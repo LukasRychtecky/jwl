@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<project name="JWL.deploy" default="JWL.deploy" basedir="../SeamWiki">
+
+	
+	<target name="JWL.deploy">
+		<ant antfile="../SeamWiki/build.xml" inheritAll="true" target="JWL.deploy"/>
+	</target>
+
+	
+</project>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE facelet-taglib PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+  "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+<facelet-taglib>
+	<namespace>http://www.jsfwikilibrary.com/ui/core</namespace>
+	<tag>
+		<tag-name>article</tag-name>
+		<component>
+			<component-type>com.jwl.component.Article</component-type>
+			<renderer-type>com.jwl.component.ArticleRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>administration</tag-name>
+		<component>
+			<component-type>com.jwl.component.Administration</component-type>
+			<renderer-type>com.jwl.component.AdministrationRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>search</tag-name>
+		<component>
+			<component-type>com.jwl.component.Search</component-type>
+			<renderer-type>com.jwl.component.SearchRenderer</renderer-type>
+		</component>
+	</tag>
+</facelet-taglib>

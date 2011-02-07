@@ -1,0 +1,75 @@
+﻿2010-12-13 SCRUM
+================
+
+
+
+2010-12-09 SCRUM
+================
+PJ
+done
+- akceptacni test
+- File upload v BT skrz filter
+todo
+- post formou filtru jako zalozni varianta
+
+JO
+done
+- CSS
+- video cviko
+
+LR
+done
+- prezentace na cviko
+- update tagu
+todo
+- zkontrolovat tabulky v databazi
+- prevod z CVS na GIT
+
+
+2010-12-06 SCRUM
+================
+LR
+done
+- Flash messages
+- obnovení článku z historie
+todo
+- prezentace PPT na cviko
+- dodělat Flash messages pro všechny exceptions v PV
+- ukládání tagů
+- kontrola uživ. práv v PV
+
+JO
+done
+- CSS u editace článku
+- output text obalen divem
+todo
+- prezentační video na cviko
+- exclude role
+
+PJ
+done
+- integrace JWL do BT
+- oprava Delete akce
+todo
+- zprovoznění JWL POST akcí v BT (vytvoření čl., editace čl., search, inital page)
+
+
+2010-12-02 SCRUM
+================
+Lost, sorry :-(
+
+2010-11-29 SCRUM
+================
+PJ
+done
+- search v textu, titlu
+- paginator v search
+- sortování dle titlu, editora, datumu
+
+LR
+- JUnit testy
+- refactore business vrstvy
+- refactore integration vrstvy
+
+JO
+- návrh CSS

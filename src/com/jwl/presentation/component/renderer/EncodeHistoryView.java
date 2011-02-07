@@ -1,0 +1,50 @@
+package com.jwl.presentation.component.renderer;
+
+import com.jwl.business.IFacade;
+import com.jwl.business.article.HistoryId;
+import com.jwl.business.article.HistoryTO;
+import com.jwl.business.exceptions.ModelException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author Lukas Rychtecky
+ */
+public class EncodeHistoryView extends AbstractEncodeHistoryView {
+	private HistoryId id;
+
+	public EncodeHistoryView(IFacade facade, HistoryId id) {
+		super(facade);
+		this.id = id;
+	}
+
+	@Override
+	protected void encodeResponse() {
+		HistoryTO history = null;
+		try {
+			super.encodeFlashMessages();
+			history = super.facade.getHistory(this.id);
+
+			if (history == null) {
+				super.addFlashMessage("History not found.", FlashMessageType.WARNING, Boolean.FALSE);
+			} else {
+				super.enconde(history);
+			}
+		} catch (IOException e) {
+			Logger.getLogger(EncodeHistoryView.class.getName()).log(Level.SEVERE, null, e);
+			super.addImplicitErrorFlashMessage();
+		} catch (ModelException e) {
+			super.addImplicitErrorFlashMessage();
+			Logger.getLogger(EncodeHistoryView.class.getName()).log(Level.SEVERE, null, e);
+		} finally {
+			try {
+				super.encodeCriticalFlashMessages();
+			} catch (IOException ex) {
+				Logger.getLogger(EncodeHistoryView.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+	}
+
+}

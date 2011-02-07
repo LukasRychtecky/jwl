@@ -1,0 +1,20 @@
+﻿INTERNAL LINKS
+[What could]("What could wiki markup language do" "link")
+[Maltska konv.]("Maltská konvence"#history)
+
+INTERNAL IMAGES
+![alt|link="clanek"|500px]("1.png")
+
+
+<w:article
+	initialPage="Malcolm Sheperd Knowles"
+	user="#{credentials.username}"
+	role="#{authenticator.roles}"
+	rendered="#{identity.loggedIn}"/>
+	
+	
+<w:search
+	outgoingPage="wiki.seam"
+	user="#{credentials.username}"
+	role="#{authenticator.roles}"
+	rendered="#{identity.loggedIn}"/>

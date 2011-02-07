@@ -1,0 +1,56 @@
+﻿JWL URL MAPPING
+===============
+
+URL PARAMETERS
+- given by: com.jwl.util.html.url.URLParameter
+
+URL PARAMETERS VALUES
+1. paremeter "jwlaction"
+- it means action that user want to do 
+- possible values are given by com.jwl.presentation.article.enumerations.ArticleActions
+- from application view, possible values of this parameter are: 
+	A. "edit"
+	B. "list" 
+	C. at this moment all other strings are recognized as "" (empty string, UNSPECIFIED jwlaction) 
+
+2. parameter "jwltitle"
+- it means article title
+- from application view, possible values of this parameter are:
+	A. value is not placed in URL
+	B. value is placed in URL but article with this title does not exist 
+	C. value is placed in URL and article with this title exists
+
+
+ARTICLE STATE RECOGNITION
+=========================
+ARTICLE STATE
+- possible values are given by com.jwl.presentation.article.enumerations.ArticleStates
+	CREATE, 
+	EDIT,
+	ERROR,
+	LIST,
+	VIEW
+- recognition is done in ArticleController class
+- recognition is done by combination values of jwltitle parameter and jwlaction
+ 	parameter
+- jwltitle has bigger priority than jwlaction, so jwltitle sometimes overrides 
+	jwlaction in following table 
+
+
+STATE RECOGNITION TABLE
+=======================
+
+no. |		jwlaction		|		jwltitle		| 	Article Component State
+---------------------------------------------------------------
+1.	|		"edit"			|		case A			|		CREATE
+2.	|		"edit"			|		case B			|		CREATE
+3.	|		"edit"			|		case C			|		EDIT
+---------------------------------------------------------------
+4.	|		"list"			|		case A			|		LIST
+5.	|		"list"			|		case B			|		LIST
+6.	|		"list"			|		case C			|		VIEW (jwltitle overrides jwlaction)
+---------------------------------------------------------------
+7.	|		""					|		case A			|		LIST
+8.	|		""					|		case B			|		CREATE
+9.	|		""					|		case C			|		VIEW
+

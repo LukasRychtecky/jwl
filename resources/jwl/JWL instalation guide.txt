@@ -1,0 +1,8 @@
+﻿1. Pouze 1 data source
+2. Persistence.xml - vložit persistence unit
+3. web.xml - vložit servlety a filtry
+4. @PersistenceContext(unitName="bugtrack")
+5. application.xml - přidat EJB modul
+6. Přidat potřebné knihovny do WEB-INF/lib
+7. icpc-util.taglib.xml - zakomentovat řádky 233-237
+8. (Optional) vložit rebel.xml

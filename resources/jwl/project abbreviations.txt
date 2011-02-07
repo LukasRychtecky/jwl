@@ -1,0 +1,67 @@
+﻿PROJECT SHORTCUTS
+=================
+
+FACADE DESIGN PATTERN 
+Example: Facade
+Use Case: Facade class is main object of business layer. Every time when 
+presentation layer needs to get some data that will be displayed, it will "ask"
+Facade for that data. You can see, for example ArticleRendered "ask" Facade 
+for all data. 
+
+
+UC = Use Case
+Example: GetTagsUC, UpdateArticleTextUC
+Use Case: Every UC class is responsible for one (or few) method of Facade. 
+Every UC class has its interface. First UC classes use DAO object to fetch data, 
+second UC classes use TO object to convert data from entity object to data for
+presentation layer.
+
+TO = Transfer Object
+Example: ArticleTO
+Use Case: Transfer object contains data converted from entities (database 
+result) to something that presentation layer can understand. Even when entity
+change, transfer object remain same and that is the point. So Facade must return
+only TO instance, never entity. Use it same way when presentation layer want to 
+send new data from user to the business layer - so you fill ArticleTO instance 
+with new data and send it upon Facade. 
+
+DAO = Data Access Object
+Example: ArticleDAO, EntityManagerDAO
+Use Case: DAO is object that directly access database via entity manager. 
+EntityManagerDAO serves for CRUD actions for all entities in JWL. Methods of 
+this class works with Object parameters so you fetch or save any entity in JWL. 
+EntityManagerDAO always works with ONE entity (database table entry). If you
+want to fetch information about more table entries, you must create another DAO,
+for example ArticleDAO.  
+ArticleDAO serves as service to run advanced SQL queries around Article entity. 
+For example to fetch all article titles, editors, etc. which we need to know for
+listing state of article. 
+
+CRUD = Create, Read, Update, Delete 
+It means database actions. 
+
+EntityHome Design Pattern
+Example: ArticleHome
+Use Case: Simply said, EntityHome is cache for entity. You set ID of entity 
+(table entry) you want to use and EntityHome automatically use DAO object, which
+load data from database. EntityHome than holds data so you can still get 
+another entity data without accessing database on the background. When you set 
+new ID, old data is lost and entity for new ID is loaded.
+
+ValueListHandler Design Pattern
+Example: ArticleListHandler
+Use Case: Simply said, ValueListHandler is cache for list of entities. For 
+example, imagine case when you do SQL query which return all articles in 
+database, but in HTML page you show first twenty results. User than click to 
+show next twenty result so you only call articleListHandler.getNextElements(20) 
+and data is again returned without accessing database on the background.
+ 
+
+ECLIPSE SHORTCUTS
+=================
+Open class = Ctrl + Shift + 't', write class name. You can use camel notation
+Find method when you are in class = Ctrl + 'o'
+Run Ant = Alt + Shift + 'x', wait a second, push 'q'. 
+
+You can change Eclipse shortcuts in
+Window -> Preferences -> General -> Keys 
