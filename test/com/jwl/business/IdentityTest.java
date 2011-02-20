@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import com.jwl.business.permissions.IIdentity;
 import com.jwl.business.permissions.Identity;
-import com.jwl.integration.dao.interfaces.IRoleDAO;
+import com.jwl.integration.role.IRoleDAO;
 
 /**
  *

@@ -4,8 +4,9 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
-import com.jwl.integration.dao.interfaces.ITagDAO;
+import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
+import com.jwl.integration.tag.ITagDAO;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,17 +16,16 @@ import java.util.Set;
  */
 public class SaveTagsUC extends AbstractUC implements ISaveTagsUC {
 
-	private ITagDAO dao;
-
-	public SaveTagsUC(ITagDAO dao) {
-		this.dao = dao;
+	public SaveTagsUC(IDAOFactory factory) {
+		super(factory);
 	}
+
 
 	@Override
 	public void save(Set<String> givenTags, ArticleId id) throws ModelException {
 		super.checkPermission(AccessPermissions.ARTICLE_EDIT);
 		try {
-			Set<String> alreadyExistTags = this.dao.getAllWhere(givenTags);
+			Set<String> alreadyExistTags = super.factory.getTagDAO().getAllWhere(givenTags);
 			Set<String> tagsToCreate = new HashSet<String>();
 			for (String tag : givenTags) {
 				if (!alreadyExistTags.contains(tag)) {
@@ -33,8 +33,8 @@ public class SaveTagsUC extends AbstractUC implements ISaveTagsUC {
 				}
 			}
 
-			this.dao.create(tagsToCreate, id);
-			this.dao.addExistingToArticle(givenTags, id);
+			super.factory.getTagDAO().create(tagsToCreate, id);
+			super.factory.getTagDAO().addExistingToArticle(givenTags, id);
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

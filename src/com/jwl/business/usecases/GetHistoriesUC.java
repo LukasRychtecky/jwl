@@ -4,8 +4,9 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
-import com.jwl.integration.dao.interfaces.IHistoryDAO;
+import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
+import com.jwl.integration.history.IHistoryDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,8 @@ import java.util.List;
  */
 public class GetHistoriesUC extends AbstractUC implements IGetHistoriesUC {
 
-	private IHistoryDAO dao;
-
-	public GetHistoriesUC(IHistoryDAO dao) {
-		this.dao = dao;
+	public GetHistoriesUC(IDAOFactory factory) {
+		super(factory);
 	}
 
 	@Override
@@ -26,7 +25,7 @@ public class GetHistoriesUC extends AbstractUC implements IGetHistoriesUC {
 		List<HistoryTO> list = new ArrayList<HistoryTO>();
 
 		try {
-			list.addAll(this.dao.findAll(id));
+			list.addAll(super.factory.getHistoryDAO().findAll(id));
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

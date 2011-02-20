@@ -13,8 +13,8 @@ import com.jwl.business.permissions.IIdentity;
 import javax.naming.NoPermissionException;
 
 /**
- * 
- * @author Lukas Rychtecky
+ * This interface provides communication between Model(business tier,
+ * integration tier) and Controller, View. The class is designed as Facade.
  */
 public interface IFacade {
 

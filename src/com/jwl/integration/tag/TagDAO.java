@@ -1,10 +1,9 @@
-package com.jwl.integration.dao;
+package com.jwl.integration.tag;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.integration.ConnectionFactory;
 import com.jwl.integration.cache.TagHome;
 import com.jwl.integration.convertor.TagConvertor;
-import com.jwl.integration.dao.interfaces.ITagDAO;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.entity.Tag;
 import com.jwl.integration.exceptions.DAOException;

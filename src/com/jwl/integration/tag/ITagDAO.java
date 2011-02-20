@@ -1,4 +1,4 @@
-package com.jwl.integration.dao.interfaces;
+package com.jwl.integration.tag;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.integration.exceptions.DAOException;

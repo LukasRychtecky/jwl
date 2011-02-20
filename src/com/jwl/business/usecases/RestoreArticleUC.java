@@ -7,8 +7,7 @@ import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
-import com.jwl.integration.dao.interfaces.IHistoryDAO;
+import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
 
 /**
@@ -16,14 +15,11 @@ import com.jwl.integration.exceptions.DAOException;
  * @author Lukas Rychtecky
  */
 public class RestoreArticleUC extends AbstractUC implements IRestoreArticleUC {
-	
-	private IArticleDAO articleDAO;
-	private IHistoryDAO historyDAO;
 
-	public RestoreArticleUC(IArticleDAO articleDAO, IHistoryDAO historyDAO) {
-		this.articleDAO = articleDAO;
-		this.historyDAO = historyDAO;
+	public RestoreArticleUC(IDAOFactory factory) {
+		super(factory);
 	}
+	
 
 	@Override
 	public void restore(HistoryId id) throws ModelException {
@@ -34,7 +30,7 @@ public class RestoreArticleUC extends AbstractUC implements IRestoreArticleUC {
 			HistoryTO history = this.getHistory(id);
 			this.restoreArticle(article, history);
 
-			this.historyDAO.deleteAllYoungerThan(id.getArticleId(), history.getModified());
+			super.factory.getHistoryDAO().deleteAllYoungerThan(id.getArticleId(), history.getModified());
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}
@@ -47,12 +43,12 @@ public class RestoreArticleUC extends AbstractUC implements IRestoreArticleUC {
 		article.setText(history.getText());
 		article.setTitle(history.getTitle());
 
-		this.articleDAO.update(article);
+		super.factory.getArticleDAO().update(article);
 	}
 
 	private ArticleTO getArticle(HistoryId id) throws DAOException, ObjectNotFoundException {
 		ArticleTO article = null;
-		article = this.articleDAO.get(id.getArticleId());
+		article = super.factory.getArticleDAO().get(id.getArticleId());
 		if (article == null) {
 			throw new ObjectNotFoundException("Article not found, id: " + id.getArticleId());
 		}
@@ -61,7 +57,7 @@ public class RestoreArticleUC extends AbstractUC implements IRestoreArticleUC {
 
 	private HistoryTO getHistory(HistoryId id) throws DAOException, ObjectNotFoundException {
 		HistoryTO history = null;
-		history = this.historyDAO.get(id);
+		history = super.factory.getHistoryDAO().get(id);
 		if (history == null) {
 			throw new ObjectNotFoundException("History not found, id: " + id);
 		}

@@ -1,14 +1,13 @@
 package com.jwl.business.usecases;
 
+import com.jwl.integration.IDAOFactory;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 
 /**
@@ -17,10 +16,8 @@ import com.jwl.integration.exceptions.DAOException;
  */
 public class FindArticlesUC extends AbstractUC implements IFindArticlesUC {
 
-	private IArticleDAO dao;
-
-	public FindArticlesUC(IArticleDAO dao) {
-		this.dao = dao;
+	public FindArticlesUC(IDAOFactory factory) {
+		super(factory);
 	}
 
 	@Override
@@ -28,7 +25,7 @@ public class FindArticlesUC extends AbstractUC implements IFindArticlesUC {
 		super.checkPermission(AccessPermissions.ARTICLE_VIEW);
 		List<ArticleTO> articles = new ArrayList<ArticleTO>();
 		try {
-			articles.addAll(this.dao.findEverywhere(search.getSearchText()));
+			articles.addAll(super.factory.getArticleDAO().findEverywhere(search.getSearchText()));
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

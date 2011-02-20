@@ -1,6 +1,6 @@
-package com.jwl.integration.dao;
+package com.jwl.integration.role;
 
-import com.jwl.integration.dao.interfaces.IRoleDAO;
+import com.jwl.integration.dao.EntityManagerDAO;
 import com.jwl.integration.exceptions.DAOException;
 import java.util.ArrayList;
 import java.util.List;

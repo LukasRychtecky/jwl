@@ -4,15 +4,12 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
-import com.jwl.business.exceptions.BreakBusinessRuleException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
-import com.jwl.integration.dao.interfaces.IHistoryDAO;
-import com.jwl.integration.dao.interfaces.ITagDAO;
+import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
 import java.util.Set;
 
@@ -22,14 +19,8 @@ import java.util.Set;
  */
 public class UpdateArticleUC extends AbstractUC implements IUpdateArticleUC {
 
-	private IArticleDAO dao;
-	private IHistoryDAO historyDAO;
-	private ITagDAO tagDAO;
-
-	public UpdateArticleUC(IArticleDAO dao, IHistoryDAO historyDAO, ITagDAO tagDAO) {
-		this.dao = dao;
-		this.historyDAO = historyDAO;
-		this.tagDAO = tagDAO;
+	public UpdateArticleUC(IDAOFactory factory) {
+		super(factory);
 	}
 
 	@Override
@@ -38,7 +29,7 @@ public class UpdateArticleUC extends AbstractUC implements IUpdateArticleUC {
 
 		Set<String> tags = article.getTags();
 		try {
-			ArticleTO articleFromDB = this.dao.get(article.getId());
+			ArticleTO articleFromDB = super.factory.getArticleDAO().get(article.getId());
 
 			if (articleFromDB == null) {
 				throw new ObjectNotFoundException("Article not found, id: " + article.getId());
@@ -50,12 +41,12 @@ public class UpdateArticleUC extends AbstractUC implements IUpdateArticleUC {
 
 				HistoryTO history = article.createHistory();
 				history.setId(new HistoryId(0, article.getId()));
-				this.historyDAO.create(history);
+				super.factory.getHistoryDAO().create(history);
 
 				article.removeAllTags();
 				article.setEditCount(article.getEditCount() + 1);
 				article.setTitle(articleFromDB.getTitle());
-				this.dao.update(article);
+				super.factory.getArticleDAO().update(article);
 			}
 
 		} catch (DAOException e) {
@@ -77,13 +68,13 @@ public class UpdateArticleUC extends AbstractUC implements IUpdateArticleUC {
 
 	private void saveTags(Set<String> tags, ArticleId id) throws ModelException {
 
-		ISaveTagsUC uc = new SaveTagsUC(this.tagDAO);
+		ISaveTagsUC uc = new SaveTagsUC(super.factory);
 		uc.save(tags, id);
 
 		try {
-			Set<String> allTags = this.tagDAO.getAllWhere(id);
+			Set<String> allTags = super.factory.getTagDAO().getAllWhere(id);
 			allTags.removeAll(tags);
-			this.tagDAO.removeFromArticle(tags, id);
+			super.factory.getTagDAO().removeFromArticle(tags, id);
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

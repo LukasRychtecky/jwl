@@ -3,7 +3,7 @@ package com.jwl.business.article.usecases;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ArticleInputMaxSizeException;
 import com.jwl.business.exceptions.InsufficientArticleDataException;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
+import com.jwl.integration.article.IArticleDAO;
 
 /**
  * 

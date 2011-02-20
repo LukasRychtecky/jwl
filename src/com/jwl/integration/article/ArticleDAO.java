@@ -1,11 +1,10 @@
-package com.jwl.integration.dao;
+package com.jwl.integration.article;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.integration.cache.ArticleHome;
 import com.jwl.business.article.ArticleId;
 import com.jwl.integration.cache.ArticleListHandler;
 import com.jwl.integration.convertor.ArticleConvertor;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.exceptions.DuplicateEntryException;
