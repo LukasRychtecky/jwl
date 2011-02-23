@@ -14,6 +14,7 @@ public enum JWLElements {
 	EDIT_TAGS           	("tags", "Tags"),
 	EDIT_CHANGE_NOTE		("changeNote", "Change note"),
 	EDIT_SAVE				("edit", "Save"),
+	EDIT_SIMILAR_ARTICLE_DIV ("sad", ""),
 	CREATE_SAVE				("create", "Create"),
 	FILE_FORM				("jwl-upload",""),
 	FILE_TITLE				("fileTitle",""),

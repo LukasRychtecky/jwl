@@ -1,6 +1,7 @@
 package com.jwl.integration.dao;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.integration.ConnectionFactory;
 import com.jwl.integration.cache.ArticleHome;
 import com.jwl.business.article.ArticleId;
 import com.jwl.integration.cache.ArticleListHandler;
@@ -12,8 +13,14 @@ import com.jwl.integration.exceptions.DuplicateEntryException;
 import com.jwl.integration.exceptions.EntityNotFoundException;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityExistsException;
 
+import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+
+@Stateless
 public class ArticleDAO implements IArticleDAO {
 
 	private ArticleHome home;
@@ -45,11 +52,11 @@ public class ArticleDAO implements IArticleDAO {
 		if (id == null) {
 			return null;
 		}
-		
+
 		ArticleTO article = null;
 		try {
 			this.home.setId(id.getId());
-			
+
 			Article entity = this.home.getInstance();
 			if (entity == null) {
 				return null;
@@ -80,12 +87,13 @@ public class ArticleDAO implements IArticleDAO {
 			Article article = this.home.getInstance();
 
 			if (article == null) {
-				throw new EntityNotFoundException("Can't delete article id: " + id);
+				throw new EntityNotFoundException("Can't delete article id: "
+						+ id);
 			}
 
 			this.home.delete();
 		} catch (EntityNotFoundException e) {
-			
+
 		} catch (Exception e) {
 			throw new DAOException(e);
 		}
@@ -103,8 +111,7 @@ public class ArticleDAO implements IArticleDAO {
 		}
 		return articles;
 	}
-	
-	
+
 	@Override
 	public List<ArticleTO> findEverywhere(String what) throws DAOException {
 		List<ArticleTO> articles = null;
@@ -131,6 +138,30 @@ public class ArticleDAO implements IArticleDAO {
 			throw new DAOException(e);
 		}
 		return article;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTO> findAll(int from, int maxCount) {
+		EntityManagerFactory connection = ConnectionFactory.getInstance()
+				.getConnection();
+		EntityManager em = connection.createEntityManager();
+		List<Article> articles = null;
+		Query query = em.createNamedQuery("Article.findAll");
+		query.setFirstResult(from);
+		query.setMaxResults(maxCount);
+		articles = query.getResultList();
+		return ArticleConvertor.convertList(articles);
+	}
+
+	@Override
+	public int getCount() {
+		EntityManagerFactory connection = ConnectionFactory.getInstance()
+				.getConnection();
+		EntityManager em = connection.createEntityManager();
+		Query query = em.createNamedQuery("Article.count");
+		long count = (Long) query.getSingleResult();
+		return (int)count;
 	}
 
 }

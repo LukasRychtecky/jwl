@@ -25,5 +25,9 @@ public interface IArticleDAO {
 	public List<ArticleTO> findEverywhere(String needle) throws DAOException;
 
 	public ArticleTO getByTitle(String title) throws DAOException;
+	
+	public List<ArticleTO> findAll(int from, int maxCount);
+	
+	public int getCount();
 
 }

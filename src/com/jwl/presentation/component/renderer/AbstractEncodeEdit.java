@@ -101,6 +101,9 @@ public abstract class AbstractEncodeEdit extends JWLEncoder {
 		encodeContent(form.getChildren());
 
 		form.encodeAll(context);
+		
+		encodeDivIdStart(JWLElements.EDIT_SIMILAR_ARTICLE_DIV.id);
+		encodeDivEnd();
 	}
 
 	/**

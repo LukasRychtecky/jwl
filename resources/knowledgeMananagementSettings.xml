@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8">
+<knowledgeManagement>
+<feature>
+<name>
+articleSimilarity
+<name>
+<input>
+<name>
+NameSimilarity
+</name>
+<weight>
+1.5
+</weight>
+</input>
+<input>
+<name>
+TagSimilarity
+</name>
+<weight>
+1
+</weight>
+</input>
+<threshold>
+1.2
+</threshold>
+</feature>
+</knowledgeManagement>
