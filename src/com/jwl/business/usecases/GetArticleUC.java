@@ -5,7 +5,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
+import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
 
 /**
@@ -14,18 +14,17 @@ import com.jwl.integration.exceptions.DAOException;
  */
 public class GetArticleUC extends AbstractUC implements IGetArticleUC {
 
-	private IArticleDAO dao;
-
-	public GetArticleUC(IArticleDAO dao) {
-		this.dao = dao;
+	public GetArticleUC(IDAOFactory factory) {
+		super(factory);
 	}
+
 
 	@Override
 	public ArticleTO get(ArticleId id) throws ModelException {
 			super.checkPermission(AccessPermissions.ARTICLE_VIEW);
 			ArticleTO article = null;
 		try {
-			article = this.dao.get(id);
+			article = super.factory.getArticleDAO().get(id);
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

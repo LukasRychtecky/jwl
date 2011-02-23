@@ -1,5 +1,5 @@
 package com.jwl.business;
-
+// <editor-fold defaultstate="collapsed">
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
@@ -38,73 +38,48 @@ import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-import com.jwl.integration.dao.ArticleDAO;
-import com.jwl.integration.dao.HistoryDAO;
-import com.jwl.integration.dao.RoleDAO;
-import com.jwl.integration.dao.TagDAO;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
-import com.jwl.integration.dao.interfaces.IHistoryDAO;
-import com.jwl.integration.dao.interfaces.ITagDAO;
+import com.jwl.integration.article.ArticleDAO;
+import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.entity.Role;
+import com.jwl.integration.history.HistoryDAO;
+import com.jwl.integration.history.IHistoryDAO;
+import com.jwl.integration.role.RoleDAO;
+import com.jwl.integration.tag.ITagDAO;
+import com.jwl.integration.tag.TagDAO;
+//</editor-fold>
 
 /**
- * 
- * @review Petr Dytrych
+ * This interface provides communication between Model(business tier,
+ * integration tier) and Controller, View. The class is designed as Facade.
  */
 public class Facade implements IFacade {
 
 	private IIdentity identity = null;
 	private IPaginator paginator = null;
-	private IArticleDAO articleDAO = null;
-	private ITagDAO tagDAO = null;
-	private IHistoryDAO historyDAO = null;
 	private SearchPaginator searchPaginator = null;
 
-	protected IArticleDAO getArticleDAO() {
-		if (this.articleDAO == null) {
-			this.articleDAO = new ArticleDAO();
-		}
-		return this.articleDAO;
-	}
-
-	protected ITagDAO getTagDAO() {
-		if (this.tagDAO == null) {
-			this.tagDAO = new TagDAO();
-		}
-		return this.tagDAO;
-	}
-
-	protected IHistoryDAO getHistoryDAO() {
-		if (this.historyDAO == null) {
-			this.historyDAO = new HistoryDAO();
-		}
-		return this.historyDAO;
-	}
 	
 	@Override
 	public List<ArticleTO> findArticles(SearchTO searchTO) throws ModelException {
-		IFindArticlesUC uc = new FindArticlesUC(this.getArticleDAO());
+		IFindArticlesUC uc = new FindArticlesUC(Environment.getDAOFactory());
 		return uc.find(searchTO);
 	}
 
 	@Override
 	public ArticleTO findArticleByTitle(String title) throws ModelException {
-		IFindArticleByTitleUC uc = new FindArticleByTitleUC(this.getArticleDAO());
+		IFindArticleByTitleUC uc = new FindArticleByTitleUC(Environment.getDAOFactory());
 		return uc.find(title);
 	}
 
 	@Override
 	public void updateArticle(ArticleTO article) throws ModelException {
-		IUpdateArticleUC uc = new UpdateArticleUC(
-					this.getArticleDAO(),
-					this.getHistoryDAO(),
-					this.getTagDAO());
+		IUpdateArticleUC uc = new UpdateArticleUC(Environment.getDAOFactory());
 		uc.update(article);
 	}
 
 	@Override
 	public void createArticle(ArticleTO article) throws ModelException {
-		ICreateArticleUC uc = new CreateArticleUC(this.getArticleDAO(), this.getTagDAO());
+		ICreateArticleUC uc = new CreateArticleUC(Environment.getDAOFactory());
 		uc.create(article);
 	}
 
@@ -142,25 +117,25 @@ public class Facade implements IFacade {
 
 	@Override
 	public void deleteArticle(ArticleId id) throws ModelException {
-		IDeleteArticleUC uc = new DeleteArticleUC(this.getArticleDAO(), this.getHistoryDAO());
+		IDeleteArticleUC uc = new DeleteArticleUC(Environment.getDAOFactory());
 		uc.delete(id);
 	}
 
 	@Override
 	public void lockArticle(ArticleId id) throws ModelException {
-		ILockArticleUC uc = new LockArticleUC(this.getArticleDAO());
+		ILockArticleUC uc = new LockArticleUC(Environment.getDAOFactory());
 		uc.lock(id);
 	}
 
 	@Override
 	public void unlockArticle(ArticleId id) throws ModelException {
-		IUnlockArticleUC uc = new UnlockArticleUC(this.getArticleDAO());
+		IUnlockArticleUC uc = new UnlockArticleUC(Environment.getDAOFactory());
 		uc.unlock(id);
 	}
 
 	@Override
 	public ArticleTO getArticle(ArticleId id) throws ModelException {
-		IGetArticleUC uc = new GetArticleUC(this.getArticleDAO());
+		IGetArticleUC uc = new GetArticleUC(Environment.getDAOFactory());
 		return uc.get(id);
 	}
 
@@ -191,19 +166,19 @@ public class Facade implements IFacade {
 
 	@Override
 	public List<HistoryTO> getHistories(ArticleId id) throws ModelException {
-		IGetHistoriesUC uc = new GetHistoriesUC(this.getHistoryDAO());
+		IGetHistoriesUC uc = new GetHistoriesUC(Environment.getDAOFactory());
 		return uc.get(id);
 	}
 
 	@Override
 	public HistoryTO getHistory(HistoryId id) throws ModelException {
-		IGetHistoryUC uc = new GetHistoryUC(this.getHistoryDAO());
+		IGetHistoryUC uc = new GetHistoryUC(Environment.getDAOFactory());
 		return uc.get(id);
 	}
 
 	@Override
 	public void restoreArticle(HistoryId id) throws ModelException {
-		IRestoreArticleUC uc = new RestoreArticleUC(this.getArticleDAO(), this.getHistoryDAO());
+		IRestoreArticleUC uc = new RestoreArticleUC(Environment.getDAOFactory());
 		uc.restore(id);
 	}
 

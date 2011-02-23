@@ -4,7 +4,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
+import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
 
 /**
@@ -13,10 +13,8 @@ import com.jwl.integration.exceptions.DAOException;
  */
 public class FindArticleByTitleUC extends AbstractUC implements IFindArticleByTitleUC {
 
-	private IArticleDAO dao;
-
-	public FindArticleByTitleUC(IArticleDAO dao) {
-		this.dao = dao;
+	public FindArticleByTitleUC(IDAOFactory factory) {
+		super(factory);
 	}
 
 	@Override
@@ -24,7 +22,7 @@ public class FindArticleByTitleUC extends AbstractUC implements IFindArticleByTi
 		super.checkPermission(AccessPermissions.ARTICLE_VIEW);
 		ArticleTO article = null;
 		try {
-			article = this.dao.getByTitle(title);
+			article = super.factory.getArticleDAO().getByTitle(title);
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

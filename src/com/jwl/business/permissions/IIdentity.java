@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.PermissionDeniedException;
-import com.jwl.integration.dao.interfaces.IRoleDAO;
+import com.jwl.integration.role.IRoleDAO;
 
 /**
  * 

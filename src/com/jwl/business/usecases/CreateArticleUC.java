@@ -8,8 +8,7 @@ import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
-import com.jwl.integration.dao.interfaces.ITagDAO;
+import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.exceptions.DuplicateEntryException;
 import java.util.Set;
@@ -20,12 +19,8 @@ import java.util.Set;
  */
 public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 
-	private IArticleDAO dao;
-	private ITagDAO tagDAO;
-
-	public CreateArticleUC(IArticleDAO dao, ITagDAO tagDAO) {
-		this.dao = dao;
-		this.tagDAO = tagDAO;
+	public CreateArticleUC(IDAOFactory factory) {
+		super(factory);
 	}
 
 	@Override
@@ -41,7 +36,7 @@ public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 		try {
 			article.removeAllTags();
 
-			id = this.dao.create(article);
+			id = super.factory.getArticleDAO().create(article);
 
 		} catch (DuplicateEntryException e) {
 			throw new ArticleExistsException(e);
@@ -49,7 +44,7 @@ public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 			throw new ModelException(e);
 		}
 
-		ISaveTagsUC uc = new SaveTagsUC(this.tagDAO);
+		ISaveTagsUC uc = new SaveTagsUC(super.factory);
 		uc.save(tags, id);
 
 		return id;

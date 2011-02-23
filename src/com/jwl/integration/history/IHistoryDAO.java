@@ -1,4 +1,4 @@
-package com.jwl.integration.dao.interfaces;
+package com.jwl.integration.history;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.HistoryId;

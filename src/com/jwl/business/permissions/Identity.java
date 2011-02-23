@@ -10,16 +10,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.NoAuthenticatedYetException;
 import com.jwl.business.exceptions.NoRoleFoundException;
 import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.exceptions.UnexpectedActionException;
-import com.jwl.integration.dao.interfaces.IRoleDAO;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.entity.Role;
 import com.jwl.integration.exceptions.DAOException;
+import com.jwl.integration.role.IRoleDAO;
 
 /**
  * This class represents user of application.
@@ -145,12 +144,12 @@ public class Identity implements IIdentity {
 	/**
 	 * Loads permissions of "Role" entity from Data Access Object
 	 *
-	 * @param aClass
+	 * @param classObject
 	 * @param dao
 	 */
 	@Override
-	public void setPermissionsSources(Class<?> aClass, IRoleDAO dao) {
-		this.userActionsSource = aClass;
+	public void setPermissionsSources(Class<?> classObject, IRoleDAO dao) {
+		this.userActionsSource = classObject;
 		this.dao = dao;
 	}
 	

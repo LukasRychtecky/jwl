@@ -1,11 +1,10 @@
-package com.jwl.integration.dao;
+package com.jwl.integration.history;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.integration.ConnectionFactory;
 import com.jwl.integration.convertor.HistoryConvertor;
-import com.jwl.integration.dao.interfaces.IHistoryDAO;
 import com.jwl.integration.entity.History;
 import com.jwl.integration.entity.HistoryPK;
 import com.jwl.integration.exceptions.DAOException;
