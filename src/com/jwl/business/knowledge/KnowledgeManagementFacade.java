@@ -3,7 +3,7 @@ package com.jwl.business.knowledge;
 import java.util.List;
 
 import com.jwl.business.article.ArticleTO;
-import com.jwl.integration.dao.ArticleDAO;
+import com.jwl.integration.article.ArticleDAO;
 
 public class KnowledgeManagementFacade implements IKnowledgeManagementFacade{
 
