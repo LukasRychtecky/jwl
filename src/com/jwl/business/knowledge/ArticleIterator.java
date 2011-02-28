@@ -3,7 +3,7 @@ package com.jwl.business.knowledge;
 import java.util.List;
 
 import com.jwl.business.article.ArticleTO;
-import com.jwl.integration.dao.interfaces.IArticleDAO;
+import com.jwl.integration.article.IArticleDAO;
 
 public class ArticleIterator implements IArticleIterator {
 	private IArticleDAO articleDAO;
