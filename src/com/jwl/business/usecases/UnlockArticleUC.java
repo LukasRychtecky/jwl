@@ -7,7 +7,6 @@ import com.jwl.business.exceptions.ObjectNotFoundException;
 import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.integration.IDAOFactory;
-import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 
 /**

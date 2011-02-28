@@ -1,14 +1,14 @@
 package com.jwl.business.usecases;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
-import com.jwl.integration.history.IHistoryDAO;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
