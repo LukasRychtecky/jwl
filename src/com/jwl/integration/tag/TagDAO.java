@@ -42,6 +42,7 @@ public class TagDAO extends BaseDAO implements ITagDAO {
 			}
 			em.joinTransaction();
 			em.persist(entity);
+			em.flush();
 			if (localTrans) {
 				ut.commit();
 			}

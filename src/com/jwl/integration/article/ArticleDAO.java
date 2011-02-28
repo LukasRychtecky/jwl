@@ -53,7 +53,7 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 		}finally{
 			closeEntityManager(em);
 		}
-		return article.getId();
+		return new ArticleId(entity.getId());
 	}
 
 	@Override
