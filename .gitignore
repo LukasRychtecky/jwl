@@ -1,2 +1,9 @@
 /nbproject
-
+.classpath
+.cvsignore
+.project
+.settings/
+bin/
+build_ant/
+dist/
+.gitignore
