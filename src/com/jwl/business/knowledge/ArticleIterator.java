@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.integration.article.IArticleDAO;
+import com.jwl.integration.exceptions.DAOException;
 
 public class ArticleIterator implements IArticleIterator {
-	private IArticleDAO articleDAO;
+	private  IArticleDAO articleDAO;
 	private int batchSize;
 	private int articleBatch;
 	private int currentArticle;
@@ -28,7 +29,11 @@ public class ArticleIterator implements IArticleIterator {
 	@Override
 	public boolean hasNext() {
 		if(articleSum==-1){
-			articleSum =articleDAO.getCount();
+			try {
+				articleSum =articleDAO.getCount();
+			} catch (DAOException e) {
+				return false;
+			}
 		}
 		if(articleCount<articleSum){
 			return true;
@@ -37,7 +42,7 @@ public class ArticleIterator implements IArticleIterator {
 	}
 
 	@Override
-	public ArticleTO getNextArticle() {
+	public ArticleTO getNextArticle() throws DAOException {
 		if (loadedArticles == null || currentArticle == batchSize) {
 			loadedArticles = articleDAO.findAll(articleBatch
 					* batchSize, batchSize);

@@ -98,9 +98,9 @@ public class FileDownloadProcess implements IProcess {
 		}
 	}
 
-	private void renameFile(File file, String newName) {
+/*	private void renameFile(File file, String newName) {
 		File newFile = this.getFile(newName);
 		file.renameTo(newFile);
-	}
+	} */
 
 }

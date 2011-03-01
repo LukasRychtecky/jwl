@@ -1,21 +1,23 @@
 package com.jwl.business;
 // <editor-fold defaultstate="collapsed">
-import com.jwl.business.article.HistoryId;
-import com.jwl.business.article.HistoryTO;
-import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.Identity;
-import com.jwl.business.permissions.IIdentity;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.HistoryId;
+import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.process.FileDownloadProcess;
 import com.jwl.business.article.process.FileUploadProcess;
 import com.jwl.business.exceptions.BusinessProcessException;
+import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.permissions.Identity;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
@@ -38,15 +40,8 @@ import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-import com.jwl.integration.article.ArticleDAO;
-import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.entity.Role;
-import com.jwl.integration.history.HistoryDAO;
-import com.jwl.integration.history.IHistoryDAO;
 import com.jwl.integration.role.RoleDAO;
-import com.jwl.integration.tag.ITagDAO;
-import com.jwl.integration.tag.TagDAO;
-//</editor-fold>
 
 /**
  * This interface provides communication between Model(business tier,

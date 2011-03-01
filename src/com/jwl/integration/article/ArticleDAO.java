@@ -1,49 +1,59 @@
 package com.jwl.integration.article;
 
-import com.jwl.business.article.ArticleTO;
-import com.jwl.integration.ConnectionFactory;
-import com.jwl.integration.cache.ArticleHome;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
+
 import com.jwl.business.article.ArticleId;
-import com.jwl.integration.cache.ArticleListHandler;
+import com.jwl.business.article.ArticleTO;
+import com.jwl.integration.BaseDAO;
 import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.exceptions.DuplicateEntryException;
-import com.jwl.integration.exceptions.EntityNotFoundException;
-import java.util.Date;
-import java.util.List;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-
-@Stateless
-public class ArticleDAO implements IArticleDAO {
-
-	private ArticleHome home;
-	private ArticleListHandler list;
-
-	public ArticleDAO() {
-		this.home = new ArticleHome();
-		this.list = new ArticleListHandler();
-	}
+public class ArticleDAO extends BaseDAO implements IArticleDAO {
 
 	@Override
 	public ArticleId create(ArticleTO article) throws DAOException {
-		ArticleId id = null;
+		UserTransaction ut = getUserTransaction();
+		boolean localTrans = false;
+		Article entity = ArticleConvertor.convertToEntity(article);
+		EntityManager em = getEntityManager();
 		try {
-			Article entity = ArticleConvertor.convertToEntity(article);
-			this.home.setInstance(entity);
-			this.home.save();
-			id = new ArticleId(this.home.getInstance().getId());
+			if (ut.getStatus() == Status.STATUS_NO_TRANSACTION) {
+				ut.begin();
+				localTrans = true;
+			}
+			em.joinTransaction();
+			em.persist(entity);
+			em.flush();
+			if (localTrans) {
+				ut.commit();
+			}
 		} catch (EntityExistsException e) {
+			try {
+				ut.rollback();
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
 			throw new DuplicateEntryException(e);
-		} catch (Exception e) {
+		} catch (Throwable e) {
+			try {
+				ut.rollback();
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
 			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
 		}
-		return id;
+		return new ArticleId(entity.getId());
 	}
 
 	@Override
@@ -51,116 +61,160 @@ public class ArticleDAO implements IArticleDAO {
 		if (id == null) {
 			return null;
 		}
-
 		ArticleTO article = null;
+		EntityManager em = getEntityManager();
 		try {
-			this.home.setId(id.getId());
-
-			Article entity = this.home.getInstance();
+			Article entity = em.find(Article.class, id.getId());
 			if (entity == null) {
 				return null;
 			}
 			article = ArticleConvertor.convertFromEntity(entity);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
 		}
 		return article;
 	}
 
 	@Override
 	public void update(ArticleTO article) throws DAOException {
+		UserTransaction ut = getUserTransaction();
+		boolean localTrans = false;
+		Article entity = ArticleConvertor.convertToEntity(article);
+		EntityManager em = getEntityManager();
 		try {
-			Article entity = ArticleConvertor.convertToEntity(article);
+			if (ut.getStatus() == Status.STATUS_NO_TRANSACTION) {
+				ut.begin();
+				localTrans = true;
+			}		
+			em.joinTransaction();
 			entity.setModified(new Date());
-			this.home.setInstance(entity);
-			this.home.save();
-		} catch (Exception e) {
+			em.merge(entity);
+			em.flush();
+			if (localTrans) {
+				ut.commit();
+			}
+		} catch (Throwable e) {
+			try {
+				ut.rollback();
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
 			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
 		}
+
 	}
 
 	@Override
 	public void delete(ArticleId id) throws DAOException {
+		UserTransaction ut = getUserTransaction();
+		boolean localTrans = false;
+		EntityManager em = getEntityManager();
 		try {
-			this.home.setId(id.getId());
-			Article article = this.home.getInstance();
-
-			if (article == null) {
-				throw new EntityNotFoundException("Can't delete article id: "
-						+ id);
+			if (ut.getStatus() == Status.STATUS_NO_TRANSACTION) {
+				ut.begin();
+				localTrans = true;
+			}			
+			em.joinTransaction();
+			Article article = em.find(Article.class, id.getId());
+			em.remove(article);
+			em.flush();
+			if (localTrans) {
+				ut.commit();
 			}
-
-			this.home.delete();
-		} catch (EntityNotFoundException e) {
-
-		} catch (Exception e) {
+		} catch (Throwable e) {
+			try {
+				ut.rollback();
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
 			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
 		}
 	}
 
 	@Override
 	public List<ArticleTO> findAll() throws DAOException {
-		List<ArticleTO> articles = null;
-		try {
-			this.list.findAll();
-			List<Article> entityList = this.list.getNextElements(20);
-			articles = ArticleConvertor.convertList(entityList);
-		} catch (Exception e) {
+		List<ArticleTO> resultList = null;
+		EntityManager em = getEntityManager();
+		try {			
+			Query query = em.createNamedQuery("Article.findAll");
+			@SuppressWarnings("unchecked")
+			List<Article> articles = query.getResultList();
+			ArticleConvertor.convertList(articles);
+		} catch (Throwable e) {
 			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
 		}
-		return articles;
+		return resultList;
 	}
 
 	@Override
-	public List<ArticleTO> findEverywhere(String what) throws DAOException {
-		List<ArticleTO> articles = null;
-		try {
-			this.list.findEverywhere(what);
-			List<Article> entityList = this.list.getNextElements(20);
-			articles = ArticleConvertor.convertList(entityList);
-		} catch (Exception e) {
-			throw new DAOException(e);
-		}
-		return articles;
+	public List<ArticleTO> findEverywhere(String needle) throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public ArticleTO getByTitle(String title) throws DAOException {
-		ArticleTO article = null;
-		try {
-			Article entity = this.home.getArticleByTitle(title);
-			if (entity == null) {
+		if (title == null || title.isEmpty()) {
+			return null;
+		}
+		ArticleTO result = null;
+		EntityManager em = getEntityManager();
+		try {		
+			Query query = em.createNamedQuery("Article.findByTitle");
+			query.setParameter(0, title);
+			@SuppressWarnings("unchecked")
+			List<Article> articles = query.getResultList();
+			if (articles.isEmpty()) {
 				return null;
 			}
-			article = ArticleConvertor.convertFromEntity(entity);
+			result = ArticleConvertor.convertFromEntity(articles.get(0));
+		} catch (Throwable e) {
+			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
+		}
+		return result;
+	}
+
+	@Override
+	public List<ArticleTO> findAll(int from, int maxCount) throws DAOException {
+		List<ArticleTO> resultList = null;
+		EntityManager em = getEntityManager();
+		try {			
+			Query query = em.createNamedQuery("Article.findAll");
+			query.setFirstResult(from);
+			query.setMaxResults(maxCount);
+			@SuppressWarnings("unchecked")
+			List<Article> articles = query.getResultList();
+			resultList = ArticleConvertor.convertList(articles);
+		} catch (Throwable e) {
+			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
+		}
+		return resultList;
+	}
+
+	@Override
+	public int getCount() throws DAOException {
+		long count = 0;
+		EntityManager em = getEntityManager();
+		try {		
+			Query query = em.createNamedQuery("Article.count");
+			count = (Long) query.getSingleResult();
 		} catch (Exception e) {
 			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
 		}
-		return article;
+		return (int) count;
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ArticleTO> findAll(int from, int maxCount) {
-		EntityManagerFactory connection = ConnectionFactory.getInstance()
-				.getConnection();
-		EntityManager em = connection.createEntityManager();
-		List<Article> articles = null;
-		Query query = em.createNamedQuery("Article.findAll");
-		query.setFirstResult(from);
-		query.setMaxResults(maxCount);
-		articles = query.getResultList();
-		return ArticleConvertor.convertList(articles);
-	}
-
-	@Override
-	public int getCount() {
-		EntityManagerFactory connection = ConnectionFactory.getInstance()
-				.getConnection();
-		EntityManager em = connection.createEntityManager();
-		Query query = em.createNamedQuery("Article.count");
-		long count = (Long) query.getSingleResult();
-		return (int)count;
-	}
-
 }

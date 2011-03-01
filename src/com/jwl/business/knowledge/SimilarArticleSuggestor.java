@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.integration.exceptions.DAOException;
 
 public class SimilarArticleSuggestor implements INeuronInput {
 	private Neuron neuron;
@@ -37,9 +38,13 @@ public class SimilarArticleSuggestor implements INeuronInput {
 
 	public List<ArticleTO> suggestSimilarArticles(String tags, String name) {
 		List<ArticleTO> similarArticles = new ArrayList<ArticleTO>();
-		while (articleFeeder.hasNext()) {
-			
-			ArticleTO comparedArticle = articleFeeder.getNextArticle();
+		while (articleFeeder.hasNext()) {			
+			ArticleTO comparedArticle;
+			try {
+				comparedArticle = articleFeeder.getNextArticle();
+			} catch (DAOException e) {
+				break;
+			}
 			neuronInput = new HashMap<String, WeightRecord>();
 			float nameSimilarity = getNameSimilarityRatio(name, comparedArticle);
 			WeightRecord nsInputRecord = new WeightRecord(
