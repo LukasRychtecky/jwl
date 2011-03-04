@@ -19,14 +19,15 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	public AbstractEncodeView(IFacade facade) {
 		super(facade);
 	}
-	
-	protected void encondeArticle(ArticleTO article) throws IOException, ModelException {
+
+	protected void encondeArticle(ArticleTO article) throws IOException,
+			ModelException {
 		this.encodeTitle(article.getTitle());
 		this.encodeText(article.getText());
 		this.encodeTags(super.facade.getArticle(article.getId()).getTags());
-		
+
 	}
-	
+
 	private void encodeTitle(String title) throws IOException {
 		super.encodeH1Text(title, JWLStyleClass.VIEW_TITLE);
 	}
@@ -55,7 +56,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 			}
 		}
 	}
-	
+
 	private void encodeLinkToListing() throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("Back to listing");
@@ -99,6 +100,39 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	private boolean hasAttachmentAddPermission(ArticleId articleId) {
 		return this.hasPermission(ArticlePermissions.ATTACHMENT_ADD, articleId);
 	}
-	
-	
+
+	protected void encodeRating(float ratingAverage) throws IOException {
+		int sn = (int) ratingAverage;
+		int r = (int) (ratingAverage * 100) % 1;
+		if (r > 75 || (r > 25 && r < 50)) {
+			sn++;
+		}
+
+		writer.write("<form action=\"\">");
+		super.encodeDivClassStart("stars");
+		for (int i = 1; i < 11; i++) {
+			float sv = (float) i / 2;
+			if (i == sn) {
+				encodeStar(i, sv, true);
+			} else {
+				encodeStar(i, sv, false);
+			}
+		}
+		super.encodeDivEnd();
+		writer.write("</form>");
+	}
+
+	private void encodeStar(int elementNumber, float starValue, boolean checked)
+			throws IOException {
+		writer.write("<label for=\"rating-" + elementNumber + "\">");
+		writer.write("<input id=\"rating-" + elementNumber
+				+ "\" name=\"rating\" type=\"radio\" value=\"" + elementNumber+"\"");
+		if(checked){
+			writer.write(" checked");
+		}
+		writer.write("\"/>");
+		writer.write(starValue + " stars");
+		writer.write("</label>");
+	}
+
 }

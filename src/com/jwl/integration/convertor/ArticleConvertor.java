@@ -1,6 +1,9 @@
 package com.jwl.integration.convertor;
 
 import com.jwl.business.article.ArticleId;
+import com.jwl.business.article.IKeyWord;
+import com.jwl.business.article.IRating;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +43,17 @@ public class ArticleConvertor {
 		for (Tag tag : entity.getTags()) {
 			article.addTag(tag.getName());
 		}
+		
+		List<IRating> ratings = new ArrayList<IRating>();
+		for(IRating r:entity.getRatings()){
+			ratings.add(r);
+		}
+		
+		List<IKeyWord> keyWords = new ArrayList<IKeyWord>();
+		for(IKeyWord kw: entity.getKeyWords()){
+			keyWords.add(kw);
+		}
+		
 		return article;
 	}
 

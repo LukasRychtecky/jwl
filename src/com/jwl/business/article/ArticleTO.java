@@ -1,6 +1,7 @@
 package com.jwl.business.article;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -20,6 +21,9 @@ public class ArticleTO {
 	private Boolean locked = Boolean.FALSE;
 	private Date modified;
 	private String changeNote = "";
+	private List<IRating> ratings;
+	private List<IKeyWord> keyWords;
+	
 
 	public ArticleTO() {
 	}
@@ -169,4 +173,30 @@ public class ArticleTO {
 	public void removeAllTags() {
 		this.tags.clear();
 	}
+
+	public List<IRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<IRating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public List<IKeyWord> getKeyWords() {
+		return keyWords;
+	}
+
+	public void setKeyWords(List<IKeyWord> keyWords) {
+		this.keyWords = keyWords;
+	}
+	
+	public float getRatingAverage(){
+		float total =0;
+		for(IRating r:ratings){
+			total += r.getRating();
+		}
+		total/=ratings.size();
+		return total;
+	}
+		
 }
