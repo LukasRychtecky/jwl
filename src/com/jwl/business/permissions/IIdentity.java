@@ -18,8 +18,13 @@ public interface IIdentity {
 
 	public Boolean hasUserRole(String role);
 
+	public Boolean isAllowed(Permission permission);
+
 	public void checkPermission(String action, ArticleId articleId)
 			throws PermissionDeniedException;
+	
+	public void checkPermission(Permission permission) throws PermissionDeniedException;
+
 
 	public void setPermissionsSources(Class<?> aClass, IRoleDAO dao);
 

@@ -18,7 +18,7 @@ import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.IIdentity;
 import com.jwl.business.permissions.Identity;
-import com.jwl.business.permissions.IdentityMock;
+import com.jwl.business.permissions.UserIdentity;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
@@ -82,7 +82,7 @@ public class Facade implements IFacade {
 	@Override
 	public IIdentity getIdentity() {
 		if (this.identity == null) {
-			this.identity = new IdentityMock();
+			this.identity = new UserIdentity();
 			this.identity.setPermissionsSources(RoleOld.class, new RoleDAO());
 		}
 		return this.identity;

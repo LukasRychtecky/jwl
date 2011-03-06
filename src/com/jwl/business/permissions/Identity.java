@@ -198,7 +198,7 @@ public class Identity implements IIdentity {
 			IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		
-		List<String> actions = getUserActions(); new ArrayList<String>();
+		List<String> actions = getUserActions();
 		this.permissions.setActions(actions);
 		
 		for (Object roleObject : roleObjects) {
@@ -225,6 +225,16 @@ public class Identity implements IIdentity {
 	@Override
 	public boolean isAuthenticated() {
 		return this.isAuthenticated;
+	}
+
+	@Override
+	public Boolean isAllowed(Permission permission) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void checkPermission(Permission permission) throws PermissionDeniedException {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 	
 	private class PermissionStore {

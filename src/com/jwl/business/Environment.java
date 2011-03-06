@@ -1,5 +1,7 @@
 package com.jwl.business;
 
+import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.permissions.UserIdentity;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
 
@@ -22,7 +24,7 @@ public class Environment {
 	}
 
 	public static void setPersistenceUnit(String persistenceUnit) {
-		if (persistenceUnit != null && persistenceUnit.length() > 0) {
+		if (persistenceUnit != null && !persistenceUnit.isEmpty()) {
 			Environment.PERSISTENCE_UNIT = persistenceUnit;
 		}
 	}
@@ -32,6 +34,10 @@ public class Environment {
 			Environment.factory = new JPADAOFactory();
 		}
 		return Environment.factory;
+	}
+
+	public static IIdentity getIdentity() {
+		return new UserIdentity();
 	}
 
 
