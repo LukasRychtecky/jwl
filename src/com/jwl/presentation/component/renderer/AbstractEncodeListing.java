@@ -103,6 +103,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		for (String tag : article.getTags()) {
 			tags.append(tag).append(", ");
 		}
+		
 		String separatedTags = "";
 		if (tags.length() > 0) {
 			separatedTags = tags.substring(0, tags.length() - 2);

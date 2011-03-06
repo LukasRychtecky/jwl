@@ -23,7 +23,7 @@ public class EncodeView extends AbstractEncodeView {
 			super.encodeFlashMessages();
 			ArticleTO article = this.facade.getArticle(this.id);
 			super.encondeArticle(article);
-			super.encodeRating(article.getRatingAverage());
+			super.encodeRating(article.getRatingAverage(), id);
 			super.encodeCommonLinks(article);
 		} catch (IOException e) {
 			Logger.getLogger(EncodeView.class.getName()).log(Level.SEVERE, null, e);

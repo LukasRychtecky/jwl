@@ -21,8 +21,8 @@ public class ArticleTO {
 	private Boolean locked = Boolean.FALSE;
 	private Date modified;
 	private String changeNote = "";
-	private List<IRating> ratings;
-	private List<IKeyWord> keyWords;
+	private List<RatingTO> ratings;
+	private List<KeyWordTO> keyWords;
 	
 
 	public ArticleTO() {
@@ -174,25 +174,25 @@ public class ArticleTO {
 		this.tags.clear();
 	}
 
-	public List<IRating> getRatings() {
+	public List<RatingTO> getRatings() {
 		return ratings;
 	}
 
-	public void setRatings(List<IRating> ratings) {
+	public void setRatings(List<RatingTO> ratings) {
 		this.ratings = ratings;
 	}
 
-	public List<IKeyWord> getKeyWords() {
+	public List<KeyWordTO> getKeyWords() {
 		return keyWords;
 	}
 
-	public void setKeyWords(List<IKeyWord> keyWords) {
+	public void setKeyWords(List<KeyWordTO> keyWords) {
 		this.keyWords = keyWords;
 	}
 	
 	public float getRatingAverage(){
 		float total =0;
-		for(IRating r:ratings){
+		for(RatingTO r:ratings){
 			total += r.getRating();
 		}
 		total/=ratings.size();

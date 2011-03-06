@@ -73,5 +73,7 @@ public interface IFacade {
 	public HistoryTO getHistory(HistoryId id) throws ModelException;
 
 	public void restoreArticle(HistoryId id) throws ModelException;
+	
+	public void rateArticle(ArticleId id, float rating)throws ModelException;
 
 }

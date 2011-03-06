@@ -26,6 +26,7 @@ import com.jwl.business.usecases.GetArticleUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.LockArticleUC;
+import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
@@ -37,6 +38,7 @@ import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
+import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
@@ -175,6 +177,12 @@ public class Facade implements IFacade {
 	public void restoreArticle(HistoryId id) throws ModelException {
 		IRestoreArticleUC uc = new RestoreArticleUC(Environment.getDAOFactory());
 		uc.restore(id);
+	}
+
+	@Override
+	public void rateArticle(ArticleId id, float rating) throws ModelException {
+		IRateArticleUC uc = new RateArticleUC(Environment.getDAOFactory());
+		uc.rateArticle(id, rating);	
 	}
 
 }

@@ -2,16 +2,21 @@ package com.jwl.integration.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class RatingPK implements Serializable {
 
 	private static final long serialVersionUID = -4719384797956118519L;
-	@Column(name = "article_id", unique = true, nullable = false,
-			insertable = true)
+	
+	@Basic(optional = false)
+    @Column(name = "article_id", nullable = false)
 	private int articleId;
 
-	@Column(name = "author", unique = true, nullable = false, insertable = true)
+	@Basic(optional = false)
+    @Column(name = "author", nullable = false, length = 100)
 	private String author;
 
 	public RatingPK() {

@@ -101,10 +101,11 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		return this.hasPermission(ArticlePermissions.ATTACHMENT_ADD, articleId);
 	}
 
-	protected void encodeRating(float ratingAverage) throws IOException {
+	protected void encodeRating(float ratingAverage, ArticleId articleId)
+			throws IOException {
 		int sn = (int) ratingAverage;
-		int r = (int) (ratingAverage * 100) % 1;
-		if (r > 75 || (r > 25 && r < 50)) {
+		int r = (int) (ratingAverage * 10) % 1;
+		if (r >= 5) {
 			sn++;
 		}
 
@@ -119,6 +120,8 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 			}
 		}
 		super.encodeDivEnd();
+		writer.write("<input id=\"rating-article-id\" type=\"hidden\" value=\""
+				+ articleId.getId().intValue() + "\" />");
 		writer.write("</form>");
 	}
 
@@ -126,8 +129,9 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 			throws IOException {
 		writer.write("<label for=\"rating-" + elementNumber + "\">");
 		writer.write("<input id=\"rating-" + elementNumber
-				+ "\" name=\"rating\" type=\"radio\" value=\"" + elementNumber+"\"");
-		if(checked){
+				+ "\" name=\"rating\" type=\"radio\" value=\"" + elementNumber
+				+ "\"");
+		if (checked) {
 			writer.write(" checked");
 		}
 		writer.write("\"/>");

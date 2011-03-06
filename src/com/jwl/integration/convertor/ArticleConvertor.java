@@ -1,8 +1,6 @@
 package com.jwl.integration.convertor;
 
 import com.jwl.business.article.ArticleId;
-import com.jwl.business.article.IKeyWord;
-import com.jwl.business.article.IRating;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,7 +29,8 @@ public class ArticleConvertor {
 	}
 
 	public static ArticleTO convertFromEntity(Article entity) {
-		ArticleTO article = new ArticleTO(new ArticleId(entity.getId()), entity.getModified());
+		ArticleTO article = new ArticleTO(new ArticleId(entity.getId()),
+				entity.getModified());
 		article.setChangeNote(entity.getChangeNote());
 		article.setCreated(entity.getCreated());
 		article.setEditCount(entity.getEditCount());
@@ -43,17 +42,10 @@ public class ArticleConvertor {
 		for (Tag tag : entity.getTags()) {
 			article.addTag(tag.getName());
 		}
-		
-		List<IRating> ratings = new ArrayList<IRating>();
-		for(IRating r:entity.getRatings()){
-			ratings.add(r);
-		}
-		
-		List<IKeyWord> keyWords = new ArrayList<IKeyWord>();
-		for(IKeyWord kw: entity.getKeyWords()){
-			keyWords.add(kw);
-		}
-		
+
+		article.setRatings(RatingConvertor.convertFromEntities(entity
+				.getRatings()));
+
 		return article;
 	}
 
@@ -70,7 +62,7 @@ public class ArticleConvertor {
 		if (article.getId() != null) {
 			entity.setId(article.getId().getId());
 		}
-		
+
 		Set<Tag> tags = new HashSet<Tag>();
 
 		for (String tag : article.getTags()) {
@@ -81,5 +73,5 @@ public class ArticleConvertor {
 
 		return entity;
 	}
-	
+
 }
