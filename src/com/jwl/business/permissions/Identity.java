@@ -16,7 +16,7 @@ import com.jwl.business.exceptions.NoRoleFoundException;
 import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.exceptions.UnexpectedActionException;
 import com.jwl.integration.entity.Article;
-import com.jwl.integration.entity.Role;
+import com.jwl.integration.entity.RoleOld;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.role.IRoleDAO;
 
@@ -131,7 +131,7 @@ public class Identity implements IIdentity {
 		List<Object> allRoles = this.dao.findRoles(this.roles);
 		Set<Integer> excludedRoles = new HashSet<Integer>();
 		for (Object roleObject : allRoles) {
-			Role role = (Role)roleObject;
+			RoleOld role = (RoleOld)roleObject;
 			for (Article article : role.getArticles()) {
 				if (article.getId().equals(articleId.getId())) {
 					excludedRoles.add(role.getId());
@@ -142,7 +142,7 @@ public class Identity implements IIdentity {
 	}
 	
 	/**
-	 * Loads permissions of "Role" entity from Data Access Object
+	 * Loads permissions of "RoleOld" entity from Data Access Object
 	 *
 	 * @param classObject
 	 * @param dao
@@ -202,7 +202,7 @@ public class Identity implements IIdentity {
 		this.permissions.setActions(actions);
 		
 		for (Object roleObject : roleObjects) {
-			Role role = (Role) roleObject;
+			RoleOld role = (RoleOld) roleObject;
 			for (String action : actions) {
 				Method method = role.getClass().getMethod("is" + action);
 				Boolean permission = false || (Boolean) method.invoke(role);

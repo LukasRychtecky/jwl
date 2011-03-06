@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.jwl.integration.BaseEntity;
+import com.jwl.integration.role.Role;
 import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.NamedQueries;
