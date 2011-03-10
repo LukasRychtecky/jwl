@@ -36,20 +36,14 @@ public class Role implements Serializable {
     @Column(name = "code", nullable = false, length = 45)
 	private String code;
 
-	@ManyToMany(mappedBy = "roleList", fetch = FetchType.LAZY)
-	private List<Permission> permissionList;
+	@ManyToMany(mappedBy = "roleList", fetch = FetchType.EAGER)
+	private List<PermissionEntity> permissionList;
 
 	@JoinTable(name = "article_exclude_role", joinColumns = {
     	@JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
     	@JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false)})
     @ManyToMany(fetch = FetchType.LAZY)
 	private List<Article> articleList;
-
-	@JoinTable(name = "user_has_role", joinColumns = {
-    	@JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
-    	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)})
-    @ManyToMany(fetch = FetchType.LAZY)
-	private List<User> userList;
 
 	public Role() {
 	}
@@ -79,11 +73,11 @@ public class Role implements Serializable {
 		this.code = code;
 	}
 
-	public List<Permission> getPermissionList() {
+	public List<PermissionEntity> getPermissionList() {
 		return permissionList;
 	}
 
-	public void setPermissionList(List<Permission> permissionList) {
+	public void setPermissionList(List<PermissionEntity> permissionList) {
 		this.permissionList = permissionList;
 	}
 
@@ -93,14 +87,6 @@ public class Role implements Serializable {
 
 	public void setArticleList(List<Article> articleList) {
 		this.articleList = articleList;
-	}
-
-	public List<User> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
 	}
 
 	@Override

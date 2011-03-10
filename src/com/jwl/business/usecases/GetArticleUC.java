@@ -3,7 +3,7 @@ package com.jwl.business.usecases;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.Permission;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -21,7 +21,7 @@ public class GetArticleUC extends AbstractUC implements IGetArticleUC {
 
 	@Override
 	public ArticleTO get(ArticleId id) throws ModelException {
-//			super.checkPermission(new Permission("Article", "view"));
+			super.checkPermission(AccessPermissions.ARTICLE_VIEW, id);
 			ArticleTO article = null;
 		try {
 			article = super.factory.getArticleDAO().get(id);

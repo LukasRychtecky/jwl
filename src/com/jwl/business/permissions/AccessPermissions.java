@@ -6,25 +6,39 @@ package com.jwl.business.permissions;
  */
 public enum AccessPermissions {
 
-	ARTICLE_VIEW ("ArticleView"),
-	ARTICLE_EDIT ("ArticleEdit"),
-	ARTICLE_RENAME ("ArticleRename"),
-	ARTICLE_LOCK ("ArticleLock"),
-	ARTICLE_DELETE ("ArticleDelete"),
-	ARTICLE_EXCLUDE_ROLE ("ArticleExcludeRole"),
-	ATTACHMENT_VIEW ("AttachmentView"),
-	ATTACHMENT_ADD ("AttachmentAdd"),
-	ATTACHMENT_DELETE ("AttachmentDelete"), 
-	ARTICLE_RESTORE ("ArticleRestore");
+	ARTICLE_VIEW ("Article", "view"),
+	ARTICLE_EDIT ("Article", "edit"),
+	ARTICLE_RENAME ("Article", "rename"),
+	ARTICLE_RESTORE ("Article", "restore"),
+	ARTICLE_LOCK ("Article", "lock"),
+	ARTICLE_DELETE ("Article", "delete"),
+	ARTICLE_EXCLUDE_ROLE ("Article", "restoreRole"),
 
-	private String action;
+	ATTACHMENT_VIEW ("Attachment", "view"),
+	ATTACHMENT_ADD ("Attachment", "add"),
+	ATTACHMENT_DELETE ("Attachment", "delete");
 
-	private AccessPermissions(String action) {
-		this.action = action;
+	private String context;
+	private String method;
+
+	private AccessPermissions(String context, String method) {
+		this.context = context;
+		this.method = method;
 	}
 
-	public String getAction() {
-		return action;
+	@Override
+	public String toString() {
+		return this.context + "::" + this.method;
+	}
+
+	public boolean equals(String context, String method) {
+		if (context == null || !context.equals(this.context)) {
+			return false;
+		}
+		if (method == null || !method.equals(this.method)) {
+			return false;
+		}
+		return true;
 	}
 
 }

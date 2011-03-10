@@ -1,10 +1,11 @@
 package com.jwl.business.permissions;
 
 import com.jwl.business.article.ArticleId;
-import com.jwl.business.exceptions.NoAuthenticatedYetException;
-import com.jwl.business.exceptions.NoRoleFoundException;
+import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.PermissionDeniedException;
-import com.jwl.integration.role.IRoleDAO;
+import com.jwl.business.usecases.LoadPermissionsUC;
+import com.jwl.business.usecases.interfaces.ILoadPermissionsUC;
+import com.jwl.integration.IDAOFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,19 +17,29 @@ import java.util.Map;
  */
 public class UserIdentity implements IIdentity {
 
-	private Map<String, List<Permission>> permissions;
+	private IDAOFactory factory;
+	private Map<String, List<AccessPermissions>> permissions = null;
 	private Boolean isAuthenticated = Boolean.FALSE;
+	private Boolean isPermissionsLoaded = Boolean.FALSE;
 
-	public UserIdentity() {
-		this.permissions = new HashMap<String, List<Permission>>();
+	public UserIdentity(IDAOFactory factory) {
+		this.factory = factory;
+		this.permissions = new HashMap<String, List<AccessPermissions>>();
 	}
 
-
+	private void loadPermissions() throws ModelException {
+		if (!this.isPermissionsLoaded && !this.permissions.keySet().isEmpty()) {
+			ILoadPermissionsUC uc = new LoadPermissionsUC(this.factory);
+			this.permissions = uc.load(this.permissions.keySet());
+			this.isPermissionsLoaded = Boolean.TRUE;
+			this.isAuthenticated = Boolean.TRUE;
+		}
+	}
 
 	@Override
 	public void addUserRole(String role) {
 		if (!this.permissions.containsKey(role)) {
-			this.permissions.put(role, new ArrayList<Permission>());
+			this.permissions.put(role, new ArrayList<AccessPermissions>());
 		}
 	}
 
@@ -45,30 +56,27 @@ public class UserIdentity implements IIdentity {
 	}
 
 	@Override
-	public void checkPermission(String action, ArticleId articleId) throws PermissionDeniedException {
-
-	}
-
-	@Override
-	public void checkPermission(Permission permission) throws PermissionDeniedException {
-		if (this.permissions.isEmpty()) {
+	public void checkPermission(AccessPermissions permission) throws ModelException, PermissionDeniedException {
+		this.loadPermissions();
+		if (this.permissions.keySet().isEmpty()) {
 			throw new PermissionDeniedException("No roles found! Did you forget add role?");
 		}
-		if (!this.isAuthenticated) {
-			throw new PermissionDeniedException("Not authenticated yet. Did you forget call authenticate?");
-		}
 		if (!this.isAllowed(permission)) {
-			throw new PermissionDeniedException(
-					"Permission denied for " + permission.getContext() +
-					"::" + permission.getMethod() + " #" + permission.getArticleId()
-			);
+			throw new PermissionDeniedException("Permission denied for " + permission);
 		}
 	}
 
 	@Override
-	public Boolean isAllowed(Permission permission) {
+	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws ModelException, PermissionDeniedException {
+		this.checkPermission(permission);
+	}
+
+	@Override
+	public Boolean isAllowed(AccessPermissions permission) throws ModelException {
+		this.loadPermissions();
 		Boolean isAllowed = Boolean.FALSE;
-		for (List<Permission> perms : this.permissions.values()) {
+
+		for (List<AccessPermissions> perms : this.permissions.values()) {
 			if (perms.contains(permission)) {
 				isAllowed = Boolean.TRUE;
 				break;
@@ -78,18 +86,7 @@ public class UserIdentity implements IIdentity {
 	}
 
 	@Override
-	public void setPermissionsSources(Class<?> aClass, IRoleDAO dao) {
-
-	}
-
-	@Override
-	public void authenticate() {
-
-	}
-
-	@Override
 	public boolean isAuthenticated() {
 		return this.isAuthenticated;
 	}
-
 }

@@ -5,7 +5,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ArticleExistsException;
 import com.jwl.business.exceptions.BreakBusinessRuleException;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.permissions.AccessPermissionsOld;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
 import com.jwl.integration.IDAOFactory;
@@ -25,7 +25,7 @@ public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 
 	@Override
 	public ArticleId create(ArticleTO article) throws ModelException {
-		super.checkPermission(AccessPermissions.ARTICLE_EDIT);
+		super.checkPermission(AccessPermissionsOld.ARTICLE_EDIT);
 		if (article.getTitle().isEmpty()) {
 			throw new BreakBusinessRuleException("Article can't has empty title");
 		}

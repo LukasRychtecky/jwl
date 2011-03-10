@@ -1,7 +1,10 @@
 package com.jwl.presentation.component.renderer;
 
+import com.jwl.business.exceptions.ModelException;
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
@@ -10,6 +13,7 @@ import com.jwl.business.IFacade;
 import com.jwl.business.permissions.IIdentity;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.PermissionDeniedException;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
@@ -194,12 +198,13 @@ public abstract class JWLEncoder {
 		return new HtmlOutputPropertyLink(properties);
 	}
 
-	protected boolean hasPermission(String permission, ArticleId id) {
+	protected boolean hasPermission(AccessPermissions permission, ArticleId id) {
 		IIdentity identity = Global.getInstance().getFacade().getIdentity();
 		try {
 			identity.checkPermission(permission, id);
 			return true;
-		} catch (PermissionDeniedException e) {
+		} catch (ModelException ex) {
+			Logger.getLogger(JWLEncoder.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return false;
 	}

@@ -1,11 +1,14 @@
 package com.jwl.business;
 
+import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.integration.exceptions.DAOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -137,8 +140,8 @@ public class IdentityTest extends TestCase {
 	public void testHasPermissionEmptyDAO() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -160,8 +163,8 @@ public class IdentityTest extends TestCase {
 	public void testCheckPermissionEmptyDAO() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -184,7 +187,7 @@ public class IdentityTest extends TestCase {
 	public void testHasPermissionNoAuthenticated() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
+//		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
 
 		for (String action : this.permissions) {
 //			try {
@@ -207,7 +210,7 @@ public class IdentityTest extends TestCase {
 	public void testCheckPermissionNoAuthenticated() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
+//		identity.setPermissionsSources(RoleMock.class, this.emptyDAO);
 
 		for (String action : this.permissions) {
 //			try {
@@ -232,8 +235,8 @@ public class IdentityTest extends TestCase {
 	public void testHasPermissionNoPermissionLoaded() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMockExmpty.class, this.emptyDAO);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMockExmpty.class, this.emptyDAO);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -256,8 +259,8 @@ public class IdentityTest extends TestCase {
 	public void testCheckPermissionNoPermissionLoaded() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMockExmpty.class, this.emptyDAO);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMockExmpty.class, this.emptyDAO);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -282,8 +285,8 @@ public class IdentityTest extends TestCase {
 	public void testHasPermissionAdmin() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMock.class, this.dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, this.dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -305,8 +308,8 @@ public class IdentityTest extends TestCase {
 	public void testCheckPermissionAdmin() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -314,7 +317,7 @@ public class IdentityTest extends TestCase {
 //			} catch (UnexpectedActionException e) {
 //				IdentityTest.fail("Unexpected action: " + action);
 //			} catch (PermissionDeniedException e) {
-//				IdentityTest.fail("Permission denied for action: " + action);
+//				IdentityTest.fail("PermissionEntity denied for action: " + action);
 //			} catch (NoRoleFoundException e) {
 //				IdentityTest.fail("No role added");
 //			} catch (NoAuthenticatedYetException e) {
@@ -330,8 +333,8 @@ public class IdentityTest extends TestCase {
 	public void testHasPermissionSlave() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.slave);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -353,8 +356,8 @@ public class IdentityTest extends TestCase {
 	public void testCheckPermissionSlave() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.slave);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -379,8 +382,8 @@ public class IdentityTest extends TestCase {
 	public void testHasPermissionEditor() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.editor);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		Map<String, Boolean> editorPermissions = this.editorPermissionProvider();
 
@@ -405,8 +408,8 @@ public class IdentityTest extends TestCase {
 	public void testCheckPermissionEditor() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.editor);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		Map<String, Boolean> editorPermissions = this.editorPermissionProvider();
 
@@ -441,8 +444,8 @@ public class IdentityTest extends TestCase {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.editor);
 		identity.addUserRole(this.slave);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		Map<String, Boolean> editorPermissions = this.editorPermissionProvider();
 
@@ -467,8 +470,8 @@ public class IdentityTest extends TestCase {
 	public void testCheckPermissionEditorAndSlave() {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.editor);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		Map<String, Boolean> editorPermissions = this.editorPermissionProvider();
 
@@ -518,8 +521,8 @@ public class IdentityTest extends TestCase {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
 		identity.addUserRole(this.slave);
-		identity.setPermissionsSources(RoleMock.class, this.dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, this.dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -542,8 +545,8 @@ public class IdentityTest extends TestCase {
 		IIdentity identity = new Identity();
 		identity.addUserRole(this.admin);
 		identity.addUserRole(this.slave);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -551,7 +554,7 @@ public class IdentityTest extends TestCase {
 //			} catch (UnexpectedActionException e) {
 //				IdentityTest.fail("Unexpected action: " + action);
 //			} catch (PermissionDeniedException e) {
-//				IdentityTest.fail("Permission denied for action: " + action);
+//				IdentityTest.fail("PermissionEntity denied for action: " + action);
 //			} catch (NoRoleFoundException e) {
 //				IdentityTest.fail("No role added");
 //			} catch (NoAuthenticatedYetException e) {
@@ -569,8 +572,8 @@ public class IdentityTest extends TestCase {
 		identity.addUserRole(this.admin);
 		identity.addUserRole(this.slave);
 		identity.addUserRole(this.editor);
-		identity.setPermissionsSources(RoleMock.class, this.dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, this.dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -594,8 +597,8 @@ public class IdentityTest extends TestCase {
 		identity.addUserRole(this.admin);
 		identity.addUserRole(this.slave);
 		identity.addUserRole(this.editor);
-		identity.setPermissionsSources(RoleMock.class, dao);
-		identity.authenticate();
+//		identity.setPermissionsSources(RoleMock.class, dao);
+//		identity.authenticate();
 
 		for (String action : this.permissions) {
 //			try {
@@ -603,7 +606,7 @@ public class IdentityTest extends TestCase {
 //			} catch (UnexpectedActionException e) {
 //				IdentityTest.fail("Unexpected action: " + action);
 //			} catch (PermissionDeniedException e) {
-//				IdentityTest.fail("Permission denied for action: " + action);
+//				IdentityTest.fail("PermissionEntity denied for action: " + action);
 //			} catch (NoRoleFoundException e) {
 //				IdentityTest.fail("No role added");
 //			} catch (NoAuthenticatedYetException e) {
@@ -618,6 +621,11 @@ public class IdentityTest extends TestCase {
 		public List<Object> findRoles(List<String> roles) {
 			List<Object> emptyList = new ArrayList<Object>();
 			return emptyList;
+		}
+
+		@Override
+		public Map<String, List<AccessPermissions>> load(Set<String> roles) throws DAOException {
+			throw new UnsupportedOperationException("Not supported yet.");
 		}
 
 	}
@@ -696,6 +704,11 @@ public class IdentityTest extends TestCase {
 			}
 
 			return role;
+		}
+
+		@Override
+		public Map<String, List<AccessPermissions>> load(Set<String> roles) throws DAOException {
+			throw new UnsupportedOperationException("Not supported yet.");
 		}
 	}
 

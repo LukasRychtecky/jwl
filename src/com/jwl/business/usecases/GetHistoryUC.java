@@ -3,7 +3,7 @@ package com.jwl.business.usecases;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.permissions.AccessPermissionsOld;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -20,7 +20,7 @@ public class GetHistoryUC extends AbstractUC implements IGetHistoryUC {
 
 	@Override
 	public HistoryTO get(HistoryId id) throws ModelException {
-		super.checkPermission(AccessPermissions.ARTICLE_RESTORE);
+		super.checkPermission(AccessPermissionsOld.ARTICLE_RESTORE);
 		HistoryTO history = null;
 
 		try {

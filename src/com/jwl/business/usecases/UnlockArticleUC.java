@@ -4,7 +4,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.permissions.AccessPermissionsOld;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -22,7 +22,7 @@ public class UnlockArticleUC extends AbstractUC implements IUnlockArticleUC {
 	@Override
 	public void unlock(ArticleId id) throws ModelException {
 		try {
-			super.checkPermission(AccessPermissions.ARTICLE_LOCK);
+			super.checkPermission(AccessPermissionsOld.ARTICLE_LOCK);
 			ArticleTO article = super.factory.getArticleDAO().get(id);
 			if (article == null) {
 				throw new ObjectNotFoundException("Article not found, id: " + id);

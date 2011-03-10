@@ -21,11 +21,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "permission", catalog = "wiki", schema = "")
 @NamedQueries({
-	@NamedQuery(name = "Permission.findAll", query = "SELECT p FROM Permission p"),
-	@NamedQuery(name = "Permission.findById", query = "SELECT p FROM Permission p WHERE p.id = :id"),
-	@NamedQuery(name = "Permission.findByContext", query = "SELECT p FROM Permission p WHERE p.context = :context"),
-	@NamedQuery(name = "Permission.findByMethod", query = "SELECT p FROM Permission p WHERE p.method = :method")})
-public class Permission implements Serializable {
+	@NamedQuery(name = "PermissionEntity.findAll", query = "SELECT p FROM PermissionEntity p"),
+	@NamedQuery(name = "PermissionEntity.findById", query = "SELECT p FROM PermissionEntity p WHERE p.id = :id"),
+	@NamedQuery(name = "PermissionEntity.findByContext", query = "SELECT p FROM PermissionEntity p WHERE p.context = :context"),
+	@NamedQuery(name = "PermissionEntity.findByMethod", query = "SELECT p FROM PermissionEntity p WHERE p.method = :method")})
+public class PermissionEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
     @Basic(optional = false)
@@ -46,14 +46,14 @@ public class Permission implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
 	private List<Role> roleList;
 
-	public Permission() {
+	public PermissionEntity() {
 	}
 
-	public Permission(Integer id) {
+	public PermissionEntity(Integer id) {
 		this.id = id;
 	}
 
-	public Permission(Integer id, String context, String method) {
+	public PermissionEntity(Integer id, String context, String method) {
 		this.id = id;
 		this.context = context;
 		this.method = method;
@@ -101,10 +101,10 @@ public class Permission implements Serializable {
 	@Override
 	public boolean equals(Object object) {
 		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Permission)) {
+		if (!(object instanceof PermissionEntity)) {
 			return false;
 		}
-		Permission other = (Permission) object;
+		PermissionEntity other = (PermissionEntity) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -113,7 +113,7 @@ public class Permission implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.jwl.integration.role.Permission[id=" + id + "]";
+		return "com.jwl.integration.role.PermissionEntity[id=" + id + "]";
 	}
 
 }

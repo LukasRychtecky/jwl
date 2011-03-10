@@ -1,5 +1,6 @@
 package com.jwl.business.permissions;
 
+import com.jwl.business.exceptions.ModelException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -81,7 +82,6 @@ public class Identity implements IIdentity {
 	 * @throws UnexpectedActionException
 	 * @throws NoRoleFoundException
 	 */
-	@Override
 	public void checkPermission(String action, ArticleId articleId)
 			throws PermissionDeniedException {
 		
@@ -147,7 +147,6 @@ public class Identity implements IIdentity {
 	 * @param classObject
 	 * @param dao
 	 */
-	@Override
 	public void setPermissionsSources(Class<?> classObject, IRoleDAO dao) {
 		this.userActionsSource = classObject;
 		this.dao = dao;
@@ -156,7 +155,6 @@ public class Identity implements IIdentity {
 	/**
 	 * Authenticates user.
 	 */
-	@Override
 	public void authenticate() {
 		this.isAuthenticated = Boolean.TRUE;
 		this.loadPermissions();
@@ -227,13 +225,30 @@ public class Identity implements IIdentity {
 		return this.isAuthenticated;
 	}
 
-	@Override
 	public Boolean isAllowed(Permission permission) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	@Override
 	public void checkPermission(Permission permission) throws PermissionDeniedException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void checkPermission(Permission permission, ArticleId articleId) throws ModelException, PermissionDeniedException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Boolean isAllowed(AccessPermissions permission) throws ModelException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void checkPermission(AccessPermissions permission) throws ModelException, PermissionDeniedException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws ModelException, PermissionDeniedException {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 	

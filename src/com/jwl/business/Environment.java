@@ -14,6 +14,7 @@ public class Environment {
 	public static final String IMPLICIT_PU = "jsfwiki";
 	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
 	private static IDAOFactory factory = null;
+	private static IIdentity identity = null;
 
 	private Environment() {
 
@@ -37,7 +38,10 @@ public class Environment {
 	}
 
 	public static IIdentity getIdentity() {
-		return new UserIdentity();
+		if (Environment.identity == null) {
+			Environment.identity = new UserIdentity(Environment.getDAOFactory());
+		}
+		return Environment.identity;
 	}
 
 

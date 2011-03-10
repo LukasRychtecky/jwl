@@ -50,7 +50,6 @@ import com.jwl.integration.role.RoleDAO;
  */
 public class Facade implements IFacade {
 
-	private IIdentity identity = null;
 	private IPaginator paginator = null;
 	private SearchPaginator searchPaginator = null;
 
@@ -81,11 +80,7 @@ public class Facade implements IFacade {
 
 	@Override
 	public IIdentity getIdentity() {
-		if (this.identity == null) {
-			this.identity = new UserIdentity();
-			this.identity.setPermissionsSources(RoleOld.class, new RoleDAO());
-		}
-		return this.identity;
+		return Environment.getIdentity();
 	}
 
 	@Override
