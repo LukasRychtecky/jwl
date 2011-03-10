@@ -70,7 +70,7 @@ public abstract class AbstractEncodeEdit extends JWLEncoder {
 			tags.append(tag).append(", ");
 		}
 
-		String tagAsString = "";
+		String tagAsString = "Ahoj ";
 		if (tags.length() > 0) {
 			tagAsString = tags.substring(0, tags.length() - 1);
 		}
@@ -195,7 +195,7 @@ public abstract class AbstractEncodeEdit extends JWLEncoder {
 	}
 
 	protected UIComponent encodeUnknownUserMessage() {
-		return getHtmlTextComponent("Your user name is unknown. It will "
+		return getHtmlTextComponent("Your user name is unknown! JOoooo. It will "
 				+ "record your IP adress.", JWLStyleClass.EDIT_MESSAGE_WARNING);
 	}
 
