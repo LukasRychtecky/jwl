@@ -12,7 +12,7 @@ public enum AccessPermissions {
 	ARTICLE_RESTORE ("Article", "restore"),
 	ARTICLE_LOCK ("Article", "lock"),
 	ARTICLE_DELETE ("Article", "delete"),
-	ARTICLE_EXCLUDE_ROLE ("Article", "restoreRole"),
+	ARTICLE_EXCLUDE_ROLE ("Article", "excludeRole"),
 
 	ATTACHMENT_VIEW ("Attachment", "view"),
 	ATTACHMENT_ADD ("Attachment", "add"),

@@ -19,6 +19,8 @@ public interface IIdentity {
 	public Boolean hasUserRole(String role);
 
 	public Boolean isAllowed(AccessPermissions permission) throws ModelException;
+
+	public Boolean isAllowed(AccessPermissions permission, ArticleId id) throws ModelException;
 	
 	public void checkPermission(AccessPermissions permission) throws ModelException, PermissionDeniedException;
 

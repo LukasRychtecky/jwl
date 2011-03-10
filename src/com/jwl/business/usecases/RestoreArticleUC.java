@@ -8,7 +8,7 @@ import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
-import com.jwl.business.permissions.AccessPermissionsOld;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
 import com.jwl.integration.IDAOFactory;
@@ -27,7 +27,7 @@ public class RestoreArticleUC extends AbstractUC implements IRestoreArticleUC {
 
 	@Override
 	public void restore(HistoryId id) throws ModelException {
-		super.checkPermission(AccessPermissionsOld.ARTICLE_RESTORE);
+		super.checkPermission(AccessPermissions.ARTICLE_RESTORE);
 		
 		try {
 			ArticleTO article = this.getArticle(id);

@@ -17,8 +17,6 @@ import com.jwl.business.article.process.FileUploadProcess;
 import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.IIdentity;
-import com.jwl.business.permissions.Identity;
-import com.jwl.business.permissions.UserIdentity;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
@@ -89,7 +87,7 @@ public class Facade implements IFacade {
 		try {
 			process.doIt();
 		} catch (BusinessProcessException e) {
-			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null,
+			Logger.getLogger(FileUploadProcess.class.getName()).log(Level.SEVERE, null,
 					e);
 		}
 	}
@@ -101,7 +99,7 @@ public class Facade implements IFacade {
 		try {
 			process.doIt();
 		} catch (BusinessProcessException e) {
-			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e);
 		}
 		
 	}

@@ -4,7 +4,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
-import com.jwl.business.permissions.AccessPermissionsOld;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -23,7 +23,7 @@ public class LockArticleUC extends AbstractUC implements ILockArticleUC {
 
 	@Override
 	public void lock(ArticleId id) throws ModelException {
-		super.checkPermission(AccessPermissionsOld.ARTICLE_LOCK);
+		super.checkPermission(AccessPermissions.ARTICLE_LOCK);
 		try {
 			ArticleTO article = super.factory.getArticleDAO().get(id);
 			if (article == null) {

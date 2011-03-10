@@ -5,7 +5,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.BreakBusinessRuleException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
-import com.jwl.business.permissions.AccessPermissionsOld;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -23,7 +23,7 @@ public class DeleteArticleUC extends AbstractUC implements IDeleteArticleUC {
 
 	@Override
 	public void delete(ArticleId id) throws ModelException {
-		super.checkPermission(AccessPermissionsOld.ARTICLE_DELETE);
+		super.checkPermission(AccessPermissions.ARTICLE_DELETE);
 		try {
 			ArticleTO article = super.factory.getArticleDAO().get(id);
 

@@ -6,7 +6,7 @@ import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
-import com.jwl.business.permissions.AccessPermissionsOld;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.integration.IDAOFactory;
@@ -25,7 +25,7 @@ public class UpdateArticleUC extends AbstractUC implements IUpdateArticleUC {
 
 	@Override
 	public void update(ArticleTO article) throws ModelException {
-		super.checkPermission(AccessPermissionsOld.ARTICLE_EDIT);
+		super.checkPermission(AccessPermissions.ARTICLE_EDIT);
 
 		Set<String> tags = article.getTags();
 		try {

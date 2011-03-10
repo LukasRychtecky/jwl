@@ -5,7 +5,6 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.permissions.AccessPermissions;
-import com.jwl.business.permissions.AccessPermissionsOld;
 import com.jwl.integration.IDAOFactory;
 
 /**
@@ -20,11 +19,20 @@ abstract public class AbstractUC {
 		this.factory = factory;
 	}
 
-	public void checkPermission(AccessPermissionsOld action) throws PermissionDeniedException {
+	public void checkPermission(AccessPermissions permission) throws ModelException, PermissionDeniedException {
+		Environment.getIdentity().checkPermission(permission);
 	}
 
 	public void checkPermission(AccessPermissions permission, ArticleId id) throws ModelException, PermissionDeniedException {
 		Environment.getIdentity().checkPermission(permission, id);
+	}
+
+	public boolean isAllowed(AccessPermissions permission) throws ModelException {
+		return Environment.getIdentity().isAllowed(permission);
+	}
+
+	public boolean isAllowed(AccessPermissions permission, ArticleId id) throws ModelException {
+		return Environment.getIdentity().isAllowed(permission, id);
 	}
 
 }

@@ -86,6 +86,14 @@ public class UserIdentity implements IIdentity {
 	}
 
 	@Override
+	public Boolean isAllowed(AccessPermissions permission, ArticleId id) throws ModelException {
+		Boolean isAllowed = this.isAllowed(permission);
+		//TODO: exclude role
+
+		return isAllowed;
+	}
+
+	@Override
 	public boolean isAuthenticated() {
 		return this.isAuthenticated;
 	}

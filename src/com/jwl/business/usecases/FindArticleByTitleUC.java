@@ -2,7 +2,7 @@ package com.jwl.business.usecases;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.AccessPermissionsOld;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -19,7 +19,7 @@ public class FindArticleByTitleUC extends AbstractUC implements IFindArticleByTi
 
 	@Override
 	public ArticleTO find(String title) throws ModelException {
-		super.checkPermission(AccessPermissionsOld.ARTICLE_VIEW);
+		super.checkPermission(AccessPermissions.ARTICLE_VIEW);
 		ArticleTO article = null;
 		try {
 			article = super.factory.getArticleDAO().getByTitle(title);
