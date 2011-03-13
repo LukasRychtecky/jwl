@@ -44,7 +44,7 @@ public class PermissionEntity implements Serializable {
     	@JoinColumn(name = "permission_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
     	@JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)})
     @ManyToMany(fetch = FetchType.LAZY)
-	private List<Role> roleList;
+	private List<RoleEntity> roleList;
 
 	public PermissionEntity() {
 	}
@@ -83,11 +83,11 @@ public class PermissionEntity implements Serializable {
 		this.method = method;
 	}
 
-	public List<Role> getRoleList() {
+	public List<RoleEntity> getRoleList() {
 		return roleList;
 	}
 
-	public void setRoleList(List<Role> roleList) {
+	public void setRoleList(List<RoleEntity> roleList) {
 		this.roleList = roleList;
 	}
 

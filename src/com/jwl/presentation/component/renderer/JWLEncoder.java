@@ -199,14 +199,13 @@ public abstract class JWLEncoder {
 	}
 
 	protected boolean hasPermission(AccessPermissions permission, ArticleId id) {
-		IIdentity identity = Global.getInstance().getFacade().getIdentity();
 		try {
-			identity.checkPermission(permission, id);
-			return true;
+			IIdentity identity = Global.getInstance().getFacade().getIdentity();
+			return identity.isAllowed(permission, id);
 		} catch (ModelException ex) {
 			Logger.getLogger(JWLEncoder.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
 		}
-		return false;
 	}
 
 	protected String getFormAction() {

@@ -1,8 +1,7 @@
 package com.jwl.business.permissions;
 
-import java.util.List;
-
 import com.jwl.business.article.ArticleId;
+import java.util.List;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.PermissionDeniedException;
 
@@ -12,15 +11,15 @@ import com.jwl.business.exceptions.PermissionDeniedException;
  */
 public interface IIdentity {
 
-	public void addUserRole(String role);
+	public void addUserRole(Role role);
 
-	public void addUserRoles(List<String> roles);
+	public void addUserRoles(List<Role> roles);
 
-	public Boolean hasUserRole(String role);
+	public Boolean hasUserRole(Role role);
 
 	public Boolean isAllowed(AccessPermissions permission) throws ModelException;
 
-	public Boolean isAllowed(AccessPermissions permission, ArticleId id) throws ModelException;
+	public Boolean isAllowed(AccessPermissions permission, ArticleId articleId) throws ModelException;
 	
 	public void checkPermission(AccessPermissions permission) throws ModelException, PermissionDeniedException;
 

@@ -39,8 +39,7 @@ import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-import com.jwl.integration.entity.RoleOld;
-import com.jwl.integration.role.RoleDAO;
+// </editor-fold>
 
 /**
  * This interface provides communication between Model(business tier,

@@ -6,10 +6,11 @@ import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.usecases.LoadPermissionsUC;
 import com.jwl.business.usecases.interfaces.ILoadPermissionsUC;
 import com.jwl.integration.IDAOFactory;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -18,40 +19,40 @@ import java.util.Map;
 public class UserIdentity implements IIdentity {
 
 	private IDAOFactory factory;
-	private Map<String, List<AccessPermissions>> permissions = null;
+	private Map<Role, List<AccessPermissions>> permissions = null;
 	private Boolean isAuthenticated = Boolean.FALSE;
 	private Boolean isPermissionsLoaded = Boolean.FALSE;
+	private Set<Role> roles;
 
 	public UserIdentity(IDAOFactory factory) {
 		this.factory = factory;
-		this.permissions = new HashMap<String, List<AccessPermissions>>();
+		this.permissions = new HashMap<Role, List<AccessPermissions>>();
+		this.roles = new HashSet<Role>();
 	}
 
 	private void loadPermissions() throws ModelException {
-		if (!this.isPermissionsLoaded && !this.permissions.keySet().isEmpty()) {
+		if (!this.isPermissionsLoaded && !this.roles.isEmpty()) {
 			ILoadPermissionsUC uc = new LoadPermissionsUC(this.factory);
-			this.permissions = uc.load(this.permissions.keySet());
+			this.permissions = uc.load(this.roles);
 			this.isPermissionsLoaded = Boolean.TRUE;
 			this.isAuthenticated = Boolean.TRUE;
 		}
 	}
 
 	@Override
-	public void addUserRole(String role) {
-		if (!this.permissions.containsKey(role)) {
-			this.permissions.put(role, new ArrayList<AccessPermissions>());
-		}
+	public void addUserRole(Role role) {
+		this.roles.add(role);
 	}
 
 	@Override
-	public void addUserRoles(List<String> roles) {
-		for (String role : roles) {
+	public void addUserRoles(List<Role> roles) {
+		for (Role role : roles) {
 			this.addUserRole(role);
 		}
 	}
 
 	@Override
-	public Boolean hasUserRole(String role) {
+	public Boolean hasUserRole(Role role) {
 		return this.permissions.containsKey(role);
 	}
 
@@ -69,6 +70,9 @@ public class UserIdentity implements IIdentity {
 	@Override
 	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws ModelException, PermissionDeniedException {
 		this.checkPermission(permission);
+		if (!this.isAllowed(permission, articleId)) {
+			throw new PermissionDeniedException("Permission denied for article #" + articleId);
+		}
 	}
 
 	@Override
@@ -88,7 +92,17 @@ public class UserIdentity implements IIdentity {
 	@Override
 	public Boolean isAllowed(AccessPermissions permission, ArticleId id) throws ModelException {
 		Boolean isAllowed = this.isAllowed(permission);
-		//TODO: exclude role
+
+		if (!isAllowed) {
+			return isAllowed;
+		}
+
+		for (Role role : this.permissions.keySet()) {
+			if (role.getArticlesId().contains(id)) {
+				isAllowed = Boolean.FALSE;
+				break;
+			}
+		}
 
 		return isAllowed;
 	}

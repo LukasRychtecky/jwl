@@ -1,5 +1,6 @@
 package com.jwl.business.article;
 
+import com.jwl.business.permissions.Role;
 import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ public class ArticleTO {
 	private Boolean locked = Boolean.FALSE;
 	private Date modified;
 	private String changeNote = "";
+	private Set<Role> excludedRoles;
 
 	public ArticleTO() {
 	}
@@ -27,6 +29,7 @@ public class ArticleTO {
 	public ArticleTO(ArticleId id, Date modified) {
 		this.id = id;
 		this.modified = modified;
+		this.excludedRoles = new HashSet<Role>();
 	}
 
 	/**
@@ -169,4 +172,14 @@ public class ArticleTO {
 	public void removeAllTags() {
 		this.tags.clear();
 	}
+
+	public void addRole(Role role) {
+		this.excludedRoles.add(role);
+	}
+
+	public Set<Role> getExcludedRoles() {
+		return new HashSet<Role>(this.excludedRoles);
+	}
+
+
 }

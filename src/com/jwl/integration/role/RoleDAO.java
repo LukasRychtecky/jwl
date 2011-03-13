@@ -1,6 +1,7 @@
 package com.jwl.integration.role;
 
 import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.permissions.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +16,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * This class provides CRUD operations on Role entity.
+ * This class provides CRUD operations on RoleEntity entity.
  * 
  * @author Lukas Rychtecky
  */
 public class RoleDAO extends BaseDAO implements IRoleDAO {
 
 	private static final long serialVersionUID = -8198800235309610794L;
-	private static final String FIND_ALL_WHERE = "SELECT r FROM Role r WHERE ";
+	private static final String FIND_ALL_WHERE = "SELECT r FROM RoleEntity r WHERE ";
 
 	/**
 	 * Returns roles by given names.
@@ -68,23 +69,23 @@ public class RoleDAO extends BaseDAO implements IRoleDAO {
 	}
 
 	@Override
-	public Map<String, List<AccessPermissions>> load(Set<String> roles) throws DAOException {
-		Map<String, List<AccessPermissions>> permissions = new HashMap<String, List<AccessPermissions>>();
+	public Map<Role, List<AccessPermissions>> load(Set<Role> roles) throws DAOException {
+		Map<Role, List<AccessPermissions>> permissions = new HashMap<Role, List<AccessPermissions>>();
 		EntityManager em = super.getEntityManager();
 		try {
 			Query query = em.createQuery(this.buildQuery(roles.size()));
 
 			Integer i = 0;
-			for (Iterator<String> it = roles.iterator(); it.hasNext();) {
-				query.setParameter(i, it.next());
+			for (Iterator<Role> it = roles.iterator(); it.hasNext();) {
+				query.setParameter(i, it.next().getCode());
 				i++;
 
 			}
 			@SuppressWarnings("unchecked")
-			List<Role> result = (List<Role>) query.getResultList();
+			List<RoleEntity> result = (List<RoleEntity>) query.getResultList();
 
-			for (Role role : result) {
-				permissions.put(role.getCode(), this.toObject(role.getPermissionList()));
+			for (RoleEntity entity : result) {
+				permissions.put(RoleConvertor.toObject(entity), this.toObject(entity.getPermissionList()));
 			}
 
 		} catch (Exception e) {
@@ -101,7 +102,7 @@ public class RoleDAO extends BaseDAO implements IRoleDAO {
 		try {
 			perm = AccessPermissions.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			//TODO: process ex.
+			//TODO: skip unknow permission
 		}
 
 		return perm;

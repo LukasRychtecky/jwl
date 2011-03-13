@@ -2,6 +2,7 @@ package com.jwl.business.usecases;
 
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.permissions.Role;
 import com.jwl.business.usecases.interfaces.ILoadPermissionsUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -20,8 +21,8 @@ public class LoadPermissionsUC extends AbstractUC implements ILoadPermissionsUC 
 	}
 
 	@Override
-	public Map<String, List<AccessPermissions>> load(Set<String> roles) throws ModelException {
-		Map<String, List<AccessPermissions>> permissions = null;
+	public Map<Role, List<AccessPermissions>> load(Set<Role> roles) throws ModelException {
+		Map<Role, List<AccessPermissions>> permissions = null;
 
 		try {
 			permissions = super.factory.getRoleDAO().load(roles);

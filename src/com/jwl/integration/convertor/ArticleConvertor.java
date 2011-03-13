@@ -6,8 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.integration.role.RoleConvertor;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.entity.Tag;
+import com.jwl.integration.role.RoleEntity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +42,10 @@ public class ArticleConvertor {
 		for (Tag tag : entity.getTags()) {
 			article.addTag(tag.getName());
 		}
+
+//		for (RoleEntity roleEntity : entity.getRoles()) {
+//			article.addRole(RoleConvertor.toObject(roleEntity));
+//		}
 		return article;
 	}
 

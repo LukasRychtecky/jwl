@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -22,10 +23,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "security_role", catalog = "wiki", schema = "")
 @NamedQueries({
-	@NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
-	@NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
-	@NamedQuery(name = "Role.findByCode", query = "SELECT r FROM Role r WHERE r.code = :code")})
-public class Role implements Serializable {
+	@NamedQuery(name = "RoleEntity.findAll", query = "SELECT r FROM RoleEntity r"),
+	@NamedQuery(name = "RoleEntity.findById", query = "SELECT r FROM RoleEntity r WHERE r.id = :id"),
+	@NamedQuery(name = "RoleEntity.findByCode", query = "SELECT r FROM RoleEntity r WHERE r.code = :code")})
+public class RoleEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
     @Basic(optional = false)
@@ -45,14 +46,14 @@ public class Role implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
 	private List<Article> articleList;
 
-	public Role() {
+	public RoleEntity() {
 	}
 
-	public Role(Integer id) {
+	public RoleEntity(Integer id) {
 		this.id = id;
 	}
 
-	public Role(Integer id, String code) {
+	public RoleEntity(Integer id, String code) {
 		this.id = id;
 		this.code = code;
 	}
@@ -99,10 +100,10 @@ public class Role implements Serializable {
 	@Override
 	public boolean equals(Object object) {
 		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Role)) {
+		if (!(object instanceof RoleEntity)) {
 			return false;
 		}
-		Role other = (Role) object;
+		RoleEntity other = (RoleEntity) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -111,7 +112,7 @@ public class Role implements Serializable {
 
 	@Override
 	public String toString() {
-		return "com.jwl.integration.role.Role[id=" + id + "]";
+		return "com.jwl.integration.role.RoleEntity[id=" + id + "]";
 	}
 
 }

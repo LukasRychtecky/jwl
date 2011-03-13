@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.jwl.integration.BaseEntity;
-import com.jwl.integration.role.Role;
+import com.jwl.integration.role.RoleEntity;
 import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.NamedQueries;
@@ -89,7 +89,7 @@ public class Article extends BaseEntity implements java.io.Serializable {
 	@JoinTable(name = "article_exclude_role", 
 	joinColumns = { @JoinColumn(name = "article_id", nullable = false, updatable = false) }, 
 	inverseJoinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false) })	
-	private Set<Role> roles = new HashSet<Role>(0);
+	private Set<RoleEntity> roles = new HashSet<RoleEntity>(0);
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "article", fetch = FetchType.LAZY)
 	private Collection<History> histories;
@@ -122,7 +122,7 @@ public class Article extends BaseEntity implements java.io.Serializable {
 
 	public Article(String text, String title, Date created, boolean locked,
 			String editor, Date modified, int editCount, String changeNote,
-			Set<Role> roles, Set<History> histories, Set<Tag> tags,
+			Set<RoleEntity> roles, Set<History> histories, Set<Tag> tags,
 			Set<Attachment> attachments) {
 		this.text = text;
 		this.title = title;
@@ -212,11 +212,11 @@ public class Article extends BaseEntity implements java.io.Serializable {
 		this.changeNote = changeNote;
 	}
 
-	public Set<Role> getRoles() {
+	public Set<RoleEntity> getRoles() {
 		return this.roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
 	}
 

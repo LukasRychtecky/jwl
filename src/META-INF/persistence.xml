@@ -9,7 +9,7 @@
     <class>com.jwl.integration.role.User</class>
     <class>com.jwl.integration.role.Permission</class>
     <class>com.jwl.integration.role.Article</class>
-    <class>com.jwl.integration.role.Role</class>
+    <class>com.jwl.integration.role.RoleEntity</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
