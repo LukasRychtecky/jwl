@@ -6,14 +6,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlOutputLink;
+import javax.faces.context.ResponseWriter;
+
 import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.administration.enumerations.AdministrationActions;
 import com.jwl.presentation.article.enumerations.ListColumns;
+import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
+import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.component.renderer.AbstractEncodeListing;
+import com.jwl.util.html.component.HtmlLinkProperties;
 
 /**
  * @author Lukas Rychtecky
@@ -30,6 +37,7 @@ public class EncodeListing extends AbstractEncodeListing {
 			super.encodeFlashMessages();
 			super.encodeLinkToCreateNewArticle();
 			encodeArticles();
+			this.encodeKnowledgeLinks();
 		} catch (IOException e) {
 			Logger.getLogger(EncodeListing.class.getName()).log(Level.SEVERE,
 					null, e);
@@ -77,5 +85,28 @@ public class EncodeListing extends AbstractEncodeListing {
 		oc.put(3, ListColumns.EDITOR);
 		oc.put(5, ListColumns.CREATED);
 		return oc;
+	}
+	private void encodeKnowledgeLinks() throws IOException{
+		this.encodeDivIdStart(JWLElements.ADMINISTRATION_KM_DIV.id);
+		ResponseWriter writer = this.context.getResponseWriter();
+		writer.write("Knowledge manageent");
+		encodeMergeSuggestionsLink();
+		this.encodeKeyWordLink();
+		this.encodeDivEnd();
+	}
+	private void encodeKeyWordLink() throws IOException{
+		ResponseWriter writer = this.context.getResponseWriter();
+		writer.write("<a id=\""+JWLElements.ADMINISTRATION_KW_LINK.id+"\" href=\"#\">");
+		writer.write("create key words");
+		writer.write("</a>");
+	}
+	private void encodeMergeSuggestionsLink() throws IOException {
+		HtmlLinkProperties properties = new HtmlLinkProperties();
+		properties.setValue("Merge suggestions");
+		properties.addParameter(JWLURLParameters.ACTION, AdministrationActions.MERGE_SUGGESTION.action);
+		properties.addClass(JWLStyleClass.ACTION_BUTTON);
+
+		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
+		link.encodeAll(this.context);
 	}
 }

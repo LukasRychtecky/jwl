@@ -45,7 +45,8 @@ public class ArticleConvertor {
 
 		article.setRatings(RatingConvertor.convertFromEntities(entity
 				.getRatings()));
-
+		
+		article.setKeyWords(KeyWordConvertor.fromEntities(entity.getKeyWords()));
 		return article;
 	}
 

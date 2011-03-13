@@ -13,40 +13,42 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsExceptiuon;
+import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
 
 public class SettingsSource implements ISettingsSource {
 	Map<String, NeuronRecord> neuronRecords;
-	private static final String settingsFile = "/resources/knowledgemanagementsettings.xml";
-	
+	Map<String, String> schedulerRecords;
+	private static final String settingsFile = "C:\\JWL_BW\\SeamWiki\\resources\\KnowledgeManagementSettings.xml";
+
 	@Override
 	public Map<String, WeightRecord> getWeights(String neuronName)
-			throws KnowledgeManagementSettingsExceptiuon {
+			throws KnowledgeManagementSettingsException {
 		checkRecordAvailability(neuronName);
 		return neuronRecords.get(neuronName).getWeights();
 	}
 
 	@Override
 	public float getTreshold(String neuronName)
-			throws KnowledgeManagementSettingsExceptiuon {
+			throws KnowledgeManagementSettingsException {
 		checkRecordAvailability(neuronName);
 		return neuronRecords.get(neuronName).getThreshold();
 	}
 
 	@Override
 	public float getWeight(String neuronName, String inputName)
-			throws KnowledgeManagementSettingsExceptiuon {	
+			throws KnowledgeManagementSettingsException {
 		checkRecordAvailability(neuronName);
 		return neuronRecords.get(neuronName).getWeights().get(inputName)
 				.getWeight();
 	}
-	
-	private void checkRecordAvailability(String neuronName) throws KnowledgeManagementSettingsExceptiuon{
+
+	private void checkRecordAvailability(String neuronName)
+			throws KnowledgeManagementSettingsException {
 		if (neuronRecords == null) {
 			fillNeuronRecords();
 		}
 		if (!neuronRecords.containsKey(neuronName)) {
-			throw new KnowledgeManagementSettingsExceptiuon(
+			throw new KnowledgeManagementSettingsException(
 					"Unknown neuron name");
 		}
 	}
@@ -61,12 +63,12 @@ public class SettingsSource implements ISettingsSource {
 	}
 
 	private void fillNeuronRecords()
-			throws KnowledgeManagementSettingsExceptiuon {
+			throws KnowledgeManagementSettingsException {
 		Document doc;
 		try {
 			doc = setUpXmlParser();
 		} catch (Exception e) {
-			throw new KnowledgeManagementSettingsExceptiuon(
+			throw new KnowledgeManagementSettingsException(
 					"Knowledge settings file cound not be read.", e);
 		}
 		neuronRecords = new HashMap<String, NeuronRecord>();
@@ -77,42 +79,81 @@ public class SettingsSource implements ISettingsSource {
 			Map<String, WeightRecord> weights = new HashMap<String, WeightRecord>();
 			Node featureNode = nodeList.item(i);
 			NodeList featureChildren = featureNode.getChildNodes();
-			for (int j = 0; i < featureChildren.getLength(); i++) {
+			for (int j = 0; j < featureChildren.getLength(); j++) {
 				Node e = featureChildren.item(j);
 				if (e.getNodeName().equals("name")) {
-					featureName = e.getNodeValue();
+					featureName = e.getTextContent().trim();
 					continue;
 				}
 				if (e.getNodeName().equals("threshold")) {
-					featureThreshold = new Float(e.getNodeValue());
+					featureThreshold = new Float(e.getTextContent().trim());
 					continue;
 				}
 				if (e.getNodeName().equals("input")) {
 					NodeList inputChildren = e.getChildNodes();
+					String inputName = null;
+					Float inputWeight = null;
 					for (int k = 0; k < inputChildren.getLength(); k++) {
 						Node f = inputChildren.item(k);
-						String inputName = null;
-						Float inputWeight = null;
 						if (f.getNodeName().equals("name")) {
-							inputName = f.getNodeValue();
+							inputName = f.getTextContent().trim();
 						}
 						if (f.getNodeName().equals("weight")) {
-							inputWeight = new Float(f.getNodeValue());
-						}
-						if (inputName != null && inputWeight != null) {
-							WeightRecord wr = new WeightRecord(inputName,
-									inputWeight.floatValue());
-							weights.put(inputName, wr);
+							inputWeight = new Float(f.getTextContent().trim());
 						}
 					}
-				}
-				if (featureName != null && featureThreshold != null
-						&& weights.size() != 0) {
-					NeuronRecord nr = new NeuronRecord(featureName, weights,
-							featureThreshold);
-					neuronRecords.put(featureName, nr);
+					WeightRecord wr = new WeightRecord(inputName,
+							inputWeight.floatValue());
+					weights.put(inputName, wr);
 				}
 			}
+			NeuronRecord nr = new NeuronRecord(featureName, weights,
+					featureThreshold);
+			neuronRecords.put(featureName, nr);
+		}
+	}
+
+	@Override
+	public String getCronExpression(String taskName)
+			throws KnowledgeManagementSettingsException {
+		if (schedulerRecords == null) {
+			fillSchedulerRecords();
+		}
+		if (!schedulerRecords.containsKey(taskName)) {
+			throw new KnowledgeManagementSettingsException(
+					"Unknown neuron name");
+		}
+		return schedulerRecords.get(taskName);
+	}
+
+	private void fillSchedulerRecords()
+			throws KnowledgeManagementSettingsException {
+		Document doc;
+		try {
+			doc = setUpXmlParser();
+		} catch (Exception e) {
+			throw new KnowledgeManagementSettingsException(
+					"Knowledge settings file cound not be read.", e);
+		}
+		schedulerRecords = new HashMap<String, String>();
+		NodeList nodeList = doc.getElementsByTagName("scheduledJob");
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			String jobName = null;
+			String cronExpression = null;
+			Node featureNode = nodeList.item(i);
+			NodeList scheduledJobChildren = featureNode.getChildNodes();
+			for (int j = 0; j < scheduledJobChildren.getLength(); j++) {
+				Node e = scheduledJobChildren.item(j);
+				if (e.getNodeName().equals("name")) {
+					jobName = e.getTextContent().trim();
+					continue;
+				}
+				if (e.getNodeName().equals("cronExpression")) {
+					cronExpression = e.getTextContent().trim();
+					continue;
+				}
+			}
+			schedulerRecords.put(jobName, cronExpression);
 		}
 	}
 }

@@ -74,6 +74,7 @@ public interface IFacade {
 
 	public void restoreArticle(HistoryId id) throws ModelException;
 	
-	public void rateArticle(ArticleId id, float rating)throws ModelException;
-
+	public void rateArticle(ArticleId id, float rating) throws ModelException;
+	
+	public List<ArticlePair> GetMergeSuggestions() throws ModelException;
 }

@@ -1,44 +1,42 @@
 package com.jwl.business.knowledge;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
-import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsExceptiuon;
+import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
 
 public class Neuron {
-	private INeuronInput input;
 	private ISettingsSource weightSource;
 	private String neuronName;
 
-	public Neuron(INeuronInput input, ISettingsSource weightSource,
+	public Neuron(ISettingsSource weightSource,
 			String neuronName) {
-		this.input = input;
 		this.weightSource = weightSource;
 		this.neuronName = neuronName;
 	}
 
-	public float getOutput() {
-		float inputSum = sumInputs();
+	public float getOutput(Map<String,WeightRecord> input) {
+		float inputSum = sumInputs(input);
 		float treshold;
 		try {
 			treshold = weightSource.getTreshold(neuronName);
-		} catch (KnowledgeManagementSettingsExceptiuon e) {
+		} catch (KnowledgeManagementSettingsException e) {
 			return 0;
 		}
-		if (sumInputs() >= treshold) {
+		if (inputSum >= treshold) {
 			return inputSum;
 		}
 		return 0;
 	}
 
-	private float sumInputs() {
+	private float sumInputs(Map<String,WeightRecord> input) {
 		float result = 0;
-		for (Entry<String,WeightRecord> in : input.feedInput().entrySet()) {
+		for (Entry<String,WeightRecord> in : input.entrySet()) {
 			try {
 				result += in.getValue().getWeight()
 						* weightSource.getWeight(neuronName, in.getKey());
-			} catch (KnowledgeManagementSettingsExceptiuon e) {
+			} catch (KnowledgeManagementSettingsException e) {
 				return 0;
-
 			} 
 		}
 		return result;

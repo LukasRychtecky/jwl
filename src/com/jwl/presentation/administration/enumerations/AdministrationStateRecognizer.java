@@ -53,6 +53,9 @@ public class AdministrationStateRecognizer {
 					state = AdministrationStates.LIST;
 				}
 				break;
+			case MERGE_SUGGESTION:
+				state = AdministrationStates.MERGE_SUGGESTION;
+				break;
 			default:
 				state = AdministrationStates.LIST;
 				break;
@@ -100,7 +103,9 @@ public class AdministrationStateRecognizer {
 			return AdministrationActions.RESTORE;
 		} else if (urlAction.equalsIgnoreCase(AdministrationActions.HISTORY_VIEW.action)) {
 			return AdministrationActions.HISTORY_VIEW;
-		} else {
+		} else if(urlAction.equalsIgnoreCase(AdministrationActions.MERGE_SUGGESTION.action)){
+			return AdministrationActions.MERGE_SUGGESTION;
+		}else {
 			return AdministrationActions.UNKNOWN;
 		}
 	}

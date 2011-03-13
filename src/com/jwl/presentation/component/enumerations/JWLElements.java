@@ -6,6 +6,8 @@ public enum JWLElements {
 	JWL_DIV             	("jwl", ""),
 	ARTICLE_DIV         	("jwl-article", ""),
 	ADMINISTRATION_DIV  	("jwl-administration", ""),
+	ADMINISTRATION_KM_DIV 	("jwl-admin-kn-div", ""),
+	ADMINISTRATION_KW_LINK  ("jwl-admin-kn-kw",""),
 	SEARCH_DIV          	("jwl-search", ""),
 	EDIT_FORM           	("jwl-edit", ""),
 	EDIT_ID             	("id", ""),

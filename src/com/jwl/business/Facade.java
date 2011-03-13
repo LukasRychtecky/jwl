@@ -1,4 +1,5 @@
 package com.jwl.business;
+
 // <editor-fold defaultstate="collapsed">
 import java.util.List;
 import java.util.logging.Level;
@@ -25,6 +26,7 @@ import com.jwl.business.usecases.FindArticlesUC;
 import com.jwl.business.usecases.GetArticleUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
+import com.jwl.business.usecases.GetMergeSuggestionsUC;
 import com.jwl.business.usecases.LockArticleUC;
 import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
@@ -37,6 +39,7 @@ import com.jwl.business.usecases.interfaces.IFindArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
+import com.jwl.business.usecases.interfaces.IGetMergeSuggestionsUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
@@ -44,6 +47,7 @@ import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.integration.entity.Role;
 import com.jwl.integration.role.RoleDAO;
+import com.jwl.presentation.global.WikiURLParser;
 
 /**
  * This interface provides communication between Model(business tier,
@@ -53,18 +57,19 @@ public class Facade implements IFacade {
 
 	private IIdentity identity = null;
 	private IPaginator paginator = null;
-	private SearchPaginator searchPaginator = null;
+	private KeyWordPaginator searchPaginator = null;
 
-	
 	@Override
-	public List<ArticleTO> findArticles(SearchTO searchTO) throws ModelException {
+	public List<ArticleTO> findArticles(SearchTO searchTO)
+			throws ModelException {
 		IFindArticlesUC uc = new FindArticlesUC(Environment.getDAOFactory());
 		return uc.find(searchTO);
 	}
 
 	@Override
 	public ArticleTO findArticleByTitle(String title) throws ModelException {
-		IFindArticleByTitleUC uc = new FindArticleByTitleUC(Environment.getDAOFactory());
+		IFindArticleByTitleUC uc = new FindArticleByTitleUC(
+				Environment.getDAOFactory());
 		return uc.find(title);
 	}
 
@@ -107,9 +112,10 @@ public class Facade implements IFacade {
 		try {
 			process.doIt();
 		} catch (BusinessProcessException e) {
-			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null,
+					e);
 		}
-		
+
 	}
 
 	@Override
@@ -138,13 +144,13 @@ public class Facade implements IFacade {
 
 	@Override
 	public IPaginator getPaginator() {
-		if(this.paginator == null){
+		if (this.paginator == null) {
 			this.paginator = new Paginator(3);
 		}
 		paginator.setUpPaginator();
 		return paginator;
 	}
-	
+
 	@Override
 	public IPaginator getSearchPaginator() {
 		if (searchPaginator != null) {
@@ -156,9 +162,9 @@ public class Facade implements IFacade {
 	@Override
 	public void setSearchParametres(SearchTO searchTO) {
 		if (this.searchPaginator == null) {
-			this.searchPaginator = new SearchPaginator(3);
+			this.searchPaginator = new KeyWordPaginator(new WikiURLParser(), Environment.getKnowledgeFacade());
 		}
-		searchPaginator.setSearchCategories(searchTO);
+		searchPaginator.setSearch(searchTO);
 	}
 
 	@Override
@@ -182,7 +188,14 @@ public class Facade implements IFacade {
 	@Override
 	public void rateArticle(ArticleId id, float rating) throws ModelException {
 		IRateArticleUC uc = new RateArticleUC(Environment.getDAOFactory());
-		uc.rateArticle(id, rating);	
+		uc.rateArticle(id, rating);
+	}
+
+	@Override
+	public List<ArticlePair> GetMergeSuggestions() throws ModelException {
+		IGetMergeSuggestionsUC uc = new GetMergeSuggestionsUC(
+				Environment.getDAOFactory());
+		return uc.getMergeSuggestions();
 	}
 
 }

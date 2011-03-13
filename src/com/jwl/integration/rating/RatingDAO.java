@@ -8,7 +8,6 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.RatingTO;
 import com.jwl.integration.BaseDAO;
 import com.jwl.integration.convertor.RatingConvertor;
-import com.jwl.integration.entity.Article;
 import com.jwl.integration.entity.Rating;
 import com.jwl.integration.entity.RatingPK;
 import com.jwl.integration.exceptions.DAOException;

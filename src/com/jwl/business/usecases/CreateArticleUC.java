@@ -46,7 +46,7 @@ public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 
 		ISaveTagsUC uc = new SaveTagsUC(super.factory);
 		uc.save(tags, id);
-
+		
 		return id;
 	}
 

@@ -9,6 +9,7 @@ import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.administration.enumerations.AdministrationStateRecognizer;
 import com.jwl.presentation.administration.enumerations.AdministrationStates;
 import com.jwl.presentation.component.renderer.EncodeHistoryListing;
+import com.jwl.presentation.administration.renderer.EncodeMergeSuggestion;
 import com.jwl.presentation.administration.renderer.EncodeListing;
 import com.jwl.presentation.article.controller.ArticleDecoder;
 import com.jwl.presentation.component.controller.JWLController;
@@ -114,6 +115,9 @@ public class AdministrationController extends JWLController {
 					break;
 				case HISTORY_VIEW:
 					encoder = new EncodeHistoryView(super.facade, recognizer.getHistoryId());
+					break;
+				case MERGE_SUGGESTION:
+					encoder = new EncodeMergeSuggestion(facade);
 					break;
 				default:
 					encoder = new EncodeError();

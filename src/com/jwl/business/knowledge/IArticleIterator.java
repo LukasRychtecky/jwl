@@ -5,6 +5,7 @@ import com.jwl.integration.exceptions.DAOException;
 
 public interface IArticleIterator {
 	public boolean hasNext();
-	public ArticleTO getNextArticle()throws DAOException;
-	
+
+	public ArticleTO getNextArticle() throws DAOException;
+
 }

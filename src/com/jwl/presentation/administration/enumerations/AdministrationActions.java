@@ -14,7 +14,8 @@ public enum AdministrationActions {
 	VIEW("view"),
 	HISTORY_VIEW ("history_view"),
 	HISTORY_LIST ("history_list"),
-	RESTORE ("restore");
+	RESTORE ("restore"),
+	MERGE_SUGGESTION("merge_suggestion");
 
 	public String action;
 

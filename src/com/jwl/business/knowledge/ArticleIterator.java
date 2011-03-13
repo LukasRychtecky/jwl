@@ -54,7 +54,6 @@ public class ArticleIterator implements IArticleIterator {
 		currentArticle++;
 		articleCount++;
 		return a;
-	}
-	
+	}	
 
 }

@@ -14,7 +14,6 @@ import javax.faces.model.SelectItem;
 
 import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
-import com.jwl.presentation.article.enumerations.ListColumns;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.renderer.AbstractEncodeListing;
@@ -102,9 +101,9 @@ public class EncodeSearch extends AbstractEncodeListing {
 
 	private Map<Integer, String> getOrderableColumns() {
 		Map<Integer, String> oc = new HashMap<Integer, String>();
-		oc.put(1, ListColumns.TITLE);
-		oc.put(3, ListColumns.EDITOR);
-		oc.put(5, ListColumns.CREATED);
+		//oc.put(1, ListColumns.TITLE);
+		//oc.put(3, ListColumns.EDITOR);
+		//oc.put(5, ListColumns.CREATED);
 		return oc;
 	}
 }

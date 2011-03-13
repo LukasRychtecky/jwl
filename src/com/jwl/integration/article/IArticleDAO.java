@@ -4,6 +4,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.integration.exceptions.DAOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -29,4 +30,6 @@ public interface IArticleDAO {
 	public List<ArticleTO> findAll(int from, int maxCount) throws DAOException;
 	
 	public int getCount()throws DAOException;
+	
+	public List<ArticleTO> findArticleWithKeyWord(Set<String> keyWords)throws DAOException;
 }

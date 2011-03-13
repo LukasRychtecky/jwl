@@ -6,8 +6,6 @@ import javax.servlet.http.HttpSession;
 
 import com.jwl.business.Facade;
 import com.jwl.business.IFacade;
-import com.jwl.business.knowledge.IKnowledgeManagementFacade;
-import com.jwl.business.knowledge.KnowledgeManagementFacade;
 
 /**
  * This class provides access to facade.
@@ -70,14 +68,6 @@ public class Global {
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		session.setAttribute(FACADE_VAR, this.facade);
 		this.facade = null;
-	}
-	/*
-	 * Return an instance of knowledge management facade
-	 * 
-	 * @author Petr Janouch
-	 */
-	public IKnowledgeManagementFacade getKnowledgeFacade(){
-		return new KnowledgeManagementFacade();
 	}
 
 }

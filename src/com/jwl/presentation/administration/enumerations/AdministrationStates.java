@@ -13,6 +13,7 @@ public enum AdministrationStates {
 	VIEW,
 	ATTACH_FILE,
 	HISTORY_LIST,
-	HISTORY_VIEW;
+	HISTORY_VIEW,
+	MERGE_SUGGESTION;
 
 }

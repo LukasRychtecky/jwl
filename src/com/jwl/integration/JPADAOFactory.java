@@ -4,6 +4,8 @@ import com.jwl.integration.article.ArticleDAO;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.history.HistoryDAO;
 import com.jwl.integration.history.IHistoryDAO;
+import com.jwl.integration.keyword.IKeyWordDAO;
+import com.jwl.integration.keyword.KeyWordDAO;
 import com.jwl.integration.rating.IRatingDAO;
 import com.jwl.integration.rating.RatingDAO;
 import com.jwl.integration.role.IRoleDAO;
@@ -22,6 +24,7 @@ public class JPADAOFactory implements IDAOFactory {
 	private IHistoryDAO historyDAO = null;
 	private IRoleDAO roleDAO = null;
 	private IRatingDAO ratingDAO = null;
+	private IKeyWordDAO keyWordDAO = null;
 
 	@Override
 	public IArticleDAO getArticleDAO() {
@@ -61,6 +64,14 @@ public class JPADAOFactory implements IDAOFactory {
 			this.ratingDAO = new RatingDAO();
 		}
 		return this.ratingDAO;
+	}
+
+	@Override
+	public IKeyWordDAO getKeyWordDAO() {
+		if(this.keyWordDAO == null){
+			this.keyWordDAO = new KeyWordDAO();
+		}
+		return this.keyWordDAO;
 	}
 
 }
