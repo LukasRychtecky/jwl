@@ -22,12 +22,16 @@ public class FindArticlesUC extends AbstractUC implements IFindArticlesUC {
 
 	@Override
 	public List<ArticleTO> find(SearchTO search) throws ModelException {
-		super.checkPermission(AccessPermissions.ARTICLE_VIEW);
 		List<ArticleTO> articles = new ArrayList<ArticleTO>();
 		try {
 			articles.addAll(super.factory.getArticleDAO().findEverywhere(search.getSearchText()));
 		} catch (DAOException e) {
 			throw new ModelException(e);
+		}
+		for (ArticleTO articleTO : articles) {
+			if (!super.isAllowed(AccessPermissions.ARTICLE_VIEW)) {
+				articles.remove(articleTO);
+			}
 		}
 		return articles;
 	}

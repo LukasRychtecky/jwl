@@ -6,6 +6,7 @@ import java.util.List;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.permissions.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -22,6 +23,7 @@ public class GetHistoriesUC extends AbstractUC implements IGetHistoriesUC {
 
 	@Override
 	public List<HistoryTO> get(ArticleId id) throws ModelException {
+		super.checkPermission(AccessPermissions.ARTICLE_RESTORE);
 		List<HistoryTO> list = new ArrayList<HistoryTO>();
 
 		try {

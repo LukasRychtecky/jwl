@@ -1,5 +1,6 @@
 package com.jwl.business.article;
 
+import com.jwl.business.permissions.Role;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class ArticleTO {
 	private Date modified;
 	private String changeNote = "";
 	private List<RatingTO> ratings;
+	private Set<Role> excludedRoles;
 	private List<KeyWordTO> keyWords;
 	
 
@@ -31,6 +33,7 @@ public class ArticleTO {
 	public ArticleTO(ArticleId id, Date modified) {
 		this.id = id;
 		this.modified = modified;
+		this.excludedRoles = new HashSet<Role>();
 	}
 
 	/**
@@ -177,9 +180,17 @@ public class ArticleTO {
 	public List<RatingTO> getRatings() {
 		return ratings;
 	}
+	
+	public void addRole(Role role) {
+		this.excludedRoles.add(role);
+	}
 
 	public void setRatings(List<RatingTO> ratings) {
 		this.ratings = ratings;
+	}
+	
+	public Set<Role> getExcludedRoles() {
+		return new HashSet<Role>(this.excludedRoles);
 	}
 
 	public List<KeyWordTO> getKeyWords() {

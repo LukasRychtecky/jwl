@@ -18,11 +18,10 @@ public class GetArticleUC extends AbstractUC implements IGetArticleUC {
 		super(factory);
 	}
 
-
 	@Override
 	public ArticleTO get(ArticleId id) throws ModelException {
-			super.checkPermission(AccessPermissions.ARTICLE_VIEW);
-			ArticleTO article = null;
+		super.checkPermission(AccessPermissions.ARTICLE_VIEW, id);
+		ArticleTO article = null;
 		try {
 			article = super.factory.getArticleDAO().get(id);
 		} catch (DAOException e) {
@@ -30,5 +29,4 @@ public class GetArticleUC extends AbstractUC implements IGetArticleUC {
 		}
 		return article;
 	}
-
 }

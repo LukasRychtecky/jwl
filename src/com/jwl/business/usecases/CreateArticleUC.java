@@ -25,7 +25,7 @@ public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 
 	@Override
 	public ArticleId create(ArticleTO article) throws ModelException {
-		super.checkPermission(AccessPermissions.ARTICLE_EDIT);
+		super.checkPermission(AccessPermissions.ARTICLE_VIEW);
 		if (article.getTitle().isEmpty()) {
 			throw new BreakBusinessRuleException("Article can't has empty title");
 		}
