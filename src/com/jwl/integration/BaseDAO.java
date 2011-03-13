@@ -7,10 +7,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
 
 public class BaseDAO {
+
 	protected EntityManager getEntityManager() {
-		EntityManagerFactory emf = ConnectionFactory.getInstance()
-				.getConnection();
-		EntityManager em  = emf.createEntityManager();
+		EntityManagerFactory emf = ConnectionFactory.getInstance().getConnection();
+		EntityManager em = emf.createEntityManager();
 		return em;
 
 	}
@@ -25,9 +25,9 @@ public class BaseDAO {
 		}
 		return ut;
 	}
-	
-	protected void closeEntityManager(EntityManager em){
-		if(em!=null && em.isOpen()){
+
+	protected void closeEntityManager(EntityManager em) {
+		if (em != null && em.isOpen()) {
 			em.close();
 		}
 	}

@@ -77,8 +77,8 @@ public class JWLRenderer extends Renderer {
 				encoder = new EncodeError();
 			}
 			encoder.addImplicitErrorFlashMessage();
-		} finally {
-			encoder.encodeCriticalFlashMessages();
+//		} finally {
+//			encoder.encodeCriticalFlashMessages();
 			this.messages.clear();
 		}
 	}

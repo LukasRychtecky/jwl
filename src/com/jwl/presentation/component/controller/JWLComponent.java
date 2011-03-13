@@ -1,5 +1,6 @@
 package com.jwl.presentation.component.controller;
 
+import com.jwl.business.permissions.Role;
 import java.util.ArrayList;
 import java.util.List;
 import javax.el.ELContext;
@@ -45,15 +46,15 @@ abstract public class JWLComponent extends UIInput implements StateHolder {
 		return role;
 	}
 
-	public List<String> getRoles() {
-		List<String> roles = new ArrayList<String>();
+	public List<Role> getRoles() {
+		List<Role> roles = new ArrayList<Role>();
 		String[] splitedRoles = this.getUserRole().split(JWLComponent.ROLE_DELIMITER);
 
 		String role = null;
 		for (int i = 0; i < splitedRoles.length; i++) {
 			role = splitedRoles[i].trim().toLowerCase();
 			if (role.length() > 0) {
-				roles.add(role);
+				roles.add(new Role(role));
 			}
 		}
 

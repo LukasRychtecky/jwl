@@ -18,7 +18,6 @@ import com.jwl.business.article.process.FileUploadProcess;
 import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.IIdentity;
-import com.jwl.business.permissions.Identity;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
@@ -45,8 +44,7 @@ import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-import com.jwl.integration.entity.Role;
-import com.jwl.integration.role.RoleDAO;
+// </editor-fold>
 import com.jwl.presentation.global.WikiURLParser;
 
 /**
@@ -55,7 +53,6 @@ import com.jwl.presentation.global.WikiURLParser;
  */
 public class Facade implements IFacade {
 
-	private IIdentity identity = null;
 	private IPaginator paginator = null;
 	private KeyWordPaginator searchPaginator = null;
 
@@ -87,11 +84,7 @@ public class Facade implements IFacade {
 
 	@Override
 	public IIdentity getIdentity() {
-		if (this.identity == null) {
-			this.identity = new Identity();
-			this.identity.setPermissionsSources(Role.class, new RoleDAO());
-		}
-		return this.identity;
+		return Environment.getIdentity();
 	}
 
 	@Override
@@ -100,7 +93,7 @@ public class Facade implements IFacade {
 		try {
 			process.doIt();
 		} catch (BusinessProcessException e) {
-			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null,
+			Logger.getLogger(FileUploadProcess.class.getName()).log(Level.SEVERE, null,
 					e);
 		}
 	}
@@ -112,8 +105,8 @@ public class Facade implements IFacade {
 		try {
 			process.doIt();
 		} catch (BusinessProcessException e) {
-			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null,
-					e);
+Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e);
+
 		}
 
 	}

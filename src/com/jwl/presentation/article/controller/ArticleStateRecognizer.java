@@ -125,12 +125,11 @@ public class ArticleStateRecognizer {
 			return state;
 		}
 		IIdentity identity = Global.getInstance().getFacade().getIdentity();
-		String action = ArticlePermissions.mapStateToPermission(state);
 		try {
-			identity.checkPermission(action, id);
+			identity.checkPermission(ArticlePermissions.mapStateToPermission(state), id);
 			return state;
-		} catch (PermissionDeniedException e) {
-			Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, e);
+		} catch (ModelException ex) {
+			Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return ArticleStates.LIST;
 	}

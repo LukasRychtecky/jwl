@@ -6,6 +6,7 @@ import javax.naming.NoPermissionException;
 import com.jwl.business.RoleTypes;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.permissions.Role;
 import com.jwl.presentation.administration.enumerations.AdministrationStateRecognizer;
 import com.jwl.presentation.administration.enumerations.AdministrationStates;
 import com.jwl.presentation.component.renderer.EncodeHistoryListing;
@@ -82,8 +83,8 @@ public class AdministrationController extends JWLController {
 	private void checkRole(UIComponent component) throws NoPermissionException {
 		AdministrationComponent adminComponent = (AdministrationComponent) component;
 
-		for (String role : adminComponent.getRoles()) {
-			if (role.equalsIgnoreCase(RoleTypes.ADMINISTRATOR.toString())) {
+		for (Role role : adminComponent.getRoles()) {
+			if (role.getCode().equalsIgnoreCase(RoleTypes.ADMINISTRATOR.toString())) {
 				return;
 			}
 		}
