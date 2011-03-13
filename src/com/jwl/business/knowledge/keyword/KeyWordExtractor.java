@@ -23,7 +23,7 @@ public class KeyWordExtractor {
 	private IArticleDAO articleDAO;
 	private IKeyWordDAO keyWordDAO;
 	private Map<String, Integer> wordsInArticles;
-	private static int TAG_COUNT = 5;
+	private static int TAG_COUNT = 10;
 
 	public KeyWordExtractor(IArticleDAO articleDAO, IKeyWordDAO keyWordDAO) {
 		this.articleDAO = articleDAO;

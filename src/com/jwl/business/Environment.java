@@ -4,11 +4,8 @@ import com.jwl.business.knowledge.IKnowledgeManagementFacade;
 import com.jwl.business.knowledge.ISettingsSource;
 import com.jwl.business.knowledge.KnowledgeManagementFacade;
 import com.jwl.business.knowledge.SettingsSource;
-jwl.business.permissions.IIdentity;
+import com.jwl.business.permissions.IIdentity;
 import com.jwl.business.permissions.UserIdentity;
-
-import com.jwl.business.knowledge.KnowledgeManagementFacade;
-import com.jwl.business.knowledge.SettingsSource;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
 

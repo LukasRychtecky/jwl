@@ -2,13 +2,14 @@ package com.jwl.presentation.component.renderer;
 
 import java.io.IOException;
 import java.util.Set;
+
 import javax.faces.component.html.HtmlOutputLink;
+
 import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.article.enumerations.ArticleActions;
-import com.jwl.presentation.article.enumerations.ArticlePermissions;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.convertor.MarkupToMarkdown;

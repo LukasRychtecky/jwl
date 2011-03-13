@@ -78,4 +78,8 @@
    <renderer-class>com.jwl.util.html.renderer.FreeOutputRenderer</renderer-class>
   </renderer>
  </render-kit>
+ <lifecycle>
+       <phase-listener>com.jwl.presentation.component.knowledgeajax.KnowledgeAjaxPhaseListener</phase-listener>
+   </lifecycle>
+
 </faces-config>

@@ -1,5 +1,8 @@
 package com.jwl.business.knowledge.scheduler;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -24,7 +27,7 @@ public class ScheduledJobManager {
 			attachMergeSuggestionsGeneration(scheduler, settings);
 			attachMergeSuggestionsClenUp(scheduler, settings);
 		} catch (Exception e) {
-
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up scheduler", e);
 		}
 	}
 	
@@ -45,7 +48,7 @@ public class ScheduledJobManager {
 					jobGroup, KeyWordGenerationJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up key word generation scheduling", e);
 		}
 	}
 
@@ -66,7 +69,7 @@ public class ScheduledJobManager {
 					jobGroup, MergeSuggestionsGenerationJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions generation scheduling", e);
 		}
 	}
 
@@ -87,7 +90,7 @@ public class ScheduledJobManager {
 					jobGroup, MergeSuggestionsCleanUpJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions clean up scheduling", e);
 		}
 	}
 
