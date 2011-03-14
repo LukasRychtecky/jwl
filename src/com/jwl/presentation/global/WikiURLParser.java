@@ -61,6 +61,10 @@ public class WikiURLParser extends URLParser {
 	public String getRedirectTarget(){
 		return getURLParameter(JWLURLParameters.REDIRECT_TARGET);
 	}
+
+	public String getFileAction() {
+		return this.getURLParameter(JWLURLParameters.FILE_ACTION);
+	}
 	
 	public String getListPageNumber(){
 		return getURLParameter(JWLURLParameters.LIST_PAGE_NUMBER);

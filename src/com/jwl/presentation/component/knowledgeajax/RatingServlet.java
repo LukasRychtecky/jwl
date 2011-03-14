@@ -26,7 +26,7 @@ public class RatingServlet extends HttpServlet {
 		int articleIdNum = Integer.parseInt(articleId);
 		ArticleId aic = new ArticleId(articleIdNum);
 		try {
-			Global.getInstance().getFacadeOtsideJSF()
+			Global.getInstance().getFacadeOutsideJSF()
 					.rateArticle(aic, ratedValueNum);
 		} catch (ModelException e) {
 
@@ -34,7 +34,7 @@ public class RatingServlet extends HttpServlet {
 		resp.setContentType("text/plain");
 		PrintWriter out = resp.getWriter();
 		try {
-			ArticleTO article = Global.getInstance().getFacadeOtsideJSF()
+			ArticleTO article = Global.getInstance().getFacadeOutsideJSF()
 					.getArticle(aic);
 			int sn = (int) article.getRatingAverage();
 			int r = (int) (article.getRatingAverage() * 10) % 1;

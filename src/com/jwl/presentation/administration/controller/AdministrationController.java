@@ -1,5 +1,6 @@
 package com.jwl.presentation.administration.controller;
 
+// <editor-fold defaultstate="collapsed">
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.naming.NoPermissionException;
@@ -23,6 +24,7 @@ import com.jwl.presentation.component.renderer.FlashMessageType;
 import com.jwl.presentation.component.renderer.JWLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+// </editor-fold>
 
 /**
  *
@@ -73,6 +75,9 @@ public class AdministrationController extends JWLController {
 			case RESTORE:
 				this.facade.restoreArticle(recognizer.getHistoryId());
 				super.message = new FlashMessage("Article was restored.");
+				break;
+			case IMPORT_ACL:
+				super.message = new FlashMessage("import");
 				break;
 			default:
 				break;

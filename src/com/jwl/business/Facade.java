@@ -24,6 +24,7 @@ import com.jwl.business.usecases.FindArticlesUC;
 import com.jwl.business.usecases.GetArticleUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
+import com.jwl.business.usecases.ImportACLUC;
 import com.jwl.business.usecases.LockArticleUC;
 import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
@@ -36,6 +37,7 @@ import com.jwl.business.usecases.interfaces.IFindArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
+import com.jwl.business.usecases.interfaces.IImportACLUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
@@ -51,6 +53,16 @@ public class Facade implements IFacade {
 
 	private IPaginator paginator = null;
 	private SearchPaginator searchPaginator = null;
+
+	@Override
+	public void setJWLHome(String home) {
+		Environment.setJWLHome(home);
+	}
+
+	@Override
+	public String getJWLHome() {
+		return Environment.getJWLHome();
+	}
 
 	
 	@Override
@@ -80,6 +92,12 @@ public class Facade implements IFacade {
 	@Override
 	public IIdentity getIdentity() {
 		return Environment.getIdentity();
+	}
+
+	@Override
+	public void importACL() throws ModelException {
+		IImportACLUC uc = new ImportACLUC(Environment.getDAOFactory());
+		uc.importACL(Environment.getACLFileName());
 	}
 
 	@Override

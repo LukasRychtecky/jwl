@@ -4,6 +4,7 @@ import com.jwl.business.permissions.Role;
 import com.jwl.business.permissions.RoleId;
 import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,6 +21,17 @@ public class RoleConvertor {
 			role.addArticle(ArticleConvertor.convertFromEntity(article));
 		}
 		return role;
+	}
+
+	public static RoleEntity toEntity(Role role) {
+		RoleEntity entity = new RoleEntity();
+		if (role.getId() != null) {
+			entity.setId(role.getId().getId());
+		}
+		entity.setCode(role.getCode());
+		entity.setPermissionList(new ArrayList<PermissionEntity>());
+
+		return entity;
 	}
 
 }

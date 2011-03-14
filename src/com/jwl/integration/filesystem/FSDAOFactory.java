@@ -34,7 +34,7 @@ public class FSDAOFactory implements IDAOFactory {
     }
 
 	@Override
-	public IRatingDAO getRAtingDAO() {
+	public IRatingDAO getRatingDAO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

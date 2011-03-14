@@ -15,15 +15,25 @@ public class Role {
 	private RoleId id;
 	private Set<ArticleTO> articles;
 	private Set<ArticleId> articlesId = null;
+	private Set<AccessPermissions> perms;
 
 	public Role(String code) {
 		this.code = code;
 		this.articles = new HashSet<ArticleTO>();
+		this.perms = new HashSet<AccessPermissions>();
 	}
 
 	public Role(String code, RoleId id) {
 		this(code);
 		this.id = id;
+	}
+
+	public void addPermission(AccessPermissions perm) {
+		this.perms.add(perm);
+	}
+
+	public Set<AccessPermissions> getPermissions() {
+		return new HashSet<AccessPermissions>(this.perms);
 	}
 
 	public String getCode() {

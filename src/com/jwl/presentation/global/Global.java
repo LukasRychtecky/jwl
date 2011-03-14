@@ -57,7 +57,7 @@ public class Global {
 		return facade;
 	}
 
-	public IFacade getFacadeOtsideJSF() {
+	public IFacade getFacadeOutsideJSF() {
 		return new Facade();
 	}
 

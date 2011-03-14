@@ -31,7 +31,7 @@ abstract public class JWLComponent extends UIInput implements StateHolder {
 	}
 
 	public String getUserName() {
-		if (null == user || user.equals("")) {
+		if (null == user || user.isEmpty()) {
 			Object attribute = this.getAttribute(JWLTagAttributes.REQUIRED_USER);
 			user = this.getNotNullString(attribute);
 		}

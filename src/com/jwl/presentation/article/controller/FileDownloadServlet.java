@@ -19,7 +19,7 @@ public class FileDownloadServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		IFacade facade =Global.getInstance().getFacadeOtsideJSF();
+		IFacade facade =Global.getInstance().getFacadeOutsideJSF();
 		facade.makeDownloadFileResponse(req,resp);
 	}
 

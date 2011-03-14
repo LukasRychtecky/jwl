@@ -41,6 +41,12 @@ public interface IFacade {
 	 */
 	public void deleteArticle(ArticleId id) throws ModelException;
 
+	public void setJWLHome(String home);
+
+	public String getJWLHome();
+
+	public void importACL() throws ModelException;
+
 
 	public ArticleTO findArticleByTitle(String title) throws ModelException;
 

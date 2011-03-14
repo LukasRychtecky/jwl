@@ -8,7 +8,6 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.permissions.IIdentity;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.article.enumerations.ArticlePermissions;

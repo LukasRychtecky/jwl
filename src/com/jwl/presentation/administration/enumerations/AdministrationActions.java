@@ -14,12 +14,18 @@ public enum AdministrationActions {
 	VIEW("view"),
 	HISTORY_VIEW ("history_view"),
 	HISTORY_LIST ("history_list"),
-	RESTORE ("restore");
+	RESTORE ("restore"),
+	IMPORT_ACL ("import_acl");
 
 	public String action;
 
 	private AdministrationActions(String action) {
 		this.action = action;
+	}
+
+	@Override
+	public String toString() {
+		return this.action;
 	}
 
 }

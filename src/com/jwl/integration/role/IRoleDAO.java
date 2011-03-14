@@ -17,4 +17,6 @@ public interface IRoleDAO {
 
 	public Map<Role, List<AccessPermissions>> load(Set<Role> roles) throws DAOException;
 
+	public void save(Set<Role> roles) throws DAOException;
+
 }

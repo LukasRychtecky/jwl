@@ -217,13 +217,14 @@ public abstract class JWLEncoder {
 		return getFormActionString(context, target, params);
 	}
 
-	protected String getFormAction(String target) {
+	protected String getFormAction(String target, String action, String fileAction) {
 		WikiURLParser parser = new WikiURLParser();
 		String context = parser.getCurrentContext();
 		String currentPage = parser.getCurrentPage();
 		Map<String, String> params = parser.getURLParametersAndArticleTitle();
 		params.put(JWLURLParameters.REDIRECT_TARGET, currentPage);
-		params.put(JWLURLParameters.ACTION, ArticleActions.VIEW);
+		params.put(JWLURLParameters.ACTION, action);
+		params.put(JWLURLParameters.FILE_ACTION, fileAction);
 		return getFormActionString(context, target, params);
 	}
 

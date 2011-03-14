@@ -26,6 +26,14 @@ public enum AccessPermissions {
 		this.method = method;
 	}
 
+	public String getContext() {
+		return context;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
 	@Override
 	public String toString() {
 		return this.context + "::" + this.method;

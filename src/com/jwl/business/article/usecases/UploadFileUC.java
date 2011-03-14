@@ -63,8 +63,8 @@ public class UploadFileUC implements IUploadFileUC {
 	private void setupUpload() throws IOException {
 		checkIfPathExist(tmpDir);
 		checkIfPathExist(destinationDir);
-		ckeckIfPathIsDirectory(tmpDir);
-		ckeckIfPathIsDirectory(destinationDir);
+		checkIfPathIsDirectory(tmpDir);
+		checkIfPathIsDirectory(destinationDir);
 	}
 
 	private void checkIfPathExist(File path) throws IOException {
@@ -73,14 +73,14 @@ public class UploadFileUC implements IUploadFileUC {
 		}
 	}
 
-	private void ckeckIfPathIsDirectory(File path) throws IOException {
+	private void checkIfPathIsDirectory(File path) throws IOException {
 		if (path.isFile()) {
 			throw new IOException(path + " is not a directory");
 		}
 	}
 
 	private void parseFileUploadRequest() throws FileUploadException {
-		List<?> items = getParsedReques();
+		List<?> items = getParsedRequest();
 		Iterator<?> itr = items.iterator();
 		while (itr.hasNext()) {
 			FileItem item = (FileItem) itr.next();
@@ -93,7 +93,7 @@ public class UploadFileUC implements IUploadFileUC {
 		}
 	}
 
-	private List<?> getParsedReques() throws FileUploadException {
+	private List<?> getParsedRequest() throws FileUploadException {
 		DiskFileItemFactory fileItemFactory = getFileItemFactory();
 		ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
 		return uploadHandler.parseRequest(request);

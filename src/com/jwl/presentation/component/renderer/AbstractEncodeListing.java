@@ -4,17 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlPanelGrid;
-
 import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.article.enumerations.ArticleActions;
-import com.jwl.presentation.article.enumerations.ArticlePermissions;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.global.WikiURLParser;
