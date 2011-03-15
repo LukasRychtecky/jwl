@@ -1,13 +1,16 @@
 package com.jwl.integration.convertor;
 
 import com.jwl.business.article.ArticleId;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.integration.role.RoleConvertor;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.entity.Tag;
+import com.jwl.integration.role.RoleEntity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +31,8 @@ public class ArticleConvertor {
 	}
 
 	public static ArticleTO convertFromEntity(Article entity) {
-		ArticleTO article = new ArticleTO(new ArticleId(entity.getId()), entity.getModified());
+		ArticleTO article = new ArticleTO(new ArticleId(entity.getId()),
+				entity.getModified());
 		article.setChangeNote(entity.getChangeNote());
 		article.setCreated(entity.getCreated());
 		article.setEditCount(entity.getEditCount());
@@ -40,6 +44,13 @@ public class ArticleConvertor {
 		for (Tag tag : entity.getTags()) {
 			article.addTag(tag.getName());
 		}
+
+		article.setRatings(RatingConvertor.convertFromEntities(entity
+				.getRatings()));
+
+//		for (RoleEntity roleEntity : entity.getRoles()) {
+//			article.addRole(RoleConvertor.toObject(roleEntity));
+//		}
 		return article;
 	}
 
@@ -56,7 +67,7 @@ public class ArticleConvertor {
 		if (article.getId() != null) {
 			entity.setId(article.getId().getId());
 		}
-		
+
 		Set<Tag> tags = new HashSet<Tag>();
 
 		for (String tag : article.getTags()) {
@@ -67,5 +78,5 @@ public class ArticleConvertor {
 
 		return entity;
 	}
-	
+
 }

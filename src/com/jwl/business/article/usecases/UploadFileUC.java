@@ -23,7 +23,6 @@ public class UploadFileUC implements IUploadFileUC {
 	private static final String DESTINATION_DIR_PATH = "c:\\wikifiles";
 	private static final String TMP_DIR_PATH = DESTINATION_DIR_PATH
 			+ File.separator + "tmp";
-	
 	private HttpServletRequest request;
 	private File tmpDir;
 	private File destinationDir;
@@ -34,13 +33,12 @@ public class UploadFileUC implements IUploadFileUC {
 	String description = "";
 	FileItem receivedFile;
 
-	
-	public UploadFileUC(HttpServletRequest request){
+	public UploadFileUC(HttpServletRequest request) {
 		this.request = request;
 		this.tmpDir = new File(TMP_DIR_PATH);
 		this.destinationDir = new File(DESTINATION_DIR_PATH);
 	}
-	
+
 	@Override
 	public AttachmentTO uploadFile() throws BusinessProcessException {
 		try {
@@ -70,7 +68,7 @@ public class UploadFileUC implements IUploadFileUC {
 	}
 
 	private void checkIfPathExist(File path) throws IOException {
-		if(!destinationDir.exists()){
+		if (!destinationDir.exists()) {
 			throw new IOException(path + " does not exist.");
 		}
 	}
@@ -82,7 +80,7 @@ public class UploadFileUC implements IUploadFileUC {
 	}
 
 	private void parseFileUploadRequest() throws FileUploadException {
-		List<?> items = getParsedReques(); 
+		List<?> items = getParsedReques();
 		Iterator<?> itr = items.iterator();
 		while (itr.hasNext()) {
 			FileItem item = (FileItem) itr.next();
@@ -101,13 +99,13 @@ public class UploadFileUC implements IUploadFileUC {
 		return uploadHandler.parseRequest(request);
 	}
 
-	private DiskFileItemFactory getFileItemFactory (){
+	private DiskFileItemFactory getFileItemFactory() {
 		DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 		fileItemFactory.setSizeThreshold(1 * 1024 * 1024); // 1 MB
 		fileItemFactory.setRepository(tmpDir);
 		return fileItemFactory;
-	} 
-	
+	}
+
 	private void saveInformationFromFormFields(FileItem item) {
 		if (item.getFieldName().endsWith(JWLElements.FILE_TITLE.id)) {
 			fileTitle = item.getString();
@@ -126,12 +124,12 @@ public class UploadFileUC implements IUploadFileUC {
 			throw new BusinessProcessException("File type is not supported.");
 		}
 	}
-	
+
 	private boolean isSupportedFileType(String originalFileName) {
 		FileExpert fileExpert = new FileExpert();
 		return fileExpert.isSupportedFileType(originalFileName);
 	}
-	
+
 	private void saveFileOnDisc(File destinationDir, FileItem fileItem)
 			throws Exception {
 		File file = new File(destinationDir, createUniqueFileName());
@@ -162,8 +160,7 @@ public class UploadFileUC implements IUploadFileUC {
 		attachment.setUniqueName(uniqueFileName);
 		attachment.setDescription(fileDescription);
 		attachment.setArticleTitle(articleTitle);
-		
+
 		return attachment;
 	}
-	
 }

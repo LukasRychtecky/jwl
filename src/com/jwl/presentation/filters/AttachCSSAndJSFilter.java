@@ -46,24 +46,24 @@ public class AttachCSSAndJSFilter implements Filter {
 		PrintWriter out = response.getWriter();
 		// saves user's instance of facade in the session
 		Global.getInstance().saveFacade();
-//		if (wrapper.getContentType() != null
-//				&& wrapper.getContentType().contains("text/html")
-//				&& wrapper.toString().indexOf("</head>") != -1
-//				&& wrapper.toString().indexOf(
-//						"id=\"" + JWLElements.JWL_DIV.id + "\"") != -1) {
+		// if (wrapper.getContentType() != null
+		// && wrapper.getContentType().contains("text/html")
+		// && wrapper.toString().indexOf("</head>") != -1
+		// && wrapper.toString().indexOf(
+		// "id=\"" + JWLElements.JWL_DIV.id + "\"") != -1) {
 
-			headEndPosition = wrapper.toString().indexOf("</head>");
-			bodyBeginPosition = wrapper.toString().indexOf("<body>") + 6;
+		headEndPosition = wrapper.toString().indexOf("</head>");
+		bodyBeginPosition = wrapper.toString().indexOf("<body>") + 6;
 
-			StringBuilder builder = new StringBuilder();
-			builder.append(wrapper.toString());
-			this.addWikiCSS(builder);
-			this.addEditToolbarJavascript(builder);
-			response.setContentLength(builder.toString().length());
-			out.write(builder.toString());
-//		} else {
-//			out.write(wrapper.toString());
-//		}
+		StringBuilder builder = new StringBuilder();
+		builder.append(wrapper.toString());
+		this.addWikiCSS(builder);
+		this.addEditToolbarJavascript(builder);
+		response.setContentLength(builder.toString().length());
+		out.write(builder.toString());
+		// } else {
+		// out.write(wrapper.toString());
+		// }
 		out.close();
 
 	}
@@ -85,6 +85,7 @@ public class AttachCSSAndJSFilter implements Filter {
 		List<String> styles = new ArrayList<String>();
 		styles.add(JWL_DIRECTORY + "markitup/sets/markdown/style.css");
 		styles.add(JWL_DIRECTORY + "markitup/skins/simple/style.css");
+		styles.add(JWL_DIRECTORY + "jwlstars.css");
 
 		for (String href : styles) {
 			String link = "<link rel=\"stylesheet\" type=\"text/css\" "
@@ -99,6 +100,8 @@ public class AttachCSSAndJSFilter implements Filter {
 		scripts.add(JWL_DIRECTORY + "jquery.livequery.js");
 		scripts.add(JWL_DIRECTORY + "markitup/jquery.markitup.js");
 		scripts.add(JWL_DIRECTORY + "markitup/sets/markdown/set.js");
+		scripts.add(JWL_DIRECTORY + "knowledgemanagement.js");
+		scripts.add(JWL_DIRECTORY + "jwlstarscript.js");
 
 		for (String scriptName : scripts) {
 			String script = "<script type=\"text/javascript\" src=\""
@@ -109,25 +112,21 @@ public class AttachCSSAndJSFilter implements Filter {
 		}
 
 		String script = "<script type=\"text/javascript\">"
-				+ "$(document).ready(function()	{"
-				+ "$('#"
-				+ JWLElements.EDIT_FORM.id
-				+ JWLStyleClass.HTML_ID_SEPARATOR
-				+ JWLElements.EDIT_TEXT.id
-				+ "').markItUp(mySettings);"
-				+ "});"
-				+ "</script>";
+			+ "$(document).ready(function()	{"
+			+ "$('#"
+			+ JWLElements.EDIT_FORM.id
+			+ JWLStyleClass.HTML_ID_SEPARATOR
+			+ JWLElements.EDIT_TEXT.id
+			+ "').markItUp(mySettings);"
+			+ "});"
+			+ "</script>";
 		builder.insert(bodyBeginPosition, script);
 
-		script =	"<script type=\"text/javascript\">" +
-					"$(\"div.jwl-flash-message:not(.jwl-no-hide)\").livequery(function () {" +
-					"var el = $(this);" +
-					"setTimeout(function () {" +
-					"el.animate({\"opacity\": 0}, 1500);" +
-					"el.slideUp();" +
-					"}, 7000);" +
-					"});" +
-					"</script>";
+		script = "<script type=\"text/javascript\">"
+				+ "$(\"div.jwl-flash-message:not(.jwl-no-hide)\").livequery(function () {"
+				+ "var el = $(this);" + "setTimeout(function () {"
+				+ "el.animate({\"opacity\": 0}, 1500);" + "el.slideUp();"
+				+ "}, 7000);" + "});" + "</script>";
 		builder.insert(bodyBeginPosition, script);
 	}
 

@@ -27,7 +27,7 @@ public abstract class AbstractId {
         }
 
 		final AbstractId other = (AbstractId) object;
-		if (this.id != other.id) {
+		if (this.id.intValue() != other.getId().intValue()) {
 			return false;
 		}
 		return true;

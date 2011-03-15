@@ -1,6 +1,8 @@
 package com.jwl.business.article;
 
+import com.jwl.business.permissions.Role;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -20,6 +22,10 @@ public class ArticleTO {
 	private Boolean locked = Boolean.FALSE;
 	private Date modified;
 	private String changeNote = "";
+	private List<RatingTO> ratings;
+	private Set<Role> excludedRoles;
+	private List<KeyWordTO> keyWords;
+	
 
 	public ArticleTO() {
 	}
@@ -27,6 +33,7 @@ public class ArticleTO {
 	public ArticleTO(ArticleId id, Date modified) {
 		this.id = id;
 		this.modified = modified;
+		this.excludedRoles = new HashSet<Role>();
 	}
 
 	/**
@@ -169,4 +176,38 @@ public class ArticleTO {
 	public void removeAllTags() {
 		this.tags.clear();
 	}
+
+	public List<RatingTO> getRatings() {
+		return ratings;
+	}
+	
+	public void addRole(Role role) {
+		this.excludedRoles.add(role);
+	}
+
+	public void setRatings(List<RatingTO> ratings) {
+		this.ratings = ratings;
+	}
+	
+	public Set<Role> getExcludedRoles() {
+		return new HashSet<Role>(this.excludedRoles);
+	}
+
+	public List<KeyWordTO> getKeyWords() {
+		return keyWords;
+	}
+
+	public void setKeyWords(List<KeyWordTO> keyWords) {
+		this.keyWords = keyWords;
+	}
+	
+	public float getRatingAverage(){
+		float total =0;
+		for(RatingTO r:ratings){
+			total += r.getRating();
+		}
+		total/=ratings.size();
+		return total;
+	}
+		
 }

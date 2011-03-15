@@ -39,7 +39,7 @@ public class UpdateArticleUC extends AbstractUC implements IUpdateArticleUC {
 
 				article.setTitle(articleFromDB.getTitle());
 
-				HistoryTO history = article.createHistory();
+				HistoryTO history = articleFromDB.createHistory();
 				history.setId(new HistoryId(0, article.getId()));
 				super.factory.getHistoryDAO().create(history);
 

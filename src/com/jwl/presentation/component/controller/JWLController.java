@@ -45,11 +45,7 @@ abstract public class JWLController {
 	protected void setUserRoles(UIComponent component)
 			throws NoPermissionException {
 		JWLComponent articleComponent = (JWLComponent) component;
-		IIdentity identity = Global.getInstance().getFacade().getIdentity();
-		if (!identity.isAuthenticated()) {
-			identity.addUserRoles(articleComponent.getRoles());
-			identity.authenticate();
-		}
+		Global.getInstance().getFacade().getIdentity().addUserRoles(articleComponent.getRoles());
 	}
 	
 	protected Map<String, String> getMap(FacesContext context){ 

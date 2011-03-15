@@ -68,4 +68,6 @@ public class JWLStyleClass {
 	// // Messagges
 	public static final String FLASH_PREFIX = JWL_PREFIX +						"flash-";
 	public static final String FLASH_MESSAGE = FLASH_PREFIX +					"message";
+	
+	public static final String VIEW_STARS = JWL_PREFIX + "stars";
 }

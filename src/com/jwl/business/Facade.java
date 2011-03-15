@@ -1,21 +1,22 @@
 package com.jwl.business;
 // <editor-fold defaultstate="collapsed">
-import com.jwl.business.article.HistoryId;
-import com.jwl.business.article.HistoryTO;
-import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.Identity;
-import com.jwl.business.permissions.IIdentity;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.HistoryId;
+import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.process.FileDownloadProcess;
 import com.jwl.business.article.process.FileUploadProcess;
 import com.jwl.business.exceptions.BusinessProcessException;
+import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.permissions.IIdentity;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
@@ -24,6 +25,7 @@ import com.jwl.business.usecases.GetArticleUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.LockArticleUC;
+import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
@@ -35,18 +37,11 @@ import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
+import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-import com.jwl.integration.article.ArticleDAO;
-import com.jwl.integration.article.IArticleDAO;
-import com.jwl.integration.entity.Role;
-import com.jwl.integration.history.HistoryDAO;
-import com.jwl.integration.history.IHistoryDAO;
-import com.jwl.integration.role.RoleDAO;
-import com.jwl.integration.tag.ITagDAO;
-import com.jwl.integration.tag.TagDAO;
-//</editor-fold>
+// </editor-fold>
 
 /**
  * This interface provides communication between Model(business tier,
@@ -54,7 +49,6 @@ import com.jwl.integration.tag.TagDAO;
  */
 public class Facade implements IFacade {
 
-	private IIdentity identity = null;
 	private IPaginator paginator = null;
 	private SearchPaginator searchPaginator = null;
 
@@ -85,11 +79,7 @@ public class Facade implements IFacade {
 
 	@Override
 	public IIdentity getIdentity() {
-		if (this.identity == null) {
-			this.identity = new Identity();
-			this.identity.setPermissionsSources(Role.class, new RoleDAO());
-		}
-		return this.identity;
+		return Environment.getIdentity();
 	}
 
 	@Override
@@ -98,7 +88,7 @@ public class Facade implements IFacade {
 		try {
 			process.doIt();
 		} catch (BusinessProcessException e) {
-			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null,
+			Logger.getLogger(FileUploadProcess.class.getName()).log(Level.SEVERE, null,
 					e);
 		}
 	}
@@ -110,7 +100,7 @@ public class Facade implements IFacade {
 		try {
 			process.doIt();
 		} catch (BusinessProcessException e) {
-			Logger.getLogger(Identity.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e);
 		}
 		
 	}
@@ -180,6 +170,12 @@ public class Facade implements IFacade {
 	public void restoreArticle(HistoryId id) throws ModelException {
 		IRestoreArticleUC uc = new RestoreArticleUC(Environment.getDAOFactory());
 		uc.restore(id);
+	}
+
+	@Override
+	public void rateArticle(ArticleId id, float rating) throws ModelException {
+		IRateArticleUC uc = new RateArticleUC(Environment.getDAOFactory());
+		uc.rateArticle(id, rating);	
 	}
 
 }

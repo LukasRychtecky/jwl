@@ -45,7 +45,13 @@ public class URLParser {
 	
 	public String getCurrentPage() {
 		this.assertValidState();
-		return httpServletRequest.getServletPath().substring(1);
+		String requestURI = httpServletRequest.getRequestURI();
+		int contextDeliminer = requestURI.lastIndexOf("/");
+		if (contextDeliminer == 1){
+			return "";
+		} else {
+			return requestURI.substring(contextDeliminer+1);
+		}
 	}
 	
 	public String getCurrentURI() {

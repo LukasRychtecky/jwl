@@ -103,6 +103,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		for (String tag : article.getTags()) {
 			tags.append(tag).append(", ");
 		}
+		
 		String separatedTags = "";
 		if (tags.length() > 0) {
 			separatedTags = tags.substring(0, tags.length() - 2);
@@ -174,7 +175,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 	}
 
 	private boolean hasViewPermission(ArticleId id) {
-		return this.hasPermission(ArticlePermissions.ARTICLE_VIEW, id);
+		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ARTICLE_VIEW, id);
 	}
 
 	private void encodeLinkToNextPage(IPaginator paginator) throws IOException {

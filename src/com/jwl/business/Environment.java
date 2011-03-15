@@ -1,5 +1,7 @@
 package com.jwl.business;
 
+import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.permissions.UserIdentity;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
 import com.jwl.integration.filesystem.FSDAOFactory;
@@ -15,6 +17,7 @@ public class Environment {
 //	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
 	private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
+	private static IIdentity identity = null;
 
 	private Environment() {
 
@@ -25,7 +28,7 @@ public class Environment {
 	}
 
 	public static void setPersistenceUnit(String persistenceUnit) {
-		if (persistenceUnit != null && persistenceUnit.length() > 0) {
+		if (persistenceUnit != null && !persistenceUnit.isEmpty()) {
 			Environment.PERSISTENCE_UNIT = persistenceUnit;
 		}
 	}
@@ -41,4 +44,15 @@ public class Environment {
 		return Environment.factory;
 	}
 
+<<<<<<< HEAD
+=======
+	public static IIdentity getIdentity() {
+		if (Environment.identity == null) {
+			Environment.identity = new UserIdentity(Environment.getDAOFactory());
+		}
+		return Environment.identity;
+	}
+
+
+>>>>>>> master
 }
