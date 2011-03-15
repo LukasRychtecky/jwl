@@ -71,4 +71,16 @@ public class FSArticleDAO implements IArticleDAO {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+	@Override
+	public List<ArticleTO> findAll(int from, int maxCount) throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getCount() throws DAOException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

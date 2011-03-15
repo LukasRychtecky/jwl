@@ -14,8 +14,8 @@ public class Environment {
 
 	public static final String IMPLICIT_PU = "jsfwiki";
 	public static final String FILESYSTEM_PU = "jsf-filesystem";
-//	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
-	private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
+	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
+//	private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
 	private static IIdentity identity = null;
 
@@ -44,15 +44,10 @@ public class Environment {
 		return Environment.factory;
 	}
 
-<<<<<<< HEAD
-=======
 	public static IIdentity getIdentity() {
 		if (Environment.identity == null) {
 			Environment.identity = new UserIdentity(Environment.getDAOFactory());
 		}
 		return Environment.identity;
 	}
-
-
->>>>>>> master
 }

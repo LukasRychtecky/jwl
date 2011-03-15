@@ -3,6 +3,7 @@ package com.jwl.integration.filesystem;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.history.IHistoryDAO;
+import com.jwl.integration.rating.IRatingDAO;
 import com.jwl.integration.role.IRoleDAO;
 import com.jwl.integration.tag.ITagDAO;
 
@@ -31,5 +32,11 @@ public class FSDAOFactory implements IDAOFactory {
     public IRoleDAO getRoleDAO() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+	@Override
+	public IRatingDAO getRAtingDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
