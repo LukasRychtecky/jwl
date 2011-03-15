@@ -2,15 +2,18 @@ package com.jwl.business;
 
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
+import com.jwl.integration.filesystem.FSDAOFactory;
 
 /**
- *
+ * 
  * @author Lukas Rychtecky
  */
 public class Environment {
 
 	public static final String IMPLICIT_PU = "jsfwiki";
-	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
+	public static final String FILESYSTEM_PU = "jsf-filesystem";
+//	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
+	private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
 
 	private Environment() {
@@ -29,10 +32,13 @@ public class Environment {
 
 	public static IDAOFactory getDAOFactory() {
 		if (Environment.factory == null) {
-			Environment.factory = new JPADAOFactory();
+			if (Environment.PERSISTENCE_UNIT == Environment.FILESYSTEM_PU) {
+				Environment.factory = new FSDAOFactory();
+			} else {
+				Environment.factory = new JPADAOFactory();
+			}
 		}
 		return Environment.factory;
 	}
-
 
 }
