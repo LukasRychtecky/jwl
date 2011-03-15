@@ -1,14 +1,8 @@
 /nbproject
 .classpath
 .project
-<<<<<<< HEAD
-/bin
-/build_ant
-/dist
-=======
 .settings/
 bin/
 build_ant/
 dist/
 .gitignore
->>>>>>> master
