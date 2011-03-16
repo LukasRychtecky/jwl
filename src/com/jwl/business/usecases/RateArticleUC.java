@@ -20,7 +20,7 @@ public class RateArticleUC extends AbstractUC implements IRateArticleUC {
 	@Override		
 	public void rateArticle(ArticleId articleId, float rating)throws ModelException {
 		try {
-			IRatingDAO rdao= this.factory.getRAtingDAO();
+			IRatingDAO rdao= this.factory.getRatingDAO();
 			RatingTO rat = rdao.find(articleId, "Petr");
 			if(rat==null){
 				rat =new RatingTO();

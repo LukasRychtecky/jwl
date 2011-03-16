@@ -3,7 +3,6 @@ package com.jwl.integration;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.history.IHistoryDAO;
 import com.jwl.integration.rating.IRatingDAO;
-import com.jwl.integration.rating.RatingDAO;
 import com.jwl.integration.role.IRoleDAO;
 import com.jwl.integration.tag.ITagDAO;
 
@@ -52,9 +51,9 @@ public abstract class DAOFactory implements IDAOFactory {
 	}
 
 	@Override
-	public IRatingDAO getRAtingDAO() {
+	public IRatingDAO getRatingDAO() {
 		if (this.ratingDAO == null) {
-			this.ratingDAO = new RatingDAO();
+			this.ratingDAO = factoryRating();
 		}
 		return this.ratingDAO;
 	}

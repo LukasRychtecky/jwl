@@ -20,6 +20,6 @@ public interface IDAOFactory {
 
 	public IRoleDAO getRoleDAO();
 	
-	public IRatingDAO getRAtingDAO();
+	public IRatingDAO getRatingDAO();
 
 }
