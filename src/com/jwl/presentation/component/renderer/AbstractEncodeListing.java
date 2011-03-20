@@ -23,8 +23,8 @@ import javax.faces.component.html.HtmlPanelGroup;
 
 public abstract class AbstractEncodeListing extends JWLEncoder {
 
-	private final String[] headers = new String[] { "Title", "Tags", "Editor",
-			"Editing count", "Created", "Actions" };
+	private final String[] headers = new String[]{"Title", "Tags", "Editor",
+		"Editing count", "Created", "Actions"};
 
 	public AbstractEncodeListing(IFacade facade) {
 		super(facade);
@@ -58,14 +58,21 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 			}
 		}
 		table.encodeAll(this.context);
-		this.encodeLinkToFirstPage(paginator);
+
+		HtmlPanelGroup pagingContainer = new HtmlPanelGroup();
+		pagingContainer.setStyleClass("jwl-paging");
+		List<UIComponent> children = pagingContainer.getChildren();
+
+		children.add(this.createLinkToFirstPage(paginator));
 		if (paginator.hasPrevious()) {
-			this.encodeLinkToPreviousPage(paginator);
+			children.add(this.createLinkToPreviousPage(paginator));
 		}
 		if (paginator.hasNext()) {
-			this.encodeLinkToNextPage(paginator);
+			children.add(this.createLinkToNextPage(paginator));
 		}
-		this.encodeLinkToLastPage(paginator);
+		children.add(this.createLinkToLastPage(paginator));
+
+		pagingContainer.encodeAll(this.context);
 	}
 
 	protected void encodeListing(List<ArticleTO> articles, List<String> headers)
@@ -100,7 +107,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		for (String tag : article.getTags()) {
 			tags.append(tag).append(", ");
 		}
-		
+
 		String separatedTags = "";
 		if (tags.length() > 0) {
 			separatedTags = tags.substring(0, tags.length() - 2);
@@ -108,10 +115,8 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 
 		articlesTableData.add(this.getTagsComponent(separatedTags));
 		articlesTableData.add(this.getEditorComponent(article.getEditor()));
-		articlesTableData.add(this.getEditingCountComponent(article
-				.getEditCount()));
-		articlesTableData.add(this.getCreatedComponent(article.getCreated()
-				.toString()));
+		articlesTableData.add(this.getEditingCountComponent(article.getEditCount()));
+		articlesTableData.add(this.getCreatedComponent(article.getCreated().toString()));
 
 		encodeAdditionalRowData(article, articlesTableData);
 	}
@@ -175,53 +180,49 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ARTICLE_VIEW, id);
 	}
 
-	private void encodeLinkToNextPage(IPaginator paginator) throws IOException {
+	private UIComponent createLinkToNextPage(IPaginator paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue(">");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator
-				.getNextPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getNextPageIndex());
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_NEXT_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
-		link.encodeAll(this.context);
+		return link;
 	}
 
-	private void encodeLinkToPreviousPage(IPaginator paginator)
+	private UIComponent createLinkToPreviousPage(IPaginator paginator)
 			throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("<");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator
-				.getPreviousPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getPreviousPageIndex());
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_PREVIOUS_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
-		link.encodeAll(this.context);
+		return link;
 	}
 
-	private void encodeLinkToFirstPage(IPaginator paginator) throws IOException {
+	private UIComponent createLinkToFirstPage(IPaginator paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("<<");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator
-				.getFirstPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getFirstPageIndex());
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_FIRST_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
-		link.encodeAll(this.context);
+		return link;
 	}
 
-	private void encodeLinkToLastPage(IPaginator paginator) throws IOException {
+	private UIComponent createLinkToLastPage(IPaginator paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue(">>");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator
-				.getLastPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getLastPageIndex());
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_LAST_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
-		link.encodeAll(this.context);
+		return link;
 	}
 
 	private List<String> encodeHeaders(List<String> headers,
@@ -249,8 +250,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
 		properties.addParameter(JWLURLParameters.LIST_ORDER_COLUMN, columnName);
 		properties.setHref(parser.getCurrentURL());
-		properties.addParameters(parser
-				.getURLParametersMinusArticleParameters());
+		properties.addParameters(parser.getURLParametersMinusArticleParameters());
 		String url = properties.getHref();
 		Map<String, String> attributes = properties.getParameters();
 		String link = URLBuilder.buildURL(url, attributes);

@@ -5,8 +5,10 @@
 /*******************************************
 * Action button style
 */
-a.jwl-actionButton, a.jwl-actionButton:visited,
-#jwl-edit-create, #jwl-edit-edit, #jwl-search-search, #jwl-upload-save {
+#jwl {
+	font-size: 1.1em;
+}
+a.jwl-action-button, a.jwl-action-button:visited, .jwl-action-button input[type=submit] {
 	padding: .3em 1em;
 	text-decoration: none;
 	font-size: 1.1em;
@@ -32,7 +34,7 @@ a.jwl-actionButton, a.jwl-actionButton:visited,
 	border: 1px solid #d3d3d3;
 }
 
-a.jwl-actionButton:hover {
+a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover {
 	border-color: #999;
 	background-color: #DADADA;
 	background-image: -webkit-gradient(
@@ -51,7 +53,7 @@ a.jwl-actionButton:hover {
 	cursor: pointer;
 }
 
-a.jwl-actionButton:active {
+a.jwl-action-button:active {
 	background-color: white;
 	background-image: none;
 }
@@ -59,7 +61,8 @@ a.jwl-actionButton:active {
 /*
 * Action button style smaller
 */
-a.jwl-actionButtonSmall, a.jwl-actionButtonSmall:visited {
+a.jwl-action-button-small, a.jwl-action-button-small:visited {
+	margin: .5em .2em;
 	padding: .15em .55em;
 	text-decoration: none;
 	font-size: 1.1em;
@@ -85,7 +88,7 @@ a.jwl-actionButtonSmall, a.jwl-actionButtonSmall:visited {
 	border: 1px solid #d3d3d3;
 }
 
-a.jwl-actionButtonSmall:hover {
+a.jwl-action-button-small:hover {
 	border-color: #999;
 	background-color: #DADADA;
 	background-image: -webkit-gradient(
@@ -104,21 +107,20 @@ a.jwl-actionButtonSmall:hover {
 	cursor: pointer;
 }
 
-a.jwl-actionButtonSmall:active {
+a.jwl-action-button-small:active {
 	background-color: white;
 	background-image: none;
 }
 
-a.jwl-actionLink {
+a.jwl-action-link {
     margin-right: 5px;
 }
-
-
-/*
-* Create new article button
-*/
+.jwl-paging {
+	display: block;
+	margin: 1em .3em;
+}
 a.jwl-createNewArticle {
-    margin-left: 2px;
+    margin: .5em .3em;
 }
 
 
@@ -131,13 +133,13 @@ a.jwl-createNewArticle {
 */
 table.jwl-tableOfArticles {
     width: 100%;
-    margin: 30px 0px 25px 0px;
+    margin: .3em;
     color: black;
 }
 
 table.jwl-tableOfArticles td {
-    background-color: rgb(245, 245, 237); /*FBEEB9*/
-    padding: 10px 14px;
+    background-color: #F5F5ED;
+    padding: .4em .6em;
     border-bottom: 1px solid white;
     border-right: 1px solid white;
 }
@@ -145,6 +147,8 @@ table.jwl-tableOfArticles td {
 table.jwl-tableOfArticles td a {
     text-decoration: none;
     color: #49A3F2;
+	display: block;
+	float: left;
 }
 
 table.jwl-tableOfArticles td a:hover {
@@ -156,52 +160,31 @@ table.jwl-tableOfArticles td a:hover {
 * Head of table
 */
 thead.jwl-tableHearderOfArticles th {
-    background-color: #303030; 
-    color: white;
+	/*    background-color: #303030; */
+    color: #bababa;
     border-right: 1px solid white;
-    padding: 5px; 
+    padding: 5px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#111));
+	background: -moz-linear-gradient(top, #333, #111);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333', endColorstr='#111');
 }
 
 thead.jwl-tableHearderOfArticles a {
     color: white;
+	display: block;
+	text-decoration: none;
 }
 
 thead.jwl-tableHearderOfArticles a:hover {
     color: #FF00DB;
+	text-decoration: underline;
 }
-
-/*
-* Listing button
-*/
-a.jwl-nextPage, a.jwl-previousPage, a.jwl-firstPage, a.jwl-lastPage {
-    margin-left: 5px;
-}
-
-a.jwl-nextPage {
-}
-
-a.jwl-previousPage {
-}
-
-a.jwl-firstPage {
-    margin-left: 7px;
-}
-
-a.jwl-lastPage {
-}
-
 
 /******************************
 * View State
 */
 .jwl-view-title, .jwl-view-text {
     border-bottom: 1px dotted #CCCCCC;
-}
-
-.jwl-view-title {
-}
-
-.jwl-view-text {
 }
 
 .jwl-view-tags {
@@ -212,15 +195,6 @@ a.jwl-lastPage {
 .jwl-view-link-back, .jwl-view-link-edit, .jwl-view-link-attach {
     float: left;
     margin-right: 5px;
-}
-
-.jwl-view-link-back {
-}
-
-.jwl-view-link-edit {
-}
-
-.jwl-view-link-attach {
 }
 
 
@@ -237,25 +211,13 @@ a.jwl-lastPage {
     margin-top: 9px;
 }
 
-.jwl-edit-tags-label, .jwl-edit-changeNote-label {
-}
-
 .jwl-edit-titleLabel {
     margin-top: 6px;
-}
-
-.jwl-edit-title-label {
 }
 
 .jwl-edit-text-label {
     position: relative;
     top: 20px;
-}
-
-.jwl-edit-tags-label {
-}
-
-.jwl-edit-changeNote-label {
 }
 
 /*
@@ -273,8 +235,8 @@ a.jwl-lastPage {
 * Inputs
 */
 .jwl-edit-title-input input, .jwl-edit-tags-input input, .jwl-edit-changeNote-input input {
-   width: 490px;
-   padding: 5px;
+	width: 490px;
+	padding: 5px;
 }
 
 .jwl-edit-title {
@@ -283,15 +245,6 @@ a.jwl-lastPage {
 .jwl-edit-title-input {
     margin-bottom: 10px;
 }
-
-.jwl-edit-tags-input {
-
-}
-
-.jwl-edit-changeNote-input {
-
-}
-
 #jwl-edit-text {
     margin-left: 80px;
     width: 490px;
@@ -307,7 +260,7 @@ a.jwl-lastPage {
 }
 
 
-/******************************
+/**
 * Attach State
 */
 
@@ -320,32 +273,14 @@ a.jwl-lastPage {
     margin-top: 9px;
 }
 
-.jwl-upload-fileName-label {
+.jwl-upload-file-label, #jwl-upload-fileItem, .jwl-action-button #jwl-upload-save {
+	float: none;
+	display: block;
 }
-
-.jwl-upload-file-label {
-}
-
-.jwl-upload-fileDescription-label {
-}
-
-/*
-* Inputs
-*/
 .jwl-upload-fileName-input input, .jwl-upload-file-input input, .jwl-upload-fileDescription-input input {
     width: 490px;
     padding: 5px;
 }
-
-.jwl-upload-fileName-input {
-}
-
-.jwl-upload-file-input {
-}
-
-.jwl-upload-fileDescription-input {
-}
-
 .jwl-upload-inputSubmit {
     margin-top: 20px;
 }
@@ -358,10 +293,6 @@ a.jwl-lastPage {
     width: 100%;
     padding: 5px;
 }
-
-.jwl-search-input {
-}
-
 .jwl-search-inputSubmit {
     margin-left: 20px;
 }
@@ -373,8 +304,6 @@ a.jwl-lastPage {
 .jwl-flash-message {
 	background-position: 0.5em 50%;
 	color: black;
-	/*background-color: #F5F5ED;*/
-	/*border: 1px solid #303030;*/
 	padding: 1em;
 	background-repeat: no-repeat;
 	padding: 1.5em 1em 1.5em 60px;
