@@ -1,5 +1,6 @@
 package com.jwl.business;
 // <editor-fold defaultstate="collapsed">
+import com.jwl.business.exceptions.InsufficientArticleDataException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,11 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.process.FileDownloadProcess;
 import com.jwl.business.article.process.FileUploadProcess;
+import com.jwl.business.article.usecases.CreateAttachmentUC;
+import com.jwl.business.article.usecases.interfaces.ICreateAttachmentUC;
 import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.permissions.IIdentity;
@@ -95,9 +99,9 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void importACL() throws ModelException {
+	public void importACL(String fileName) throws ModelException {
 		IImportACLUC uc = new ImportACLUC(Environment.getDAOFactory());
-		uc.importACL(Environment.getACLFileName());
+		uc.importACL(fileName);
 	}
 
 	@Override
@@ -109,6 +113,12 @@ public class Facade implements IFacade {
 			Logger.getLogger(FileUploadProcess.class.getName()).log(Level.SEVERE, null,
 					e);
 		}
+	}
+
+	@Override
+	public void createAttachment(AttachmentTO attachment) throws InsufficientArticleDataException {
+		ICreateAttachmentUC uc = new CreateAttachmentUC();
+		uc.createAttachment(attachment);
 	}
 
 	@Override

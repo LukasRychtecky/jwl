@@ -1,6 +1,8 @@
 package com.jwl.presentation.global;
 
 import com.jwl.business.FileExpert;
+import com.jwl.business.article.AttachmentTO;
+import com.jwl.presentation.component.enumerations.JWLElements;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -24,25 +26,25 @@ public class FileMover {
 	private String originalFileName = "";
 	private String uniqueFileName = "";
 	private String explicitFileName = "";
+	private AttachmentTO attachment;
 
 	public FileMover(HttpServletRequest request) {
 		this.request = request;
 		this.jwlHome = request.getSession().getServletContext().getRealPath("/jwl/");
+		this.attachment = new AttachmentTO();
 	}
 
-	public void moveToTMP() throws IOException, FileUploadException, Exception {
+	public String moveToTMP() throws IOException, FileUploadException, Exception {
 		this.dir = new File(this.jwlHome + File.separator + "private" + File.separator + "tmp");
 
 		this.checkDir();
 		this.parseFileUploadRequest();
 		this.saveFileOnDisc(this.dir, this.receivedFile);
+		return this.uniqueFileName;
 	}
 
-	public void moveToTMP(String explicitFileName) throws IOException, FileUploadException, Exception {
-		if (explicitFileName != null) {
-			this.explicitFileName = explicitFileName;
-		}
-		this.moveToTMP();
+	public AttachmentTO getAttchment() {
+		return this.attachment;
 	}
 
 	protected void checkDir() throws IOException {
@@ -98,11 +100,24 @@ public class FileMover {
 		Iterator<?> itr = items.iterator();
 		while (itr.hasNext()) {
 			FileItem item = (FileItem) itr.next();
-			if (item.getName() == null) {
-				continue;
+
+			if (item.isFormField()) {
+				this.createAttachment(item);
+			} else {
+				this.originalFileName = item.getName();
+				this.receivedFile = item;
 			}
-			this.originalFileName = item.getName();
-			this.receivedFile = item;
+		}
+	}
+
+	private void createAttachment(FileItem item) {
+		System.out.println("ITEM: " + item.getFieldName());
+		if (item.getFieldName().endsWith(JWLElements.FILE_TITLE.id)) {
+			this.attachment.setOriginalName(item.getString());
+		} else if (item.getFieldName().endsWith(JWLElements.FILE_ARTICLE_TITLE.id)) {
+			this.attachment.setArticleTitle(item.getString());
+		} else if (item.getFieldName().endsWith(JWLElements.FILE_DESCRIPTION.id)) {
+			this.attachment.setDescription(item.getString());
 		}
 	}
 }

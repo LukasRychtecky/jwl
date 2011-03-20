@@ -1,6 +1,7 @@
 package com.jwl.presentation.filters;
-
+// <editor-fold defaultstate="collapsed">
 import com.jwl.business.IFacade;
+import com.jwl.business.article.AttachmentTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -24,8 +25,10 @@ import com.jwl.presentation.global.WikiURLParser;
 import com.jwl.util.html.url.URLBuilder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+// </editor-fold>
 
 public class FileUploadFilter implements Filter {
+
 	private String htmlRedirect =
 			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
 			+ " \"http://www.w3.org/TR/html4/frameset.dtd\">"
@@ -53,21 +56,25 @@ public class FileUploadFilter implements Filter {
 			facade.setJWLHome(request.getSession().getServletContext().getRealPath("/jwl/"));
 
 			if (parser.getFileAction().equals(ArticleActions.ATTACH_FILE)) {
-				//do attach
+				mover = new FileMover(request);
+				mover.moveToTMP();
+				AttachmentTO a = mover.getAttchment();
+				System.out.println("NAME: " + a.getOriginalName());
+				System.out.println("TITL: " + a.getArticleTitle());
+				System.out.println("DESC: " + a.getDescription());
 //				ut.begin();
-//				IFacade facade = Global.getInstance().getFacadeOutsideJSF();
-//				facade.uploadFile(request);
+//				facade.createAttachment(this.createAttachment(request));
 //				ut.commit();
 			} else if (parser.getFileAction().equals(AdministrationActions.IMPORT_ACL.toString())) {
 				mover = new FileMover(request);
-				mover.moveToTMP("acl.csv");
-				facade.importACL();
+				String fileName = mover.moveToTMP();
+				facade.importACL(fileName);
 			}
 
 
 		} catch (Throwable e) {
 			Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, e);
-			
+
 			try {
 				ut.rollback();
 			} catch (Throwable t) {
@@ -110,4 +117,5 @@ public class FileUploadFilter implements Filter {
 		}
 		return ut;
 	}
+	
 }

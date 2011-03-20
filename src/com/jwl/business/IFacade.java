@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
@@ -45,7 +46,7 @@ public interface IFacade {
 
 	public String getJWLHome();
 
-	public void importACL() throws ModelException;
+	public void importACL(String fileName) throws ModelException;
 
 
 	public ArticleTO findArticleByTitle(String title) throws ModelException;
@@ -58,6 +59,8 @@ public interface IFacade {
 	public IIdentity getIdentity();
 
 	public void uploadFile(HttpServletRequest request);
+
+	public void createAttachment(AttachmentTO attachment) throws ModelException;
 
 	public void makeDownloadFileResponse(HttpServletRequest request,
 			HttpServletResponse response);
