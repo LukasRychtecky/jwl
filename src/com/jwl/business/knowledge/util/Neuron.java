@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.util;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,7 +19,7 @@ public class Neuron {
 		float inputSum = sumInputs(input);
 		float treshold;
 		try {
-			treshold = weightSource.getTreshold(neuronName);
+			treshold = weightSource.getThreshold(neuronName);
 		} catch (KnowledgeManagementSettingsException e) {
 			return 0;
 		}

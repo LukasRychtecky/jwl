@@ -98,7 +98,7 @@ public class KeyWordPaginator implements IPaginator {
 	
 	public void setSearch(SearchTO searchData){
 		try {
-			searchResults = knowledge.getKeyWordSearchResult(searchData.getSearchText());
+			searchResults = knowledge.getKeyWordSearchResult(searchData);
 		} catch (KnowledgeException e) {
 			searchResults = new ArrayList<ArticleTO>();
 		}

@@ -91,6 +91,7 @@ public class EncodeListing extends AbstractEncodeListing {
 		ResponseWriter writer = this.context.getResponseWriter();
 		writer.write("Knowledge manageent");
 		encodeMergeSuggestionsLink();
+		encodeDeadArticlesLink();
 		this.encodeKeyWordLink();
 		this.encodeDivEnd();
 	}
@@ -103,7 +104,17 @@ public class EncodeListing extends AbstractEncodeListing {
 	private void encodeMergeSuggestionsLink() throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("Merge suggestions");
-		properties.addParameter(JWLURLParameters.ACTION, AdministrationActions.MERGE_SUGGESTION.action);
+		properties.addParameter(JWLURLParameters.ACTION, AdministrationActions.MERGE_SUGGESTION_LIST.action);
+		properties.addClass(JWLStyleClass.ACTION_BUTTON);
+
+		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
+		link.encodeAll(this.context);
+	}
+	
+	private void encodeDeadArticlesLink() throws IOException {
+		HtmlLinkProperties properties = new HtmlLinkProperties();
+		properties.setValue("Dead articles suggestions");
+		properties.addParameter(JWLURLParameters.ACTION, AdministrationActions.DEAD_ARTICLE_LIST.action);
 		properties.addClass(JWLStyleClass.ACTION_BUTTON);
 
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);

@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.util;
 
 import java.io.Serializable;
 
@@ -27,4 +27,23 @@ public class ArticleIdPair implements Serializable {
 	public ArticleId getId2() {
 		return new ArticleId(id2);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof ArticleIdPair){
+			ArticleIdPair aip = (ArticleIdPair) obj;
+			if(id1.equals(aip.id1)&&id2.equals(aip.id2)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return id1.hashCode()^id2.hashCode();
+	}
+		
 }

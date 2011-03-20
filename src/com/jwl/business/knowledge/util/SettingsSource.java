@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.util;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,36 +16,36 @@ import org.xml.sax.SAXException;
 import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
 
 public class SettingsSource implements ISettingsSource {
-	Map<String, NeuronRecord> neuronRecords;
+	Map<String, FeatureRecord> neuronRecords;
 	Map<String, String> schedulerRecords;
 	private static final String settingsFile = "C:\\JWL_BW\\SeamWiki\\resources\\KnowledgeManagementSettings.xml";
 
 	@Override
-	public Map<String, WeightRecord> getWeights(String neuronName)
+	public Map<String, WeightRecord> getWeights(String featureName)
 			throws KnowledgeManagementSettingsException {
-		checkRecordAvailability(neuronName);
-		return neuronRecords.get(neuronName).getWeights();
+		checkRecordAvailability(featureName);
+		return neuronRecords.get(featureName).getWeights();
 	}
 
 	@Override
-	public float getTreshold(String neuronName)
+	public float getThreshold(String featureName)
 			throws KnowledgeManagementSettingsException {
-		checkRecordAvailability(neuronName);
-		return neuronRecords.get(neuronName).getThreshold();
+		checkRecordAvailability(featureName);
+		return neuronRecords.get(featureName).getThreshold();
 	}
 
 	@Override
-	public float getWeight(String neuronName, String inputName)
+	public float getWeight(String featureName, String inputName)
 			throws KnowledgeManagementSettingsException {
-		checkRecordAvailability(neuronName);
-		return neuronRecords.get(neuronName).getWeights().get(inputName)
+		checkRecordAvailability(featureName);
+		return neuronRecords.get(featureName).getWeights().get(inputName)
 				.getWeight();
 	}
 
 	private void checkRecordAvailability(String neuronName)
 			throws KnowledgeManagementSettingsException {
 		if (neuronRecords == null) {
-			fillNeuronRecords();
+			fillFeatureRecords();
 		}
 		if (!neuronRecords.containsKey(neuronName)) {
 			throw new KnowledgeManagementSettingsException(
@@ -62,7 +62,7 @@ public class SettingsSource implements ISettingsSource {
 		return doc;
 	}
 
-	private void fillNeuronRecords()
+	private void fillFeatureRecords()
 			throws KnowledgeManagementSettingsException {
 		Document doc;
 		try {
@@ -71,11 +71,11 @@ public class SettingsSource implements ISettingsSource {
 			throw new KnowledgeManagementSettingsException(
 					"Knowledge settings file cound not be read.", e);
 		}
-		neuronRecords = new HashMap<String, NeuronRecord>();
+		neuronRecords = new HashMap<String, FeatureRecord>();
 		NodeList nodeList = doc.getElementsByTagName("feature");
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			String featureName = null;
-			Float featureThreshold = null;
+			float featureThreshold = 0;
 			Map<String, WeightRecord> weights = new HashMap<String, WeightRecord>();
 			Node featureNode = nodeList.item(i);
 			NodeList featureChildren = featureNode.getChildNodes();
@@ -107,7 +107,7 @@ public class SettingsSource implements ISettingsSource {
 					weights.put(inputName, wr);
 				}
 			}
-			NeuronRecord nr = new NeuronRecord(featureName, weights,
+			FeatureRecord nr = new FeatureRecord(featureName, weights,
 					featureThreshold);
 			neuronRecords.put(featureName, nr);
 		}

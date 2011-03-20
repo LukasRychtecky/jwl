@@ -1,9 +1,8 @@
 package com.jwl.presentation.search.enumerations;
 
 public enum SearchCategories {
-	EVERYWHERE("Everywhere"),
 	TITLE("Title"),
-	TEXT("Text"),
+	KEY_WORDS("KeyWords"),
 	TAGS("Tags"),
 	EDITORS("Editors");
 	

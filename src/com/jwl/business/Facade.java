@@ -17,28 +17,35 @@ import com.jwl.business.article.process.FileDownloadProcess;
 import com.jwl.business.article.process.FileUploadProcess;
 import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.usecases.AddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
 import com.jwl.business.usecases.FindArticlesUC;
 import com.jwl.business.usecases.GetArticleUC;
+import com.jwl.business.usecases.GetDeadArticlesUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.GetMergeSuggestionsUC;
+import com.jwl.business.usecases.IncreaseLivabilityUC;
 import com.jwl.business.usecases.LockArticleUC;
 import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
+import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
+import com.jwl.business.usecases.interfaces.IGetDeadArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.IGetMergeSuggestionsUC;
+import com.jwl.business.usecases.interfaces.IIncreaseLivablityUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
@@ -185,10 +192,31 @@ Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e)
 	}
 
 	@Override
-	public List<ArticlePair> GetMergeSuggestions() throws ModelException {
+	public List<ArticlePair> getMergeSuggestions() throws ModelException {
 		IGetMergeSuggestionsUC uc = new GetMergeSuggestionsUC(
 				Environment.getDAOFactory());
 		return uc.getMergeSuggestions();
+	}
+
+	@Override
+	public List<ArticleTO> getDeadArticles() throws ModelException {
+		IGetDeadArticlesUC uc = new GetDeadArticlesUC(Environment.getDAOFactory());
+		return uc.getDeadArticles();
+	}
+
+	@Override
+	public void addToMergeSuggestionsIgnored(List<ArticleIdPair> articleIdPairs)
+			throws ModelException {
+		IAddToMergeSuggestionsIgnoreUC uc = new AddToMergeSuggestionsIgnoreUC(Environment.getDAOFactory());
+		uc.addToIgnored(articleIdPairs);		
+	}
+
+	@Override
+	public void increaseLivability(List<ArticleId> ids, double increase)
+			throws ModelException {
+		IIncreaseLivablityUC uc = new IncreaseLivabilityUC(Environment.getDAOFactory());
+		uc.addLivability(ids, increase);
+		
 	}
 
 }

@@ -3,33 +3,42 @@ package com.jwl.presentation.administration.renderer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlPanelGrid;
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 import com.jwl.business.ArticlePair;
 import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleTO;
-import com.jwl.business.exceptions.ModelException;
+import com.jwl.presentation.administration.enumerations.AdministrationActions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
+import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.component.renderer.JWLEncoder;
+import com.jwl.presentation.global.WikiURLParser;
+import com.jwl.util.html.component.HtmlActionForm;
 import com.jwl.util.html.component.HtmlFreeOutput;
 import com.jwl.util.html.component.HtmlHeaderPanelGrid;
 import com.jwl.util.html.component.HtmlLinkProperties;
 
-public class EncodeMergeSuggestion extends JWLEncoder {
+public class EncodeMergeSuggestionList extends JWLEncoder {
 
-	private final String[] headers = new String[] { "Title", "Tags", "Editor",
+	private final String[] headers = new String[] {"Title", "Tags", "Editor",
 			"Editing count", "Created", "Rating"};
 
-	public EncodeMergeSuggestion(IFacade facade) {
+	public EncodeMergeSuggestionList(IFacade facade) {
 		super(facade);
 	}
 
 	private List<String> getHeaderNames() {		
 		List<String> result = new ArrayList<String>();	
+		result.add("");
 		for(String s:headers){
 			result.add(s);
 		}
@@ -38,14 +47,31 @@ public class EncodeMergeSuggestion extends JWLEncoder {
 		}
 		return result;
 	}
+	
+	private void encodeForm(List<ArticlePair> articlePairs) throws IOException{
+		HtmlActionForm form = new HtmlActionForm();
+		form.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id);
+		form.setEnctype("application/x-www-form-urlencoded");
+		form.setAction(this.getFormAction());
+		List<UIComponent> formData = form.getChildren();
+		HtmlPanelGrid table = encodeListing(articlePairs);
+		formData.add(table);
+		encodeFormActions(formData);
+		form.encodeAll(context);
+	}
+	
+	private void encodeFormActions(List<UIComponent> formData){
+		formData.add(this.getHtmlSubmitComponent(JWLElements.KNOWLEDGE_IGNORE,
+				JWLStyleClass.EDIT_INPUT_SUBMIT));
+	}
 
-	private void encodeListing(List<ArticlePair> articlePairs) throws IOException {
+	private HtmlPanelGrid encodeListing(List<ArticlePair> articlePairs) throws IOException {		
 		HtmlPanelGrid table = getTable(getHeaderNames());
 		List<UIComponent> articlesTableData = table.getChildren();
 		for (ArticlePair articlePair : articlePairs) {
-			this.encodeRowData(articlePair, articlesTableData);
+			this.encodeRowData(articlePair, articlesTableData);			
 		}
-		table.encodeAll(this.context);
+		return table;
 	}
 
 	private HtmlPanelGrid getTable(List<String> headers) {
@@ -60,6 +86,12 @@ public class EncodeMergeSuggestion extends JWLEncoder {
 	}
 	
 	private void encodeRowData(ArticlePair articlePair, List<UIComponent> articlesTableData){
+		if(articlePair.getArticle1()==null||articlePair.getArticle1()==null){
+			return;
+		}
+		HtmlSelectBooleanCheckbox chbx = new HtmlSelectBooleanCheckbox();
+		chbx.setId(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id+articlePair.getArticle1().getId().getId().intValue()+"-"+articlePair.getArticle2().getId().getId().intValue());
+		articlesTableData.add(chbx);
 		encodeArticleRowData(articlePair.getArticle1(), articlesTableData);
 		encodeArticleRowData(articlePair.getArticle2(), articlesTableData);
 	}
@@ -93,7 +125,7 @@ public class EncodeMergeSuggestion extends JWLEncoder {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue(title);
 		properties.addParameter(JWLURLParameters.ARTICLE_TITLE, title);
-		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.VIEW);
+		properties.addParameter(JWLURLParameters.ACTION, AdministrationActions.MERGE_SUGGESTION_VIEW.action);
 		return this.getHtmlLinkComponent(properties);
 	}
 
@@ -142,20 +174,45 @@ public class EncodeMergeSuggestion extends JWLEncoder {
 		output.setFreeOutput(sb.toString());
 		return output;
 	}
+	
+	private void encodeLinkToListing() throws IOException {
+		HtmlLinkProperties properties = new HtmlLinkProperties();
+		properties.setValue("Back to listing");
+		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
+		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		properties.addClass(JWLStyleClass.VIEW_LINK_BACK);
+
+		HtmlOutputLink link = getHtmlLinkComponent(properties);
+		link.encodeAll(context);
+	}
 
 	@Override
 	public void encodeResponse() {
-		List<ArticlePair> mergeSuggestions;
 		try {
-			mergeSuggestions = this.facade.GetMergeSuggestions();
-		} catch (ModelException e) {
-			return;
+			super.encodeFlashMessages();
+			List<ArticlePair> mergeSuggestions = this.facade.getMergeSuggestions();
+			encodeForm(mergeSuggestions);
+			encodeLinkToListing();
+		} catch (Exception e) {
+			Logger.getLogger(EncodeListing.class.getName()).log(Level.SEVERE,
+					null, e);
+			super.addImplicitErrorFlashMessage();
+			try {
+				super.encodeCriticalFlashMessages();
+			} catch (IOException ex) {
+				Logger.getLogger(EncodeListing.class.getName()).log(
+						Level.SEVERE, null, ex);
+			}
 		}
-		try {
-			encodeListing(mergeSuggestions);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	}
+	
+	@Override
+	protected String getFormAction() {
+		WikiURLParser parser = new WikiURLParser();
+		String context = parser.getCurrentContext();
+		String target = parser.getCurrentPage();
+		Map<String, String> params = parser.getURLParametersAndArticleTitle();
+		params.put(JWLURLParameters.ACTION, AdministrationActions.MERGE_SUGGESTION_LIST.action);
+		return getFormActionString(context, target, params);
 	}
 }

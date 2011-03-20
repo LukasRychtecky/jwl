@@ -29,6 +29,7 @@ public class SearchController extends JWLController {
 			throws NoPermissionException {
 		this.assertValidInput(context, component);
 		this.setUserRoles(component);
+		this.setUserName(component);
 	}
 
 	@Override

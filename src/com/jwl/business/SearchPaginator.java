@@ -46,29 +46,19 @@ public class SearchPaginator extends AbstractPaginator {
 	}
 
 	public void setSearchCategories(SearchTO searchTO) {
-		this.searchText = searchTO.getSearchText().toLowerCase();
-		if (searchTO.isEverywhere()) {
-			this.setAllCategories();
-		}
+		this.searchText = searchTO.getSearchPhrase().toLowerCase();
 		if (searchTO.isTags()) {
 			this.searchInTags = true;
 		}
 		if (searchTO.isEditors()) {
 			this.searchInEditors = true;
 		}
-		if (searchTO.isText()) {
+		if (searchTO.isKeyWords()) {
 			this.searchInText = true;
 		}
 		if (searchTO.isTitle()) {
 			this.searchInTitle = true;
 		}
-	}
-
-	private void setAllCategories() {
-		this.searchInEditors = true;
-		this.searchInTags = true;
-		this.searchInText = true;
-		this.searchInTitle = true;
 	}
 
 	private String buildQuery() {

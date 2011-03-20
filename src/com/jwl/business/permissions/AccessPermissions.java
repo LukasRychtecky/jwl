@@ -13,6 +13,8 @@ public enum AccessPermissions {
 	ARTICLE_LOCK ("Article", "lock"),
 	ARTICLE_DELETE ("Article", "delete"),
 	ARTICLE_EXCLUDE_ROLE ("Article", "excludeRole"),
+	ARTICLE_RATE ("Article", "rate"),
+	KNOWLEDGE_ADMINISTER ("Knoeledge", "administer"),
 
 	ATTACHMENT_VIEW ("Attachment", "view"),
 	ATTACHMENT_ADD ("Attachment", "add"),

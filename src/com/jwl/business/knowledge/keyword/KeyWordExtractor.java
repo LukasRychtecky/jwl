@@ -13,7 +13,7 @@ import java.util.Set;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.KeyWordTO;
-import com.jwl.business.knowledge.ArticleIterator;
+import com.jwl.business.knowledge.util.ArticleIterator;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.keyword.IKeyWordDAO;

@@ -25,6 +25,7 @@ public class ArticleTO {
 	private List<RatingTO> ratings;
 	private Set<Role> excludedRoles;
 	private List<KeyWordTO> keyWords;
+	private double livability;
 	
 
 	public ArticleTO() {
@@ -208,6 +209,14 @@ public class ArticleTO {
 		}
 		total/=ratings.size();
 		return total;
+	}
+
+	public double getLivability() {
+		return livability;
+	}
+
+	public void setLivability(double livability) {
+		this.livability = livability;
 	}
 		
 }

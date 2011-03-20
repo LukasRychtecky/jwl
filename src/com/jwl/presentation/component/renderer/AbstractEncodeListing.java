@@ -16,7 +16,6 @@ import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.article.enumerations.ArticleActions;
-import com.jwl.presentation.article.enumerations.ArticlePermissions;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.global.WikiURLParser;
@@ -269,7 +268,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 
 	private UIComponent getRatingComponent(float rating) {
 		int sn = (int) rating;
-		int r = (int) (rating * 10) % 1;
+		int r = (int) (rating %1) * 10;
 		if (r >= 5) {
 			sn++;
 		}

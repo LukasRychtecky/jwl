@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.suggestors;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,16 +7,22 @@ import java.util.Map;
 import java.util.Set;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.knowledge.KnowledgeManagementFacade;
 import com.jwl.business.knowledge.keyword.WordProcessor;
+import com.jwl.business.knowledge.util.ArticleIterator;
+import com.jwl.business.knowledge.util.IArticleIterator;
+import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.Neuron;
+import com.jwl.business.knowledge.util.WeightRecord;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 
-public class SimilarArticleSuggestor extends AbstractArticleSuggestor {
+public class EditArticleSuggestor extends AbstractArticleSuggestor {
 
-	public SimilarArticleSuggestor(IArticleDAO articleDAO,
+	public EditArticleSuggestor(IArticleDAO articleDAO,
 			ISettingsSource knowledgeSettings) {
 		super(articleDAO, knowledgeSettings);
-		this.neuron = new Neuron(settingsSource, "ArticleSimilarity");
+		this.neuron = new Neuron(settingsSource, "ArticleSimilarityEdit");
 	}
 
 	public List<ArticleTO> suggestSimilarArticles(String tags, String name,

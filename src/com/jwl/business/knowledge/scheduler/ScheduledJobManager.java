@@ -9,8 +9,8 @@ import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 
 import com.jwl.business.Environment;
-import com.jwl.business.knowledge.ISettingsSource;
 import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
+import com.jwl.business.knowledge.util.ISettingsSource;
 
 public class ScheduledJobManager {
 	ISettingsSource settingsSource;
@@ -24,6 +24,7 @@ public class ScheduledJobManager {
 		try {
 			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
 			attachKeyWordGeneration(scheduler, settings);
+			attachLivabilityPeriodicDecrease(scheduler, settings);
 			attachMergeSuggestionsGeneration(scheduler, settings);
 			attachMergeSuggestionsClenUp(scheduler, settings);
 		} catch (Exception e) {
@@ -49,6 +50,27 @@ public class ScheduledJobManager {
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
 			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up key word generation scheduling", e);
+		}
+	}
+	
+	private void attachLivabilityPeriodicDecrease(Scheduler scheduler,
+			ISettingsSource settings) {
+		String cronExpression = null;
+		try {
+			cronExpression = settings
+					.getCronExpression(LivabilityPeriodicReductionJob.jobName);
+		} catch (KnowledgeManagementSettingsException e) {
+			return;
+		}
+		try {
+			CronTrigger trigger = new CronTrigger("LivabilityPeriodicReduction",
+					"knowledge management");
+			trigger.setCronExpression(cronExpression);
+			JobDetail jobDetail = new JobDetail("LivabilityPeriodicReduction",
+					jobGroup, LivabilityPeriodicReductionJob.class);
+			scheduler.scheduleJob(jobDetail, trigger);
+		} catch (Exception e) {
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up livability decrease scheduling", e);
 		}
 	}
 

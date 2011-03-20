@@ -32,4 +32,6 @@ public interface IArticleDAO {
 	public int getCount()throws DAOException;
 	
 	public List<ArticleTO> findArticleWithKeyWord(Set<String> keyWords)throws DAOException;
+	
+	public List<ArticleTO> findDead() throws DAOException;
 }

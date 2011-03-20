@@ -53,9 +53,18 @@ public class AdministrationStateRecognizer {
 					state = AdministrationStates.LIST;
 				}
 				break;
-			case MERGE_SUGGESTION:
-				state = AdministrationStates.MERGE_SUGGESTION;
+			case MERGE_SUGGESTION_LIST:
+				state = AdministrationStates.MERGE_SUGGESTION_LIST;
 				break;
+			case MERGE_SUGGESTION_VIEW:
+				state = AdministrationStates.MERGE_SUGGESTION_VIEW;
+				break;	
+			case DEAD_ARTICLE_LIST:
+				state = AdministrationStates.DEAD_ARTICLE_LIST;
+				break;	
+			case DEAD_ARTICLE_VIEW:
+				state = AdministrationStates.DEAD_ARTICLE_VIEW;
+				break;	
 			default:
 				state = AdministrationStates.LIST;
 				break;
@@ -103,9 +112,15 @@ public class AdministrationStateRecognizer {
 			return AdministrationActions.RESTORE;
 		} else if (urlAction.equalsIgnoreCase(AdministrationActions.HISTORY_VIEW.action)) {
 			return AdministrationActions.HISTORY_VIEW;
-		} else if(urlAction.equalsIgnoreCase(AdministrationActions.MERGE_SUGGESTION.action)){
-			return AdministrationActions.MERGE_SUGGESTION;
-		}else {
+		} else if(urlAction.equalsIgnoreCase(AdministrationActions.MERGE_SUGGESTION_LIST.action)){
+			return AdministrationActions.MERGE_SUGGESTION_LIST;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.MERGE_SUGGESTION_VIEW.action)){
+			return AdministrationActions.MERGE_SUGGESTION_VIEW;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.DEAD_ARTICLE_LIST.action)){
+			return AdministrationActions.DEAD_ARTICLE_LIST;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.DEAD_ARTICLE_VIEW.action)){
+			return AdministrationActions.DEAD_ARTICLE_VIEW;
+		}else{
 			return AdministrationActions.UNKNOWN;
 		}
 	}

@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.util;
 
 public class WeightRecord {
 	private String name;

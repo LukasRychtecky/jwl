@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.util;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.integration.exceptions.DAOException;

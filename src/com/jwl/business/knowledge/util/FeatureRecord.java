@@ -1,13 +1,14 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.util;
 
 import java.util.Map;
 
-public class NeuronRecord {
+
+public class FeatureRecord {
 	private String neuronName;
 	private Map<String, WeightRecord> weights;
 	private float threshold;
 
-	public NeuronRecord(String neuronName, Map<String, WeightRecord> weights,
+	public FeatureRecord(String neuronName, Map<String, WeightRecord> weights,
 			float threshold) {
 		super();
 		this.neuronName = neuronName;

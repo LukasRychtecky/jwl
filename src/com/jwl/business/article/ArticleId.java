@@ -15,4 +15,18 @@ public class ArticleId extends AbstractId implements Serializable{
 		super(id);
 	}
 
+/*	@Override
+	public boolean equals(Object object) {
+		if(object instanceof ArticleId){
+			ArticleId id2 = (ArticleId)object;
+			if(super.getId().intValue()==id2.getId().intValue()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	} */
+	
+	
 }

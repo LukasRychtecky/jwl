@@ -18,7 +18,9 @@ import javax.persistence.TemporalType;
 
 
 @NamedQueries({
-	@NamedQuery(name ="KeyWord.findAll",query="SELECT kw FROM KeyWord kw")
+	@NamedQuery(name ="KeyWord.findAll",query="SELECT kw FROM KeyWord kw"),
+	@NamedQuery(name = "KeyWord.best",
+			query = "SELECT  max(kw.weight) FROM KeyWord kw JOIN kw.article GROUP BY kw.article  ")
 })
 @Entity
 @Table(name = "key_word", catalog = "wiki", schema = "")
@@ -27,6 +29,7 @@ public class KeyWord {
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	private int id;
+		
 	
 	@Column(name = "word", nullable = false)
 	private String word;

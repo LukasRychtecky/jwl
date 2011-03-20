@@ -50,6 +50,8 @@ public class ArticleConvertor {
 		// for (RoleEntity roleEntity : entity.getRoles()) {
 		// article.addRole(RoleConvertor.toObject(roleEntity));
 		// }
+		
+		article.setLivability(entity.getLivability());
 		return article;
 	}
 
@@ -74,7 +76,8 @@ public class ArticleConvertor {
 		}
 
 		entity.setTags(tags);
-
+		
+		entity.setLivability(article.getLivability());
 		return entity;
 	}
 

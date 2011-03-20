@@ -58,7 +58,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		}
 	}
 
-	private void encodeLinkToListing() throws IOException {
+	protected void encodeLinkToListing() throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("Back to listing");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
@@ -105,7 +105,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	protected void encodeRating(float ratingAverage, ArticleId articleId)
 			throws IOException {
 		int sn = (int) ratingAverage;
-		int r = (int) (ratingAverage * 10) % 1;
+		int r = (int) (ratingAverage % 1) * 10;
 		if (r >= 5) {
 			sn++;
 		}

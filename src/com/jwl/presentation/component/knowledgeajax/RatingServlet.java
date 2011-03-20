@@ -37,7 +37,7 @@ public class RatingServlet extends HttpServlet {
 			ArticleTO article = Global.getInstance().getFacadeOtsideJSF()
 					.getArticle(aic);
 			int sn = (int) article.getRatingAverage();
-			int r = (int) (article.getRatingAverage() * 10) % 1;
+			int r = (int) (article.getRatingAverage() % 1) * 10;
 			if (r >= 5) {
 				sn++;
 			}

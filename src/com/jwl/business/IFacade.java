@@ -9,6 +9,7 @@ import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.permissions.IIdentity;
 import javax.naming.NoPermissionException;
 
@@ -76,5 +77,11 @@ public interface IFacade {
 	
 	public void rateArticle(ArticleId id, float rating) throws ModelException;
 	
-	public List<ArticlePair> GetMergeSuggestions() throws ModelException;
+	public List<ArticlePair> getMergeSuggestions() throws ModelException;
+	
+	public List<ArticleTO> getDeadArticles() throws ModelException;
+	
+	public void addToMergeSuggestionsIgnored(List<ArticleIdPair> articleIdPairs) throws ModelException;
+	
+	public void increaseLivability(List<ArticleId> ids, double increase) throws ModelException;
 }

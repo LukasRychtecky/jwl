@@ -251,4 +251,21 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 		}
 		return ArticleConvertor.convertList(result);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTO> findDead() throws DAOException {
+		EntityManager em = getEntityManager();
+		List<Article> result = null;
+		try {		
+			Query query = em.createNamedQuery("Article.findDead");
+			
+			result = query.getResultList();
+		} catch (Exception e) {
+			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
+		}
+		return ArticleConvertor.convertList(result);
+	}
 }

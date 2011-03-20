@@ -27,12 +27,20 @@ public enum JWLElements {
 	SEARCH_FORM				("jwl-search", ""),
 	SEARCH_INPUT			("search-text", ""),
 	SEARCH_WHERE			("search-where", ""),
-	SEARCH_WHERE_EVERYWHERE	("search-where-everywhere", ""),
 	SEARCH_WHERE_TAGS		("search-where-tags", ""),
 	SEARCH_WHERE_EDITORS	("search-where-editors", ""),
-	SEARCH_WHERE_TEXT		("search-where-text", ""),
+	SEARCH_WHERE_KEY_WORDS	("search-where-keywords", ""),
 	SEARCH_WHERE_TITLE		("search-where-title", ""),
-	SEARCH_BUTTON			("search", "Search");
+	SEARCH_BUTTON			("search", "Search"),
+	KNOWLEDGE_MERGE_SUG_FORM("kn-merge-sug-form",""),
+	KNOWLEDGE_IGNORE		("ignore", "ignore"),
+	KNOWLEDGE_ID_PAIR_CHECKBOX("articlePair",""),
+	KNOWLEDGE_DEAD_SUG_FORM  ("kn-dead-sug-form", ""),
+	KNOWLEDGE_ID_CHECKBOX   ("articleId",""),
+	KNOWLEDGE_DEAD_DELETE	("delete","delete"),
+	KNOWLEDGE_INCREASE_LIVABILITY("increase-livability","increase"),
+	KNOWLEDGE_LIVABILITY_INPUT("livability-input","");
+	
 	
 	public String id;
 	public String value;

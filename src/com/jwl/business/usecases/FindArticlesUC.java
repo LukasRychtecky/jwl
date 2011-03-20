@@ -24,7 +24,7 @@ public class FindArticlesUC extends AbstractUC implements IFindArticlesUC {
 	public List<ArticleTO> find(SearchTO search) throws ModelException {
 		List<ArticleTO> articles = new ArrayList<ArticleTO>();
 		try {
-			articles.addAll(super.factory.getArticleDAO().findEverywhere(search.getSearchText()));
+			articles.addAll(super.factory.getArticleDAO().findEverywhere(search.getSearchPhrase()));
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

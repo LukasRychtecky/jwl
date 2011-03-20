@@ -65,18 +65,23 @@ public class EncodeSearch extends AbstractEncodeListing {
 		table.setColumns(5);
 		table.setBorder(0);
 		List<UIComponent> children = table.getChildren();
-		children.add(this.getCheckbox(JWLElements.SEARCH_WHERE_EVERYWHERE.id,
-				SearchCategories.EVERYWHERE.where, "true", false));
 		children.add(this.getCheckbox(JWLElements.SEARCH_WHERE_TITLE.id,
 				SearchCategories.TITLE.where, "true", false));
-		children.add(this.getCheckbox(JWLElements.SEARCH_WHERE_TEXT.id,
-				SearchCategories.TEXT.where, "true", false));
+		children.add(this.getCheckbox(JWLElements.SEARCH_WHERE_KEY_WORDS.id,
+				SearchCategories.KEY_WORDS.where, "true", false));
 		children.add(this.getCheckbox(JWLElements.SEARCH_WHERE_EDITORS.id,
 				SearchCategories.EDITORS.where, "true", false));
 		children.add(this.getCheckbox(JWLElements.SEARCH_WHERE_TAGS.id,
 				SearchCategories.TAGS.where, "true", false));
 		return table;
 	}
+
+	/*
+	 * private HtmlSelectBooleanCheckbox getCheckbox(String id, String label,
+	 * String value, boolean checked) { HtmlSelectBooleanCheckbox chbx = new
+	 * HtmlSelectBooleanCheckbox(); chbx.setLabel(label); chbx. chbx.setId(id);
+	 * return chbx; }
+	 */
 
 	private HtmlSelectManyCheckbox getCheckbox(String id, String label,
 			String value, boolean checked) {
@@ -101,9 +106,9 @@ public class EncodeSearch extends AbstractEncodeListing {
 
 	private Map<Integer, String> getOrderableColumns() {
 		Map<Integer, String> oc = new HashMap<Integer, String>();
-		//oc.put(1, ListColumns.TITLE);
-		//oc.put(3, ListColumns.EDITOR);
-		//oc.put(5, ListColumns.CREATED);
+		// oc.put(1, ListColumns.TITLE);
+		// oc.put(3, ListColumns.EDITOR);
+		// oc.put(5, ListColumns.CREATED);
 		return oc;
 	}
 }

@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.suggestors;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,8 +18,15 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.knowledge.KnowledgeManagementFacade;
 import com.jwl.business.knowledge.exceptions.KnowledgeException;
 import com.jwl.business.knowledge.keyword.WordProcessor;
+import com.jwl.business.knowledge.util.ArticleIdPair;
+import com.jwl.business.knowledge.util.ArticleIterator;
+import com.jwl.business.knowledge.util.IArticleIterator;
+import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.Neuron;
+import com.jwl.business.knowledge.util.WeightRecord;
 import com.jwl.integration.article.IArticleDAO;
 
 public class MergeArticleSuggestor extends AbstractArticleSuggestor {
@@ -36,12 +43,11 @@ public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 	public List<ArticleIdPair> suggestArticleMerge() {
 		Map<ArticleIdPair, Float> articleIdPairs = new HashMap<ArticleIdPair, Float>();
 		IArticleIterator iterator1 = new ArticleIterator(articleDAO, 50);
-		IArticleIterator iterator2 = new ArticleIterator(articleDAO, 50);
 		List<ArticleIdPair> ignoredPairs = null;
 		try {
 			ignoredPairs = getIdPairsFromFile(MERGE_IGNORED_FILEPATH);
 		} catch (KnowledgeException e1) {
-
+			ignoredPairs = new ArrayList<ArticleIdPair>();
 		}
 		try {
 			while (iterator1.hasNext()) {
@@ -52,12 +58,12 @@ public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 				Set<String> a1KeyWords = new HashSet<String>(
 						f.extractKeyWordsOnRun(article1.getTitle(),
 								article1.getText()));
+				IArticleIterator iterator2 = new ArticleIterator(articleDAO, 50);
 				while (iterator2.hasNext()) {
 					ArticleTO article2 = iterator2.getNextArticle();
 					ArticleIdPair aip = new ArticleIdPair(article1.getId(),
 							article2.getId());
-					if (article1.getId().getId()
-							.equals(article2.getId().getId())
+					if (article1.getId().equals(article2.getId())
 							|| articleIdPairs.containsKey(aip)
 							|| ignoredPairs.contains(aip)) {
 						continue;
@@ -87,7 +93,18 @@ public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 	public List<ArticleIdPair> getPregeneratedMergeSuggestions()
 			throws KnowledgeException {
 		List<ArticleIdPair> mergeSuggestions = getIdPairsFromFile(MERGE_FILEPATH);
+		filterIgnored(mergeSuggestions);	
 		return mergeSuggestions;
+	}
+	
+	private void filterIgnored(List<ArticleIdPair> mergeSuggestions){
+		List<ArticleIdPair> ignoredPairs =null;
+		try {
+			ignoredPairs = getIdPairsFromFile(MERGE_IGNORED_FILEPATH);
+		} catch (KnowledgeException e) {
+			return;
+		}
+		mergeSuggestions.removeAll(ignoredPairs);
 	}
 
 	private List<ArticleIdPair> createOrderedPairList(

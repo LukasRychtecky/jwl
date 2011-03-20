@@ -1,4 +1,4 @@
-package com.jwl.business.knowledge;
+package com.jwl.business.knowledge.suggestors;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +14,9 @@ import java.util.Set;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.KeyWordTO;
 import com.jwl.business.knowledge.keyword.WordProcessor;
+import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.Neuron;
+import com.jwl.business.knowledge.util.WeightRecord;
 import com.jwl.integration.article.IArticleDAO;
 
 public class AbstractArticleSuggestor {

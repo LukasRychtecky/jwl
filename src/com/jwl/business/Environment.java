@@ -1,9 +1,9 @@
 package com.jwl.business;
 
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
-import com.jwl.business.knowledge.ISettingsSource;
 import com.jwl.business.knowledge.KnowledgeManagementFacade;
-import com.jwl.business.knowledge.SettingsSource;
+import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.SettingsSource;
 import com.jwl.business.permissions.IIdentity;
 import com.jwl.business.permissions.UserIdentity;
 import com.jwl.integration.IDAOFactory;

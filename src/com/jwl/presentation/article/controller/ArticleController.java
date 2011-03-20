@@ -105,7 +105,8 @@ public class ArticleController extends JWLController {
 
 		this.assertValidInput(context, component);
 		this.setUserRoles(component);
-
+		this.setUserName(component);
+		
 		this.recognizer = new ArticleStateRecognizer(super.facade);
 
 		if (this.recognizer.getAction().equals(ArticleActions.RESTORE)) {
