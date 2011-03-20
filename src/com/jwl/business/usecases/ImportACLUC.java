@@ -114,6 +114,9 @@ public class ImportACLUC extends AbstractUC implements IImportACLUC {
 		} finally {
 			try {
 				buffer.close();
+				if (!acl.delete()) {
+					Logger.getLogger(ImportACLUC.class.getName()).log(Level.SEVERE, null, "Can not delete file " + acl.getName());
+				}
 			} catch (IOException ex) {
 				Logger.getLogger(ImportACLUC.class.getName()).log(Level.SEVERE, null, ex);
 			}
