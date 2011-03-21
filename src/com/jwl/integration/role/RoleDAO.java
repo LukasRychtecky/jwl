@@ -26,7 +26,6 @@ public class RoleDAO extends BaseDAO implements IRoleDAO {
 
 	private static final long serialVersionUID = -8198800235309610794L;
 	private static final String FIND_ALL_WHERE = "SELECT r FROM RoleEntity r WHERE ";
-	private static final String REMOVE_BY_ID = "DELETE r FROM RoleEntity r WHERE ";
 	private static final String DELETE_ROLE_HAS_PERMISSION = "DELETE FROM `role_has_permission`";
 	private static final String FIND_ALL_PERMISSIONS = "PermissionEntity.findAll";
 	private static final String FIND_ALL_ENTITIES = "RoleEntity.findAll";

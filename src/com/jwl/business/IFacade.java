@@ -10,7 +10,7 @@ import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.security.IIdentity;
 import javax.naming.NoPermissionException;
 
 /**

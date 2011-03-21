@@ -5,6 +5,7 @@ import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.usecases.CreateAttachmentUC;
 import com.jwl.business.article.usecases.interfaces.ICreateAttachmentUC;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
 import com.jwl.integration.IDAOFactory;
 import java.io.File;
@@ -21,6 +22,8 @@ public class UploadAttachmentUC extends AbstractUC implements IUploadAttachmentU
 
 	@Override
 	public void upload(AttachmentTO attachment, String source, String destinationDir) throws ModelException {
+		this.checkPermission(AccessPermissions.ATTACHMENT_ADD);
+		
 		File sourceFile = new File(source);
 		File destinationFile = new File(destinationDir, sourceFile.getName());
 
@@ -33,7 +36,7 @@ public class UploadAttachmentUC extends AbstractUC implements IUploadAttachmentU
 			throw new ModelException("File type is not supported, file: " + source);
 		}
 		
-		if (sourceFile.renameTo(destinationFile)) {
+		if (!sourceFile.renameTo(destinationFile)) {
 			throw new ModelException("Attachment can't be moved to " + destinationDir);
 		}
 

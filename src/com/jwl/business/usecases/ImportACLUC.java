@@ -30,6 +30,7 @@ public class ImportACLUC extends AbstractUC implements IImportACLUC {
 
 	@Override
 	public void importACL(String fileName) throws ModelException {
+		super.checkPermission(AccessPermissions.SECURITY_IMPORT);
 
 		File acl = new File(fileName);
 		if (!acl.exists()) {

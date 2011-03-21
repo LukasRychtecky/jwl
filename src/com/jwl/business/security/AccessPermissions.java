@@ -12,11 +12,13 @@ public enum AccessPermissions {
 	ARTICLE_RESTORE ("Article", "restore"),
 	ARTICLE_LOCK ("Article", "lock"),
 	ARTICLE_DELETE ("Article", "delete"),
-	ARTICLE_EXCLUDE_ROLE ("Article", "excludeRole"),
+	ARTICLE_EXCLUDEROLE ("Article", "excludeRole"),
 
 	ATTACHMENT_VIEW ("Attachment", "view"),
 	ATTACHMENT_ADD ("Attachment", "add"),
-	ATTACHMENT_DELETE ("Attachment", "delete");
+	ATTACHMENT_DELETE ("Attachment", "delete"),
+
+	SECURITY_IMPORT("Security", "import");
 
 	private String context;
 	private String method;

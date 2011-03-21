@@ -1,6 +1,5 @@
 package com.jwl.business;
 // <editor-fold defaultstate="collapsed">
-import com.jwl.business.exceptions.InsufficientArticleDataException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,11 +14,9 @@ import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.process.FileDownloadProcess;
-import com.jwl.business.article.usecases.CreateAttachmentUC;
-import com.jwl.business.article.usecases.interfaces.ICreateAttachmentUC;
 import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.security.IIdentity;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
@@ -108,7 +105,6 @@ public class Facade implements IFacade {
 
 	@Override
 	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException {
-		System.out.println("CALLING FACADE");
 		IUploadAttachmentUC uc = new UploadAttachmentUC(Environment.getDAOFactory());
 		uc.upload(attachment, source, Environment.getAttachmentStorage());
 	}
