@@ -1,5 +1,6 @@
 package com.jwl.business.article.process;
 
+import com.jwl.business.Environment;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,12 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.jwl.business.FileExpert;
 import com.jwl.business.article.process.interfaces.IProcess;
 import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.integration.cache.AttachmentHome;
@@ -23,7 +21,7 @@ public class FileDownloadProcess implements IProcess {
 	private HttpServletResponse response;
 	private HttpServletRequest request;
 
-	public FileDownloadProcess(HttpServletRequest request,HttpServletResponse response) {
+	public FileDownloadProcess(HttpServletRequest request, HttpServletResponse response) {
 		this.response = response;
 		this.request = request;
 	}
@@ -33,13 +31,11 @@ public class FileDownloadProcess implements IProcess {
 		try {
 			String fileTitle = this.getFileTitle();
 			String fileUniqueName = this.getFileUniqueName(fileTitle);
-			if(fileUniqueName==null){
+			if (fileUniqueName == null) {
 				throw new BusinessProcessException("file not found");
 			}
 			File requestedFile = this.getFile(fileUniqueName);
-			//this.renameFile(requestedFile, fileTitle);
 			this.writeFileInResponse(requestedFile);
-			//this.renameFile(requestedFile, fileUniqueName);
 		} catch (Exception e) {
 			throw new BusinessProcessException("download failed");
 		}
@@ -51,18 +47,15 @@ public class FileDownloadProcess implements IProcess {
 	}
 
 	private File getFile(String fileName) {
-		String fileStoreDir = FileExpert.getFileStorePath();
-
-		File file = new File(fileStoreDir + "\\" + fileName);
+		File file = new File(Environment.getAttachmentStorage() + File.separator + fileName);
 		return file;
 	}
 
 	private String getFileUniqueName(String fileTitle) {
 		AttachmentHome attachmentHome = new AttachmentHome();
-		Attachment attachment = attachmentHome
-				.getAttachmentFromTitle(fileTitle);
-		if(attachment!=null){
-		return attachment.getUniqueFileName();
+		Attachment attachment = attachmentHome.getAttachmentFromTitle(fileTitle);
+		if (attachment != null) {
+			return attachment.getUniqueFileName();
 		}
 		return null;
 	}
@@ -93,14 +86,9 @@ public class FileDownloadProcess implements IProcess {
 				out.write(buffer, 0, bytesRead);
 			}
 		} finally {
-			if (in != null)
+			if (in != null) {
 				in.close();
+			}
 		}
 	}
-
-/*	private void renameFile(File file, String newName) {
-		File newFile = this.getFile(newName);
-		file.renameTo(newFile);
-	} */
-
 }

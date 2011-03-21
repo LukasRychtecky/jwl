@@ -1,6 +1,5 @@
 package com.jwl.presentation.global;
 
-import com.jwl.business.FileExpert;
 import com.jwl.business.article.AttachmentTO;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import java.io.File;
@@ -40,10 +39,11 @@ public class FileMover {
 		this.checkDir();
 		this.parseFileUploadRequest();
 		this.saveFileOnDisc(this.dir, this.receivedFile);
-		return this.uniqueFileName;
+		return this.dir.getPath() + File.separator + this.uniqueFileName;
 	}
 
-	public AttachmentTO getAttchment() {
+	public AttachmentTO getAttachment() {
+		this.attachment.setUniqueName(this.uniqueFileName);
 		return this.attachment;
 	}
 
@@ -81,8 +81,13 @@ public class FileMover {
 		fileItem.write(file);
 	}
 
+	private String generateUniqueName(FileItem file) {
+		int hash = file.hashCode();
+		return String.valueOf(hash);
+	}
+
 	private String createUniqueFileName() {
-		this.uniqueFileName = FileExpert.generateUniqueName(this.receivedFile);
+		this.uniqueFileName = this.generateUniqueName(this.receivedFile);
 		this.uniqueFileName = this.addSuffixToUniqueName(this.originalFileName, this.uniqueFileName);
 		return this.uniqueFileName;
 	}
@@ -111,13 +116,13 @@ public class FileMover {
 	}
 
 	private void createAttachment(FileItem item) {
-		System.out.println("ITEM: " + item.getFieldName());
 		if (item.getFieldName().endsWith(JWLElements.FILE_TITLE.id)) {
 			this.attachment.setOriginalName(item.getString());
 		} else if (item.getFieldName().endsWith(JWLElements.FILE_ARTICLE_TITLE.id)) {
 			this.attachment.setArticleTitle(item.getString());
 		} else if (item.getFieldName().endsWith(JWLElements.FILE_DESCRIPTION.id)) {
 			this.attachment.setDescription(item.getString());
+			this.attachment.setTitle(item.getString());
 		}
 	}
 }

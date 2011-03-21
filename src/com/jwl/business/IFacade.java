@@ -58,9 +58,7 @@ public interface IFacade {
 	 */
 	public IIdentity getIdentity();
 
-	public void uploadFile(HttpServletRequest request);
-
-	public void createAttachment(AttachmentTO attachment) throws ModelException;
+	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException;
 
 	public void makeDownloadFileResponse(HttpServletRequest request,
 			HttpServletResponse response);

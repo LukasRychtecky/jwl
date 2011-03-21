@@ -1,7 +1,6 @@
 package com.jwl.presentation.filters;
 // <editor-fold defaultstate="collapsed">
 import com.jwl.business.IFacade;
-import com.jwl.business.article.AttachmentTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -57,14 +56,10 @@ public class FileUploadFilter implements Filter {
 
 			if (parser.getFileAction().equals(ArticleActions.ATTACH_FILE)) {
 				mover = new FileMover(request);
-				mover.moveToTMP();
-				AttachmentTO a = mover.getAttchment();
-				System.out.println("NAME: " + a.getOriginalName());
-				System.out.println("TITL: " + a.getArticleTitle());
-				System.out.println("DESC: " + a.getDescription());
-//				ut.begin();
-//				facade.createAttachment(this.createAttachment(request));
-//				ut.commit();
+				String source = mover.moveToTMP();
+				ut.begin();
+				facade.uploadAttachment(mover.getAttachment(), source);
+				ut.commit();
 			} else if (parser.getFileAction().equals(AdministrationActions.IMPORT_ACL.toString())) {
 				mover = new FileMover(request);
 				String fileName = mover.moveToTMP();

@@ -59,6 +59,10 @@ public class Environment {
 		return Environment.JWL_HOME + File.separator + "private" + File.separator + "tmp" + File.separator + Environment.ACL_FILE_NAME;
 	}
 
+	public static String getAttachmentStorage() {
+		return Environment.JWL_HOME + File.separator + "private" + File.separator + "jwl-files";
+	}
+
 
 
 	public static IIdentity getIdentity() {

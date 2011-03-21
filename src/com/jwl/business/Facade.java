@@ -15,7 +15,6 @@ import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.process.FileDownloadProcess;
-import com.jwl.business.article.process.FileUploadProcess;
 import com.jwl.business.article.usecases.CreateAttachmentUC;
 import com.jwl.business.article.usecases.interfaces.ICreateAttachmentUC;
 import com.jwl.business.exceptions.BusinessProcessException;
@@ -34,6 +33,7 @@ import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
+import com.jwl.business.usecases.UploadAttachmentUC;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
@@ -47,6 +47,7 @@ import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
+import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
 // </editor-fold>
 
 /**
@@ -104,22 +105,14 @@ public class Facade implements IFacade {
 		uc.importACL(fileName);
 	}
 
-	@Override
-	public void uploadFile(HttpServletRequest request) {
-		FileUploadProcess process = new FileUploadProcess(request);
-		try {
-			process.doIt();
-		} catch (BusinessProcessException e) {
-			Logger.getLogger(FileUploadProcess.class.getName()).log(Level.SEVERE, null,
-					e);
-		}
-	}
 
 	@Override
-	public void createAttachment(AttachmentTO attachment) throws InsufficientArticleDataException {
-		ICreateAttachmentUC uc = new CreateAttachmentUC();
-		uc.createAttachment(attachment);
+	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException {
+		System.out.println("CALLING FACADE");
+		IUploadAttachmentUC uc = new UploadAttachmentUC(Environment.getDAOFactory());
+		uc.upload(attachment, source, Environment.getAttachmentStorage());
 	}
+
 
 	@Override
 	public void makeDownloadFileResponse(HttpServletRequest request,
