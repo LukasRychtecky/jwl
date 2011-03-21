@@ -1,7 +1,7 @@
 package com.jwl.integration.role;
 
-import com.jwl.business.permissions.Role;
-import com.jwl.business.permissions.RoleId;
+import com.jwl.business.security.Role;
+import com.jwl.business.security.RoleId;
 import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
 import java.util.ArrayList;

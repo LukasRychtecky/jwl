@@ -177,7 +177,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 	}
 
 	private boolean hasViewPermission(ArticleId id) {
-		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ARTICLE_VIEW, id);
+		return this.hasPermission(com.jwl.business.security.AccessPermissions.ARTICLE_VIEW, id);
 	}
 
 	private UIComponent createLinkToNextPage(IPaginator paginator) throws IOException {

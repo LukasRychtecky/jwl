@@ -7,7 +7,7 @@ import javax.naming.NoPermissionException;
 import com.jwl.business.RoleTypes;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.Role;
+import com.jwl.business.security.Role;
 import com.jwl.presentation.administration.enumerations.AdministrationStateRecognizer;
 import com.jwl.presentation.administration.enumerations.AdministrationStates;
 import com.jwl.presentation.component.renderer.EncodeHistoryListing;

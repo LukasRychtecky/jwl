@@ -1,7 +1,7 @@
 package com.jwl.business;
 
-import com.jwl.business.permissions.IIdentity;
-import com.jwl.business.permissions.UserIdentity;
+import com.jwl.business.security.IIdentity;
+import com.jwl.business.security.UserIdentity;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
 import com.jwl.integration.filesystem.FSDAOFactory;

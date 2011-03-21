@@ -1,5 +1,6 @@
-package com.jwl.business.permissions;
+package com.jwl.business.security;
 
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.PermissionDeniedException;

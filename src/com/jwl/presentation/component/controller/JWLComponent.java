@@ -1,6 +1,6 @@
 package com.jwl.presentation.component.controller;
 
-import com.jwl.business.permissions.Role;
+import com.jwl.business.security.Role;
 import java.util.ArrayList;
 import java.util.List;
 import javax.el.ELContext;

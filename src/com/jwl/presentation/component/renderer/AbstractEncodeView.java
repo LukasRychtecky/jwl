@@ -94,11 +94,11 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	}
 
 	private boolean hasEditPermission(ArticleId articleId) {
-		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ARTICLE_EDIT, articleId);
+		return this.hasPermission(com.jwl.business.security.AccessPermissions.ARTICLE_EDIT, articleId);
 	}
 
 	private boolean hasAttachmentAddPermission(ArticleId articleId) {
-		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ATTACHMENT_ADD, articleId);
+		return this.hasPermission(com.jwl.business.security.AccessPermissions.ATTACHMENT_ADD, articleId);
 	}
 
 	protected void encodeRating(float ratingAverage, ArticleId articleId)

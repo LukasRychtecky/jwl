@@ -1,4 +1,4 @@
-package com.jwl.business.permissions;
+package com.jwl.business.security;
 
 /**
  *

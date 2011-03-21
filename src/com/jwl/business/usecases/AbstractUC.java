@@ -4,7 +4,7 @@ import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.PermissionDeniedException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.integration.IDAOFactory;
 
 /**
