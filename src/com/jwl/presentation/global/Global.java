@@ -11,8 +11,6 @@ import com.jwl.business.knowledge.KnowledgeManagementFacade;
 
 /**
  * This class provides access to facade.
- * 
- * @author Lukas Rychtecky
  */
 public class Global {
 

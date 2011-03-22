@@ -1,20 +1,12 @@
 package com.jwl.business;
 // <editor-fold defaultstate="collapsed">
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
-import com.jwl.business.article.process.FileDownloadProcess;
-import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.usecases.CreateArticleUC;
@@ -22,6 +14,7 @@ import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
 import com.jwl.business.usecases.FindArticlesUC;
 import com.jwl.business.usecases.GetArticleUC;
+import com.jwl.business.usecases.GetFileUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.ImportACLUC;
@@ -36,6 +29,7 @@ import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
+import com.jwl.business.usecases.interfaces.IGetFileUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.IImportACLUC;
@@ -45,6 +39,7 @@ import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
+import java.io.File;
 // </editor-fold>
 
 /**
@@ -66,7 +61,6 @@ public class Facade implements IFacade {
 		return Environment.getJWLHome();
 	}
 
-	
 	@Override
 	public List<ArticleTO> findArticles(SearchTO searchTO) throws ModelException {
 		IFindArticlesUC uc = new FindArticlesUC(Environment.getDAOFactory());
@@ -102,24 +96,16 @@ public class Facade implements IFacade {
 		uc.importACL(fileName);
 	}
 
-
 	@Override
 	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException {
 		IUploadAttachmentUC uc = new UploadAttachmentUC(Environment.getDAOFactory());
 		uc.upload(attachment, source, Environment.getAttachmentStorage());
 	}
 
-
 	@Override
-	public void makeDownloadFileResponse(HttpServletRequest request,
-			HttpServletResponse response) {
-		FileDownloadProcess process = new FileDownloadProcess(request, response);
-		try {
-			process.doIt();
-		} catch (BusinessProcessException e) {
-			Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e);
-		}
-		
+	public File getFile(String name) throws ModelException {
+		IGetFileUC uc = new GetFileUC(Environment.getDAOFactory());
+		return uc.get(name);
 	}
 
 	@Override
@@ -148,13 +134,13 @@ public class Facade implements IFacade {
 
 	@Override
 	public IPaginator getPaginator() {
-		if(this.paginator == null){
+		if (this.paginator == null) {
 			this.paginator = new Paginator(3);
 		}
 		paginator.setUpPaginator();
 		return paginator;
 	}
-	
+
 	@Override
 	public IPaginator getSearchPaginator() {
 		if (searchPaginator != null) {
@@ -192,7 +178,6 @@ public class Facade implements IFacade {
 	@Override
 	public void rateArticle(ArticleId id, float rating) throws ModelException {
 		IRateArticleUC uc = new RateArticleUC(Environment.getDAOFactory());
-		uc.rateArticle(id, rating);	
+		uc.rateArticle(id, rating);
 	}
-
 }
