@@ -11,8 +11,6 @@ import com.jwl.business.knowledge.KnowledgeManagementFacade;
 
 /**
  * This class provides access to facade.
- * 
- * @author Lukas Rychtecky
  */
 public class Global {
 
@@ -57,7 +55,7 @@ public class Global {
 		return facade;
 	}
 
-	public IFacade getFacadeOtsideJSF() {
+	public IFacade getFacadeOutsideJSF() {
 		return new Facade();
 	}
 

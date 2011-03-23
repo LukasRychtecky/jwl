@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.component.html.HtmlInputText;
-
 import com.jwl.business.IFacade;
+import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.controller.JWLComponent;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
@@ -29,38 +28,18 @@ public class EncodeAttach extends JWLEncoder {
 	@Override
 	protected void encodeResponse() {
 		try {
-			renderCode();
+			this.encodeForm();
 		} catch (IOException ex) {
 			Logger.getLogger(EncodeAttach.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 	}
 
-	private void renderCode() throws IOException {
-		this.encodeForm();
-	}
-
 	private void encodeForm() throws IOException {
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.FILE_FORM.id);
 		form.setEnctype("multipart/form-data");
-		form.setAction(this.getFormAction(JWLComponent.JWL_UPLOAD_FILE_PAGE));
-
-		/*
-		 * HtmlPanelGrid table = new HtmlPanelGrid(); table.setColumns(2);
-		 * table.setBorder(0); List<UIComponent> children = table.getChildren();
-		 * 
-		 * children.add(this.encodeLabelForFileName());
-		 * children.add(this.encodeFileName());
-		 * 
-		 * children.add(this.encodeLabelForFileInput());
-		 * children.add(this.encodeFileInput());
-		 * 
-		 * children.add(this.encodeLabelForFileDescription());
-		 * children.add(this.encodeFileDescription());
-		 * 
-		 * children.add(this.encodeSubmit());
-		 */
+		form.setAction(this.getFormAction(JWLComponent.JWL_UPLOAD_FILE_PAGE, ArticleActions.VIEW, ArticleActions.ATTACH_FILE));
 
 		List<UIComponent> formData = form.getChildren();
 
@@ -75,9 +54,6 @@ public class EncodeAttach extends JWLEncoder {
 
 		formData.add(this.encodeSubmit());
 		formData.add(this.encodeHiddenArticleTitle());
-
-		// form.getChildren().add(this.encodeHiddenArticleTitle());
-		// form.getChildren().add(table);
 		form.encodeAll(context);
 	}
 

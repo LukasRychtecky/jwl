@@ -131,9 +131,6 @@ public class TagDAO extends BaseDAO implements ITagDAO {
 			query.setParameter("articleId", id.getId());
 
 			List<Tag> tags = query.getResultList();
-			for (Tag tag : tags) {
-				System.out.println("T: " + tag.getName());
-			}
 			result.addAll(TagConvertor.toStringSet((Collection<Tag>) tags));
 
 		} catch (Exception e) {

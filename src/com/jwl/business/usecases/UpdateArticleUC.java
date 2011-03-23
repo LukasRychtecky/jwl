@@ -6,7 +6,7 @@ import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.integration.IDAOFactory;

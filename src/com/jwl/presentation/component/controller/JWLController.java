@@ -7,7 +7,7 @@ import javax.naming.NoPermissionException;
 import com.jwl.business.Facade;
 import com.jwl.business.IFacade;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.component.renderer.FlashMessage;
 import com.jwl.presentation.component.renderer.JWLEncoder;
 import com.jwl.presentation.global.Global;

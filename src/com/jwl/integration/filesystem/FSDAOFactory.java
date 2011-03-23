@@ -5,7 +5,6 @@ import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.filesystem.article.FSArticleDAO;
 import com.jwl.integration.filesystem.history.FSHistoryDAO;
 import com.jwl.integration.filesystem.rating.FSRatingDAO;
-import com.jwl.integration.filesystem.role.FSRoleDAO;
 import com.jwl.integration.filesystem.tag.FSTagDAO;
 import com.jwl.integration.history.IHistoryDAO;
 import com.jwl.integration.rating.IRatingDAO;
@@ -35,12 +34,12 @@ public class FSDAOFactory implements IDAOFactory {
 
     @Override
     public IRoleDAO getRoleDAO() {
-        return new FSRoleDAO();
+    	throw new UnsupportedOperationException("Not supported yet.");
     }
 
 	@Override
 	public IRatingDAO getRatingDAO() {
-		return new FSRatingDAO();
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }

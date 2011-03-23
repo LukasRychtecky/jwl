@@ -16,7 +16,7 @@ public abstract class DAOFactory implements IDAOFactory {
 	private ITagDAO tagDAO = null;
 	private IHistoryDAO historyDAO = null;
 	private IRoleDAO roleDAO = null;
-	private IRatingDAO ratingDAO = null;
+	protected IRatingDAO ratingDAO = null;
 
 	@Override
 	public IArticleDAO getArticleDAO() {

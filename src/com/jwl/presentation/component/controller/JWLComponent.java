@@ -1,6 +1,6 @@
 package com.jwl.presentation.component.controller;
 
-import com.jwl.business.permissions.Role;
+import com.jwl.business.security.Role;
 import java.util.ArrayList;
 import java.util.List;
 import javax.el.ELContext;
@@ -31,7 +31,7 @@ abstract public class JWLComponent extends UIInput implements StateHolder {
 	}
 
 	public String getUserName() {
-		if (null == user || user.equals("")) {
+		if (null == user || user.isEmpty()) {
 			Object attribute = this.getAttribute(JWLTagAttributes.REQUIRED_USER);
 			user = this.getNotNullString(attribute);
 		}

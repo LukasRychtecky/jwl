@@ -38,10 +38,15 @@ public class JPADAOFactory extends DAOFactory {
 	}
 
 	@Override
-	protected IRatingDAO factoryRating() {
-		return new RatingDAO();
+	public IRatingDAO getRatingDAO() {
+		if (this.ratingDAO == null) {
+			this.ratingDAO = new RatingDAO();
+		}
+		return this.ratingDAO;
 	}
 
-	
-
+	@Override
+	protected IRatingDAO factoryRating() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

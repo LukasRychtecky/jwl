@@ -53,6 +53,9 @@ public class AdministrationStateRecognizer {
 					state = AdministrationStates.LIST;
 				}
 				break;
+			case IMPORT_ACL:
+				state = AdministrationStates.LIST;
+				break;
 			default:
 				state = AdministrationStates.LIST;
 				break;

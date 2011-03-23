@@ -1,6 +1,6 @@
 package com.jwl.presentation.article.enumerations;
 
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 
 public class ArticlePermissions {
 

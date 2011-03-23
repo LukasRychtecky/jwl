@@ -10,10 +10,10 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import com.jwl.business.IFacade;
-import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.security.IIdentity;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.PermissionDeniedException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
@@ -217,13 +217,14 @@ public abstract class JWLEncoder {
 		return getFormActionString(context, target, params);
 	}
 
-	protected String getFormAction(String target) {
+	protected String getFormAction(String target, String action, String fileAction) {
 		WikiURLParser parser = new WikiURLParser();
 		String context = parser.getCurrentContext();
 		String currentPage = parser.getCurrentPage();
 		Map<String, String> params = parser.getURLParametersAndArticleTitle();
 		params.put(JWLURLParameters.REDIRECT_TARGET, currentPage);
-		params.put(JWLURLParameters.ACTION, ArticleActions.VIEW);
+		params.put(JWLURLParameters.ACTION, action);
+		params.put(JWLURLParameters.FILE_ACTION, fileAction);
 		return getFormActionString(context, target, params);
 	}
 

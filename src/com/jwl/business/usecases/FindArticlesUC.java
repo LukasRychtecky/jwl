@@ -6,7 +6,7 @@ import java.util.List;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
 import com.jwl.integration.exceptions.DAOException;
 

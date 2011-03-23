@@ -13,6 +13,7 @@ public class JWLURLParameters {
 	public static final String LIST_PAGE_NUMBER = "jwlpageindex";
 	public static final String LIST_ORDER_COLUMN = "jwlordercolumn";
 	public static final String HISTORY_ID = "historyid";
+	public static final String FILE_ACTION = "jwlfileaction";
 	
 	public static List<String> ALL_URL_PARAMETERS;
 	public static List<String> ALL_URL_PARAMETERS_BUT_TITLE;
