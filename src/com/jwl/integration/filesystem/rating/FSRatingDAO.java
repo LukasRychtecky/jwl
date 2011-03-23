@@ -10,22 +10,19 @@ public class FSRatingDAO implements IRatingDAO {
 	@Override
 	public void create(RatingTO rating, ArticleId articleId)
 			throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public RatingTO find(ArticleId articleId, String author)
 			throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void update(RatingTO rating, ArticleId articleId)
 			throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }

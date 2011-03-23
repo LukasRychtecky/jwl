@@ -11,45 +11,38 @@ public class FSTagDAO implements ITagDAO {
 	@Override
 	public void addExistingToArticle(Set<String> tags, ArticleId id)
 			throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void create(String tag, ArticleId id) throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void create(Set<String> tags, ArticleId id) throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public Set<String> getAll() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public Set<String> getAllWhere(Set<String> tags) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public Set<String> getAllWhere(ArticleId id) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void removeFromArticle(Set<String> tags, ArticleId id)
 			throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }

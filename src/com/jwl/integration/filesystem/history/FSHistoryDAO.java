@@ -13,45 +13,38 @@ public class FSHistoryDAO implements IHistoryDAO {
 
 	@Override
 	public void create(HistoryTO history) throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void delete(HistoryId id) throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void deleteAll(ArticleId id) throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void deleteAllYoungerThan(ArticleId id, Date date)
 			throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public List<HistoryTO> findAll(ArticleId id) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public HistoryTO get(HistoryId id) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public void update(HistoryTO history) throws DAOException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }

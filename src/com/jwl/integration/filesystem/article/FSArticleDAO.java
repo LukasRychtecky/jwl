@@ -20,25 +20,7 @@ public class FSArticleDAO implements IArticleDAO {
 
     @Override
     public ArticleId create(ArticleTO article) throws DAOException {
-//        File directory = new File("Enter any" +
-//                    "directory name or file name");
-//        boolean isDirectory = directory.isDirectory();
-//        if (isDirectory) {
-//          // It returns true if directory is a directory.
-//          System.out.println("the name you have entered" +
-//                 "is a directory  : "  +    directory);
-//          //It returns the absolutepath of a directory.
-//          System.out.println("the path is "  +
-//                      directory.getAbsolutePath());
-//        } else {
-//          // It returns false if directory is a file.
-//          System.out.println("the name you have" +
-//           "entered is a file  : " +   directory);
-//          //It returns the absolute path of a file.
-//          System.out.println("the path is "  +
-//                    directory.getAbsolutePath());
-//        }
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

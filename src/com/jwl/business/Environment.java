@@ -15,9 +15,11 @@ public class Environment {
 	public static final String IMPLICIT_PU = "jsfwiki";
 	public static final String FILESYSTEM_PU = "jsf-filesystem";
 	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
-//	private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
+//	 private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
 	private static IIdentity identity = null;
+
+	private static final String FILESYSTEM_STORE = "/Users/ostatnickyjiri/Desktop";
 
 	private Environment() {
 

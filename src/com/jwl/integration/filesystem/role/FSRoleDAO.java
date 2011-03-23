@@ -13,15 +13,13 @@ public class FSRoleDAO implements IRoleDAO {
 
 	@Override
 	public List<Object> findRoles(List<String> roles) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
 	public Map<Role, List<AccessPermissions>> load(Set<Role> roles)
 			throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }
