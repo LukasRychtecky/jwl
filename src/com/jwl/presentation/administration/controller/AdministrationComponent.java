@@ -7,8 +7,6 @@ import com.jwl.presentation.component.controller.JWLComponent;
  */
 public class AdministrationComponent extends JWLComponent {
 
-	// TODO PD
-	
 	public static final String COMPONENT_TYPE = "com.jwl.component.Administration";
 	public static final String DEFAULT_RENDERER = "com.jwl.component.AdministrationRenderer";
 
