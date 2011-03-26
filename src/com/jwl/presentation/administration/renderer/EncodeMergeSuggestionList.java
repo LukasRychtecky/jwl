@@ -23,6 +23,8 @@ import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.component.renderer.JWLEncoder;
 import com.jwl.presentation.global.WikiURLParser;
 import com.jwl.util.html.component.HtmlActionForm;
+import com.jwl.util.html.component.HtmlDiv;
+import com.jwl.util.html.component.HtmlDivCommandButton;
 import com.jwl.util.html.component.HtmlFreeOutput;
 import com.jwl.util.html.component.HtmlHeaderPanelGrid;
 import com.jwl.util.html.component.HtmlLinkProperties;
@@ -54,15 +56,35 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 		form.setEnctype("application/x-www-form-urlencoded");
 		form.setAction(this.getFormAction());
 		List<UIComponent> formData = form.getChildren();
-		HtmlPanelGrid table = encodeListing(articlePairs);
-		formData.add(table);
-		encodeFormActions(formData);
+		encodePanel(formData, articlePairs);
+		encodePanelActions(formData);
 		form.encodeAll(context);
 	}
 	
-	private void encodeFormActions(List<UIComponent> formData){
-		formData.add(this.getHtmlSubmitComponent(JWLElements.KNOWLEDGE_IGNORE,
-				JWLStyleClass.EDIT_INPUT_SUBMIT));
+	protected void encodePanel(List<UIComponent> formData,List<ArticlePair> articlePairs) throws IOException{
+		HtmlDiv panel = new HtmlDiv();
+		panel.setStyleClass(JWLStyleClass.PANEL);
+		HtmlDiv panelHeader = new HtmlDiv();
+		panelHeader.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		panelHeader.setValue("Merge Suggestion");
+		HtmlDiv panelBody = new HtmlDiv();
+		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		HtmlPanelGrid table = encodeListing(articlePairs);
+		panelBody.getChildren().add(table);
+		//panelBody.getChildren().add(getPageButtonsComponent(paginator));
+		List<UIComponent> panelChildern =  panel.getChildren();
+		panelChildern.add(panelHeader);
+		panelChildern.add(panelBody);
+		formData.add(panel);
+	}
+	
+	protected void encodePanelActions(List<UIComponent> formData){
+		HtmlDiv buttonsPanel = new HtmlDiv();
+		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		List<UIComponent> panelChildren = buttonsPanel.getChildren();
+		panelChildren.add(getLinkToListing());
+		panelChildren.add(getIgnoreButton());
+		formData.add(buttonsPanel);
 	}
 
 	private HtmlPanelGrid encodeListing(List<ArticlePair> articlePairs) throws IOException {		
@@ -175,7 +197,7 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 		return output;
 	}
 	
-	private void encodeLinkToListing() throws IOException {
+	protected UIComponent getLinkToListing() {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("Back to listing");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
@@ -183,7 +205,7 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 		properties.addClass(JWLStyleClass.VIEW_LINK_BACK);
 
 		HtmlOutputLink link = getHtmlLinkComponent(properties);
-		link.encodeAll(context);
+		return link;
 	}
 
 	@Override
@@ -192,7 +214,6 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 			super.encodeFlashMessages();
 			List<ArticlePair> mergeSuggestions = this.facade.getMergeSuggestions();
 			encodeForm(mergeSuggestions);
-			encodeLinkToListing();
 		} catch (Exception e) {
 			Logger.getLogger(EncodeListing.class.getName()).log(Level.SEVERE,
 					null, e);
@@ -214,5 +235,14 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 		Map<String, String> params = parser.getURLParametersAndArticleTitle();
 		params.put(JWLURLParameters.ACTION, AdministrationActions.MERGE_SUGGESTION_LIST.action);
 		return getFormActionString(context, target, params);
+	}
+	
+	protected UIComponent getIgnoreButton(){
+		HtmlDivCommandButton button = new HtmlDivCommandButton();
+		button.setDivStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		button.setType("submit");
+		button.setId(JWLElements.KNOWLEDGE_IGNORE.id);
+		button.setValue(JWLElements.KNOWLEDGE_IGNORE.value);
+		return button;
 	}
 }

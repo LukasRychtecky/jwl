@@ -52,6 +52,8 @@ public class ArticleConvertor {
 		// }
 		
 		article.setLivability(entity.getLivability());
+		
+		article.setTopics(TopicConverter.convertFromEntities(entity.getTopics()));
 		return article;
 	}
 

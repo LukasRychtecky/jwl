@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 
 import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
+import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.renderer.AbstractEncodeListing;
@@ -97,7 +98,7 @@ public class EncodeSearch extends AbstractEncodeListing {
 	}
 
 	private void renderSearchResult() throws IOException {
-		IPaginator paginator = this.facade.getSearchPaginator();
+		IPaginator<ArticleTO> paginator = this.facade.getSearchPaginator();
 		if (paginator != null) {
 			super.encodeListing(paginator, super.getHeaderNames(),
 					this.getOrderableColumns());

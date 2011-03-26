@@ -32,7 +32,7 @@ public class SimilarArticleServlet extends HttpServlet {
 		IKnowledgeManagementFacade knowledgeFacade = Environment
 				.getKnowledgeFacade();
 		List<ArticleTO> suggestedArticles = knowledgeFacade
-				.suggestSimilarArticles(tags, title, text);
+				.suggestSimilarArticlesEdit(tags, title, text);
 		PrintWriter out = resp.getWriter();
 		out.println("<ul>");
 		for (ArticleTO sa : suggestedArticles) {

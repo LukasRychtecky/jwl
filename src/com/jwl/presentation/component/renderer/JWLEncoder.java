@@ -208,6 +208,16 @@ public abstract class JWLEncoder {
 			return false;
 		}
 	}
+	
+	protected boolean hasPermission(AccessPermissions permission) {
+		try {
+			IIdentity identity = Global.getInstance().getFacade().getIdentity();
+			return identity.isAllowed(permission);
+		} catch (ModelException ex) {
+			Logger.getLogger(JWLEncoder.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+	}
 
 	protected String getFormAction() {
 		WikiURLParser parser = new WikiURLParser();

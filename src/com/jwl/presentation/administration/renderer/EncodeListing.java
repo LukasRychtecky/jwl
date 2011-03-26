@@ -52,7 +52,7 @@ public class EncodeListing extends AbstractEncodeListing {
 	}
 
 	protected void encodeArticles() throws IOException {
-		IPaginator paginator = this.facade.getPaginator();
+		IPaginator<ArticleTO> paginator = this.facade.getPaginator();
 		super.encodeListing(paginator, super.getHeaderNames(), this
 				.getOrderableColumns());
 	}

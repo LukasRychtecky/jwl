@@ -8,6 +8,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
+import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.permissions.IIdentity;
@@ -63,9 +64,9 @@ public interface IFacade {
 
 	public ArticleTO getArticle(ArticleId id) throws ModelException;
 
-	public IPaginator getPaginator();
+	public IPaginator<ArticleTO> getPaginator();
 
-	public IPaginator getSearchPaginator();
+	public IPaginator<ArticleTO> getSearchPaginator();
 
 	public void setSearchParametres(SearchTO searchTO);
 
@@ -84,4 +85,17 @@ public interface IFacade {
 	public void addToMergeSuggestionsIgnored(List<ArticleIdPair> articleIdPairs) throws ModelException;
 	
 	public void increaseLivability(List<ArticleId> ids, double increase) throws ModelException;
+	
+	public List<ArticleTO> getSimilarArticlesInView(ArticleTO article) throws ModelException;
+	
+	public IPaginator<TopicTO> getArticleForumTopics(ArticleId articleId) throws ModelException;
+	
+	public void createForumTopic(TopicTO topic, ArticleId article) throws ModelException;
+	
+	public void deleteForumTopics(List<Integer> topicIds) throws ModelException;
+	
+	public void closeForumTopics(List<Integer> topicIds) throws ModelException;
+	
+	public void openForumTopics(List<Integer> topicIds) throws ModelException;
+	
 }

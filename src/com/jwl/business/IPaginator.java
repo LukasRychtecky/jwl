@@ -2,26 +2,29 @@ package com.jwl.business;
 
 import java.util.List;
 
-import com.jwl.business.article.ArticleTO;
+public interface IPaginator<T>{
+	public boolean hasNext();
 
-public interface IPaginator {
+	public boolean hasPrevious();
 
-	public abstract boolean hasNext();
+	public int getLastPageIndex();
 
-	public abstract boolean hasPrevious();
+	public int getFirstPageIndex();
 
-	public abstract int getLastPageIndex();
-
-	public abstract int getFirstPageIndex();
-
-	public abstract List<ArticleTO> getcurrentPageArticles();
-
-	public abstract void setUpPaginator();
+	public  List<T> getCurrentPageContent();
 
 	public int getPageIndex();
 
 	public int getPreviousPageIndex();
 
 	public int getNextPageIndex();
-
+	
+	public void setUpPaginator();
+	
+	public int getCurrentPageFirst();
+	
+	public int getCurrentPageLast();
+	
+	public int getContentSize();
+	
 }

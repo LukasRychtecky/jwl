@@ -12,6 +12,7 @@ import com.jwl.business.knowledge.suggestors.EditArticleSuggestor;
 import com.jwl.business.knowledge.suggestors.KnowledgeSearch;
 import com.jwl.business.knowledge.suggestors.LivablilityManager;
 import com.jwl.business.knowledge.suggestors.MergeArticleSuggestor;
+import com.jwl.business.knowledge.suggestors.ViewArticleSuggestor;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.keyword.IKeyWordDAO;
@@ -19,7 +20,7 @@ import com.jwl.integration.keyword.IKeyWordDAO;
 public class KnowledgeManagementFacade implements IKnowledgeManagementFacade {
 
 	@Override
-	public List<ArticleTO> suggestSimilarArticles(String tags, String name,
+	public List<ArticleTO> suggestSimilarArticlesEdit(String tags, String name,
 			String text) {
 		IArticleDAO adao = Environment.getDAOFactory().getArticleDAO();
 		EditArticleSuggestor sas = new EditArticleSuggestor(adao,
@@ -135,6 +136,15 @@ public class KnowledgeManagementFacade implements IKnowledgeManagementFacade {
 		IArticleDAO adao = Environment.getDAOFactory().getArticleDAO();
 		LivablilityManager lm = new LivablilityManager(adao, Environment.getKnowledgeSettings());
 		lm.handleArticleView(articleId);		
+	}
+
+	@Override
+	public List<ArticleTO> suggestSimilarArticlesView(
+			ArticleTO article) {
+		IArticleDAO adao = Environment.getDAOFactory().getArticleDAO();
+		ViewArticleSuggestor vas = new ViewArticleSuggestor(adao,
+				Environment.getKnowledgeSettings());
+		return vas.suggestSimilarArticles(article);
 	}
 
 }

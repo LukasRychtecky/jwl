@@ -48,13 +48,13 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		link.encodeAll(this.context);
 	}
 
-	protected void encodeListing(IPaginator paginator, List<String> headers,
+	protected void encodeListing(IPaginator<ArticleTO> paginator, List<String> headers,
 			Map<Integer, String> orderableColumns) throws IOException {
 		List<String> orderableHeaders = this.encodeHeaders(headers,
 				orderableColumns);
 		HtmlPanelGrid table = getTable(orderableHeaders);
 		List<UIComponent> articlesTableData = table.getChildren();
-		List<ArticleTO> articles = paginator.getcurrentPageArticles();
+		List<ArticleTO> articles = paginator.getCurrentPageContent();
 		for (ArticleTO article : articles) {
 			if (this.hasViewPermission(article.getId())) {
 				this.encodeRowData(article, articlesTableData);
@@ -179,7 +179,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ARTICLE_VIEW, id);
 	}
 
-	private void encodeLinkToNextPage(IPaginator paginator) throws IOException {
+	private void encodeLinkToNextPage(IPaginator<ArticleTO> paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue(">");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
@@ -191,7 +191,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		link.encodeAll(this.context);
 	}
 
-	private void encodeLinkToPreviousPage(IPaginator paginator)
+	private void encodeLinkToPreviousPage(IPaginator<ArticleTO> paginator)
 			throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("<");
@@ -204,7 +204,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		link.encodeAll(this.context);
 	}
 
-	private void encodeLinkToFirstPage(IPaginator paginator) throws IOException {
+	private void encodeLinkToFirstPage(IPaginator<ArticleTO> paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("<<");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
@@ -216,7 +216,7 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		link.encodeAll(this.context);
 	}
 
-	private void encodeLinkToLastPage(IPaginator paginator) throws IOException {
+	private void encodeLinkToLastPage(IPaginator<ArticleTO> paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue(">>");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);

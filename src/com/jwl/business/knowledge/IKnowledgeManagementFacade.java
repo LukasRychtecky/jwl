@@ -9,7 +9,7 @@ import com.jwl.business.knowledge.exceptions.KnowledgeException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 
 public interface IKnowledgeManagementFacade {
-	public List<ArticleTO> suggestSimilarArticles(String tags, String name,
+	public List<ArticleTO> suggestSimilarArticlesEdit(String tags, String name,
 			String text);
 
 	public void extractKeyWords();
@@ -39,5 +39,7 @@ public interface IKnowledgeManagementFacade {
 	public void addLivability(ArticleId articleId, double livability) throws KnowledgeException;
 	
 	public void handleArticleViewLivability(ArticleId articleId);
+	
+	public List<ArticleTO> suggestSimilarArticlesView(ArticleTO article);
 	
 }

@@ -6,12 +6,16 @@ import com.jwl.integration.history.HistoryDAO;
 import com.jwl.integration.history.IHistoryDAO;
 import com.jwl.integration.keyword.IKeyWordDAO;
 import com.jwl.integration.keyword.KeyWordDAO;
+import com.jwl.integration.post.IPostDAO;
+import com.jwl.integration.post.PostDAO;
 import com.jwl.integration.rating.IRatingDAO;
 import com.jwl.integration.rating.RatingDAO;
 import com.jwl.integration.role.IRoleDAO;
 import com.jwl.integration.role.RoleDAO;
 import com.jwl.integration.tag.ITagDAO;
 import com.jwl.integration.tag.TagDAO;
+import com.jwl.integration.topic.ITopicDAO;
+import com.jwl.integration.topic.TopicDAO;
 
 /**
  *
@@ -25,6 +29,8 @@ public class JPADAOFactory implements IDAOFactory {
 	private IRoleDAO roleDAO = null;
 	private IRatingDAO ratingDAO = null;
 	private IKeyWordDAO keyWordDAO = null;
+	private ITopicDAO topicDAO = null;
+	private IPostDAO postDAO = null;
 
 	@Override
 	public IArticleDAO getArticleDAO() {
@@ -72,6 +78,22 @@ public class JPADAOFactory implements IDAOFactory {
 			this.keyWordDAO = new KeyWordDAO();
 		}
 		return this.keyWordDAO;
+	}
+
+	@Override
+	public ITopicDAO getTopicDAO() {
+		if(this.topicDAO == null){
+			this.topicDAO = new TopicDAO();
+		}
+		return this.topicDAO;
+	}
+
+	@Override
+	public IPostDAO getPostDAO() {
+		if(this.postDAO == null){
+			this.postDAO = new PostDAO();
+		}
+		return this.postDAO;
 	}
 
 }

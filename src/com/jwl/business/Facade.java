@@ -13,6 +13,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
+import com.jwl.business.article.TopicTO;
 import com.jwl.business.article.process.FileDownloadProcess;
 import com.jwl.business.article.process.FileUploadProcess;
 import com.jwl.business.exceptions.BusinessProcessException;
@@ -21,37 +22,48 @@ import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.permissions.IIdentity;
 import com.jwl.business.usecases.AddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.CreateArticleUC;
+import com.jwl.business.usecases.CreateForumTopicUC;
 import com.jwl.business.usecases.DeleteArticleUC;
+import com.jwl.business.usecases.DeleteForumTopicsUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
 import com.jwl.business.usecases.FindArticlesUC;
+import com.jwl.business.usecases.GetArticleTopicsUC;
 import com.jwl.business.usecases.GetArticleUC;
 import com.jwl.business.usecases.GetDeadArticlesUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.GetMergeSuggestionsUC;
+import com.jwl.business.usecases.GetSimilarArticlesInViewUC;
+import com.jwl.business.usecases.CloseForumTopicsUC;
 import com.jwl.business.usecases.IncreaseLivabilityUC;
 import com.jwl.business.usecases.LockArticleUC;
+import com.jwl.business.usecases.OpenForumTopicsUC;
 import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
+import com.jwl.business.usecases.interfaces.ICloseForumTopicsUC;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
+import com.jwl.business.usecases.interfaces.ICreateForumTopicUC;
 import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
+import com.jwl.business.usecases.interfaces.IDeleteForumTopicsUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
+import com.jwl.business.usecases.interfaces.IGetArticleTopicsUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.business.usecases.interfaces.IGetDeadArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.IGetMergeSuggestionsUC;
+import com.jwl.business.usecases.interfaces.IGetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.interfaces.IIncreaseLivablityUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
+import com.jwl.business.usecases.interfaces.IOpenForumTopicsUC;
 import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-// </editor-fold>
 import com.jwl.presentation.global.WikiURLParser;
 
 /**
@@ -60,8 +72,9 @@ import com.jwl.presentation.global.WikiURLParser;
  */
 public class Facade implements IFacade {
 
-	private IPaginator paginator = null;
+	private IPaginator<ArticleTO> paginator = null;
 	private KeyWordPaginator searchPaginator = null;
+	private TopicPaginator topicPaginator = null;
 
 	@Override
 	public List<ArticleTO> findArticles(SearchTO searchTO)
@@ -143,7 +156,7 @@ Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e)
 	}
 
 	@Override
-	public IPaginator getPaginator() {
+	public IPaginator<ArticleTO> getPaginator() {
 		if (this.paginator == null) {
 			this.paginator = new Paginator(3);
 		}
@@ -152,7 +165,7 @@ Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e)
 	}
 
 	@Override
-	public IPaginator getSearchPaginator() {
+	public IPaginator<ArticleTO> getSearchPaginator() {
 		if (searchPaginator != null) {
 			searchPaginator.setUpPaginator();
 		}
@@ -216,6 +229,52 @@ Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e)
 			throws ModelException {
 		IIncreaseLivablityUC uc = new IncreaseLivabilityUC(Environment.getDAOFactory());
 		uc.addLivability(ids, increase);
+		
+	}
+
+	@Override
+	public List<ArticleTO> getSimilarArticlesInView(ArticleTO article)
+			throws ModelException {
+		IGetSimilarArticlesInViewUC uc = new GetSimilarArticlesInViewUC(Environment.getDAOFactory());
+		return uc.getSimilarArticles(article);
+	}
+
+	@Override
+	public TopicPaginator getArticleForumTopics(ArticleId articleId)
+			throws ModelException {
+		if(topicPaginator==null||!topicPaginator.getArticleId().equals(articleId)){
+			topicPaginator = new TopicPaginator();
+		}
+		IGetArticleTopicsUC uc  = new GetArticleTopicsUC(Environment.getDAOFactory());	
+		topicPaginator.setSearchResults(uc.getArticleTopics(articleId));
+		topicPaginator.setArticleId(articleId);		
+		return topicPaginator;
+	}
+
+	@Override
+	public void createForumTopic(TopicTO topic, ArticleId article)
+			throws ModelException {
+		ICreateForumTopicUC uc = new CreateForumTopicUC(Environment.getDAOFactory());
+		uc.createTopic(topic, article);	
+	}
+
+	@Override
+	public void deleteForumTopics(List<Integer> topicIds) throws ModelException {
+		IDeleteForumTopicsUC uc = new DeleteForumTopicsUC(Environment.getDAOFactory());
+		uc.deleteTopics(topicIds);
+		
+	}
+
+	@Override
+	public void closeForumTopics(List<Integer> topicIds) throws ModelException {
+		ICloseForumTopicsUC uc = new CloseForumTopicsUC(Environment.getDAOFactory());
+		uc.closeTopics(topicIds);
+	}
+
+	@Override
+	public void openForumTopics(List<Integer> topicIds) throws ModelException {
+		IOpenForumTopicsUC uc = new OpenForumTopicsUC(Environment.getDAOFactory());
+		uc.openTopics(topicIds);
 		
 	}
 

@@ -18,8 +18,10 @@ import com.jwl.presentation.administration.renderer.EncodeDeadArticleView;
 import com.jwl.presentation.administration.renderer.EncodeListing;
 import com.jwl.presentation.administration.renderer.EncodeMergeSuggestionList;
 import com.jwl.presentation.administration.renderer.EncodeMergeSuggestionView;
+import com.jwl.presentation.administration.renderer.EncodeTopicList;
 import com.jwl.presentation.component.controller.JWLController;
 import com.jwl.presentation.component.renderer.EncodeCreate;
+import com.jwl.presentation.component.renderer.EncodeCreateTopic;
 import com.jwl.presentation.component.renderer.EncodeEdit;
 import com.jwl.presentation.component.renderer.EncodeError;
 import com.jwl.presentation.component.renderer.EncodeHistoryListing;
@@ -133,7 +135,13 @@ public class AdministrationController extends JWLController {
 					break;
 				case DEAD_ARTICLE_VIEW:
 					encoder = new EncodeDeadArticleView(facade, id);
+					break;
+				case FORUM_TOPIC_LIST:
+					encoder = new EncodeTopicList(facade, id);
 					break;	
+				case FORUM_TOPIC_CREATE:
+					encoder = new EncodeCreateTopic(facade, id);
+					break;
 				default:
 					encoder = new EncodeError();
 					encoder.addImplicitErrorFlashMessage();

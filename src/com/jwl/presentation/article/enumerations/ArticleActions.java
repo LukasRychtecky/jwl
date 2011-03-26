@@ -10,5 +10,6 @@ public class ArticleActions {
 	public static final String HISTORY_VIEW = "history_view";
 	public static final String HISTORY_LIST ="history_list";
 	public static final String RESTORE = "restore";
-
+	public static final String FORUM_TOPIC_LIST = "topic_list";
+	public static final String FORUM_TOPIC_CREATE = "topic_create";
 }

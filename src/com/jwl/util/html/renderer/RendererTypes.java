@@ -29,6 +29,8 @@ public class RendererTypes {
 	public static final String FREE_OUTPUT_RENDERER = 
 		"com.jwl.html.FreeOutputRenderer";
 	
+	public static final String DIV_RENDERER = "com.jwl.html.DivRenderer";
+	
 	
 }
 

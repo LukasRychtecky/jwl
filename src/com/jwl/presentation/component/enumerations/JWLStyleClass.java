@@ -70,4 +70,12 @@ public class JWLStyleClass {
 	public static final String FLASH_MESSAGE = FLASH_PREFIX +					"message";
 	
 	public static final String VIEW_STARS = JWL_PREFIX + "stars";
+	public static final String PAGE_BUTTON = JWL_PREFIX + "pageButton";
+	public static final String PAGE_TEXT = JWL_PREFIX + "pageText";
+	public static final String PAGE_BUTTONS_TABLE = JWL_PREFIX + "pageTable";
+	public static final String PANEL = JWL_PREFIX + "panel";
+	public static final String PANEL_HEADER = JWL_PREFIX + "panelHeader";
+	public static final String PANEL_BODY = JWL_PREFIX + "panelBody";
+	public static final String PANEL_ACTION_BUTTONS = JWL_PREFIX + "panelActionButtons";
+	
 }

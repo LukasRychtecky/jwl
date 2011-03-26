@@ -31,9 +31,8 @@ public class EncodeMergeSuggestionView extends AbstractEncodeView {
 		try {
 			super.encodeFlashMessages();
 			ArticleTO article = this.facade.getArticle(this.id);
-			super.encondeArticle(article);
-			super.encodeRating(article.getRatingAverage(), id);
-			super.encodeCommonLinks(article);
+			super.encodeArticlePanel(article);
+			super.encodePanelActionButtons(article);
 		} catch (IOException e) {
 			Logger.getLogger(EncodeView.class.getName()).log(Level.SEVERE,
 					null, e);

@@ -1,10 +1,14 @@
 package com.jwl.presentation.article.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.PostTO;
+import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.component.controller.JWLDecoder;
 import com.jwl.presentation.component.enumerations.JWLElements;
@@ -32,7 +36,28 @@ public class ArticleDecoder extends JWLDecoder {
 			} else if (this.isArticleSaveRequest()) {
 				this.facade.createArticle(article);
 			}
+			
 		}
+		if(isTopicCreateRequest()){
+			handleTopicCreate();
+		}
+	}
+	
+	private void handleTopicCreate() throws ModelException{
+		TopicTO topic = new TopicTO();
+		String subject = map.get(JWLElements.FORUM_SUBJECT.id);
+		if(subject == ""){
+			throw new ModelException("Subject cannot be left empty");
+		}
+		topic.setTitle(subject);
+		PostTO post = new PostTO();
+		post.setText(map.get(JWLElements.FORUM_TOPIC_TEXT.id));
+		List<PostTO> posts =new ArrayList<PostTO>();
+		posts.add(post);
+		topic.setPosts(posts);
+		String id = map.get(JWLElements.FORUM_ARTICLE_ID.id);
+		ArticleId articleId = new ArticleId(new Integer(id));
+		this.facade.createForumTopic(topic, articleId);
 	}
 
 	private ArticleTO getFilledArticle() {
@@ -65,7 +90,7 @@ public class ArticleDecoder extends JWLDecoder {
 	}
 
 	private boolean isArticleComponentRequest() {
-		return isArticleEditRequest() || isArticleSaveRequest();
+		return isArticleEditRequest() || isArticleSaveRequest() ;
 	}
 
 	private boolean isArticleEditRequest() {
@@ -74,5 +99,9 @@ public class ArticleDecoder extends JWLDecoder {
 
 	private boolean isArticleSaveRequest() {
 		return map.containsKey(this.getFullKey(JWLElements.CREATE_SAVE.id));
+	}
+	
+	private boolean isTopicCreateRequest(){
+		return map.containsKey(JWLElements.FORUM_TOPIC_CREATE.id);
 	}
 }

@@ -13,7 +13,7 @@ import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
 import com.jwl.presentation.article.enumerations.ListColumns;
 
-public class SearchPaginator extends AbstractPaginator {
+public class SearchPaginator extends AbstractArticlePaginator {
 
 	private boolean searchInEditors;
 	private boolean searchInTags;
@@ -32,7 +32,7 @@ public class SearchPaginator extends AbstractPaginator {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ArticleTO> getcurrentPageArticles() {
+	public List<ArticleTO> getCurrentPageContent() {
 		List<Article> articles = null;
 		if (this.searchText.isEmpty()) {
 			return new ArrayList<ArticleTO>();

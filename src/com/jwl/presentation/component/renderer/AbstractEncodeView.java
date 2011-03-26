@@ -1,6 +1,7 @@
 package com.jwl.presentation.component.renderer;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import javax.faces.component.html.HtmlOutputLink;
@@ -10,6 +11,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.article.enumerations.ArticleActions;
+import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.convertor.MarkupToMarkdown;
@@ -26,7 +28,6 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		this.encodeTitle(article.getTitle());
 		this.encodeText(article.getText());
 		this.encodeTags(super.facade.getArticle(article.getId()).getTags());
-
 	}
 
 	private void encodeTitle(String title) throws IOException {
@@ -56,6 +57,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 				this.encodeLinkToAttach(article.getTitle());
 			}
 		}
+		this.encodeLinkForum(article.getId());
 	}
 
 	protected void encodeLinkToListing() throws IOException {
@@ -93,13 +95,30 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		HtmlOutputLink link = getHtmlLinkComponent(properties);
 		link.encodeAll(context);
 	}
+	
+	private void encodeLinkForum(ArticleId id) throws IOException {
+		HtmlLinkProperties properties = new HtmlLinkProperties();
+		properties.setValue("Forum");
+		properties.addParameter(JWLURLParameters.ACTION,
+				ArticleActions.FORUM_TOPIC_LIST);
+		properties.addParameter(JWLURLParameters.ARTICLE_ID, id.getId());
+		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		properties.addClass(JWLStyleClass.VIEW_LINK_ATTACH);
+
+		HtmlOutputLink link = getHtmlLinkComponent(properties);
+		link.encodeAll(context);
+	}
 
 	private boolean hasEditPermission(ArticleId articleId) {
-		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ARTICLE_EDIT, articleId);
+		return this.hasPermission(
+				com.jwl.business.permissions.AccessPermissions.ARTICLE_EDIT,
+				articleId);
 	}
 
 	private boolean hasAttachmentAddPermission(ArticleId articleId) {
-		return this.hasPermission(com.jwl.business.permissions.AccessPermissions.ATTACHMENT_ADD, articleId);
+		return this.hasPermission(
+				com.jwl.business.permissions.AccessPermissions.ATTACHMENT_ADD,
+				articleId);
 	}
 
 	protected void encodeRating(float ratingAverage, ArticleId articleId)
@@ -140,4 +159,50 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		writer.write("</label>");
 	}
 
+	protected void encodeSimilarArticles(ArticleTO article) throws IOException,
+			ModelException {
+		encodeDivIdStart(JWLElements.VIEW_SIMILAR_ARTICLE_DIV.id);
+		List<ArticleTO> similarArticles = facade
+				.getSimilarArticlesInView(article);
+		if (!similarArticles.isEmpty()) {
+			writer.write("Possibly similar articles:");
+			writer.write("<ul>");
+			for (ArticleTO sa : similarArticles) {
+				writer.write("<li>");
+				encodeArticleLinkComponent(sa.getTitle());
+				writer.write("</li>");
+			}
+			writer.write("</ul>");
+		}
+		encodeDivEnd();
+	}
+
+	private void encodeArticleLinkComponent(String title) throws IOException {
+		HtmlLinkProperties properties = new HtmlLinkProperties();
+		properties.setValue(title);
+		properties.addParameter(JWLURLParameters.ARTICLE_TITLE, title);
+		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.VIEW);
+		// properties.addClass(JWLStyleClass.ACTION_BUTTON_STYLE);
+		this.getHtmlLinkComponent(properties).encodeAll(context);
+	}
+	
+	protected void encodeArticlePanel(ArticleTO article) throws IOException, ModelException{
+		encodeDivClassStart(JWLStyleClass.PANEL);
+		encodeDivClassStart(JWLStyleClass.PANEL_HEADER);
+		encodePlainText("Wiki Article");
+		encodeDivEnd();
+		encodeDivClassStart(JWLStyleClass.PANEL_BODY);
+		encondeArticle(article);
+		encodeRating(article.getRatingAverage(), article.getId());
+		encodeDivEnd();
+		encodeDivEnd();		
+	}
+	
+	protected void encodePanelActionButtons(ArticleTO article) throws IOException{
+		encodeDivClassStart(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		encodeCommonLinks(article);
+		encodeDivEnd();
+	}
+	
+		
 }

@@ -64,7 +64,13 @@ public class AdministrationStateRecognizer {
 				break;	
 			case DEAD_ARTICLE_VIEW:
 				state = AdministrationStates.DEAD_ARTICLE_VIEW;
-				break;	
+				break;
+			case FORUM_TOPIC_LIST:
+				state = AdministrationStates.FORUM_TOPIC_LIST;
+				break;
+			case FORUM_TOPIC_CREATE:
+				state = AdministrationStates.FORUM_TOPIC_CREATE;
+				break;
 			default:
 				state = AdministrationStates.LIST;
 				break;
@@ -120,6 +126,10 @@ public class AdministrationStateRecognizer {
 			return AdministrationActions.DEAD_ARTICLE_LIST;
 		}else if(urlAction.equalsIgnoreCase(AdministrationActions.DEAD_ARTICLE_VIEW.action)){
 			return AdministrationActions.DEAD_ARTICLE_VIEW;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.FORUM_TOPIC_LIST.action)){
+			return AdministrationActions.FORUM_TOPIC_LIST;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.FORUM_TOPIC_CREATE.action)){
+			return AdministrationActions.FORUM_TOPIC_CREATE;
 		}else{
 			return AdministrationActions.UNKNOWN;
 		}

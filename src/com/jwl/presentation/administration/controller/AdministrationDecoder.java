@@ -43,29 +43,48 @@ public class AdministrationDecoder extends ArticleDecoder {
 			double increase = getLivabilityIncreaseValue();
 			facade.increaseLivability(ids, increase);
 		}
+
+		if (isDeleteTopicRequest()) {
+			handleDeleteTopic();
+		}
+		
+		if(isCloseTopicRequest()){
+			handleCloseTopic();
+		}
+		if(isOpenTopicRequest()){
+			handleOpenTopic();
+		}
+
 	}
 
 	private boolean isMergeIgnoreRequest() {
-		return map.containsKey(this.getFullKey(JWLElements.KNOWLEDGE_IGNORE.id,
-				JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id));
+		return map.containsKey(JWLElements.KNOWLEDGE_IGNORE.id);
 	}
 
 	private boolean isDeadDeleteRequest() {
-		return map.containsKey(this.getFullKey(
-				JWLElements.KNOWLEDGE_DEAD_DELETE.id,
-				JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id));
+		return map.containsKey(JWLElements.KNOWLEDGE_DEAD_DELETE.id);
 	}
 
 	private boolean isLivabilityIncreaseRequest() {
-		return map.containsKey(this.getFullKey(
-				JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id,
-				JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id));
+		return map.containsKey(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id);
+	}
+
+	private boolean isDeleteTopicRequest() {
+		return map.containsKey(JWLElements.FORUM_TOPIC_DELETE.id);
+	}
+	
+	private boolean isCloseTopicRequest() {
+		return map.containsKey(JWLElements.FORUM_TOPIC_CLOSE.id);
+	}
+	
+	private boolean isOpenTopicRequest() {
+		return map.containsKey(JWLElements.FORUM_TOPIC_OPEN.id);
 	}
 
 	private List<ArticleIdPair> getIdPairs() {
 		List<ArticleIdPair> result = new ArrayList<ArticleIdPair>();
 		for (Entry<String, String> e : map.entrySet()) {
-			if (e.getKey().contains(getFullKey(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id,JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id))) {
+			if (e.getKey().contains(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id)) {
 				ArticleIdPair pair = getPairFromCheckboxName(e.getKey());
 				result.add(pair);
 			}
@@ -75,7 +94,7 @@ public class AdministrationDecoder extends ArticleDecoder {
 
 	private ArticleIdPair getPairFromCheckboxName(String checkboxName) {
 		String pairPart = checkboxName
-				.substring(getFullKey(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id,JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id).length());
+				.substring(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id.length());
 		int delimIdex = pairPart.indexOf('-');
 		String firstId = pairPart.substring(0, delimIdex);
 		String secondId = pairPart.substring(delimIdex + 1);
@@ -87,7 +106,7 @@ public class AdministrationDecoder extends ArticleDecoder {
 	private List<ArticleId> getArticleIds() {
 		List<ArticleId> result = new ArrayList<ArticleId>();
 		for (Entry<String, String> e : map.entrySet()) {
-			if (e.getKey().contains(getFullKey(JWLElements.KNOWLEDGE_ID_CHECKBOX.id,JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id))) {
+			if (e.getKey().contains(JWLElements.KNOWLEDGE_ID_CHECKBOX.id)) {
 				ArticleId id = getIdFromCheckbox(e.getKey());
 				result.add(id);
 			}
@@ -97,23 +116,70 @@ public class AdministrationDecoder extends ArticleDecoder {
 
 	private ArticleId getIdFromCheckbox(String chechboxName) {
 		String idPart = chechboxName
-				.substring(getFullKey(JWLElements.KNOWLEDGE_ID_CHECKBOX.id,JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id).length());
+				.substring(JWLElements.KNOWLEDGE_ID_CHECKBOX.id.length());
 		int id = Integer.parseInt(idPart);
 		return new ArticleId(id);
 	}
 
-	private double getLivabilityIncreaseValue() throws BreakBusinessRuleException {
-		String value = map.get(getFullKey(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id,JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id));
-		if(value==null||value==""){
+	private double getLivabilityIncreaseValue()
+			throws BreakBusinessRuleException {
+		String value = map.get(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
+		if (value == null || value == "") {
 			throw new BreakBusinessRuleException("Livability must be filled");
 		}
 		double result = 0;
 		try {
 			result = Double.parseDouble(value);
 		} catch (Throwable t) {
-			throw new BreakBusinessRuleException("Livability increase must be a number.");
+			throw new BreakBusinessRuleException(
+					"Livability increase must be a number.");
 		}
 		return result;
+	}
+
+	private void handleDeleteTopic() throws ModelException {
+		List<Integer> topicIds = new ArrayList<Integer>();
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
+				int topicId = getTopicIdFromCheckbox(e.getKey());
+				topicIds.add(topicId);
+			}
+		}
+		if(!topicIds.isEmpty()){
+			facade.deleteForumTopics(topicIds);
+		}
+	}
+	
+	private void handleCloseTopic() throws ModelException {
+		List<Integer> topicIds = new ArrayList<Integer>();
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
+				int topicId = getTopicIdFromCheckbox(e.getKey());
+				topicIds.add(topicId);
+			}
+		}
+		if(!topicIds.isEmpty()){
+			facade.closeForumTopics(topicIds);
+		}
+	}
+	
+	private void handleOpenTopic() throws ModelException {
+		List<Integer> topicIds = new ArrayList<Integer>();
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
+				int topicId = getTopicIdFromCheckbox(e.getKey());
+				topicIds.add(topicId);
+			}
+		}
+		if(!topicIds.isEmpty()){
+			facade.openForumTopics(topicIds);
+		}
+	}
+
+	private int getTopicIdFromCheckbox(String name) {
+		String idPart = name.substring(JWLElements.FORUM_TOPIC_CHBX.id
+				.length()+1);
+		return Integer.parseInt(idPart);
 	}
 
 }

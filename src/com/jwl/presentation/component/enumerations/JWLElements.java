@@ -17,6 +17,7 @@ public enum JWLElements {
 	EDIT_CHANGE_NOTE		("changeNote", "Change note"),
 	EDIT_SAVE				("edit", "Save"),
 	EDIT_SIMILAR_ARTICLE_DIV ("sad", ""),
+	VIEW_SIMILAR_ARTICLE_DIV ("jwl-vsad", ""),
 	CREATE_SAVE				("create", "Create"),
 	FILE_FORM				("jwl-upload",""),
 	FILE_TITLE				("fileTitle",""),
@@ -33,13 +34,26 @@ public enum JWLElements {
 	SEARCH_WHERE_TITLE		("search-where-title", ""),
 	SEARCH_BUTTON			("search", "Search"),
 	KNOWLEDGE_MERGE_SUG_FORM("kn-merge-sug-form",""),
-	KNOWLEDGE_IGNORE		("ignore", "ignore"),
-	KNOWLEDGE_ID_PAIR_CHECKBOX("articlePair",""),
+	KNOWLEDGE_IGNORE		("kn-merge-sug-form-ignore", "ignore"),
+	KNOWLEDGE_ID_PAIR_CHECKBOX("kn-merge-sug-form-articlePair",""),
 	KNOWLEDGE_DEAD_SUG_FORM  ("kn-dead-sug-form", ""),
-	KNOWLEDGE_ID_CHECKBOX   ("articleId",""),
-	KNOWLEDGE_DEAD_DELETE	("delete","delete"),
-	KNOWLEDGE_INCREASE_LIVABILITY("increase-livability","increase"),
-	KNOWLEDGE_LIVABILITY_INPUT("livability-input","");
+	KNOWLEDGE_ID_CHECKBOX   ("kn-dead-sug-form-articleId",""),
+	KNOWLEDGE_DEAD_DELETE	("kn-dead-sug-form-delete","delete"),
+	KNOWLEDGE_INCREASE_LIVABILITY("kn-dead-sug-form-increase-livability","increase"),
+	KNOWLEDGE_LIVABILITY_INPUT("kn-dead-sug-form-livability-input",""),
+	FORUM_CREATE_TOPIC_FORM ("jwl-create-topic", ""),
+	FORUM_SUBJECT ("jwl-create-topic-subject", "Subject:"),
+	FORUM_ARTICLE_ID ("article-id", ""),
+	FORUM_TOPIC_TEXT ("jwl-create-topic-topic-text", "Text:"),
+	FORUM_TOPIC_CREATE ("jwl-create-topic-create", "Create"),
+	FORUM_TOPIC_CANCEL ("jwl-create-topic-cancel", "Cancel"),
+	FORUM_TOPIC_ADMIN_FORM ("jwl-admin-topic", ""),
+	FORUM_TOPIC_CHBX ("jwl-admin-topic-chbx", ""),
+	FORUM_TOPIC_DELETE ("jwl-admin-topic-delete", "delete"),
+	FORUM_TOPIC_CLOSE ("jwl-admin-topic-close", "close"),
+	FORUM_TOPIC_OPEN ("jwl-admin-topic-open", "open");
+	
+	
 	
 	
 	public String id;

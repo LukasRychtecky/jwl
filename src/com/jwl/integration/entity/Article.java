@@ -133,6 +133,9 @@ public class Article extends BaseEntity implements java.io.Serializable {
 
 	@Column(name = "livability", nullable = false)
 	private double livability;
+	
+	@OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "article")
+    private List<Topic> topics;
 
 	public Article() {
 	}
@@ -295,4 +298,12 @@ public class Article extends BaseEntity implements java.io.Serializable {
 		this.livability = livability;
 	}
 
+	public List<Topic> getTopics() {
+		return topics;
+	}
+
+	public void setTopics(List<Topic> topics) {
+		this.topics = topics;
+	}
+	
 }

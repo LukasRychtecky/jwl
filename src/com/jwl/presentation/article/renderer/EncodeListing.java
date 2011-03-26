@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
+import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.article.enumerations.ListColumns;
 import com.jwl.presentation.component.renderer.AbstractEncodeListing;
 
@@ -20,7 +22,7 @@ public class EncodeListing extends AbstractEncodeListing {
 	public void encodeResponse() {
 		try {
 			super.encodeFlashMessages();
-			IPaginator paginator = this.facade.getPaginator();
+			IPaginator<ArticleTO> paginator = this.facade.getPaginator();
 			super.encodeLinkToCreateNewArticle();
 			super.encodeListing(paginator, super.getHeaderNames(), this.getOrderableColumns());
 		} catch (IOException ex) {
