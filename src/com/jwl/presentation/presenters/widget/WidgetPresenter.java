@@ -18,19 +18,11 @@ public class WidgetPresenter extends Presenter {
 	}
 
 	@Override
-	public void renderDefault() {
-		try {
-			this.renderer.renderDefault();
-		} catch (IOException e) {
-			this.logException(e);
-		}
+	public void renderDefault() throws IOException {
+		this.renderer.renderDefault();
 	}
 
-	public void renderDetail() {
-		try {
-			this.renderer.renderDetail();
-		} catch (IOException e) {
-			this.logException(e);
-		}
+	public void renderDetail() throws IOException {
+		this.renderer.renderDetail();
 	}
 }

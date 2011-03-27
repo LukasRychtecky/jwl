@@ -1,6 +1,7 @@
 package com.jwl.presentation.core;
 
 import com.jwl.presentation.global.WikiURLParser;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ public class Router {
 		this.parser = new WikiURLParser(context);
 	}
 
-	public void route(Presenter presenter) {
+	public void route(Presenter presenter) throws IOException {
 		String action = this.parser.getAction();
 		if (action == null || action.isEmpty()) {
 			presenter.renderDefault();

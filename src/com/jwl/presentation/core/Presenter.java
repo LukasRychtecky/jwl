@@ -42,24 +42,16 @@ public class Presenter {
 		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
 	}
 
-	public void renderDefault() {
+	public void renderDefault() throws IOException {
 	}
 
-	public void render404() {
+	public void render404() throws IOException {
 		Renderer renderer = new Renderer(this.context, linker);
-		try {
-			renderer.render404(this.getRequestParam(JWLURLParameters.ACTION).toString());
-		} catch (IOException ex) {
-			this.logException(ex);
-		}
+		renderer.render404(this.getRequestParam(JWLURLParameters.ACTION).toString());
 	}
 
-	public void render500() {
+	public void render500() throws IOException {
 		Renderer renderer = new Renderer(this.context, linker);
-		try {
-			renderer.render500();
-		} catch (IOException ex) {
-			this.logException(ex);
-		}
+		renderer.render500();
 	}
 }
