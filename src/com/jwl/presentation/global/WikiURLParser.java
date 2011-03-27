@@ -18,6 +18,10 @@ public class WikiURLParser extends URLParser {
 		setRequest(request);
 	}
 
+	public WikiURLParser(FacesContext context) {
+		super.setRequest((HttpServletRequest) context.getExternalContext().getRequest());
+	}
+
 	public Map<String, String> getURLParametersMinusArticleParameters()  {
 		Map<String, String> urlParameters = getURLParameters();
 		for(String parameter : JWLURLParameters.ALL_URL_PARAMETERS){

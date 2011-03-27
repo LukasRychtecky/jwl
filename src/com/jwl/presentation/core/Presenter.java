@@ -26,12 +26,12 @@ public class Presenter {
 	protected void redirect(String action) {
 	}
 
-	protected void logException(Exception e) {
-		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
-	}
-
 	protected Object getRequestParam(String key) {
 		return this.context.getExternalContext().getRequestMap().get(key);
+	}
+
+	public void logException(Exception e) {
+		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
 	}
 
 	public void renderDefault() {
@@ -41,6 +41,15 @@ public class Presenter {
 		Renderer renderer = new Renderer(this.context);
 		try {
 			renderer.render404(this.getRequestParam(JWLURLParameters.ACTION).toString());
+		} catch (IOException ex) {
+			this.logException(ex);
+		}
+	}
+
+	public void render500() {
+		Renderer renderer = new Renderer(this.context);
+		try {
+			renderer.render500();
 		} catch (IOException ex) {
 			this.logException(ex);
 		}

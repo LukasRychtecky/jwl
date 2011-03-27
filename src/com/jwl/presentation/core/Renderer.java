@@ -27,4 +27,10 @@ public class Renderer {
 		message.encodeAll(this.context);
 	}
 
+	public void render500() throws IOException {
+		HtmlOutputText message = new HtmlOutputText();
+		message.setValue("Service is unavailable, sorry. Please try again later.");
+		message.encodeAll(this.context);
+	}
+
 }

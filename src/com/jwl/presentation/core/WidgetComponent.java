@@ -1,14 +1,7 @@
 package com.jwl.presentation.core;
 
 import com.jwl.presentation.component.controller.JWLComponent;
-import com.jwl.presentation.component.enumerations.JWLURLParameters;
-import com.jwl.presentation.global.WikiURLParser;
 import com.jwl.presentation.presenters.widget.WidgetPresenter;
-import com.jwl.util.html.url.URLParser;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 
 /**
@@ -26,29 +19,8 @@ public class WidgetComponent extends JWLComponent {
 	}
 
 	private void route(FacesContext context) {
-		Presenter presenter = new WidgetPresenter(context);
-		WikiURLParser parser = new WikiURLParser();
-		String action = parser.getAction();
-		if (action == null || action.isEmpty()) {
-			presenter.renderDefault();
-		} else {
-
-			action = action.substring(0, 1).toUpperCase().concat(action.substring(1));
-			try {
-				Method method = presenter.getClass().getMethod("render" + action);
-				method.invoke(presenter);
-			} catch (IllegalAccessException ex) {
-				Logger.getLogger(WidgetComponent.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (IllegalArgumentException ex) {
-				Logger.getLogger(WidgetComponent.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (InvocationTargetException ex) {
-				Logger.getLogger(WidgetComponent.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (NoSuchMethodException ex) {
-				Logger.getLogger(WidgetComponent.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (SecurityException ex) {
-				Logger.getLogger(WidgetComponent.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
+		Router router = new Router(context);
+		router.route(new WidgetPresenter(context));
 	}
 
 	@Override
