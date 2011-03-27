@@ -5,6 +5,7 @@ import java.util.List;
 
 public class JWLURLParameters {
 
+	public static final String PRESENTER = "jwlpresenter";
 	public static final String ARTICLE_TITLE = "jwltitle";
 	public static final String ACTION = "jwlaction";
 	public static final String FILE_NAME = "jwlfilename";

@@ -103,7 +103,7 @@ public class HtmlLinkProperties {
 		this.parameters = parameters;
 	}
 	
-	public void addParameters(Map<String, String> paramteres) {
+	public void addParameters(Map<String, String> parameters) {
 		this.parameters.putAll(parameters);
 	}
 	

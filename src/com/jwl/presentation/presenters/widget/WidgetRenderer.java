@@ -1,10 +1,7 @@
 package com.jwl.presentation.presenters.widget;
 
-import com.jwl.presentation.component.enumerations.JWLURLParameters;
+import com.jwl.presentation.core.Linker;
 import com.jwl.presentation.core.Renderer;
-import com.jwl.presentation.global.WikiURLParser;
-import com.jwl.util.html.component.HtmlLinkProperties;
-import com.jwl.util.html.component.HtmlOutputPropertyLink;
 import java.io.IOException;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
@@ -16,8 +13,8 @@ import javax.faces.context.FacesContext;
  */
 public class WidgetRenderer extends Renderer {
 
-	public WidgetRenderer(FacesContext context) {
-		super(context);
+	public WidgetRenderer(FacesContext context, Linker linker) {
+		super(context, linker);
 	}
 
 	@Override
@@ -26,21 +23,27 @@ public class WidgetRenderer extends Renderer {
 		message.setValue("AHoj ja jsem nova komponenta");
 		message.encodeAll(this.context);
 
-		HtmlLinkProperties properties = new HtmlLinkProperties();
-		properties.addParameter(JWLURLParameters.ACTION, "detail");
-		properties.setValue("go to detail");
-		WikiURLParser parser = new WikiURLParser();
-		properties.setHref(parser.getCurrentURL());
-		properties.addParameters(parser
-				.getURLParametersMinusArticleParameters());
-		HtmlOutputLink link = new HtmlOutputPropertyLink(properties);
-		link.encodeAll(this.context);
+		HtmlOutputLink link = new HtmlOutputLink();
+		link.setValue(this.linker.build("detail"));
+
+		HtmlOutputText text = new HtmlOutputText();
+		text.setValue("odkaz na detail");
+		link.getChildren().add(text);
+		link.encodeAll(context);
 	}
 
 	public void renderDetail() throws IOException {
 		HtmlOutputText message = new HtmlOutputText();
 		message.setValue("Renderujeme detail!");
 		message.encodeAll(this.context);
+
+		HtmlOutputLink link = new HtmlOutputLink();
+		link.setValue(this.linker.build("default"));
+
+		HtmlOutputText text = new HtmlOutputText();
+		text.setValue("odkaz na default");
+		link.getChildren().add(text);
+		link.encodeAll(context);
 	}
 
 }

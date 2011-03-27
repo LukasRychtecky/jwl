@@ -12,9 +12,11 @@ import javax.faces.context.FacesContext;
 public class Renderer {
 
 	protected FacesContext context;
+	protected Linker linker;
 
-	public Renderer(FacesContext context) {
+	public Renderer(FacesContext context, Linker linker) {
 		this.context = context;
+		this.linker = linker;
 	}
 
 	public void renderDefault() throws IOException {

@@ -14,7 +14,7 @@ public class WidgetPresenter extends Presenter {
 
 	public WidgetPresenter(FacesContext context) {
 		super(context);
-		this.renderer = new WidgetRenderer(this.context);
+		this.renderer = new WidgetRenderer(this.context, super.linker);
 	}
 
 	@Override
