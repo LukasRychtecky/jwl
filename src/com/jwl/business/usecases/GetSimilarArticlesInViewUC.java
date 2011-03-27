@@ -6,7 +6,7 @@ import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IGetSimilarArticlesInViewUC;
 import com.jwl.integration.IDAOFactory;
 

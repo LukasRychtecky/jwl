@@ -14,6 +14,7 @@ import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
@@ -175,16 +176,11 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 	}
 
 	private boolean hasViewPermission(ArticleId id) {
-		return this
-				.hasPermission(
-						com.jwl.business.permissions.AccessPermissions.ARTICLE_VIEW,
-						id);
+		return this.hasPermission(AccessPermissions.ARTICLE_VIEW,id);
 	}
 	
 	private boolean hasCreateTopicPermission(){
-		return this
-		.hasPermission(
-				com.jwl.business.permissions.AccessPermissions.FORUM_CREATE_TOPIC);
+		return this.hasPermission(AccessPermissions.FORUM_CREATE_TOPIC);
 	}
 	
 	private UIComponent getPageButtonsComponent(IPaginator<TopicTO> paginator) throws IOException{

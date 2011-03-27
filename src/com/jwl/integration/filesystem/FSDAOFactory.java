@@ -7,9 +7,12 @@ import com.jwl.integration.filesystem.history.FSHistoryDAO;
 import com.jwl.integration.filesystem.rating.FSRatingDAO;
 import com.jwl.integration.filesystem.tag.FSTagDAO;
 import com.jwl.integration.history.IHistoryDAO;
+import com.jwl.integration.keyword.IKeyWordDAO;
+import com.jwl.integration.post.IPostDAO;
 import com.jwl.integration.rating.IRatingDAO;
 import com.jwl.integration.role.IRoleDAO;
 import com.jwl.integration.tag.ITagDAO;
+import com.jwl.integration.topic.ITopicDAO;
 
 /**
  *
@@ -40,6 +43,24 @@ public class FSDAOFactory implements IDAOFactory {
 	@Override
 	public IRatingDAO getRatingDAO() {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public IKeyWordDAO getKeyWordDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ITopicDAO getTopicDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IPostDAO getPostDAO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

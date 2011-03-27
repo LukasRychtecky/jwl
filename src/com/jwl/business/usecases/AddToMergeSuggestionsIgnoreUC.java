@@ -7,7 +7,7 @@ import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
 import com.jwl.business.knowledge.exceptions.KnowledgeException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
 import com.jwl.integration.IDAOFactory;
 

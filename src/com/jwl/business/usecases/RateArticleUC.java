@@ -7,7 +7,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.RatingTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IRateArticleUC;
 
 import com.jwl.integration.IDAOFactory;

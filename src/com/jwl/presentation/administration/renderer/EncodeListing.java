@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.context.ResponseWriter;
 
@@ -17,19 +18,15 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.administration.enumerations.AdministrationActions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.article.enumerations.ListColumns;
-import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.controller.JWLComponent;
-
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.component.renderer.AbstractEncodeListing;
-import com.jwl.util.html.component.HtmlLinkProperties;
 import com.jwl.util.html.component.HtmlActionForm;
-
 import com.jwl.util.html.component.HtmlDivInputFile;
 import com.jwl.util.html.component.HtmlInputFile;
-import javax.faces.component.html.HtmlCommandButton;
+import com.jwl.util.html.component.HtmlLinkProperties;
 
 /**
  * @author Lukas Rychtecky

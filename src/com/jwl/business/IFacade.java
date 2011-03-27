@@ -1,8 +1,10 @@
 package com.jwl.business;
 
+import java.io.File;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import javax.naming.NoPermissionException;
+
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
@@ -13,8 +15,6 @@ import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
-import java.io.File;
-import javax.naming.NoPermissionException;
 
 /**
  * This interface provides communication between Model(business tier,

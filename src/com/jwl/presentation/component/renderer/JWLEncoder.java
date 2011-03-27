@@ -18,7 +18,6 @@ import com.jwl.business.security.IIdentity;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.AccessPermissions;
-import com.jwl.business.permissions.IIdentity;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;

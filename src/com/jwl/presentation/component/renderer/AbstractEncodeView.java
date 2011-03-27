@@ -10,6 +10,7 @@ import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
@@ -110,15 +111,11 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	}
 
 	private boolean hasEditPermission(ArticleId articleId) {
-	return this.hasPermission(
-				com.jwl.business.permissions.AccessPermissions.ARTICLE_EDIT,
-				articleId);
+	return this.hasPermission(AccessPermissions.ARTICLE_EDIT,articleId);
 	}
 
 	private boolean hasAttachmentAddPermission(ArticleId articleId) {
-		return this.hasPermission(
-				com.jwl.business.permissions.AccessPermissions.ATTACHMENT_ADD,
-				articleId);
+		return this.hasPermission(AccessPermissions.ATTACHMENT_ADD,articleId);
 	}
 
 	protected void encodeRating(float ratingAverage, ArticleId articleId)

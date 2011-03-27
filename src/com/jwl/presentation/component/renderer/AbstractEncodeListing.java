@@ -198,7 +198,6 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 
 	private UIComponent createLinkToPreviousPage(IPaginator<ArticleTO> paginator)
 			throws IOException {
-			throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("<");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);

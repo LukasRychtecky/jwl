@@ -11,6 +11,7 @@ import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -63,6 +64,19 @@ public class FSArticleDAO implements IArticleDAO {
 	public int getCount() throws DAOException {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public List<ArticleTO> findArticleWithKeyWord(Set<String> keyWords)
+			throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ArticleTO> findDead() throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
