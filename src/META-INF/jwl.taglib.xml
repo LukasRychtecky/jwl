@@ -25,4 +25,11 @@
 			<renderer-type>com.jwl.component.SearchRenderer</renderer-type>
 		</component>
 	</tag>
+	<tag>
+		<tag-name>widget</tag-name>
+		<component>
+			<component-type>com.jwl.component.Widget</component-type>
+			<renderer-type>com.jwl.component.WidgetRenderer</renderer-type>
+		</component>
+	</tag>
 </facelet-taglib>

@@ -14,6 +14,10 @@
   <component-type>com.jwl.component.Search</component-type>
   <component-class>com.jwl.presentation.search.controller.SearchComponent</component-class>
  </component>
+ <component>
+  <component-type>com.jwl.component.Widget</component-type>
+  <component-class>com.jwl.presentation.core.WidgetComponent</component-class>
+ </component>
  <render-kit>
   <!-- JWL COMPONENT RENDERERS -->
   <renderer>

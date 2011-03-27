@@ -1,5 +1,6 @@
 package com.jwl.presentation.article.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
@@ -14,6 +15,7 @@ import com.jwl.presentation.article.enumerations.ArticlePermissions;
 import com.jwl.presentation.article.enumerations.ArticleStates;
 import com.jwl.presentation.global.Global;
 import com.jwl.presentation.global.WikiURLParser;
+import java.lang.reflect.Method;
 
 public class ArticleStateRecognizer {
 
@@ -68,6 +70,30 @@ public class ArticleStateRecognizer {
 			} else if (id == null) {
 				state = ArticleStates.NOT_EXIST;
 			} else {
+				try {
+					String packageName = "article";
+					String className = "com.jwl.presentation.presenters." + packageName + ".Presenter";
+					Class c = Class.forName(className);
+					Object presenter = c.newInstance();
+					presenter = c.cast(presenter);
+					Method m = presenter.getClass().getMethod("renderDetail");
+					m.invoke(presenter);
+
+				} catch (ClassNotFoundException ex) {
+					Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (InstantiationException ex) {
+					Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (IllegalAccessException ex) {
+					Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (NoSuchMethodException ex) {
+					Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (SecurityException ex) {
+					Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (IllegalArgumentException ex) {
+					Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (InvocationTargetException ex) {
+					Logger.getLogger(ArticleStateRecognizer.class.getName()).log(Level.SEVERE, null, ex);
+				}
 				state = ArticleStates.VIEW;
 			}
 		} else if (action.equals(ArticleActions.HISTORY_LIST)) {
