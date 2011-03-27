@@ -25,6 +25,7 @@ public class ArticleTO {
 	private List<RatingTO> ratings;
 	private Set<Role> excludedRoles;
 	private List<KeyWordTO> keyWords;
+	private Set<AttachmentTO> attachments;
 	
 
 	public ArticleTO() {
@@ -208,6 +209,14 @@ public class ArticleTO {
 		}
 		total/=ratings.size();
 		return total;
+	}
+
+	public Set<AttachmentTO> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(Set<AttachmentTO> attachments) {
+		this.attachments = attachments;
 	}
 		
 }
