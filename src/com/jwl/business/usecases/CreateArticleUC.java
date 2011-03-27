@@ -6,7 +6,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ArticleExistsException;
 import com.jwl.business.exceptions.BreakBusinessRuleException;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.ISaveTagsUC;
 import com.jwl.integration.IDAOFactory;

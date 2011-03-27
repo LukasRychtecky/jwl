@@ -5,13 +5,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
-import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.security.IIdentity;
+import java.io.File;
 import javax.naming.NoPermissionException;
 
 /**
@@ -43,6 +45,12 @@ public interface IFacade {
 	 */
 	public void deleteArticle(ArticleId id) throws ModelException;
 
+	public void setJWLHome(String home);
+
+	public String getJWLHome();
+
+	public void importACL(String fileName) throws ModelException;
+
 
 	public ArticleTO findArticleByTitle(String title) throws ModelException;
 
@@ -53,10 +61,9 @@ public interface IFacade {
 	 */
 	public IIdentity getIdentity();
 
-	public void uploadFile(HttpServletRequest request);
+	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException;
 
-	public void makeDownloadFileResponse(HttpServletRequest request,
-			HttpServletResponse response);
+	public File getFile(String name) throws ModelException;
 
 	public void lockArticle(ArticleId id) throws ModelException;
 

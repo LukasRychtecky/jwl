@@ -7,11 +7,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 
 /**
+ * Generic stand-in-stream enabling writing in the response
  *
  * @author Petr Janouch
- * @review Lukas Rychtecky
- * 
- * Generic stand-in-stream enabling writing in the response
  */
 public class GenericResponseWrapper extends HttpServletResponseWrapper {
 

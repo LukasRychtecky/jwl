@@ -15,12 +15,21 @@ import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.administration.enumerations.AdministrationActions;
+import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.article.enumerations.ListColumns;
+import com.jwl.presentation.component.enumerations.JWLElements;
+import com.jwl.presentation.component.controller.JWLComponent;
+
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.component.renderer.AbstractEncodeListing;
 import com.jwl.util.html.component.HtmlLinkProperties;
+import com.jwl.util.html.component.HtmlActionForm;
+
+import com.jwl.util.html.component.HtmlDivInputFile;
+import com.jwl.util.html.component.HtmlInputFile;
+import javax.faces.component.html.HtmlCommandButton;
 
 /**
  * @author Lukas Rychtecky
@@ -36,6 +45,7 @@ public class EncodeListing extends AbstractEncodeListing {
 		try {
 			super.encodeFlashMessages();
 			super.encodeLinkToCreateNewArticle();
+			this.encodeACLUploader();
 			encodeArticles();
 			this.encodeKnowledgeLinks();
 		} catch (IOException e) {
@@ -49,6 +59,42 @@ public class EncodeListing extends AbstractEncodeListing {
 						Level.SEVERE, null, ex);
 			}
 		}
+	}
+
+	protected void encodeACLUploader() throws IOException {
+		HtmlActionForm form = new HtmlActionForm();
+		form.setId(JWLElements.FILE_FORM.id);
+		form.setEnctype("multipart/form-data");
+		form.setAction(
+				this.getFormAction(
+					JWLComponent.JWL_UPLOAD_FILE_PAGE,
+					ArticleActions.LIST,
+					AdministrationActions.IMPORT_ACL.toString()
+				)
+		);
+
+		List<UIComponent> formData = form.getChildren();
+		formData.add(this.encodeLabelForFileInput());
+		formData.add(this.encodeFileInput());
+		formData.add(this.encodeSubmit());
+		form.encodeAll(context);
+	}
+
+	private UIComponent encodeLabelForFileInput() {
+		return getHtmlLabelComponent("ACL import:", JWLElements.FILE_ITEM.id,
+				JWLStyleClass.ATTACH_LABEL_FOR_FILE);
+	}
+
+	private HtmlInputFile encodeFileInput() throws IOException {
+		HtmlDivInputFile fileInput = new HtmlDivInputFile();
+		fileInput.setDivStyleClass(JWLStyleClass.ATTACH_FILE);
+		fileInput.setId(JWLElements.FILE_ITEM.id);
+		return fileInput;
+	}
+
+	private HtmlCommandButton encodeSubmit() throws IOException {
+		return getHtmlSubmitComponent(JWLElements.FILE_SAVE,
+				JWLStyleClass.ACTION_BUTTON);
 	}
 
 	protected void encodeArticles() throws IOException {

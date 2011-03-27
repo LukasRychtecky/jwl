@@ -15,7 +15,8 @@ public enum AdministrationActions {
 	HISTORY_VIEW ("history_view"),
 	HISTORY_LIST ("history_list"),
 	RESTORE ("restore"),
-	MERGE_SUGGESTION_LIST("merge_suggestion_list"),
+IMPORT_ACL ("import_acl"),
+MERGE_SUGGESTION_LIST("merge_suggestion_list"),
 	MERGE_SUGGESTION_VIEW("merge_suggestion_view"),
 	DEAD_ARTICLE_LIST ("dead_article_list"),
 	DEAD_ARTICLE_VIEW ("dead_article_view"),
@@ -26,6 +27,11 @@ public enum AdministrationActions {
 
 	private AdministrationActions(String action) {
 		this.action = action;
+	}
+
+	@Override
+	public String toString() {
+		return this.action;
 	}
 
 }

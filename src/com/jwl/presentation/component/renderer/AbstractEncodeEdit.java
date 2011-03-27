@@ -198,7 +198,7 @@ public abstract class AbstractEncodeEdit extends JWLEncoder {
 	}
 
 	protected UIComponent encodeUnknownUserMessage() {
-		return getHtmlTextComponent("Your user name is unknown. It will "
+		return getHtmlTextComponent("Your user name is unknown! It will "
 				+ "record your IP adress.", JWLStyleClass.EDIT_MESSAGE_WARNING);
 	}
 

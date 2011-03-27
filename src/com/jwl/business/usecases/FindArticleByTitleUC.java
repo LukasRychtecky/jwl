@@ -2,7 +2,7 @@ package com.jwl.business.usecases;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.business.permissions.AccessPermissions;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;

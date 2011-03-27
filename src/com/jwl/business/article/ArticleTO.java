@@ -1,6 +1,6 @@
 package com.jwl.business.article;
 
-import com.jwl.business.permissions.Role;
+import com.jwl.business.security.Role;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;

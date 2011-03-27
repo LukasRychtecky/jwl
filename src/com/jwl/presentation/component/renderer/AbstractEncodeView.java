@@ -110,7 +110,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	}
 
 	private boolean hasEditPermission(ArticleId articleId) {
-		return this.hasPermission(
+	return this.hasPermission(
 				com.jwl.business.permissions.AccessPermissions.ARTICLE_EDIT,
 				articleId);
 	}

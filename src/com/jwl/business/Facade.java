@@ -2,24 +2,16 @@ package com.jwl.business;
 
 // <editor-fold defaultstate="collapsed">
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.TopicTO;
-import com.jwl.business.article.process.FileDownloadProcess;
-import com.jwl.business.article.process.FileUploadProcess;
-import com.jwl.business.exceptions.BusinessProcessException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
-import com.jwl.business.permissions.IIdentity;
+import com.jwl.business.security.IIdentity;
 import com.jwl.business.usecases.AddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.CreateForumTopicUC;
@@ -30,9 +22,11 @@ import com.jwl.business.usecases.FindArticlesUC;
 import com.jwl.business.usecases.GetArticleTopicsUC;
 import com.jwl.business.usecases.GetArticleUC;
 import com.jwl.business.usecases.GetDeadArticlesUC;
+import com.jwl.business.usecases.GetFileUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.GetMergeSuggestionsUC;
+import com.jwl.business.usecases.ImportACLUC;
 import com.jwl.business.usecases.GetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.CloseForumTopicsUC;
 import com.jwl.business.usecases.IncreaseLivabilityUC;
@@ -43,6 +37,7 @@ import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
+import com.jwl.business.usecases.UploadAttachmentUC;
 import com.jwl.business.usecases.interfaces.ICloseForumTopicsUC;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.ICreateForumTopicUC;
@@ -53,9 +48,11 @@ import com.jwl.business.usecases.interfaces.IFindArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetArticleTopicsUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.business.usecases.interfaces.IGetDeadArticlesUC;
+import com.jwl.business.usecases.interfaces.IGetFileUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.IGetMergeSuggestionsUC;
+import com.jwl.business.usecases.interfaces.IImportACLUC;
 import com.jwl.business.usecases.interfaces.IGetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.interfaces.IIncreaseLivablityUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
@@ -65,6 +62,8 @@ import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.presentation.global.WikiURLParser;
+import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
+import java.io.File;
 
 /**
  * This interface provides communication between Model(business tier,
@@ -75,6 +74,15 @@ public class Facade implements IFacade {
 	private IPaginator<ArticleTO> paginator = null;
 	private KeyWordPaginator searchPaginator = null;
 	private TopicPaginator topicPaginator = null;
+	@Override
+	public void setJWLHome(String home) {
+		Environment.setJWLHome(home);
+	}
+
+	@Override
+	public String getJWLHome() {
+		return Environment.getJWLHome();
+	}
 
 	@Override
 	public List<ArticleTO> findArticles(SearchTO searchTO)
@@ -108,27 +116,23 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void uploadFile(HttpServletRequest request) {
-		FileUploadProcess process = new FileUploadProcess(request);
-		try {
-			process.doIt();
-		} catch (BusinessProcessException e) {
-			Logger.getLogger(FileUploadProcess.class.getName()).log(Level.SEVERE, null,
-					e);
-		}
+	public void importACL(String fileName) throws ModelException {
+		IImportACLUC uc = new ImportACLUC(Environment.getDAOFactory());
+		uc.importACL(fileName);
 	}
 
 	@Override
-	public void makeDownloadFileResponse(HttpServletRequest request,
-			HttpServletResponse response) {
-		FileDownloadProcess process = new FileDownloadProcess(request, response);
-		try {
-			process.doIt();
-		} catch (BusinessProcessException e) {
-Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e);
+	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException {
+		IUploadAttachmentUC uc = new UploadAttachmentUC(Environment.getDAOFactory());
+		uc.upload(attachment, source, Environment.getAttachmentStorage());
 
-		}
 
+	}
+
+	@Override
+	public File getFile(String name) throws ModelException {
+		IGetFileUC uc = new GetFileUC(Environment.getDAOFactory());
+		return uc.get(name);
 	}
 
 	@Override
@@ -277,5 +281,4 @@ Logger.getLogger(FileDownloadProcess.class.getName()).log(Level.SEVERE, null, e)
 		uc.openTopics(topicIds);
 		
 	}
-
 }

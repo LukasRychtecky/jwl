@@ -18,55 +18,37 @@ import com.jwl.integration.topic.ITopicDAO;
 import com.jwl.integration.topic.TopicDAO;
 
 /**
- *
- * @author Lukas Rychtecky
+ * 
+ * @author ostatnickyjiri
  */
-public class JPADAOFactory implements IDAOFactory {
+public class JPADAOFactory extends DAOFactory {
 
-	private IArticleDAO articleDAO = null;
-	private ITagDAO tagDAO = null;
-	private IHistoryDAO historyDAO = null;
-	private IRoleDAO roleDAO = null;
-	private IRatingDAO ratingDAO = null;
 	private IKeyWordDAO keyWordDAO = null;
 	private ITopicDAO topicDAO = null;
 	private IPostDAO postDAO = null;
-
 	@Override
-	public IArticleDAO getArticleDAO() {
-		if (this.articleDAO == null) {
-			this.articleDAO = new ArticleDAO();
-		}
-		return this.articleDAO;
+	protected IArticleDAO factoryArticle() {
+		return new ArticleDAO();
 	}
 
 	@Override
-	public ITagDAO getTagDAO() {
-		if (this.tagDAO == null) {
-			this.tagDAO = new TagDAO();
-		}
-		return this.tagDAO;
+	protected IHistoryDAO factoryHistory() {
+		return new HistoryDAO();
 	}
 
 	@Override
-	public IHistoryDAO getHistoryDAO() {
-		if (this.historyDAO == null) {
-			this.historyDAO = new HistoryDAO();
-		}
-		return this.historyDAO;
+	protected IRoleDAO factoryRole() {
+		return new RoleDAO();
 	}
 
 	@Override
-	public IRoleDAO getRoleDAO() {
-		if (this.roleDAO == null) {
-			this.roleDAO = new RoleDAO();
-		}
-		return this.roleDAO;
+	protected ITagDAO factoryTag() {
+		return new TagDAO();
 	}
 
 	@Override
-	public IRatingDAO getRAtingDAO() {
-		if(this.ratingDAO ==null){
+	public IRatingDAO getRatingDAO() {
+		if (this.ratingDAO == null) {
 			this.ratingDAO = new RatingDAO();
 		}
 		return this.ratingDAO;
@@ -96,4 +78,8 @@ public class JPADAOFactory implements IDAOFactory {
 		return this.postDAO;
 	}
 
+	@Override
+	protected IRatingDAO factoryRating() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

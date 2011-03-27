@@ -9,9 +9,9 @@ public class JWLStyleClass {
 	
 	public static final String NO_HIDE = JWL_PREFIX +							"no-hide";
 
-	public static final String ACTION_BUTTON = JWL_PREFIX +						"actionButton";
-	public static final String ACTION_BUTTON_SMALLER = JWL_PREFIX +				"actionButtonSmall";
-	public static final String ACTION_LINK = JWL_PREFIX + 						"actionLink";
+	public static final String ACTION_BUTTON = JWL_PREFIX +						"action-button";
+	public static final String ACTION_BUTTON_SMALLER = JWL_PREFIX +				"action-button-small";
+	public static final String ACTION_LINK = JWL_PREFIX + 						"action-link";
 	
 	// // Main Page ////////////////
 	public static final String CREATE_NEW_ARTICLE = JWL_PREFIX +				"createNewArticle";

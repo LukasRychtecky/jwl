@@ -1,6 +1,7 @@
 package com.jwl.integration.role;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,7 +27,8 @@ import javax.persistence.Table;
 	@NamedQuery(name = "PermissionEntity.findAll", query = "SELECT p FROM PermissionEntity p"),
 	@NamedQuery(name = "PermissionEntity.findById", query = "SELECT p FROM PermissionEntity p WHERE p.id = :id"),
 	@NamedQuery(name = "PermissionEntity.findByContext", query = "SELECT p FROM PermissionEntity p WHERE p.context = :context"),
-	@NamedQuery(name = "PermissionEntity.findByMethod", query = "SELECT p FROM PermissionEntity p WHERE p.method = :method")})
+	@NamedQuery(name = "PermissionEntity.findByMethod", query = "SELECT p FROM PermissionEntity p WHERE p.method = :method"),
+	@NamedQuery(name = "PermissionEntity.findByMethodAndContext", query = "SELECT p FROM PermissionEntity p WHERE p.method = :method AND p.context = :context")})
 public class PermissionEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -89,6 +91,13 @@ public class PermissionEntity implements Serializable {
 
 	public List<RoleEntity> getRoleList() {
 		return roleList;
+	}
+
+	public void addRole(RoleEntity role) {
+		if (this.roleList == null) {
+			this.roleList = new ArrayList<RoleEntity>();
+		}
+		this.roleList.add(role);
 	}
 
 	public void setRoleList(List<RoleEntity> roleList) {

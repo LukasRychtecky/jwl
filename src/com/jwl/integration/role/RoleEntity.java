@@ -2,8 +2,10 @@ package com.jwl.integration.role;
 
 import com.jwl.integration.entity.Article;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,7 +39,7 @@ public class RoleEntity implements Serializable {
 	private Integer id;
 
 	@Basic(optional = false)
-    @Column(name = "code", nullable = false, length = 45)
+    @Column(name = "code", nullable = false, length = 45, unique = true)
 	private String code;
 
 	@ManyToMany(mappedBy = "roleList", fetch = FetchType.EAGER)
@@ -93,6 +95,13 @@ public class RoleEntity implements Serializable {
 		this.articleList = articleList;
 	}
 
+	public void addPermission(PermissionEntity perm) {
+		if (this.permissionList == null) {
+			this.permissionList = new ArrayList<PermissionEntity>();
+		}
+		this.permissionList.add(perm);
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -107,7 +116,10 @@ public class RoleEntity implements Serializable {
 			return false;
 		}
 		RoleEntity other = (RoleEntity) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+//		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+//			return false;
+//		}
+		if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
 			return false;
 		}
 		return true;

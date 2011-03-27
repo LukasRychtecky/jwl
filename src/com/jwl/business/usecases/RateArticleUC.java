@@ -26,7 +26,7 @@ public class RateArticleUC extends AbstractUC implements IRateArticleUC {
 		String userName = Environment.getIdentity().getUserName();
 		IKnowledgeManagementFacade kmf = Environment.getKnowledgeFacade();
 		try {
-			IRatingDAO rdao= this.factory.getRAtingDAO();
+			IRatingDAO rdao= this.factory.getRatingDAO();
 			RatingTO rat = rdao.find(articleId, userName);
 			if(rat==null){
 				rat =new RatingTO();
