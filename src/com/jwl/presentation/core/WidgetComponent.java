@@ -18,7 +18,6 @@ public class WidgetComponent extends JWLComponent {
 
 	public WidgetComponent() {
 		super();
-//		this.setRendererType(DEFAULT_RENDERER);
 	}
 
 	private void route(FacesContext context) {

@@ -1,5 +1,7 @@
 package com.jwl.presentation.core;
 
+import com.jwl.business.Facade;
+import com.jwl.business.IFacade;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -14,20 +16,25 @@ public class Presenter {
 
 	protected FacesContext context;
 	protected Linker linker;
+	private IFacade facade = null;
 
 	public Presenter(FacesContext context) {
 		this.context = context;
 
 		String className = this.getClass().getSimpleName();
 		String presenterName = className.substring(0, className.lastIndexOf("Presenter"));
-		this.linker = new Linker(this.context, presenterName);
+		this.linker = new Linker(context, presenterName);
+	}
+
+	protected IFacade getFacade() {
+		if (this.facade == null) {
+			this.facade = new Facade();
+		}
+		return this.facade;
 	}
 
 	protected boolean isAjax() {
 		return false;
-	}
-
-	protected void redirect(String action) {
 	}
 
 	protected Object getRequestParam(String key) {
@@ -36,6 +43,14 @@ public class Presenter {
 
 	protected String buildLink(String action) {
 		return this.linker.build(action);
+	}
+
+	protected String buildFormLink(String action) {
+		return this.linker.buildForm(action);
+	}
+
+	protected String getFormValue(String key) {
+		return this.context.getExternalContext().getRequestParameterMap().get("jwl:" + key);
 	}
 
 	public void logException(Exception e) {

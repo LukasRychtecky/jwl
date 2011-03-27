@@ -10,6 +10,7 @@ public class HtmlActionForm extends HtmlForm {
 	
 	public HtmlActionForm() {
 		super();
+		super.setId("jwl");
 		setRendererType(RendererTypes.ACTION_FORM_RENDERER);
 	}
 

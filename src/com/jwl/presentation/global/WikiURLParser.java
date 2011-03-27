@@ -53,9 +53,13 @@ public class WikiURLParser extends URLParser {
 	public String getHistoryId() {
 		return getURLParameter(JWLURLParameters.HISTORY_ID);
 	}
-	
+
 	public String getAction() {
 		return getURLParameter(JWLURLParameters.ACTION);
+	}
+
+	public String getFormDo() {
+		return getURLParameter(JWLURLParameters.DO);
 	}
 	
 	public String getFileName(){

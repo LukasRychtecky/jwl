@@ -27,14 +27,27 @@ public class Linker {
 		this.presenter = presenter;
 	}
 
+	public String buildForm(String action) {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParameters.DO, action);
+		return this.buildLink(params);
+	}
+
 	public String build(String action, Map<String, String> params) {
 		if (!action.equals("default")) {
 			params.put(JWLURLParameters.PRESENTER, this.presenter);
 			params.put(JWLURLParameters.ACTION, action);
 		}
+		return this.buildLink(params);
+	}
 
+	public String build(String action) {
+		return this.build(action, new HashMap<String, String>());
+	}
+
+	private String buildLink(Map<String, String> params) {
 		WikiURLParser parser = new WikiURLParser(this.context);
-		StringBuilder link = new StringBuilder(parser.getCurrentURL());
+		StringBuilder link = new StringBuilder(parser.getCurrentURI());
 
 		link.append("?");
 		for (Entry<String, String> entry : params.entrySet()) {
@@ -45,10 +58,6 @@ public class Linker {
 		}
 		link.deleteCharAt(link.length() - 1);
 		return link.toString();
-	}
-
-	public String build(String action) {
-		return this.build(action, new HashMap<String, String>());
 	}
 
 	private String encodeToUTF8(String string) {
