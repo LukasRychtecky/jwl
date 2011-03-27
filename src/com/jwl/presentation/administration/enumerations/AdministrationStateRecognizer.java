@@ -53,8 +53,26 @@ public class AdministrationStateRecognizer {
 					state = AdministrationStates.LIST;
 				}
 				break;
-			case IMPORT_ACL:
+case IMPORT_ACL:
 				state = AdministrationStates.LIST;
+				break;
+				case MERGE_SUGGESTION_LIST:
+				state = AdministrationStates.MERGE_SUGGESTION_LIST;
+				break;
+			case MERGE_SUGGESTION_VIEW:
+				state = AdministrationStates.MERGE_SUGGESTION_VIEW;
+				break;	
+			case DEAD_ARTICLE_LIST:
+				state = AdministrationStates.DEAD_ARTICLE_LIST;
+				break;	
+			case DEAD_ARTICLE_VIEW:
+				state = AdministrationStates.DEAD_ARTICLE_VIEW;
+				break;
+			case FORUM_TOPIC_LIST:
+				state = AdministrationStates.FORUM_TOPIC_LIST;
+				break;
+			case FORUM_TOPIC_CREATE:
+				state = AdministrationStates.FORUM_TOPIC_CREATE;
 				break;
 			default:
 				state = AdministrationStates.LIST;
@@ -103,7 +121,19 @@ public class AdministrationStateRecognizer {
 			return AdministrationActions.RESTORE;
 		} else if (urlAction.equalsIgnoreCase(AdministrationActions.HISTORY_VIEW.action)) {
 			return AdministrationActions.HISTORY_VIEW;
-		} else {
+		} else if(urlAction.equalsIgnoreCase(AdministrationActions.MERGE_SUGGESTION_LIST.action)){
+			return AdministrationActions.MERGE_SUGGESTION_LIST;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.MERGE_SUGGESTION_VIEW.action)){
+			return AdministrationActions.MERGE_SUGGESTION_VIEW;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.DEAD_ARTICLE_LIST.action)){
+			return AdministrationActions.DEAD_ARTICLE_LIST;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.DEAD_ARTICLE_VIEW.action)){
+			return AdministrationActions.DEAD_ARTICLE_VIEW;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.FORUM_TOPIC_LIST.action)){
+			return AdministrationActions.FORUM_TOPIC_LIST;
+		}else if(urlAction.equalsIgnoreCase(AdministrationActions.FORUM_TOPIC_CREATE.action)){
+			return AdministrationActions.FORUM_TOPIC_CREATE;
+		}else{
 			return AdministrationActions.UNKNOWN;
 		}
 	}

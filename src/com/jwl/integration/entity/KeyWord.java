@@ -10,10 +10,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
+@NamedQueries({
+	@NamedQuery(name ="KeyWord.findAll",query="SELECT kw FROM KeyWord kw"),
+	@NamedQuery(name = "KeyWord.best",
+			query = "SELECT  max(kw.weight) FROM KeyWord kw JOIN kw.article GROUP BY kw.article  ")
+})
 @Entity
 @Table(name = "key_word", catalog = "wiki", schema = "")
 public class KeyWord {
@@ -21,6 +29,7 @@ public class KeyWord {
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	private int id;
+		
 	
 	@Column(name = "word", nullable = false)
 	private String word;

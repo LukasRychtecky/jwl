@@ -1,18 +1,22 @@
 package com.jwl.presentation.component.renderer;
 
-import com.jwl.business.exceptions.ModelException;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
 import com.jwl.business.IFacade;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.article.ArticleId;
-import com.jwl.business.exceptions.PermissionDeniedException;
+import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.AccessPermissions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLElements;
@@ -27,9 +31,6 @@ import com.jwl.util.html.component.HtmlDivOutputText;
 import com.jwl.util.html.component.HtmlLinkProperties;
 import com.jwl.util.html.component.HtmlOutputPropertyLink;
 import com.jwl.util.html.url.URLBuilder;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class JWLEncoder {
 
@@ -207,6 +208,16 @@ public abstract class JWLEncoder {
 			return false;
 		}
 	}
+	
+	protected boolean hasPermission(AccessPermissions permission) {
+		try {
+			IIdentity identity = Global.getInstance().getFacade().getIdentity();
+			return identity.isAllowed(permission);
+		} catch (ModelException ex) {
+			Logger.getLogger(JWLEncoder.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+	}
 
 	protected String getFormAction() {
 		WikiURLParser parser = new WikiURLParser();
@@ -228,7 +239,7 @@ public abstract class JWLEncoder {
 		return getFormActionString(context, target, params);
 	}
 
-	private String getFormActionString(String context, String target,
+	protected String getFormActionString(String context, String target,
 			Map<String, String> params) {
 		StringBuilder href = new StringBuilder();
 		if (context.length() != 0) {

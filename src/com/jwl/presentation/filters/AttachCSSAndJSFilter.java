@@ -121,6 +121,15 @@ public class AttachCSSAndJSFilter implements Filter {
 			+ "});"
 			+ "</script>";
 		builder.insert(bodyBeginPosition, script);
+		
+		script = "<script type=\"text/javascript\">"
+			+ "$(document).ready(function()	{"
+			+ "$('#"
+			+ JWLElements.FORUM_TOPIC_TEXT.id
+			+ "').markItUp(mySettings);"
+			+ "});"
+			+ "</script>";
+		builder.insert(bodyBeginPosition, script);
 
 		script = "<script type=\"text/javascript\">"
 				+ "$(\"div.jwl-flash-message:not(.jwl-no-hide)\").livequery(function () {"

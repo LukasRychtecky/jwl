@@ -26,7 +26,7 @@ public class SearchDecoder extends JWLDecoder {
 
 	private SearchTO getFilledSearch() {
 		SearchTO searchTO = new SearchTO();
-		searchTO.setSearchText(getMapValue(JWLElements.SEARCH_INPUT));
+		searchTO.setSearchPhrase(getMapValue(JWLElements.SEARCH_INPUT));
 		this.fillSearchCategory(searchTO);
 		return searchTO;
 	}
@@ -38,19 +38,14 @@ public class SearchDecoder extends JWLDecoder {
 	private void fillSearchCategory(SearchTO searchTO) {
 		String checkboxValue;
 
-		checkboxValue = getMapValue(JWLElements.SEARCH_WHERE_EVERYWHERE);
-		if (checkboxValue != null) {
-			searchTO.setEverywhere(true);
-		}
-
 		checkboxValue = getMapValue(JWLElements.SEARCH_WHERE_TITLE);
 		if (checkboxValue != null) {
 			searchTO.setTitle(true);
 		}
 
-		checkboxValue = getMapValue(JWLElements.SEARCH_WHERE_TEXT);
+		checkboxValue = getMapValue(JWLElements.SEARCH_WHERE_KEY_WORDS);
 		if (checkboxValue != null) {
-			searchTO.setText(true);
+			searchTO.setKeyWords(true);
 		}
 
 		checkboxValue = getMapValue(JWLElements.SEARCH_WHERE_EDITORS);

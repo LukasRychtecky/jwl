@@ -1,4 +1,5 @@
 package com.jwl.business;
+
 // <editor-fold defaultstate="collapsed">
 import java.util.List;
 import com.jwl.business.article.ArticleId;
@@ -7,40 +8,62 @@ import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.SearchTO;
+import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
+import com.jwl.business.usecases.AddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.CreateArticleUC;
+import com.jwl.business.usecases.CreateForumTopicUC;
 import com.jwl.business.usecases.DeleteArticleUC;
+import com.jwl.business.usecases.DeleteForumTopicsUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
 import com.jwl.business.usecases.FindArticlesUC;
+import com.jwl.business.usecases.GetArticleTopicsUC;
 import com.jwl.business.usecases.GetArticleUC;
+import com.jwl.business.usecases.GetDeadArticlesUC;
 import com.jwl.business.usecases.GetFileUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
+import com.jwl.business.usecases.GetMergeSuggestionsUC;
 import com.jwl.business.usecases.ImportACLUC;
+import com.jwl.business.usecases.GetSimilarArticlesInViewUC;
+import com.jwl.business.usecases.CloseForumTopicsUC;
+import com.jwl.business.usecases.IncreaseLivabilityUC;
 import com.jwl.business.usecases.LockArticleUC;
+import com.jwl.business.usecases.OpenForumTopicsUC;
 import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
+import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.UploadAttachmentUC;
+import com.jwl.business.usecases.interfaces.ICloseForumTopicsUC;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
+import com.jwl.business.usecases.interfaces.ICreateForumTopicUC;
 import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
+import com.jwl.business.usecases.interfaces.IDeleteForumTopicsUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
+import com.jwl.business.usecases.interfaces.IGetArticleTopicsUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
+import com.jwl.business.usecases.interfaces.IGetDeadArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetFileUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
+import com.jwl.business.usecases.interfaces.IGetMergeSuggestionsUC;
 import com.jwl.business.usecases.interfaces.IImportACLUC;
+import com.jwl.business.usecases.interfaces.IGetSimilarArticlesInViewUC;
+import com.jwl.business.usecases.interfaces.IIncreaseLivablityUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
+import com.jwl.business.usecases.interfaces.IOpenForumTopicsUC;
 import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
+import com.jwl.presentation.global.WikiURLParser;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
 import java.io.File;
-// </editor-fold>
 
 /**
  * This interface provides communication between Model(business tier,
@@ -48,9 +71,9 @@ import java.io.File;
  */
 public class Facade implements IFacade {
 
-	private IPaginator paginator = null;
-	private SearchPaginator searchPaginator = null;
-
+	private IPaginator<ArticleTO> paginator = null;
+	private KeyWordPaginator searchPaginator = null;
+	private TopicPaginator topicPaginator = null;
 	@Override
 	public void setJWLHome(String home) {
 		Environment.setJWLHome(home);
@@ -62,14 +85,16 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public List<ArticleTO> findArticles(SearchTO searchTO) throws ModelException {
+	public List<ArticleTO> findArticles(SearchTO searchTO)
+			throws ModelException {
 		IFindArticlesUC uc = new FindArticlesUC(Environment.getDAOFactory());
 		return uc.find(searchTO);
 	}
 
 	@Override
 	public ArticleTO findArticleByTitle(String title) throws ModelException {
-		IFindArticleByTitleUC uc = new FindArticleByTitleUC(Environment.getDAOFactory());
+		IFindArticleByTitleUC uc = new FindArticleByTitleUC(
+				Environment.getDAOFactory());
 		return uc.find(title);
 	}
 
@@ -100,6 +125,8 @@ public class Facade implements IFacade {
 	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException {
 		IUploadAttachmentUC uc = new UploadAttachmentUC(Environment.getDAOFactory());
 		uc.upload(attachment, source, Environment.getAttachmentStorage());
+
+
 	}
 
 	@Override
@@ -133,7 +160,7 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public IPaginator getPaginator() {
+	public IPaginator<ArticleTO> getPaginator() {
 		if (this.paginator == null) {
 			this.paginator = new Paginator(3);
 		}
@@ -142,7 +169,7 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public IPaginator getSearchPaginator() {
+	public IPaginator<ArticleTO> getSearchPaginator() {
 		if (searchPaginator != null) {
 			searchPaginator.setUpPaginator();
 		}
@@ -152,9 +179,9 @@ public class Facade implements IFacade {
 	@Override
 	public void setSearchParametres(SearchTO searchTO) {
 		if (this.searchPaginator == null) {
-			this.searchPaginator = new SearchPaginator(3);
+			this.searchPaginator = new KeyWordPaginator(new WikiURLParser(), Environment.getKnowledgeFacade());
 		}
-		searchPaginator.setSearchCategories(searchTO);
+		searchPaginator.setSearch(searchTO);
 	}
 
 	@Override
@@ -179,5 +206,79 @@ public class Facade implements IFacade {
 	public void rateArticle(ArticleId id, float rating) throws ModelException {
 		IRateArticleUC uc = new RateArticleUC(Environment.getDAOFactory());
 		uc.rateArticle(id, rating);
+	}
+
+	@Override
+	public List<ArticlePair> getMergeSuggestions() throws ModelException {
+		IGetMergeSuggestionsUC uc = new GetMergeSuggestionsUC(
+				Environment.getDAOFactory());
+		return uc.getMergeSuggestions();
+	}
+
+	@Override
+	public List<ArticleTO> getDeadArticles() throws ModelException {
+		IGetDeadArticlesUC uc = new GetDeadArticlesUC(Environment.getDAOFactory());
+		return uc.getDeadArticles();
+	}
+
+	@Override
+	public void addToMergeSuggestionsIgnored(List<ArticleIdPair> articleIdPairs)
+			throws ModelException {
+		IAddToMergeSuggestionsIgnoreUC uc = new AddToMergeSuggestionsIgnoreUC(Environment.getDAOFactory());
+		uc.addToIgnored(articleIdPairs);		
+	}
+
+	@Override
+	public void increaseLivability(List<ArticleId> ids, double increase)
+			throws ModelException {
+		IIncreaseLivablityUC uc = new IncreaseLivabilityUC(Environment.getDAOFactory());
+		uc.addLivability(ids, increase);
+		
+	}
+
+	@Override
+	public List<ArticleTO> getSimilarArticlesInView(ArticleTO article)
+			throws ModelException {
+		IGetSimilarArticlesInViewUC uc = new GetSimilarArticlesInViewUC(Environment.getDAOFactory());
+		return uc.getSimilarArticles(article);
+	}
+
+	@Override
+	public TopicPaginator getArticleForumTopics(ArticleId articleId)
+			throws ModelException {
+		if(topicPaginator==null||!topicPaginator.getArticleId().equals(articleId)){
+			topicPaginator = new TopicPaginator();
+		}
+		IGetArticleTopicsUC uc  = new GetArticleTopicsUC(Environment.getDAOFactory());	
+		topicPaginator.setSearchResults(uc.getArticleTopics(articleId));
+		topicPaginator.setArticleId(articleId);		
+		return topicPaginator;
+	}
+
+	@Override
+	public void createForumTopic(TopicTO topic, ArticleId article)
+			throws ModelException {
+		ICreateForumTopicUC uc = new CreateForumTopicUC(Environment.getDAOFactory());
+		uc.createTopic(topic, article);	
+	}
+
+	@Override
+	public void deleteForumTopics(List<Integer> topicIds) throws ModelException {
+		IDeleteForumTopicsUC uc = new DeleteForumTopicsUC(Environment.getDAOFactory());
+		uc.deleteTopics(topicIds);
+		
+	}
+
+	@Override
+	public void closeForumTopics(List<Integer> topicIds) throws ModelException {
+		ICloseForumTopicsUC uc = new CloseForumTopicsUC(Environment.getDAOFactory());
+		uc.closeTopics(topicIds);
+	}
+
+	@Override
+	public void openForumTopics(List<Integer> topicIds) throws ModelException {
+		IOpenForumTopicsUC uc = new OpenForumTopicsUC(Environment.getDAOFactory());
+		uc.openTopics(topicIds);
+		
 	}
 }

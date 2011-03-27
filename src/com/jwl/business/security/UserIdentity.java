@@ -24,6 +24,7 @@ public class UserIdentity implements IIdentity {
 	private Boolean isAuthenticated = Boolean.FALSE;
 	private Boolean isPermissionsLoaded = Boolean.FALSE;
 	private Set<Role> roles;
+	private String userName = null;
 
 	public UserIdentity(IDAOFactory factory) {
 		this.factory = factory;
@@ -111,5 +112,16 @@ public class UserIdentity implements IIdentity {
 	@Override
 	public boolean isAuthenticated() {
 		return this.isAuthenticated;
+	}
+
+	@Override
+	public void addUserName(String name) {
+		this.userName = name;
+		
+	}
+
+	@Override
+	public String getUserName() {
+		return userName;
 	}
 }

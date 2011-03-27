@@ -58,7 +58,9 @@ import com.jwl.integration.role.RoleEntity;
 		@NamedQuery(name = "Article.allOrderedByEditorDESC",
 				query = "SELECT a FROM Article a ORDER BY a.editor DESC"),
 		@NamedQuery(name = "Article.count",
-				query = "SELECT count(a) FROM Article a") })
+				query = "SELECT count(a) FROM Article a"),
+		@NamedQuery(name = "Article.findDead",
+				query = "SELECT a FROM Article a where a.livability <= 0") })
 @Entity
 @Table(name = "article", catalog = "wiki", schema = "",
 		uniqueConstraints = { @UniqueConstraint(columnNames = { "title" }) })
@@ -128,6 +130,12 @@ public class Article extends BaseEntity implements java.io.Serializable {
 
 	@OneToMany(mappedBy = "article", cascade = { CascadeType.REMOVE })
 	private List<KeyWord> keyWords;
+
+	@Column(name = "livability", nullable = false)
+	private double livability;
+	
+	@OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "article")
+    private List<Topic> topics;
 
 	public Article() {
 	}
@@ -282,4 +290,20 @@ public class Article extends BaseEntity implements java.io.Serializable {
 		this.keyWords = keyWords;
 	}
 
+	public double getLivability() {
+		return livability;
+	}
+
+	public void setLivability(double livability) {
+		this.livability = livability;
+	}
+
+	public List<Topic> getTopics() {
+		return topics;
+	}
+
+	public void setTopics(List<Topic> topics) {
+		this.topics = topics;
+	}
+	
 }

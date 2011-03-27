@@ -2,7 +2,9 @@ package com.jwl.presentation.article.controller;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.component.UIComponent;
+
 import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
@@ -82,8 +84,11 @@ public class ArticleStateRecognizer {
 			} else {
 				state = ArticleStates.LIST;
 			}
+		} else if (action.equals(ArticleActions.FORUM_TOPIC_LIST)) {			
+				state = ArticleStates.FORUM_TOPIC_LIST;
+		}else if (action.equals(ArticleActions.FORUM_TOPIC_CREATE)) {			
+			state = ArticleStates.FORUM_TOPIC_CREATE;
 		}
-
 		state = this.filterNotAllowedStates(state);
 		state = this.filterLockedStates(state);
 		return state;
@@ -114,7 +119,11 @@ public class ArticleStateRecognizer {
 			return ArticleActions.RESTORE;
 		} else if (actionParameter.equalsIgnoreCase(ArticleActions.HISTORY_VIEW)) {
 			return ArticleActions.HISTORY_VIEW;
-		} else {
+		} else if (actionParameter.equalsIgnoreCase(ArticleActions.FORUM_TOPIC_LIST)) {
+			return ArticleActions.FORUM_TOPIC_LIST;
+		} else if (actionParameter.equalsIgnoreCase(ArticleActions.FORUM_TOPIC_CREATE)) {
+			return ArticleActions.FORUM_TOPIC_CREATE;
+		}else {
 			return ArticleActions.UNKNOWN;
 		}
 	}

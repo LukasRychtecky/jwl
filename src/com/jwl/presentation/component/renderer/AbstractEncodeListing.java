@@ -2,11 +2,13 @@ package com.jwl.presentation.component.renderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlPanelGrid;
+import javax.faces.component.html.HtmlPanelGroup;
 import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
@@ -15,16 +17,16 @@ import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.global.WikiURLParser;
+import com.jwl.util.html.component.HtmlFreeOutput;
 import com.jwl.util.html.component.HtmlHeaderPanelGrid;
 import com.jwl.util.html.component.HtmlLinkProperties;
 import com.jwl.util.html.url.URLBuilder;
-import java.util.Arrays;
-import javax.faces.component.html.HtmlPanelGroup;
 
 public abstract class AbstractEncodeListing extends JWLEncoder {
 
 	private final String[] headers = new String[]{"Title", "Tags", "Editor",
-		"Editing count", "Created", "Actions"};
+"Editing count", "Created", "Rating", "Actions" };
+
 
 	public AbstractEncodeListing(IFacade facade) {
 		super(facade);
@@ -45,13 +47,13 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		link.encodeAll(this.context);
 	}
 
-	protected void encodeListing(IPaginator paginator, List<String> headers,
+	protected void encodeListing(IPaginator<ArticleTO> paginator, List<String> headers,
 			Map<Integer, String> orderableColumns) throws IOException {
 		List<String> orderableHeaders = this.encodeHeaders(headers,
 				orderableColumns);
 		HtmlPanelGrid table = getTable(orderableHeaders);
 		List<UIComponent> articlesTableData = table.getChildren();
-		List<ArticleTO> articles = paginator.getcurrentPageArticles();
+		List<ArticleTO> articles = paginator.getCurrentPageContent();
 		for (ArticleTO article : articles) {
 			if (this.hasViewPermission(article.getId())) {
 				this.encodeRowData(article, articlesTableData);
@@ -117,7 +119,8 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		articlesTableData.add(this.getEditorComponent(article.getEditor()));
 		articlesTableData.add(this.getEditingCountComponent(article.getEditCount()));
 		articlesTableData.add(this.getCreatedComponent(article.getCreated().toString()));
-
+		articlesTableData.add(this.getRatingComponent(article
+				.getRatingAverage()));
 		encodeAdditionalRowData(article, articlesTableData);
 	}
 
@@ -180,45 +183,51 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		return this.hasPermission(com.jwl.business.security.AccessPermissions.ARTICLE_VIEW, id);
 	}
 
-	private UIComponent createLinkToNextPage(IPaginator paginator) throws IOException {
+	private UIComponent createLinkToNextPage(IPaginator<ArticleTO> paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue(">");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getNextPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER,
+				paginator.getNextPageIndex());
+
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_NEXT_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
 		return link;
 	}
 
-	private UIComponent createLinkToPreviousPage(IPaginator paginator)
+	private UIComponent createLinkToPreviousPage(IPaginator<ArticleTO> paginator)
 			throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("<");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getPreviousPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER,
+				paginator.getPreviousPageIndex());
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_PREVIOUS_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
 		return link;
 	}
 
-	private UIComponent createLinkToFirstPage(IPaginator paginator) throws IOException {
+	private UIComponent createLinkToFirstPage(IPaginator<ArticleTO> paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("<<");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getFirstPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER,
+				paginator.getFirstPageIndex());
+
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_FIRST_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
 		return link;
 	}
 
-	private UIComponent createLinkToLastPage(IPaginator paginator) throws IOException {
+	private UIComponent createLinkToLastPage(IPaginator<ArticleTO> paginator) throws IOException {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue(">>");
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.LIST);
-		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER, paginator.getLastPageIndex());
+		properties.addParameter(JWLURLParameters.LIST_PAGE_NUMBER,
+				paginator.getLastPageIndex());
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		properties.addClass(JWLStyleClass.LINK_LAST_PAGE);
 		HtmlOutputLink link = this.getHtmlLinkComponent(properties);
@@ -260,5 +269,35 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 		sb.append(header);
 		sb.append("</a>");
 		return sb.toString();
+	}
+
+	private UIComponent getRatingComponent(float rating) {
+		int sn = (int) rating;
+		int r = (int) (rating %1) * 10;
+		if (r >= 5) {
+			sn++;
+		}
+		HtmlFreeOutput output = new HtmlFreeOutput();
+		StringBuilder sb = new StringBuilder();
+		sb.append("<div class=\"smallstars\">");
+		for (int i = 0; i < 10; i++) {
+			sb.append("<div class=\"");
+			boolean g = false;
+			if (i < sn) {
+				sb.append("rating");
+				g = true;
+			}
+			if (i % 2 == 1) {
+				if (g) {
+					sb.append(" ");
+				}
+				sb.append("rating-right");
+			}
+			sb.append("\">");
+			sb.append("</div>");
+		}
+		sb.append("</div>");
+		output.setFreeOutput(sb.toString());
+		return output;
 	}
 }

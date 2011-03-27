@@ -42,5 +42,13 @@ public abstract class JWLDecoder {
 		}
 	}
 	
+	protected String getFullKey(String elementId, String formId) {
+		if (null != formId && !formId.isEmpty()){
+			return formId + JWLEncoder.HTML_ID_SEPARATOR + elementId; 
+		} else {
+			return elementId;
+		}
+	}
+	
 	
 }
