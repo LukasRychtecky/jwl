@@ -11,7 +11,7 @@ import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
 import com.jwl.presentation.article.enumerations.ListColumns;
 
-public class Paginator extends AbstractPaginator {
+public class Paginator extends AbstractArticlePaginator {
 	private static String OB_TITLE_A = "Article.allOrderedByTitleASC";
 	private static String OB_TITLE_D = "Article.allOrderedByTitleDESC";
 	private static String OB_CREATED_A = "Article.allOrderedByCreatedASC";
@@ -27,7 +27,7 @@ public class Paginator extends AbstractPaginator {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ArticleTO> getcurrentPageArticles() {
+	public List<ArticleTO> getCurrentPageContent() {
 		List<Article> articles = null;
 		Query query = this.em.createNamedQuery(this.getQueryName());
 		query.setFirstResult((this.pageIndex - 1) * this.pageSize);

@@ -1,19 +1,16 @@
 package com.jwl.integration.convertor;
 
-import com.jwl.business.article.ArticleId;
-
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import com.jwl.business.article.ArticleTO;
-import com.jwl.integration.role.RoleConvertor;
-import com.jwl.integration.entity.Article;
-import com.jwl.integration.entity.Tag;
-import com.jwl.integration.role.RoleEntity;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import com.jwl.business.article.ArticleId;
+import com.jwl.business.article.ArticleTO;
+import com.jwl.integration.entity.Article;
+import com.jwl.integration.entity.Tag;
 
 public class ArticleConvertor {
 
@@ -51,9 +48,16 @@ public class ArticleConvertor {
 		article.setRatings(RatingConvertor.convertFromEntities(entity
 				.getRatings()));
 
+		article.setKeyWords(KeyWordConvertor.fromEntities(entity.getKeyWords()));
+
 		// for (RoleEntity roleEntity : entity.getRoles()) {
 		// article.addRole(RoleConvertor.toObject(roleEntity));
 		// }
+		
+		article.setLivability(entity.getLivability());
+		
+		article.setTopics(TopicConverter.convertFromEntities(entity.getTopics()));
+		
 		return article;
 	}
 
@@ -78,7 +82,8 @@ public class ArticleConvertor {
 		}
 
 		entity.setTags(tags);
-
+		
+		entity.setLivability(article.getLivability());
 		return entity;
 	}
 

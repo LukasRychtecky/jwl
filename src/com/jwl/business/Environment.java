@@ -1,7 +1,13 @@
 package com.jwl.business;
 
+import com.jwl.business.knowledge.IKnowledgeManagementFacade;
+import com.jwl.business.knowledge.KnowledgeManagementFacade;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.UserIdentity;
+
+
+import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.SettingsSource;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
 import com.jwl.integration.filesystem.FSDAOFactory;
@@ -20,8 +26,9 @@ public class Environment {
 //	 private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
 	private static IIdentity identity = null;
+private static ISettingsSource knowledgeSettings = null;
+	private static IKnowledgeManagementFacade knowledgeFacade = null;
 	private static final String ACL_FILE_NAME = "acl.csv";
-
 	private static final String FILESYSTEM_STORE = "/Users/ostatnickyjiri/Desktop";
 
 	private Environment() {
@@ -72,5 +79,17 @@ public class Environment {
 			Environment.identity = new UserIdentity(Environment.getDAOFactory());
 		}
 		return Environment.identity;
+	}
+	public static ISettingsSource getKnowledgeSettings() {
+		if (knowledgeSettings == null) {
+			knowledgeSettings = new SettingsSource();
+		}
+		return knowledgeSettings;
+	}
+	public static IKnowledgeManagementFacade getKnowledgeFacade() {
+		if (knowledgeFacade == null) {
+			knowledgeFacade = new KnowledgeManagementFacade();
+		}
+		return knowledgeFacade;
 	}
 }

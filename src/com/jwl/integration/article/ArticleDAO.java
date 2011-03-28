@@ -1,7 +1,9 @@
 package com.jwl.integration.article;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -216,5 +218,54 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 			closeEntityManager(em);
 		}
 		return (int) count;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTO> findArticleWithKeyWord(Set<String> keyWords)
+			throws DAOException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT DISTINCT a FROM Article a JOIN a.keyWords kw WHERE ");
+		Iterator<String> i = keyWords.iterator();
+		while(i.hasNext()){
+			String kw = i.next();
+			sb.append("kw.word = '");
+			sb.append(kw);
+			sb.append("'");
+			if(i.hasNext()){
+				sb.append(" OR ");
+			}			
+		}
+		sb.append("GROUP BY a HAVING count(kw.word)=");
+		sb.append(keyWords.size());
+		
+		EntityManager em = getEntityManager();
+		List<Article> result = null;
+		try {		
+			Query query = em.createQuery(sb.toString());
+			result = query.getResultList();
+		} catch (Exception e) {
+			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
+		}
+		return ArticleConvertor.convertList(result);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTO> findDead() throws DAOException {
+		EntityManager em = getEntityManager();
+		List<Article> result = null;
+		try {		
+			Query query = em.createNamedQuery("Article.findDead");
+			
+			result = query.getResultList();
+		} catch (Exception e) {
+			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
+		}
+		return ArticleConvertor.convertList(result);
 	}
 }

@@ -12,10 +12,12 @@ import com.jwl.presentation.article.renderer.EncodeListing;
 import com.jwl.presentation.article.renderer.EncodeNotExist;
 import com.jwl.presentation.component.controller.JWLController;
 import com.jwl.presentation.component.renderer.EncodeCreate;
+import com.jwl.presentation.component.renderer.EncodeCreateTopic;
 import com.jwl.presentation.component.renderer.EncodeEdit;
 import com.jwl.presentation.component.renderer.EncodeError;
 import com.jwl.presentation.component.renderer.EncodeHistoryListing;
 import com.jwl.presentation.component.renderer.EncodeHistoryView;
+import com.jwl.presentation.component.renderer.EncodeTopicList;
 import com.jwl.presentation.component.renderer.EncodeView;
 import com.jwl.presentation.component.renderer.FlashMessage;
 import com.jwl.presentation.component.renderer.FlashMessageType;
@@ -75,6 +77,12 @@ public class ArticleController extends JWLController {
 				case HISTORY_VIEW:
 					encoder = new EncodeHistoryView(super.facade, recognizer.getHistoryId());
 					break;
+				case FORUM_TOPIC_LIST:
+					encoder = new  EncodeTopicList(facade, id);
+					break;
+				case FORUM_TOPIC_CREATE:
+					encoder = new  EncodeCreateTopic(facade, id);
+					break;
 				default:
 					encoder = new EncodeError();
 					encoder.addImplicitErrorFlashMessage();
@@ -105,7 +113,8 @@ public class ArticleController extends JWLController {
 
 		this.assertValidInput(context, component);
 		this.setUserRoles(component);
-
+		this.setUserName(component);
+		
 		this.recognizer = new ArticleStateRecognizer(super.facade);
 
 		if (this.recognizer.getAction().equals(ArticleActions.RESTORE)) {

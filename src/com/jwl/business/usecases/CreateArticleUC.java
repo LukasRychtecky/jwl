@@ -1,5 +1,6 @@
 package com.jwl.business.usecases;
 
+import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ArticleExistsException;
@@ -32,6 +33,8 @@ public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 
 		ArticleId id = null;
 		Set<String> tags = article.getTags();
+		double livabilityInitValue = Environment.getKnowledgeFacade().getLivabilityInitialValue();
+		article.setLivability(livabilityInitValue);
 		
 		try {
 			article.removeAllTags();
@@ -46,7 +49,6 @@ public class CreateArticleUC extends AbstractUC implements ICreateArticleUC {
 
 		ISaveTagsUC uc = new SaveTagsUC(super.factory);
 		uc.save(tags, id);
-
 		return id;
 	}
 

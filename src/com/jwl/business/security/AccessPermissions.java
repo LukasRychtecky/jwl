@@ -13,12 +13,19 @@ public enum AccessPermissions {
 	ARTICLE_LOCK ("Article", "lock"),
 	ARTICLE_DELETE ("Article", "delete"),
 	ARTICLE_EXCLUDEROLE ("Article", "excludeRole"),
+	ARTICLE_RATE ("Article", "rate"),
+	KNOWLEDGE_ADMINISTER ("Knowledge", "administer"),
 
 	ATTACHMENT_VIEW ("Attachment", "view"),
 	ATTACHMENT_ADD ("Attachment", "add"),
 	ATTACHMENT_DELETE ("Attachment", "delete"),
-
-	SECURITY_IMPORT("Security", "import");
+		SECURITY_IMPORT("Security", "import"),
+FORUM_VIEW ("Forum", "view"),
+	FORUM_CLOSE_TOPIC ("Forum", "close"),
+	FORUM_ADD_POST ("Forum", "addPost"),
+	FORUM_CREATE_TOPIC ("Forum", "createTopic"),
+	FORUM_DELETE_TOPIC ("Forum", "deleteTopic"),
+	FORUM_DELETE_POST ("Forum", "deletePost");
 
 	private String context;
 	private String method;

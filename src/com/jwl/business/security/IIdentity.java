@@ -28,5 +28,9 @@ public interface IIdentity {
 	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws ModelException, PermissionDeniedException;
 
 	public boolean isAuthenticated();
+	
+	public void addUserName(String name);
+	
+	public String getUserName();
 
 }

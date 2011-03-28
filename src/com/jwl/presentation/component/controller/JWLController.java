@@ -11,6 +11,7 @@ import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.component.renderer.FlashMessage;
 import com.jwl.presentation.component.renderer.JWLEncoder;
 import com.jwl.presentation.global.Global;
+import com.jwl.presentation.global.WikiURLParser;
 
 /**
  * 
@@ -46,6 +47,15 @@ abstract public class JWLController {
 			throws NoPermissionException {
 		JWLComponent articleComponent = (JWLComponent) component;
 		Global.getInstance().getFacade().getIdentity().addUserRoles(articleComponent.getRoles());
+	}
+	
+	protected void setUserName(UIComponent component){
+		String userName = ((JWLComponent) component).getUserName();
+		if (userName.isEmpty()) {
+			WikiURLParser parser = new WikiURLParser();
+			userName = parser.getUserIP();
+		}
+		Global.getInstance().getFacade().getIdentity().addUserName(userName);		
 	}
 	
 	protected Map<String, String> getMap(FacesContext context){ 

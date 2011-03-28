@@ -1,30 +1,35 @@
 package com.jwl.presentation.administration.controller;
 
-// <editor-fold defaultstate="collapsed">
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.naming.NoPermissionException;
+
 import com.jwl.business.RoleTypes;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.Role;
 import com.jwl.presentation.administration.enumerations.AdministrationStateRecognizer;
 import com.jwl.presentation.administration.enumerations.AdministrationStates;
-import com.jwl.presentation.component.renderer.EncodeHistoryListing;
+import com.jwl.presentation.administration.renderer.EncodeDeadArticleList;
+import com.jwl.presentation.administration.renderer.EncodeDeadArticleView;
 import com.jwl.presentation.administration.renderer.EncodeListing;
-import com.jwl.presentation.article.controller.ArticleDecoder;
+import com.jwl.presentation.administration.renderer.EncodeMergeSuggestionList;
+import com.jwl.presentation.administration.renderer.EncodeMergeSuggestionView;
+import com.jwl.presentation.administration.renderer.EncodeTopicList;
 import com.jwl.presentation.component.controller.JWLController;
 import com.jwl.presentation.component.renderer.EncodeCreate;
+import com.jwl.presentation.component.renderer.EncodeCreateTopic;
 import com.jwl.presentation.component.renderer.EncodeEdit;
 import com.jwl.presentation.component.renderer.EncodeError;
+import com.jwl.presentation.component.renderer.EncodeHistoryListing;
 import com.jwl.presentation.component.renderer.EncodeHistoryView;
 import com.jwl.presentation.component.renderer.EncodeView;
 import com.jwl.presentation.component.renderer.FlashMessage;
 import com.jwl.presentation.component.renderer.FlashMessageType;
 import com.jwl.presentation.component.renderer.JWLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-// </editor-fold>
 
 /**
  *
@@ -44,7 +49,7 @@ public class AdministrationController extends JWLController {
 		this.assertValidInput(context, component);
 
 		if (component instanceof AdministrationComponent) {
-			this.decoder = new ArticleDecoder(getMap(context), component, facade);
+			this.decoder = new AdministrationDecoder(getMap(context), component, facade);
 			this.decoder.processDecode();
 			super.message = new FlashMessage("Article was saved.");
 		}
@@ -57,6 +62,7 @@ public class AdministrationController extends JWLController {
 		this.assertValidInput(context, component);
 		this.setUserRoles(component);
 		this.checkRole(component);
+		this.setUserName(component);
 
 		this.recognizer = new AdministrationStateRecognizer(super.facade);
 		switch (recognizer.getAction()) {
@@ -120,6 +126,24 @@ public class AdministrationController extends JWLController {
 					break;
 				case HISTORY_VIEW:
 					encoder = new EncodeHistoryView(super.facade, recognizer.getHistoryId());
+					break;
+				case MERGE_SUGGESTION_LIST:
+					encoder = new EncodeMergeSuggestionList(facade);
+					break;
+				case MERGE_SUGGESTION_VIEW:
+					encoder = new EncodeMergeSuggestionView(facade, id);
+					break;
+				case DEAD_ARTICLE_LIST:
+					encoder = new EncodeDeadArticleList(facade);
+					break;
+				case DEAD_ARTICLE_VIEW:
+					encoder = new EncodeDeadArticleView(facade, id);
+					break;
+				case FORUM_TOPIC_LIST:
+					encoder = new EncodeTopicList(facade, id);
+					break;	
+				case FORUM_TOPIC_CREATE:
+					encoder = new EncodeCreateTopic(facade, id);
 					break;
 				default:
 					encoder = new EncodeError();

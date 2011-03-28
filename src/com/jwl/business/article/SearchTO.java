@@ -3,10 +3,9 @@ package com.jwl.business.article;
 
 public class SearchTO {
 	
-	private String searchText;
-	private boolean everywhere;
+	private String searchPhrase;
 	private boolean title;
-	private boolean text;
+	private boolean keyWords;
 	private boolean editors;
 	private boolean tags;
 
@@ -14,20 +13,12 @@ public class SearchTO {
 
 	}
 
-	public String getSearchText() {
-		return searchText;
+	public String getSearchPhrase() {
+		return searchPhrase;
 	}
 
-	public void setSearchText(String searchText) {
-		this.searchText = searchText;
-	}
-
-	public boolean isEverywhere() {
-		return everywhere;
-	}
-
-	public void setEverywhere(boolean everywhere) {
-		this.everywhere = everywhere;
+	public void setSearchPhrase(String searchPhrase) {
+		this.searchPhrase = searchPhrase;
 	}
 
 	public boolean isTitle() {
@@ -38,12 +29,12 @@ public class SearchTO {
 		this.title = title;
 	}
 
-	public boolean isText() {
-		return text;
+	public boolean isKeyWords() {
+		return keyWords;
 	}
 
-	public void setText(boolean text) {
-		this.text = text;
+	public void setKeyWords(boolean text) {
+		this.keyWords = text;
 	}
 
 	public boolean isEditors() {

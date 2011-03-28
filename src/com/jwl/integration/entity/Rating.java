@@ -18,13 +18,16 @@ public class Rating {
 	
 	@EmbeddedId
     protected RatingPK pk;
-    @Basic(optional = false)
+    
+	@Basic(optional = false)
     @Column(name = "rating", nullable = false)
     private float rating;
+   
     @Basic(optional = false)
     @Column(name = "modified", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
+    
     @JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Article article;
