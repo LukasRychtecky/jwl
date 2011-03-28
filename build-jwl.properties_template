@@ -1,0 +1,29 @@
+jboss.home=/home/lukas/jboss-4.2.3.GA
+jboss.domain=default
+
+debug=true
+action.dir=/WEB-INF/dev
+
+BUILD.workspace=c:/JAVA/PROJECTS/workspace-Eclipse-SEAM
+
+SEAM.lib=/home/lukas/jboss-seam-2.2.0.GA/lib
+
+# JSF Wiki Library - Classpath
+JSF.lib=c:/JAVA/Framework/JSF/Sun JSF 2.0
+JPA.lib=c:/JAVA/Framework/JPA/Hibernate/hibernate-distribution-3.5.6-Final/lib/jpa
+JPA.req=c:/JAVA/Framework/JPA/Hibernate/hibernate-distribution-3.5.6-Final/lib/required
+JPA.slf4j=c:/JAVA/Framework/Slf4j/slf4j-1.6.1/integration/lib/slf4j-nop-1.5.6.jar
+JSF.servlet=C:/Java Framework/Framework/jboss-seam-2.2.0.GA/lib
+
+Markdown=c:/JAVA/Framework/Markdown
+
+FileUpload.upload=C:/Java Framework/Framework/commons-fileupload-1.2.2/lib
+FileUpload.io=C:/Java/Framework/Framework/commons-io-2.0
+
+Quartz.quartz=C:/Java/Framework/quartz-1.8.4/quartz-all-1.8.4.jar
+Quartz.lib=C:/Java Framework/quartz-1.8.4/lib
+
+ClassDir=build/classes
+
+# JSF Wiki Library - deploy type (true == jar, false == classes) 
+JWL.deploy-type=false
