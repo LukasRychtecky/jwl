@@ -9,6 +9,7 @@ import javax.faces.component.html.HtmlOutputLink;
 import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.AccessPermissions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
@@ -28,7 +29,8 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 			ModelException {
 		this.encodeTitle(article.getTitle());
 		this.encodeText(article.getText());
-		this.encodeTags(super.facade.getArticle(article.getId()).getTags());
+		this.encodeAttachments(article.getAttachments());
+		this.encodeTags(article.getTags());
 	}
 
 	private void encodeTitle(String title) throws IOException {
@@ -45,6 +47,17 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	private void encodeTags(Set<String> tags) throws IOException {
 		super.encodeDivClassStart(JWLStyleClass.VIEW_TAGS);
 		super.getHtmlTextComponent(tags.toString()).encodeAll(context);
+		super.encodeDivEnd();
+	}
+	
+	private void encodeAttachments(Set<AttachmentTO> attachments) throws IOException {
+		super.encodeDivClassStart(JWLStyleClass.VIEW_ATTACHMENTS);
+		
+		String atts = "";
+		for (AttachmentTO att : attachments) {
+			atts += att.getTitle();
+		}
+		super.getHtmlTextComponent(atts).encodeAll(context);
 		super.encodeDivEnd();
 	}
 

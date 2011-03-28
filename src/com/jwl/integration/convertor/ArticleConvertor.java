@@ -28,8 +28,8 @@ public class ArticleConvertor {
 	}
 
 	public static ArticleTO convertFromEntity(Article entity) {
-		ArticleTO article = new ArticleTO(new ArticleId(entity.getId()),
-				entity.getModified());
+		ArticleTO article = new ArticleTO(new ArticleId(entity.getId()), entity
+				.getModified());
 		article.setChangeNote(entity.getChangeNote());
 		article.setCreated(entity.getCreated());
 		article.setEditCount(entity.getEditCount());
@@ -41,6 +41,9 @@ public class ArticleConvertor {
 		for (Tag tag : entity.getTags()) {
 			article.addTag(tag.getName());
 		}
+
+		article.setAttachments(AttachmentConvertor.convertFromEntity(entity
+				.getAttachments()));
 
 		article.setRatings(RatingConvertor.convertFromEntities(entity
 				.getRatings()));
@@ -54,6 +57,7 @@ public class ArticleConvertor {
 		article.setLivability(entity.getLivability());
 		
 		article.setTopics(TopicConverter.convertFromEntities(entity.getTopics()));
+		
 		return article;
 	}
 

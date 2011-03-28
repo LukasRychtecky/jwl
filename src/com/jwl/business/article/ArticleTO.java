@@ -25,6 +25,7 @@ public class ArticleTO {
 	private List<RatingTO> ratings;
 	private Set<Role> excludedRoles;
 	private List<KeyWordTO> keyWords;
+	private Set<AttachmentTO> attachments;
 	private double livability;
 	private List<TopicTO> topics;
 	
@@ -212,6 +213,14 @@ public class ArticleTO {
 		return total;
 	}
 
+	public Set<AttachmentTO> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(Set<AttachmentTO> attachments) {
+		this.attachments = attachments;
+	}
+
 	public double getLivability() {
 		return livability;
 	}
@@ -226,6 +235,6 @@ public class ArticleTO {
 
 	public void setTopics(List<TopicTO> topics) {
 		this.topics = topics;
-	}	
+	}
 		
 }

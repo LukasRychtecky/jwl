@@ -56,6 +56,7 @@ public class JWLStyleClass {
 	public static final String VIEW_TITLE = JWL_PREFIX + 						"view-title";
 	public static final String VIEW_TEXT = JWL_PREFIX + 						"view-text";
 	public static final String VIEW_TAGS = JWL_PREFIX + 						"view-tags";
+	public static final String VIEW_ATTACHMENTS = JWL_PREFIX + 					"view-attachments";
 	public static final String VIEW_LINK_BACK = JWL_PREFIX + 					"view-link-back";
 	public static final String VIEW_LINK_EDIT = JWL_PREFIX + 					"view-link-edit";
 	public static final String VIEW_LINK_ATTACH = JWL_PREFIX + 					"view-link-attach";
