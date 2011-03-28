@@ -1,9 +1,135 @@
 <?xml version="1.0"?>
-<project name="JWL.deploy" default="JWL.deploy" basedir="../SeamWiki">
+<project name="JWL.deploy" default="JWL.deploy" basedir=".">
+
+	<property file="build-jwl.properties"/>
+	<property file="../SeamWiki/build.properties"/>
+
+	<property name="JWL.project" value="jwl" />
+	<property name="JWL.location" location="${BUILD.workspace}/${JWL.project}" />
+	<property name="JWL.src" location="${JWL.location}/src" />
+	<property name="JWL.buildDir" location="${JWL.location}/build_ant" />
+	<property name="JWL.dist" location="${JWL.location}/dist" />
+	<property name="JWL.classes" location="${JWL.location}/${ClassDir}" />
+	<property name="JWL.rebel" location="${JWL.location}/rebel.xml" />
+	<property name="JWL.jar" value="jsf-wiki-lib.jar" />
+	<property name="JWL.compile.debug" value="true" />
+
+	<property name="JWL.deploy-persistence-jar" location="${war.deploy.dir}/WEB-INF/lib/${JWL.jar}" />
+	<property name="JWL.deploy-persistence-classes" location="${war.deploy.dir}/WEB-INF/classes" />
+	<property name="JWL.deploy-ejb-jar" value="${project.name}.war/WEB-INF/lib/${JWL.jar}" />
+	<property name="JWL.deploy-ejb-classes" value="${project.name}.war/WEB-INF/classes" />
+
+	<path id="JWL.compile.classpath">
+		<pathelement location="${JWL.buildDir}" />
+		<fileset dir="${JSF.lib}" includes="*.jar" />
+		<fileset dir="${JPA.lib}" includes="*.jar" />
+		<fileset dir="${JPA.req}" includes="*.jar" />
+		<file name="${JPA.slf4j}" />
+		<fileset dir="${JSF.servlet}" includes="*.jar" />
+		<fileset dir="${Markdown}" includes="*.jar" />
+		<fileset dir="${FileUpload.upload}" includes="*.jar" />
+		<fileset dir="${FileUpload.io}" includes="*.jar" />
+		<file name="${Quartz.quartz}" />
+		<fileset dir="${Quartz.lib}" includes="*.jar" />
+	</path>
+
+	<condition property="JWL.deploy_as_jar">
+		<istrue value="${JWL.deploy-type}"/>
+	</condition>
+	<condition property="JWL.deploy_as_classes">
+		<isfalse value="${JWL.deploy-type}"/>
+	</condition>
+
 	<target name="JWL.deploy">
-		<ant antfile="../SeamWiki/build.xml" inheritAll="true" target="JWL.deploy"/>
+		<ant dir="." target="JWL.undeploy"/>
+		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="jar" />
+		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="war" />
+		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="ear" />
+		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="datasource" />
+		<ant dir="." target="JWL.dist"/>
+		<ant dir="." target="JWL.asClasses"/>
+		<ant dir="." target="JWL.asJar"/>
+		<ant dir="." target="JWL.libs"/>
+		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="standalnoe-explode" />
+
+		<copy todir="../SeamWiki/${war.dir}/WEB-INF" file="${JWL.buildDir}/META-INF/jwl.taglib.xml" />
 	</target>
-	<target name="JWL.build">
-		<ant antfile="../SeamWiki/build.xml" inheritAll="true" target="JWL.build"/>
+
+	<target name="JWL.asClasses" if="JWL.deploy_as_classes">
+		<copy todir="../SeamWiki/${war.dir}/WEB-INF/classes" file="${JWL.rebel}">
+			<fileset dir="${JWL.buildDir}" />
+		</copy>
+		<replace file="../SeamWiki/${jar.dir}/META-INF/persistence.xml" 
+					  			token="@JWL.deploy_type@" 
+					  			value="${JWL.deploy-persistence-classes}"/>
+		<replace file="../SeamWiki/${ear.dir}/META-INF/application.xml" 
+					  			token="@JWL.deploy_type@"
+					  			value="${JWL.deploy-ejb-classes}"/>
+		<replace file="../SeamWiki/${war.dir}/WEB-INF/classes/rebel.xml" 
+							  			token="@JWL.classes@"
+							  			value="${JWL.classes}"/>
 	</target>
+
+	<target name="JWL.asJar" if="JWL.deploy_as_jar">
+		<copy todir="../SeamWiki/${war.dir}/WEB-INF/lib">
+			<fileset file="${JWL.dist}/${JWL.jar}"/>
+		</copy>
+		<replace file="../SeamWiki/${jar.dir}/META-INF/persistence.xml" 
+					  			token="@JWL.deploy_type@" 
+					  			value="${JWL.deploy-persistence-jar}"/>
+		<replace file="../SeamWiki/${ear.dir}/META-INF/application.xml" 
+					  			token="@JWL.deploy_type@"
+					  			value="${JWL.deploy-ejb-jar}"/>
+	</target>
+
+	<target name="JWL.dist" depends="JWL.build" description="generate JWL distribution jar">
+		<mkdir dir="${JWL.dist}" />
+		<jar jarfile="${JWL.dist}/${JWL.jar}" basedir="${JWL.buildDir}" />
+	</target>
+
+	<target name="JWL.build" depends="JWL.clean" description="build JWL sources">
+		<mkdir dir="${JWL.buildDir}" />
+		<javac srcdir="${JWL.src}" 
+					destdir="${JWL.buildDir}"
+					debug="${JWL.compile.debug}" 
+					classpathref="JWL.compile.classpath" 
+					excludes="**/CVS,**/CVS/**,**/.cvsignore" 
+					encoding="utf-8" />
+		<copy todir="${JWL.buildDir}/META-INF">
+			<fileset dir="${JWL.location}/src/META-INF">
+				<exclude name="persistence.xml" />
+				<exclude name="web.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="JWL.clean" description="clean up JWL build directories">
+		<delete dir="${JWL.buildDir}" />
+		<delete dir="${JWL.dist}" />
+	</target>
+
+	<target name="JWL.undeploy" description="undeplou JWL from server">
+		<delete file="${JWL.deploy-persistence-jar}" />
+		<delete dir="${JWL.deploy-persistence-classes}/com" />
+		<delete dir="${JWL.deploy-persistence-classes}/META-INF" />
+		<delete dir="${war.dir}/WEB-INF/classes/com"/>
+		<delete dir="${war.dir}/WEB-INF/classes/META-INF"/>
+		<delete file="${war.dir}/WEB-INF/classes/rebel.xml"/>
+		<delete file="${war.dir}/WEB-INF/lib/${JWL.jar}"/>
+		<delete file="${war.dir}/WEB-INF/jwl.taglib.xml"/>
+		<delete file="${ear.dir}/META-INF/application.xml"/>
+		<delete file="${jar.dir}/META-INF/persistence.xml"/>
+	</target>
+
+	<target name="JWL.libs" description="Copy JWL external libraries to the server lib">
+		<copy todir="../SeamWiki/${war.dir}/WEB-INF/lib">
+			<fileset file="${Markdown}/parboiled4j-snapshot.jar"/>
+			<fileset file="${Markdown}/pegdown-0.8.5.4.jar"/>
+			<fileset file="${FileUpload.upload}/commons-fileupload-1.2.2.jar"/>
+			<fileset file="${FileUpload.io}/commons-io-2.0.jar"/>
+			<fileset file="${Quartz.quartz}"/>
+			<fileset dir="${Quartz.lib}" excludes="**/log4j-1.2.14.jar"/>
+		</copy>
+	</target>
+
 </project>

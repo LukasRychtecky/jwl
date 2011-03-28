@@ -6,3 +6,4 @@ bin/
 build_ant/
 dist/
 .gitignore
+build
