@@ -1,5 +1,6 @@
 package com.jwl.presentation.article.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,7 @@ import com.jwl.presentation.article.enumerations.ArticlePermissions;
 import com.jwl.presentation.article.enumerations.ArticleStates;
 import com.jwl.presentation.global.Global;
 import com.jwl.presentation.global.WikiURLParser;
+import java.lang.reflect.Method;
 
 public class ArticleStateRecognizer {
 

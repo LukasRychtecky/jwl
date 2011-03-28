@@ -5,6 +5,8 @@ import java.util.List;
 
 public class JWLURLParameters {
 
+	public static final String DO = "jwldo";
+	public static final String PRESENTER = "jwlpresenter";
 	public static final String ARTICLE_TITLE = "jwltitle";
 	public static final String ACTION = "jwlaction";
 	public static final String FILE_NAME = "jwlfilename";
@@ -12,7 +14,7 @@ public class JWLURLParameters {
 	public static final String REDIRECT_TARGET = "jwlpage";
 	public static final String LIST_PAGE_NUMBER = "jwlpageindex";
 	public static final String LIST_ORDER_COLUMN = "jwlordercolumn";
-	public static final String HISTORY_ID = "historyid";
+	public static final String HISTORY_ID = "jwlhistoryid";
 	public static final String FILE_ACTION = "jwlfileaction";
 	
 	public static List<String> ALL_URL_PARAMETERS;
