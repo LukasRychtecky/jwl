@@ -16,7 +16,7 @@
  </component>
  <component>
   <component-type>com.jwl.component.Widget</component-type>
-  <component-class>com.jwl.presentation.core.WidgetComponent</component-class>
+  <component-class>com.jwl.presentation.presenters.widget.Component</component-class>
  </component>
  <render-kit>
   <!-- JWL COMPONENT RENDERERS -->

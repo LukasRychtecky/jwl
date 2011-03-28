@@ -2,7 +2,6 @@ package com.jwl.presentation.core;
 
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.global.WikiURLParser;
-import com.jwl.util.html.url.URLBuilder;
 import com.jwl.util.html.url.URLParser;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -19,11 +18,13 @@ import javax.faces.context.FacesContext;
  */
 public class Linker {
 
-	private FacesContext context;
+	public static final String PREFIX = "jwl";
+	private WikiURLParser parser;
 	private String presenter;
+	private Map<String, String> foreingParams = null;
 
 	public Linker(FacesContext context, String presenter) {
-		this.context = context;
+		this.parser = new WikiURLParser(context);
 		this.presenter = presenter;
 	}
 
@@ -46,8 +47,8 @@ public class Linker {
 	}
 
 	private String buildLink(Map<String, String> params) {
-		WikiURLParser parser = new WikiURLParser(this.context);
-		StringBuilder link = new StringBuilder(parser.getCurrentURI());
+		StringBuilder link = new StringBuilder(this.parser.getCurrentURI());
+		params.putAll(this.getForeingParams());
 
 		link.append("?");
 		for (Entry<String, String> entry : params.entrySet()) {
@@ -67,5 +68,18 @@ public class Linker {
 			Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, e);
 			return "";
 		}
+	}
+
+	private Map<String, String> getForeingParams() {
+		if (this.foreingParams == null) {
+			this.foreingParams = new HashMap<String, String>();
+
+			for (Entry<String, String> param  : this.parser.getURLParameters().entrySet()) {
+				if (!param.getKey().startsWith(PREFIX)) {
+					this.foreingParams.put(param.getKey(), param.getValue());
+				}
+			}
+		}
+		return foreingParams;
 	}
 }

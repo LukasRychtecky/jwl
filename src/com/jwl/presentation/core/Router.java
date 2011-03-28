@@ -20,7 +20,7 @@ public class Router {
 		this.parser = new WikiURLParser(context);
 	}
 
-	public void route(Presenter presenter) throws IOException {
+	public void route(AbstractPresenter presenter) throws IOException {
 		String action = this.parser.getAction();
 		String formDo = this.parser.getFormDo();
 		if ((action == null || action.isEmpty()) && (formDo == null || formDo.isEmpty())) {

@@ -12,13 +12,13 @@ import javax.faces.context.FacesContext;
  *
  * @author Lukas Rychtecky
  */
-public class Presenter {
+abstract public class AbstractPresenter {
 
 	protected FacesContext context;
 	protected Linker linker;
 	private IFacade facade = null;
 
-	public Presenter(FacesContext context) {
+	public AbstractPresenter(FacesContext context) {
 		this.context = context;
 
 		String className = this.getClass().getSimpleName();

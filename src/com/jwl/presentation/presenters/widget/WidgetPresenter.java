@@ -2,7 +2,7 @@ package com.jwl.presentation.presenters.widget;
 
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
-import com.jwl.presentation.core.Presenter;
+import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.util.html.component.HtmlActionForm;
 import com.jwl.util.html.component.HtmlDivCommandButton;
 import com.jwl.util.html.component.HtmlDivInputText;
@@ -19,13 +19,13 @@ import javax.faces.context.FacesContext;
  *
  * @author Lukas Rychtecky
  */
-public class WidgetPresenter extends Presenter {
+public class WidgetPresenter extends AbstractPresenter {
 
-	private WidgetRenderer renderer;
+	private Renderer renderer;
 
 	public WidgetPresenter(FacesContext context) {
 		super(context);
-		this.renderer = new WidgetRenderer(this.context, super.linker);
+		this.renderer = new Renderer(this.context, super.linker);
 	}
 
 	@Override
@@ -44,14 +44,13 @@ public class WidgetPresenter extends Presenter {
 		try {
 			message.encodeAll(this.context);
 		} catch (IOException ex) {
-			Logger.getLogger(WidgetPresenter.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
 	private void createForm() {
 
 		HtmlActionForm form = new HtmlActionForm();
-		form.setEnctype("application/x-www-form-urlencoded");
 		form.setAction(this.buildFormLink("formValid"));
 
 		HtmlPanelGrid table = new HtmlPanelGrid();
@@ -68,7 +67,7 @@ public class WidgetPresenter extends Presenter {
 		try {
 			form.encodeAll(context);
 		} catch (IOException ex) {
-			Logger.getLogger(WidgetPresenter.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

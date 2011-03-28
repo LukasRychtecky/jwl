@@ -1,7 +1,6 @@
 package com.jwl.presentation.presenters.widget;
 
 import com.jwl.presentation.core.Linker;
-import com.jwl.presentation.core.Renderer;
 import java.io.IOException;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
@@ -11,9 +10,9 @@ import javax.faces.context.FacesContext;
  *
  * @author Lukas Rychtecky
  */
-public class WidgetRenderer extends Renderer {
+public class Renderer extends com.jwl.presentation.core.Renderer {
 
-	public WidgetRenderer(FacesContext context, Linker linker) {
+	public Renderer(FacesContext context, Linker linker) {
 		super(context, linker);
 	}
 
