@@ -125,7 +125,7 @@ public class ArticleStateRecognizer {
 			return ArticleActions.FORUM_TOPIC_LIST;
 		} else if (actionParameter.equalsIgnoreCase(ArticleActions.FORUM_TOPIC_CREATE)) {
 			return ArticleActions.FORUM_TOPIC_CREATE;
-		}else {
+		} else {
 			return ArticleActions.UNKNOWN;
 		}
 	}

@@ -191,6 +191,11 @@ thead.jwl-tableHearderOfArticles a:hover {
     margin-top: 3px;
     margin-bottom: 14px;
 }
+.jwl-view-tags a {
+	margin: 0px 5px 0px 0px;
+    padding: 0px 0px 0px 15px;
+    background: url('img/tag-small-icon.png') no-repeat left 2px;
+}
 
 .jwl-view-link-back, .jwl-view-link-edit, .jwl-view-link-attach {
     float: left;

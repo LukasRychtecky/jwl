@@ -45,20 +45,31 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 	}
 
 	private void encodeTags(Set<String> tags) throws IOException {
-		super.encodeDivClassStart(JWLStyleClass.VIEW_TAGS);
-		super.getHtmlTextComponent(tags.toString()).encodeAll(context);
-		super.encodeDivEnd();
+		if (!tags.isEmpty()) {
+			super.encodeDivClassStart(JWLStyleClass.VIEW_TAGS);
+			for (String tag : tags) {
+				// TODO Refactoring to search articles with the same tag
+				/*HtmlLinkProperties properties = new HtmlLinkProperties();
+				properties.addParameter(...);
+				properties.setValue(tag);
+				super.getHtmlLinkComponent(properties).encodeAll(context);*/
+				super.encodePlainText("<span>" + tag + "</span>");
+			}
+			super.encodeDivEnd();
+		}
 	}
 	
 	private void encodeAttachments(Set<AttachmentTO> attachments) throws IOException {
-		super.encodeDivClassStart(JWLStyleClass.VIEW_ATTACHMENTS);
-		
-		String atts = "";
-		for (AttachmentTO att : attachments) {
-			atts += att.getTitle();
+		if (!attachments.isEmpty()) {
+			super.encodeDivClassStart(JWLStyleClass.VIEW_ATTACHMENTS);
+			for (AttachmentTO att : attachments) {
+				HtmlLinkProperties properties = new HtmlLinkProperties();
+				//properties.addParameter(JWLURLParameters.FILE_ACTION, att.getUniqueName());
+				properties.setValue(att.getTitle());
+				super.getHtmlLinkComponent(properties).encodeAll(context);
+			}
+			super.encodeDivEnd();
 		}
-		super.getHtmlTextComponent(atts).encodeAll(context);
-		super.encodeDivEnd();
 	}
 
 	protected void encodeCommonLinks(ArticleTO article) throws IOException {
@@ -140,7 +151,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		}
 
 		writer.write("<form action=\"\">");
-		super.encodeDivClassStart("stars");
+		super.encodeDivClassStart(JWLStyleClass.VIEW_STARS);
 		for (int i = 1; i < 11; i++) {
 			float sv = (float) i / 2;
 			if (i == sn) {
@@ -192,7 +203,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		properties.setValue(title);
 		properties.addParameter(JWLURLParameters.ARTICLE_TITLE, title);
 		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.VIEW);
-		// properties.addClass(JWLStyleClass.ACTION_BUTTON_STYLE);
+		// properties.addClass(JWLStyleClass.ACTION_BUTTON);
 		this.getHtmlLinkComponent(properties).encodeAll(context);
 	}
 	
