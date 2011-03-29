@@ -187,14 +187,37 @@ thead.jwl-tableHearderOfArticles a:hover {
     border-bottom: 1px dotted #CCCCCC;
 }
 
+.jwl-view-text {
+}
+
 .jwl-view-tags {
     margin-top: 3px;
-    margin-bottom: 14px;
+    padding-bottom: 4px;
+    border-bottom: 1px dotted #F5F5F5;
 }
-.jwl-view-tags a {
+/* Change 'span' to 'a' after refactoring where tag will link
+ to search articles with the same tag */
+.jwl-view-tags span { 
 	margin: 0px 5px 0px 0px;
     padding: 0px 0px 0px 15px;
-    background: url('img/tag-small-icon.png') no-repeat left 2px;
+    background: url('img/tag-small-icon.png') no-repeat left 1px;
+}
+
+.jwl-view-attachments {
+    margin-top: 3px;
+    padding-bottom: 4px;
+    border-bottom: 1px dotted #F5F5F5;
+}
+.jwl-view-attachments a {
+    margin: 0px 5px 0px 0px;
+    padding: 0px 0px 0px 15px;
+    background: url('img/General-Document-icon.png') no-repeat left center;
+}
+
+.jwl-view-stars {
+    margin-top: 3px;
+    margin-bottom: 5px;
+
 }
 
 .jwl-view-link-back, .jwl-view-link-edit, .jwl-view-link-attach {
@@ -214,6 +237,7 @@ thead.jwl-tableHearderOfArticles a:hover {
     float: left;
     width: 80px;
     margin-top: 9px;
+    margin-right: 5px;
 }
 
 .jwl-edit-titleLabel {
@@ -251,7 +275,7 @@ thead.jwl-tableHearderOfArticles a:hover {
     margin-bottom: 10px;
 }
 #jwl-edit-text {
-    margin-left: 80px;
+    margin-left: 85px;
     width: 490px;
 }
 
