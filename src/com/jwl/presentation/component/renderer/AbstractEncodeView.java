@@ -64,7 +64,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 			super.encodeDivClassStart(JWLStyleClass.VIEW_ATTACHMENTS);
 			for (AttachmentTO att : attachments) {
 				HtmlLinkProperties properties = new HtmlLinkProperties();
-				//properties.addParameter(JWLURLParameters.FILE_ACTION, att.getUniqueName());
+				properties.addParameter(JWLURLParameters.FILE_NAME, att.getUniqueName());
 				properties.setValue(att.getTitle());
 				super.getHtmlLinkComponent(properties).encodeAll(context);
 			}
