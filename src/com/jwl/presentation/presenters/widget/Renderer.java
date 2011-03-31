@@ -1,6 +1,7 @@
 package com.jwl.presentation.presenters.widget;
 
 import com.jwl.presentation.core.Linker;
+import com.jwl.util.html.component.HtmlDivCommandButton;
 import java.io.IOException;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
@@ -29,6 +30,12 @@ public class Renderer extends com.jwl.presentation.core.Renderer {
 		text.setValue("odkaz na detail");
 		link.getChildren().add(text);
 		link.encodeAll(context);
+
+		HtmlDivCommandButton submit = new HtmlDivCommandButton();
+		submit.setType("submit");
+		submit.setId("ajax");
+		submit.setValue("Click");
+		submit.encodeAll(context);
 	}
 
 	public void renderDetail() throws IOException {

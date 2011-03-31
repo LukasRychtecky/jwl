@@ -88,7 +88,10 @@
   </renderer>
  </render-kit>
  <lifecycle>
-       <phase-listener>com.jwl.presentation.component.knowledgeajax.KnowledgeAjaxPhaseListener</phase-listener>
-   </lifecycle>
+   <phase-listener>com.jwl.presentation.component.knowledgeajax.KnowledgeAjaxPhaseListener</phase-listener>
+</lifecycle>
+ <lifecycle>
+   <phase-listener>com.jwl.presentation.core.AjaxListener</phase-listener>
+</lifecycle>
 
 </faces-config>

@@ -98,6 +98,7 @@ public class AttachCSSAndJSFilter implements Filter {
 		List<String> scripts = new ArrayList<String>();
 		scripts.add(JWL_DIRECTORY + "jquery.js");
 		scripts.add(JWL_DIRECTORY + "jquery.livequery.js");
+		scripts.add(JWL_DIRECTORY + "jwlengine.js");
 		scripts.add(JWL_DIRECTORY + "markitup/jquery.markitup.js");
 		scripts.add(JWL_DIRECTORY + "markitup/sets/markdown/set.js");
 		scripts.add(JWL_DIRECTORY + "knowledgemanagement.js");
