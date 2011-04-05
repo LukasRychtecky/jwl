@@ -19,6 +19,7 @@ import com.jwl.presentation.administration.renderer.EncodeListing;
 import com.jwl.presentation.administration.renderer.EncodeMergeSuggestionList;
 import com.jwl.presentation.administration.renderer.EncodeMergeSuggestionView;
 import com.jwl.presentation.administration.renderer.EncodeTopicList;
+import com.jwl.presentation.administration.renderer.EncodeTopicView;
 import com.jwl.presentation.component.controller.JWLController;
 import com.jwl.presentation.component.renderer.EncodeCreate;
 import com.jwl.presentation.component.renderer.EncodeCreateTopic;
@@ -145,6 +146,9 @@ public class AdministrationController extends JWLController {
 				case FORUM_TOPIC_CREATE:
 					encoder = new EncodeCreateTopic(facade, id);
 					break;
+				case FORUM_TOPIC_VIEW:
+					encoder = new EncodeTopicView(facade, recognizer.getTopicId(), id, recognizer.isAnswering(), recognizer.getQuotePostId());
+					break;	
 				default:
 					encoder = new EncodeError();
 					encoder.addImplicitErrorFlashMessage();

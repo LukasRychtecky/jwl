@@ -1,5 +1,7 @@
 package com.jwl.integration.post;
 
+import java.util.List;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.transaction.Status;
@@ -52,6 +54,47 @@ public class PostDAO extends BaseDAO implements IPostDAO {
 			closeEntityManager(em);
 		}
 
+	}
+
+	@Override
+	public List<PostTO> getPosts(Integer topicId) throws DAOException {
+		EntityManager em = getEntityManager();
+		List<Post> result =null;
+		try{
+			Topic topic  = em.find(Topic.class, topicId);
+			result = topic.getPosts();
+		}catch(Exception e){
+			throw new DAOException(e);
+		}
+		return PostConverter.convertFromEntities(result);
+	}
+	
+	@Override
+	public void delete(Integer postId) throws DAOException{
+		UserTransaction ut = getUserTransaction();
+		boolean localTrans = false;	
+		EntityManager em = getEntityManager();
+		try {
+			if (ut.getStatus() == Status.STATUS_NO_TRANSACTION) {
+				ut.begin();
+				localTrans = true;
+			}
+			em.joinTransaction();
+			Post post = em.find(Post.class, postId);
+			em.remove(post);
+			if (localTrans) {
+				ut.commit();
+			}
+		} catch (Throwable e) {
+			try {
+				ut.rollback();
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+			throw new DAOException(e);
+		} finally{
+			closeEntityManager(em);
+		}
 	}
 
 }

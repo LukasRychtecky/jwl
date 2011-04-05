@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jwl.business.Environment;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ICloseForumTopicsUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -18,7 +19,7 @@ public class CloseForumTopicsUC extends AbstractUC implements
 
 	@Override
 	public void closeTopics(List<Integer> topicIds) throws ModelException {
-		// checkPermission(AccessPermissions.FORUM_DELETE_TOPIC);
+		checkPermission(AccessPermissions.FORUM_CLOSE_TOPIC);
 		ITopicDAO topicDAO = Environment.getDAOFactory().getTopicDAO();
 		try {
 			for (Integer id : topicIds) {

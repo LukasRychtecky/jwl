@@ -161,4 +161,16 @@ public class TopicDAO extends BaseDAO implements ITopicDAO {
 		
 	}
 
+	@Override
+	public TopicTO find(Integer id) throws DAOException {
+		EntityManager em =getEntityManager();
+		Topic topic = null;
+		try{
+			topic = em.find(Topic.class, id);
+		}catch(Exception e){
+			throw new DAOException(e);
+		}
+		return TopicConverter.convertFromEntity(topic);
+	}
+
 }

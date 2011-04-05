@@ -125,7 +125,18 @@ public class AttachCSSAndJSFilter implements Filter {
 		script = "<script type=\"text/javascript\">"
 			+ "$(document).ready(function()	{"
 			+ "$('#"
+			+ JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"
 			+ JWLElements.FORUM_TOPIC_TEXT.id
+			+ "').markItUp(mySettings);"
+			+ "});"
+			+ "</script>";
+		builder.insert(bodyBeginPosition, script);
+		
+		script = "<script type=\"text/javascript\">"
+			+ "$(document).ready(function()	{"
+			+ "$('#"
+			+ JWLElements.FORUM_POST_REPLY_FORM.id+"-"
+			+ JWLElements.FORUM_POST_TEXT.id
 			+ "').markItUp(mySettings);"
 			+ "});"
 			+ "</script>";

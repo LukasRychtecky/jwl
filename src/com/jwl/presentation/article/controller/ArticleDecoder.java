@@ -41,23 +41,36 @@ public class ArticleDecoder extends JWLDecoder {
 		if(isTopicCreateRequest()){
 			handleTopicCreate();
 		}
+		
+		if(isPostReplyRequest()){
+			handlePostReplyRequest();
+		}
 	}
 	
 	private void handleTopicCreate() throws ModelException{
 		TopicTO topic = new TopicTO();
-		String subject = map.get(JWLElements.FORUM_SUBJECT.id);
+		String subject = map.get(getFullKey(JWLElements.FORUM_SUBJECT.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id));
 		if(subject == ""){
 			throw new ModelException("Subject cannot be left empty");
 		}
 		topic.setTitle(subject);
 		PostTO post = new PostTO();
-		post.setText(map.get(JWLElements.FORUM_TOPIC_TEXT.id));
+		post.setText(map.get(getFullKey(JWLElements.FORUM_TOPIC_TEXT.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id)));
 		List<PostTO> posts =new ArrayList<PostTO>();
 		posts.add(post);
 		topic.setPosts(posts);
-		String id = map.get(JWLElements.FORUM_ARTICLE_ID.id);
+		String id = map.get(getFullKey(JWLElements.FORUM_ARTICLE_ID.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id));
 		ArticleId articleId = new ArticleId(new Integer(id));
 		this.facade.createForumTopic(topic, articleId);
+	}
+	
+	private void handlePostReplyRequest() throws ModelException{
+		PostTO post = new PostTO();
+		String text = map.get(getFullKey(JWLElements.FORUM_POST_TEXT.id, JWLElements.FORUM_POST_REPLY_FORM.id));
+		post.setText(text);
+		String id = map.get(getFullKey(JWLElements.FORUM_POST_TOPIC_ID.id, JWLElements.FORUM_POST_REPLY_FORM.id));
+		Integer postId = new Integer(id);
+		this.facade.addForumPost(post, postId);		
 	}
 
 	private ArticleTO getFilledArticle() {
@@ -102,6 +115,10 @@ public class ArticleDecoder extends JWLDecoder {
 	}
 	
 	private boolean isTopicCreateRequest(){
-		return map.containsKey(JWLElements.FORUM_TOPIC_CREATE.id);
+		return map.containsKey(getFullKey(JWLElements.FORUM_TOPIC_CREATE.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id));
+	}
+	
+	private boolean isPostReplyRequest(){
+		return map.containsKey(getFullKey(JWLElements.FORUM_POST_REPLY.id,JWLElements.FORUM_POST_REPLY_FORM.id));
 	}
 }
