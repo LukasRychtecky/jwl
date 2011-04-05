@@ -50,7 +50,7 @@ public class PostConverter {
 		Collections.sort(list, new Comparator<PostTO>() {
 			@Override
 			public int compare(PostTO arg0, PostTO arg1) {
-				return arg1.getCreated().compareTo(arg0.getCreated());
+				return arg0.getCreated().compareTo(arg1.getCreated());
 			}
 		});
 	}

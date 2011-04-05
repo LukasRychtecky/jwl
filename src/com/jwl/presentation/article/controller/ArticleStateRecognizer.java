@@ -86,8 +86,10 @@ public class ArticleStateRecognizer {
 			}
 		} else if (action.equals(ArticleActions.FORUM_TOPIC_LIST)) {			
 				state = ArticleStates.FORUM_TOPIC_LIST;
-		}else if (action.equals(ArticleActions.FORUM_TOPIC_CREATE)) {			
+		} else if (action.equals(ArticleActions.FORUM_TOPIC_CREATE)) {			
 			state = ArticleStates.FORUM_TOPIC_CREATE;
+		} else if (action.equals(ArticleActions.FORUM_TOPIC_VIEW)) {			
+			state = ArticleStates.FORUM_TOPIC_VIEW;
 		}
 		state = this.filterNotAllowedStates(state);
 		state = this.filterLockedStates(state);
@@ -100,6 +102,23 @@ public class ArticleStateRecognizer {
 
 	public HistoryId getHistoryId() {
 		return new HistoryId(Integer.parseInt(this.wikiURLParser.getHistoryId()), this.getArticleId());
+	}
+	
+	public Integer getTopicId(){
+		return new Integer(this.wikiURLParser.getTopicId());
+	}
+	
+	public boolean isAnswering(){ 
+		return this.wikiURLParser.containsAnswering();
+	}
+	
+	public Integer getQuotePostId(){
+		String param = this.wikiURLParser.getQuopteTopicId();
+		if(param == null){
+			return null;
+		}
+		Integer id = new Integer(param);
+		return id;
 	}
 
 	public String getAction() {
@@ -123,7 +142,9 @@ public class ArticleStateRecognizer {
 			return ArticleActions.FORUM_TOPIC_LIST;
 		} else if (actionParameter.equalsIgnoreCase(ArticleActions.FORUM_TOPIC_CREATE)) {
 			return ArticleActions.FORUM_TOPIC_CREATE;
-		}else {
+		} else if (actionParameter.equalsIgnoreCase(ArticleActions.FORUM_TOPIC_VIEW)) {
+			return ArticleActions.FORUM_TOPIC_VIEW;
+		} else {
 			return ArticleActions.UNKNOWN;
 		}
 	}

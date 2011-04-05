@@ -66,6 +66,22 @@ public class WikiURLParser extends URLParser {
 		return this.getURLParameter(JWLURLParameters.FILE_ACTION);
 	}
 	
+	public String getTopicId(){
+		return this.getURLParameter(JWLURLParameters.TOPIC_ID);
+	}
+	
+	public boolean containsAnswering(){
+		String answ = this.getURLParameter(JWLURLParameters.ANSWERING);
+		if(answ !=null){
+			return true;
+		}
+		return false;
+	}
+	
+	public String getQuopteTopicId(){
+		return this.getURLParameter(JWLURLParameters.QUOTE_POST_ID);
+	}
+	
 	public String getListPageNumber(){
 		return getURLParameter(JWLURLParameters.LIST_PAGE_NUMBER);
 	}

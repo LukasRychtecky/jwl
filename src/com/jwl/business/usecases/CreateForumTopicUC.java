@@ -7,6 +7,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.usecases.interfaces.ICreateForumTopicUC;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.exceptions.DAOException;
@@ -21,9 +22,9 @@ public class CreateForumTopicUC extends AbstractUC implements
 	@Override
 	public void createTopic(TopicTO topic, ArticleId articleId)
 			throws ModelException {
-		//checkPermission(AccessPermissions.FORUM_CREATE_TOPIC);
+		checkPermission(AccessPermissions.FORUM_CREATE_TOPIC);
 		try {
-			PostTO initialPost = new PostTO();
+			PostTO initialPost = topic.getPosts().get(0);
 			initialPost.setAuthor(Environment.getIdentity().getUserName());
 			initialPost.setCreated(new Date());
 			Integer topicId =factory.getTopicDAO().create(topic, articleId);

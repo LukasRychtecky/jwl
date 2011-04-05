@@ -20,12 +20,13 @@ public enum AccessPermissions {
 	ATTACHMENT_ADD ("Attachment", "add"),
 	ATTACHMENT_DELETE ("Attachment", "delete"),
 		SECURITY_IMPORT("Security", "import"),
-FORUM_VIEW ("Forum", "view"),
-	FORUM_CLOSE_TOPIC ("Forum", "close"),
-	FORUM_ADD_POST ("Forum", "addPost"),
-	FORUM_CREATE_TOPIC ("Forum", "createTopic"),
-	FORUM_DELETE_TOPIC ("Forum", "deleteTopic"),
-	FORUM_DELETE_POST ("Forum", "deletePost");
+	FORUM_VIEW ("Forum", "view"),
+	FORUM_CLOSE_TOPIC ("Forum", "close_topic"),
+	FORUM_ADD_POST ("Forum", "add_post"),
+	FORUM_CREATE_TOPIC ("Forum", "create_topic"),
+	FORUM_DELETE_TOPIC ("Forum", "delete_topic"),
+	FORUM_DELETE_POST ("Forum", "delete_post");
+	
 
 	private String context;
 	private String method;

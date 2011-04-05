@@ -70,12 +70,20 @@ public class JWLStyleClass {
 	public static final String FLASH_MESSAGE = FLASH_PREFIX +					"message";
 	
 	public static final String VIEW_STARS = JWL_PREFIX + "stars";
-	public static final String PAGE_BUTTON = JWL_PREFIX + "pageButton";
-	public static final String PAGE_TEXT = JWL_PREFIX + "pageText";
-	public static final String PAGE_BUTTONS_TABLE = JWL_PREFIX + "pageTable";
+	public static final String FORUM_PAGE_BUTTON = JWL_PREFIX + "forum-pageButton";
+	public static final String FORUM_PAGE_TEXT = JWL_PREFIX + "forum-pageText";
+	public static final String FORUM_PAGE_BUTTONS_TABLE = JWL_PREFIX + "forum-pageTable";
 	public static final String PANEL = JWL_PREFIX + "panel";
 	public static final String PANEL_HEADER = JWL_PREFIX + "panelHeader";
 	public static final String PANEL_BODY = JWL_PREFIX + "panelBody";
 	public static final String PANEL_ACTION_BUTTONS = JWL_PREFIX + "panelActionButtons";
+	public static final String FORUM_POST_HEADER = JWL_PREFIX + "forum-postHeader";
+	public static final String FORUM_POST_HEADER_TITLE = JWL_PREFIX + "forum-postHeaderTitle";
+	public static final String FORUM_POST_AUTHOR = JWL_PREFIX + "forum-postAuthor";
+	public static final String FORUM_INITIAL_POST = JWL_PREFIX + "forum-post"; 
+	public static final String FORUM_REPLIES = JWL_PREFIX + "forum-replies";
+	public static final String FORUM_REPLY_ACTIONS = JWL_PREFIX + "forum-replyActions";
+	public static final String FORUM_ACTIONS_FORM = JWL_PREFIX + "forum-actionsForm";
+	public static final String FORUM_REPLIES_DELETE = JWL_PREFIX + "forum-replies-delete";
 	
 }
