@@ -3,7 +3,7 @@
 [Maltska konv.]("Maltská konvence"#history)
 
 INTERNAL IMAGES
-![alt|link="clanek"|500px]("1.png")
+![alt|link="clanek"|500px]("fileTitle")
 
 
 <w:article
