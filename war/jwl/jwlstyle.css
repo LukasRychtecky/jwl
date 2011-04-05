@@ -133,7 +133,7 @@ a.jwl-createNewArticle {
 */
 table.jwl-tableOfArticles {
     width: 100%;
-    margin: .3em;
+    margin: 1.2em .3em .3em .3em;
     color: black;
 }
 
