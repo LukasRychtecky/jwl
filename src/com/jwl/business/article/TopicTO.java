@@ -40,20 +40,23 @@ public class TopicTO {
 	public void setPosts(List<PostTO> posts) {
 		this.posts = posts;
 	}
-	
-	public PostTO getOpeningPost(){
+
+	public PostTO getOpeningPost() {
 		return posts.get(0);
 	}
-	
-	public boolean hasReplies(){
-		if(posts.size()>1){
+
+	public boolean hasReplies() {
+		if (posts.size() > 1) {
 			return true;
 		}
 		return false;
 	}
-	
-	public PostTO getLastReply(){
-		return posts.get(posts.size()-1);
+
+	public PostTO getLastReply() {
+		if (posts.size() > 2) {
+			return posts.get(posts.size() - 2);
+		}
+		return null;
 	}
 
 }

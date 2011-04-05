@@ -7,15 +7,18 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
+import com.jwl.business.article.PostTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
+import com.jwl.business.usecases.AddForumPostUC;
 import com.jwl.business.usecases.AddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.CreateForumTopicUC;
 import com.jwl.business.usecases.DeleteArticleUC;
+import com.jwl.business.usecases.DeleteForumPostUC;
 import com.jwl.business.usecases.DeleteForumTopicsUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
 import com.jwl.business.usecases.FindArticlesUC;
@@ -26,6 +29,7 @@ import com.jwl.business.usecases.GetFileUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.GetMergeSuggestionsUC;
+import com.jwl.business.usecases.GetTopicUC;
 import com.jwl.business.usecases.ImportACLUC;
 import com.jwl.business.usecases.GetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.CloseForumTopicsUC;
@@ -38,10 +42,12 @@ import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.UploadAttachmentUC;
+import com.jwl.business.usecases.interfaces.IAddForumPostUC;
 import com.jwl.business.usecases.interfaces.ICloseForumTopicsUC;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.ICreateForumTopicUC;
 import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
+import com.jwl.business.usecases.interfaces.IDeleteForumPostUC;
 import com.jwl.business.usecases.interfaces.IDeleteForumTopicsUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
@@ -52,6 +58,7 @@ import com.jwl.business.usecases.interfaces.IGetFileUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.IGetMergeSuggestionsUC;
+import com.jwl.business.usecases.interfaces.IGetTopicUC;
 import com.jwl.business.usecases.interfaces.IImportACLUC;
 import com.jwl.business.usecases.interfaces.IGetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.interfaces.IIncreaseLivablityUC;
@@ -281,4 +288,24 @@ public class Facade implements IFacade {
 		uc.openTopics(topicIds);
 		
 	}
+
+	@Override
+	public TopicTO getTopic(Integer topicId) throws ModelException {
+		IGetTopicUC uc = new GetTopicUC(Environment.getDAOFactory());
+		return uc.getTopic(topicId);
+	}
+
+	@Override
+	public void deleteForumPost(Integer postId) throws ModelException {
+		IDeleteForumPostUC uc = new DeleteForumPostUC(Environment.getDAOFactory());
+		uc.deletePost(postId);
+	}
+
+	@Override
+	public void addForumPost(PostTO post, Integer topicId)
+			throws ModelException {
+		IAddForumPostUC uc = new AddForumPostUC(Environment.getDAOFactory());
+		uc.add(post, topicId);
+	}
+ 
 }

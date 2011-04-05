@@ -10,6 +10,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
+import com.jwl.business.article.PostTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
@@ -105,4 +106,9 @@ public interface IFacade {
 	
 	public void openForumTopics(List<Integer> topicIds) throws ModelException;
 	
+	public TopicTO getTopic(Integer topicId) throws ModelException;
+	
+	public void deleteForumPost(Integer postId) throws ModelException;
+	
+	public void addForumPost(PostTO post, Integer topicId) throws ModelException;
 }
