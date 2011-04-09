@@ -46,6 +46,7 @@ public class UpdateArticleUC extends AbstractUC implements IUpdateArticleUC {
 				article.removeAllTags();
 				article.setEditCount(article.getEditCount() + 1);
 				article.setTitle(articleFromDB.getTitle());
+				article.setAttachments(articleFromDB.getAttachments());
 				super.factory.getArticleDAO().update(article);
 			}
 

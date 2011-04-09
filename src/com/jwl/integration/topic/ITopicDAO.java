@@ -14,4 +14,6 @@ public interface ITopicDAO {
 	
 	public void open(Integer id) throws DAOException;
 	
+	public TopicTO find(Integer id) throws DAOException;
+	
 }

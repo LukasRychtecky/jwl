@@ -9,7 +9,10 @@ import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlInputHidden;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputTextarea;
+import javax.faces.component.html.HtmlOutputLabel;
+import javax.faces.component.html.HtmlPanelGrid;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
@@ -89,25 +92,32 @@ public class EncodeCreateTopic extends JWLEncoder{
 	}
 	
 	protected void encodePanelBody(List<UIComponent> panelComponets) throws IOException{
-		panelComponets.add(encodeLabelForSubject());
 		panelComponets.add(encodeSubject());
 		panelComponets.add(encodeText());
 		panelComponets.add(encodeHiddenArticleId());
 	}
 	
 	protected UIComponent encodeSubject() throws IOException {
-		return getHtmlInputComponent("",JWLElements.FORUM_SUBJECT ,
-				JWLStyleClass.EDIT_TITLE_INPUT);
+		HtmlInputText livabilityInput = new HtmlInputText();
+		livabilityInput.setSize(4);
+		livabilityInput.setId(JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"+JWLElements.FORUM_SUBJECT.id);
+		HtmlOutputLabel labelForFileName = new HtmlOutputLabel();
+		//labelForFileName.setDivStyleClass(styleClass);
+		labelForFileName.setFor(JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"+JWLElements.FORUM_SUBJECT.id);
+		labelForFileName.setValue("Subject");
+		HtmlPanelGrid table= new HtmlPanelGrid();
+		table.setColumns(2);
+		table.setCellpadding("0");
+		table.setCellspacing("0");
+		List<UIComponent> tableData=table.getChildren();
+		tableData.add(labelForFileName);
+		tableData.add(livabilityInput);
+		return table;
 	}
-	
-	protected UIComponent encodeLabelForSubject() throws IOException {
-		return getHtmlLabelComponent(JWLElements.FORUM_SUBJECT.value, JWLElements.FORUM_SUBJECT.id,
-				JWLStyleClass.EDIT_LABEL_FOR_TITLE);
-	}
-	
+		
 	protected UIComponent encodeHiddenArticleId() {
 		HtmlInputHidden hiddenArticleId = new HtmlInputHidden();
-		hiddenArticleId.setId(JWLElements.FORUM_ARTICLE_ID.id);
+		hiddenArticleId.setId(JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"+JWLElements.FORUM_ARTICLE_ID.id);
 		hiddenArticleId.setValue(articleId.getId());
 		return hiddenArticleId;
 	}
@@ -116,7 +126,7 @@ public class EncodeCreateTopic extends JWLEncoder{
 		HtmlInputTextarea textArea = new HtmlInputTextarea();
 		textArea.setRows(15);
 		textArea.setCols(40);
-		textArea.setId(JWLElements.FORUM_TOPIC_TEXT.id);
+		textArea.setId(JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"+JWLElements.FORUM_TOPIC_TEXT.id);
 		return textArea;
 	}
 	
@@ -124,7 +134,7 @@ public class EncodeCreateTopic extends JWLEncoder{
 		HtmlCommandButton button = new HtmlCommandButton();
 		button.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		button.setType("submit");
-		button.setId(JWLElements.FORUM_TOPIC_CREATE.id);
+		button.setId(JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"+JWLElements.FORUM_TOPIC_CREATE.id);
 		button.setValue(JWLElements.FORUM_TOPIC_CREATE.value);
 		return button;		
 	}
@@ -133,7 +143,7 @@ public class EncodeCreateTopic extends JWLEncoder{
 		HtmlCommandButton button = new HtmlCommandButton();
 		//button.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		button.setType("submit");
-		button.setId(JWLElements.FORUM_TOPIC_CANCEL.id);
+		button.setId(JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"+JWLElements.FORUM_TOPIC_CANCEL.id);
 		button.setValue(JWLElements.FORUM_TOPIC_CANCEL.value);
 		return button;		
 	}

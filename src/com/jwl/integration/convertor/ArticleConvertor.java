@@ -7,10 +7,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.jwl.business.Facade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
+import com.jwl.business.exceptions.ModelException;
 import com.jwl.integration.entity.Article;
+import com.jwl.integration.entity.Attachment;
 import com.jwl.integration.entity.Tag;
+import com.jwl.presentation.global.Global;
 
 public class ArticleConvertor {
 
@@ -48,16 +53,19 @@ public class ArticleConvertor {
 		article.setRatings(RatingConvertor.convertFromEntities(entity
 				.getRatings()));
 
-		article.setKeyWords(KeyWordConvertor.fromEntities(entity.getKeyWords()));
+		article
+				.setKeyWords(KeyWordConvertor
+						.fromEntities(entity.getKeyWords()));
 
 		// for (RoleEntity roleEntity : entity.getRoles()) {
 		// article.addRole(RoleConvertor.toObject(roleEntity));
 		// }
-		
+
 		article.setLivability(entity.getLivability());
-		
-		article.setTopics(TopicConverter.convertFromEntities(entity.getTopics()));
-		
+
+		article.setTopics(TopicConverter
+				.convertFromEntities(entity.getTopics()));
+
 		return article;
 	}
 
@@ -76,13 +84,24 @@ public class ArticleConvertor {
 		}
 
 		Set<Tag> tags = new HashSet<Tag>();
-
 		for (String tag : article.getTags()) {
 			tags.add(new Tag(tag));
 		}
-
 		entity.setTags(tags);
-		
+
+		Set<Attachment> atts = new HashSet<Attachment>();
+		for (AttachmentTO attTO : article.getAttachments()) {
+			String title = attTO.getTitle();
+			String origName = attTO.getOriginalName();
+			String uniqeName = attTO.getUniqueName();
+			String desc = attTO.getDescription();
+			Attachment att = new Attachment(title, origName, uniqeName, desc);
+			att.setId(attTO.getId());
+			atts.add(att);
+			//atts.add(new Attachment(att.getTitle(), att.getOriginalName(), att.getUniqueName(), att.getDescription()));
+		}
+		entity.setAttachments(atts);
+
 		entity.setLivability(article.getLivability());
 		return entity;
 	}

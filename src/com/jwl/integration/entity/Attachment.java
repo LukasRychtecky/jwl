@@ -52,6 +52,14 @@ public class Attachment extends BaseEntity implements java.io.Serializable {
 		this.originalFileName = originalFileName;
 		this.uniqueFileName = uniqueFileName;
 	}
+	
+	public Attachment(String title, String originalFileName,
+			String uniqueFileName, String description) {
+		this.title = title;
+		this.originalFileName = originalFileName;
+		this.uniqueFileName = uniqueFileName;
+		this.description = description;
+	}
 
 	public Attachment(String title, String originalFileName,
 			String uniqueFileName, String description, Set<Article> articles) {

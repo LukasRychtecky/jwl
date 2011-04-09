@@ -36,34 +36,32 @@ public class AdministrationDecoder implements JWLDecoder {
 		if (isMergeIgnoreRequest()) {
 			List<ArticleIdPair> idPairs = getIdPairs();
 			facade.addToMergeSuggestionsIgnored(idPairs);
-		}
-		if (isDeadDeleteRequest()) {
+		} else if (isDeadDeleteRequest()) {
 			List<ArticleId> ids = getArticleIds();
 			for (ArticleId id : ids) {
 				facade.deleteArticle(id);
 			}
-		}
-
-		if (isLivabilityIncreaseRequest()) {
+		} else if (isLivabilityIncreaseRequest()) {
 			List<ArticleId> ids = getArticleIds();
 			double increase = getLivabilityIncreaseValue();
 			facade.increaseLivability(ids, increase);
-		}
-
-		if (isDeleteTopicRequest()) {
+		} else if (isDeleteTopicRequest()) {
 			handleDeleteTopic();
-		}
-		
-		if(isCloseTopicRequest()){
+		} else if(isCloseTopicRequest()){
 			handleCloseTopic();
-		}
-		if(isOpenTopicRequest()){
+		} else if(isOpenTopicRequest()){
 			handleOpenTopic();
+		} else {
+			Integer postId = getPostAdminRequestId();
+			if(postId!=null){
+				handleTopicViewAdmin(postId);
+			}
 		}
 
 	}
 
 	private boolean isMergeIgnoreRequest() {
+<<<<<<< HEAD
 		return parameterMap.containsKey(JWLElements.KNOWLEDGE_IGNORE.id);
 	}
 
@@ -85,12 +83,62 @@ public class AdministrationDecoder implements JWLDecoder {
 	
 	private boolean isOpenTopicRequest() {
 		return parameterMap.containsKey(JWLElements.FORUM_TOPIC_OPEN.id);
+=======
+		return map.containsKey(getFullKey(JWLElements.KNOWLEDGE_IGNORE.id, JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id));
+	}
+
+	private boolean isDeadDeleteRequest() {
+		return map.containsKey(getFullKey(JWLElements.KNOWLEDGE_DEAD_DELETE.id, JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id));
+	}
+
+	private boolean isLivabilityIncreaseRequest() {
+		return map.containsKey(getFullKey(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id, JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id));
+	}
+
+	private boolean isDeleteTopicRequest() {
+		return map.containsKey(getFullKey(JWLElements.FORUM_TOPIC_DELETE.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id));
+	}
+	
+	private boolean isCloseTopicRequest() {
+		return map.containsKey(getFullKey(JWLElements.FORUM_TOPIC_CLOSE.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id));
+	}
+	
+	private boolean isOpenTopicRequest() {
+		return map.containsKey(getFullKey(JWLElements.FORUM_TOPIC_OPEN.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id));
+	}
+	
+	private Integer getPostAdminRequestId(){
+		Integer result = null;
+		for(Entry<String, String> e: map.entrySet()){
+			if(e.getKey().contains(JWLElements.FORUM_TOPIC_ADMIN_FORM.id)){
+				String id = e.getKey();
+				String rest = id.substring(JWLElements.FORUM_TOPIC_ADMIN_FORM.id.length()+1);
+				boolean isNumber = true;
+				for(int i =0; i<rest.length(); i++){
+					if(!Character.isDigit(rest.charAt(i))){
+						isNumber=false;
+						break;
+					}
+				}
+				if(isNumber){
+					result = new Integer(rest);
+					break;
+				}
+			}
+		}
+		return result;
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 	}
 
 	private List<ArticleIdPair> getIdPairs() {
 		List<ArticleIdPair> result = new ArrayList<ArticleIdPair>();
+<<<<<<< HEAD
 		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id)) {
+=======
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(getFullKey(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id, JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id))) {
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 				ArticleIdPair pair = getPairFromCheckboxName(e.getKey());
 				result.add(pair);
 			}
@@ -100,7 +148,7 @@ public class AdministrationDecoder implements JWLDecoder {
 
 	private ArticleIdPair getPairFromCheckboxName(String checkboxName) {
 		String pairPart = checkboxName
-				.substring(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id.length());
+				.substring(getFullKey(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id, JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id).length());
 		int delimIdex = pairPart.indexOf('-');
 		String firstId = pairPart.substring(0, delimIdex);
 		String secondId = pairPart.substring(delimIdex + 1);
@@ -111,8 +159,13 @@ public class AdministrationDecoder implements JWLDecoder {
 
 	private List<ArticleId> getArticleIds() {
 		List<ArticleId> result = new ArrayList<ArticleId>();
+<<<<<<< HEAD
 		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.KNOWLEDGE_ID_CHECKBOX.id)) {
+=======
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(getFullKey(JWLElements.KNOWLEDGE_ID_CHECKBOX.id, JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id))) {
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 				ArticleId id = getIdFromCheckbox(e.getKey());
 				result.add(id);
 			}
@@ -122,14 +175,18 @@ public class AdministrationDecoder implements JWLDecoder {
 
 	private ArticleId getIdFromCheckbox(String chechboxName) {
 		String idPart = chechboxName
-				.substring(JWLElements.KNOWLEDGE_ID_CHECKBOX.id.length());
+				.substring(getFullKey(JWLElements.KNOWLEDGE_ID_CHECKBOX.id, JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id).length());
 		int id = Integer.parseInt(idPart);
 		return new ArticleId(id);
 	}
 
 	private double getLivabilityIncreaseValue()
 			throws BreakBusinessRuleException {
+<<<<<<< HEAD
 		String value = parameterMap.get(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
+=======
+		String value = map.get(getFullKey(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id,JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id));
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 		if (value == null || value == "") {
 			throw new BreakBusinessRuleException("Livability must be filled");
 		}
@@ -145,8 +202,13 @@ public class AdministrationDecoder implements JWLDecoder {
 
 	private void handleDeleteTopic() throws ModelException {
 		List<Integer> topicIds = new ArrayList<Integer>();
+<<<<<<< HEAD
 		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
+=======
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(getFullKey(JWLElements.FORUM_TOPIC_CHBX.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id))) {
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 				int topicId = getTopicIdFromCheckbox(e.getKey());
 				topicIds.add(topicId);
 			}
@@ -158,8 +220,13 @@ public class AdministrationDecoder implements JWLDecoder {
 	
 	private void handleCloseTopic() throws ModelException {
 		List<Integer> topicIds = new ArrayList<Integer>();
+<<<<<<< HEAD
 		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
+=======
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(getFullKey(JWLElements.FORUM_TOPIC_CHBX.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id))) {
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 				int topicId = getTopicIdFromCheckbox(e.getKey());
 				topicIds.add(topicId);
 			}
@@ -171,8 +238,13 @@ public class AdministrationDecoder implements JWLDecoder {
 	
 	private void handleOpenTopic() throws ModelException {
 		List<Integer> topicIds = new ArrayList<Integer>();
+<<<<<<< HEAD
 		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
+=======
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getKey().contains(getFullKey(JWLElements.FORUM_TOPIC_CHBX.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id))) {
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 				int topicId = getTopicIdFromCheckbox(e.getKey());
 				topicIds.add(topicId);
 			}
@@ -183,9 +255,15 @@ public class AdministrationDecoder implements JWLDecoder {
 	}
 
 	private int getTopicIdFromCheckbox(String name) {
-		String idPart = name.substring(JWLElements.FORUM_TOPIC_CHBX.id
+		String idPart = name.substring(getFullKey(JWLElements.FORUM_TOPIC_CHBX.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id)
 				.length()+1);
 		return Integer.parseInt(idPart);
+	}
+	
+	private void handleTopicViewAdmin(int postId) throws ModelException{
+		if(map.containsKey(getFullKey(JWLElements.FORUM_TOPIC_DELETE.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id+"-"+postId))){
+			facade.deleteForumPost(postId);
+		}
 	}
 
 }

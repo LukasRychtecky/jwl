@@ -49,6 +49,7 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id);
 		form.setEnctype("application/x-www-form-urlencoded");
+		form.setPrependId(true);
 		form.setAction(this.getFormAction());
 		List<UIComponent> formData = form.getChildren();
 		encodePanel(formData, articlePairs);
@@ -107,7 +108,7 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 			return;
 		}
 		HtmlSelectBooleanCheckbox chbx = new HtmlSelectBooleanCheckbox();
-		chbx.setId(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id+articlePair.getArticle1().getId().getId().intValue()+"-"+articlePair.getArticle2().getId().getId().intValue());
+		chbx.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id+"-"+JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id+articlePair.getArticle1().getId().getId().intValue()+"-"+articlePair.getArticle2().getId().getId().intValue());
 		articlesTableData.add(chbx);
 		encodeArticleRowData(articlePair.getArticle1(), articlesTableData);
 		encodeArticleRowData(articlePair.getArticle2(), articlesTableData);
@@ -236,7 +237,7 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 		HtmlDivCommandButton button = new HtmlDivCommandButton();
 		button.setDivStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		button.setType("submit");
-		button.setId(JWLElements.KNOWLEDGE_IGNORE.id);
+		button.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id+"-"+JWLElements.KNOWLEDGE_IGNORE.id);
 		button.setValue(JWLElements.KNOWLEDGE_IGNORE.value);
 		return button;
 	}

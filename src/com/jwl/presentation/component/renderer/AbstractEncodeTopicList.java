@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 
 import com.jwl.business.IPaginator;
@@ -29,8 +30,8 @@ import com.jwl.util.html.url.URLBuilder;
 public abstract class AbstractEncodeTopicList extends JWLEncoder {
 
 	protected ArticleId articleId;
-	protected final String[] headers = new String[] { "Topic", "Author",
-			"Created", "Replies", "Last post" };
+	protected final String[] headers = new String[] { "", "Topic", "Author",
+			"Created", "Replies" };
 
 	public AbstractEncodeTopicList(ArticleId articleId) {
 		this.articleId = articleId;
@@ -39,8 +40,9 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 	protected List<String> getHeaderNames() {
 		return Arrays.asList(this.headers);
 	}
-	
-	protected void encodeForm(IPaginator<TopicTO> paginator, List<String> headers) throws IOException{
+
+	protected void encodeForm(IPaginator<TopicTO> paginator,
+			List<String> headers) throws IOException {
 		paginator.setUpPaginator();
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id);
@@ -51,8 +53,10 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 		encodePanelActions(formData);
 		form.encodeAll(context);
 	}
-	
-	protected void encodePanel(List<UIComponent>formData, IPaginator<TopicTO> paginator, List<String> headers) throws IOException{
+
+	protected void encodePanel(List<UIComponent> formData,
+			IPaginator<TopicTO> paginator, List<String> headers)
+			throws IOException {
 		HtmlDiv panel = new HtmlDiv();
 		panel.setStyleClass(JWLStyleClass.PANEL);
 		HtmlDiv panelHeader = new HtmlDiv();
@@ -63,18 +67,20 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 		HtmlPanelGrid table = encodeListing(paginator, headers);
 		panelBody.getChildren().add(table);
 		panelBody.getChildren().add(getPageButtonsComponent(paginator));
-		List<UIComponent> panelChildern =  panel.getChildren();
+		List<UIComponent> panelChildern = panel.getChildren();
 		panelChildern.add(panelHeader);
 		panelChildern.add(panelBody);
 		formData.add(panel);
 	}
-	
-	protected void encodePanelActions(List<UIComponent> formData){
+
+	protected void encodePanelActions(List<UIComponent> formData) {
 		HtmlDiv buttonsPanel = new HtmlDiv();
 		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
 		panelChildren.add(this.getArticleLinkComponent(articleId));
-		panelChildren.add(this.getCreateTopicLinkComponent(articleId));
+		if(hasCreateTopicPermission()){
+			panelChildren.add(this.getCreateTopicLinkComponent(articleId));
+		}
 		formData.add(buttonsPanel);
 	}
 
@@ -86,15 +92,7 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 		for (TopicTO topic : topics) {
 			this.encodeRowData(topic, articlesTableData);
 		}
-		return table;	
-	/*	if (paginator.hasPrevious()) {
-			this.encodeLinkToFirstPage(paginator);
-			this.encodeLinkToPreviousPage(paginator);
-		}
-		if (paginator.hasNext()) {
-			this.encodeLinkToNextPage(paginator);
-		}
-		this.encodeLinkToLastPage(paginator); */
+		return table;
 	}
 
 	private HtmlPanelGrid getTable(List<String> headers) {
@@ -108,16 +106,18 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 		return table;
 	}
 
-	protected void encodeRowData(TopicTO topic,
-			List<UIComponent> topicTableData) {
-
-		topicTableData.add(this.getTitleComponent(topic.getTitle()));
-		topicTableData.add(this.getAuthorComponent(topic.getOpeningPost().getAuthor()));		
-		topicTableData.add(this.getCreatedComponent(topic.getOpeningPost().getCreated().toString()));
-		topicTableData.add(this.getRepliesCountComponent(topic.getPosts().size()-1));
-		topicTableData.add(this.getLatPostComponent(topic.getLastReply()));
+	protected void encodeRowData(TopicTO topic, List<UIComponent> topicTableData)
+			throws IOException {
+		topicTableData.add(this.getServiceColumn(topic));
+		topicTableData.add(this.getTitleComponent(topic.getTitle(), topic.getId()));
+		topicTableData.add(this.getAuthorComponent(topic.getOpeningPost()
+				.getAuthor()));
+		topicTableData.add(this.getCreatedComponent(topic.getOpeningPost()
+				.getCreated().toString()));
+		topicTableData.add(this.getRepliesCountComponent(topic.getPosts()
+				.size() - 1));
+		//topicTableData.add(this.getLastPostComponent(topic.getLastReply()));
 	}
-
 
 	protected UIComponent encodeActionLink(int articleId, String title,
 			String action) {
@@ -143,18 +143,29 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		return this.getHtmlLinkComponent(properties);
 	}
-	
+
 	protected UIComponent getCreateTopicLinkComponent(ArticleId articleId) {
 		HtmlLinkProperties properties = new HtmlLinkProperties();
 		properties.setValue("Create topic");
 		properties.addParameter(JWLURLParameters.ARTICLE_ID, articleId.getId());
-		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_CREATE);
+		properties.addParameter(JWLURLParameters.ACTION,
+				ArticleActions.FORUM_TOPIC_CREATE);
 		properties.addClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		return this.getHtmlLinkComponent(properties);
 	}
-	
-	private UIComponent getTitleComponent(String title) {
-		return this.getHtmlTextComponent(title);
+
+	protected UIComponent getServiceColumn(TopicTO topic) throws IOException {		
+		if (topic.isClosed()) {
+			return getImage("/SeamWiki/jwl/lock.png", 16, 16);
+		} else {
+			HtmlFreeOutput out = new HtmlFreeOutput();
+			out.setFreeOutput(" ");
+			return out;
+		}	
+	}
+
+	private UIComponent getTitleComponent(String title, Integer topicId) {
+		return this.getTopicLink(topicId, title);
 	}
 
 	private UIComponent getAuthorComponent(String editorValue) {
@@ -168,138 +179,150 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 	private UIComponent getCreatedComponent(String createdValue) {
 		return this.getHtmlTextComponent(createdValue);
 	}
-	
-	private UIComponent getLatPostComponent(PostTO lastPost) {
-		return this.getHtmlTextComponent(lastPost.getAuthor());
+
+	private UIComponent getLastPostComponent(PostTO lastPost) throws IOException {
+		if (lastPost != null) {
+			HtmlFreeOutput out = new HtmlFreeOutput();
+			HtmlDiv createdDiv = new HtmlDiv();
+			createdDiv.setValue(lastPost.getCreated());
+			HtmlDiv authorDiv = new HtmlDiv();
+			authorDiv.setValue(lastPost.getAuthor());
+			List<UIComponent> outChildren = out.getChildren();
+			outChildren.add(createdDiv);
+			outChildren.add(authorDiv);
+			outChildren.add(getImageLink("", "/SeamWiki/jwl/page_white_go.png", 16, 16));
+			return out;
+		}
+		return this.getHtmlTextComponent("-");
 	}
 
-	private boolean hasViewPermission(ArticleId id) {
-		return this.hasPermission(AccessPermissions.ARTICLE_VIEW,id);
-	}
-	
-	private boolean hasCreateTopicPermission(){
+	private boolean hasCreateTopicPermission() {
 		return this.hasPermission(AccessPermissions.FORUM_CREATE_TOPIC);
 	}
-	
-	private UIComponent getPageButtonsComponent(IPaginator<TopicTO> paginator) throws IOException{
-		StringBuilder sb = new StringBuilder();
-		sb.append("<table class=\""+JWLStyleClass.PAGE_BUTTONS_TABLE+"\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" >");
-		sb.append("<tbody><tr>");
-		sb.append("<td class=\""+JWLStyleClass.PAGE_BUTTON+"\">");
-		sb.append(encodeLinkToFirstPage(paginator));
-		sb.append("</td>");
-		sb.append("<td class=\""+JWLStyleClass.PAGE_BUTTON+"\">");
-		sb.append(encodeLinkToPreviousPage(paginator));
-		sb.append("</td>");
-		sb.append("<td class=\""+JWLStyleClass.PAGE_TEXT+"\">");
-		sb.append(encodePageText(paginator));
-		sb.append("</td>");
-		sb.append("<td class=\""+JWLStyleClass.PAGE_BUTTON+"\">");
-		sb.append(encodeLinkToNextPage(paginator));
-		sb.append("</td>");
-		sb.append("<td class=\""+JWLStyleClass.PAGE_BUTTON+"\">");
-		sb.append(encodeLinkToLastPage(paginator));
-		sb.append("</td></tr>");
-		sb.append("</tbody>");
-		sb.append("</table>");	
-		HtmlFreeOutput component = new HtmlFreeOutput();
-		component.setFreeOutput(sb.toString());
-		return component;
+
+	private UIComponent getPageButtonsComponent(IPaginator<TopicTO> paginator)
+			throws IOException {
+		HtmlPanelGrid table = new HtmlPanelGrid();
+		table.setStyleClass(JWLStyleClass.FORUM_PAGE_BUTTONS_TABLE);
+		table.setColumns(5);
+		table.setColumnClasses(JWLStyleClass.FORUM_PAGE_BUTTON+","+JWLStyleClass.FORUM_PAGE_BUTTON+","+JWLStyleClass.FORUM_PAGE_TEXT+","+JWLStyleClass.FORUM_PAGE_BUTTON+","+JWLStyleClass.FORUM_PAGE_BUTTON);
+		List<UIComponent> tableData = table.getChildren();
+		tableData.add(getLinkToFirstPage(paginator));
+		tableData.add(getLinkToPreviousPage(paginator));
+		tableData.add(getPageText(paginator));
+		tableData.add(getLinkToNextPage(paginator));
+		tableData.add(getLinkToLastPage(paginator));
+		return table;
 	}
 
-	private String encodeLinkToNextPage(IPaginator<TopicTO> paginator)
+	private UIComponent getLinkToNextPage(IPaginator<TopicTO> paginator)
 			throws IOException {
-		if(!paginator.hasNext()){
-			return encodeImage("/SeamWiki/jwl/blank.gif", 13, 11);
+		if (!paginator.hasNext()) {
+			return getImage("/SeamWiki/jwl/blank.gif", 13, 11);
 		}
-		
+
 		WikiURLParser parser = new WikiURLParser();
 		String articleId = parser.getArticleId();
-		Map<String,String> attributes = new HashMap<String, String>();
+		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.putAll(parser.getURLParametersMinusArticleParameters());
-		attributes.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
+		attributes
+				.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
 		attributes.put(JWLURLParameters.LIST_PAGE_NUMBER,
 				new Integer(paginator.getNextPageIndex()).toString());
 		attributes.put(JWLURLParameters.ARTICLE_ID, articleId);
 		String link = URLBuilder.buildURL(parser.getCurrentURL(), attributes);
-		return encodeImageLink(link, "/SeamWiki/jwl/page.next.gif", 13, 11);
+		return getImageLink(link, "/SeamWiki/jwl/page.next.gif", 13, 11);
 	}
 
-	private String encodeLinkToPreviousPage(IPaginator<TopicTO> paginator)
+	private UIComponent getLinkToPreviousPage(IPaginator<TopicTO> paginator)
 			throws IOException {
-		if(!paginator.hasPrevious()){
-			return encodeImage("/SeamWiki/jwl/blank.gif", 13, 11);
+		if (!paginator.hasPrevious()) {
+			return getImage("/SeamWiki/jwl/blank.gif", 13, 11);
 		}
 		WikiURLParser parser = new WikiURLParser();
 		String articleId = parser.getArticleId();
-		Map<String,String> attributes = new HashMap<String, String>();
+		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.putAll(parser.getURLParametersMinusArticleParameters());
-		attributes.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
+		attributes
+				.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
 		attributes.put(JWLURLParameters.LIST_PAGE_NUMBER,
 				new Integer(paginator.getPreviousPageIndex()).toString());
 		attributes.put(JWLURLParameters.ARTICLE_ID, articleId);
 		String link = URLBuilder.buildURL(parser.getCurrentURL(), attributes);
-		return encodeImageLink(link, "/SeamWiki/jwl/page.previous.gif", 13, 11);
+		return getImageLink(link, "/SeamWiki/jwl/page.previous.gif", 13, 11);
 	}
 
-	private String encodeLinkToFirstPage(IPaginator<TopicTO> paginator)
+	private UIComponent getLinkToFirstPage(IPaginator<TopicTO> paginator)
 			throws IOException {
-		if(!paginator.hasPrevious()){
-			return encodeImage("/SeamWiki/jwl/blank.gif", 13, 11);
+		if (!paginator.hasPrevious()) {
+			return getImage("/SeamWiki/jwl/blank.gif", 13, 11);
 		}
 		WikiURLParser parser = new WikiURLParser();
 		String articleId = parser.getArticleId();
-		Map<String,String> attributes = new HashMap<String, String>();
+		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.putAll(parser.getURLParametersMinusArticleParameters());
-		attributes.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
+		attributes
+				.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
 		attributes.put(JWLURLParameters.LIST_PAGE_NUMBER,
 				new Integer(paginator.getFirstPageIndex()).toString());
 		attributes.put(JWLURLParameters.ARTICLE_ID, articleId);
-		
+
 		String link = URLBuilder.buildURL(parser.getCurrentURL(), attributes);
-		return encodeImageLink(link, "/SeamWiki/jwl/page.first.gif", 13, 11);
+		return getImageLink(link, "/SeamWiki/jwl/page.first.gif", 13, 11);
 	}
 
-	private String encodeLinkToLastPage(IPaginator<TopicTO> paginator)
+	private UIComponent getLinkToLastPage(IPaginator<TopicTO> paginator)
 			throws IOException {
-		if(!paginator.hasNext()){
-			return encodeImage("/SeamWiki/jwl/blank.gif", 13, 11);
+		if (!paginator.hasNext()) {
+			return getImage("/SeamWiki/jwl/blank.gif", 13, 11);
 		}
 		WikiURLParser parser = new WikiURLParser();
 		String articleId = parser.getArticleId();
-		Map<String,String> attributes = new HashMap<String, String>();
+		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.putAll(parser.getURLParametersMinusArticleParameters());
-		attributes.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
+		attributes
+				.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
 		attributes.put(JWLURLParameters.LIST_PAGE_NUMBER,
 				new Integer(paginator.getLastPageIndex()).toString());
 		attributes.put(JWLURLParameters.ARTICLE_ID, articleId);
-		
+
 		String link = URLBuilder.buildURL(parser.getCurrentURL(), attributes);
-		return encodeImageLink(link, "/SeamWiki/jwl/page.last.gif", 13, 11);		
+		return getImageLink(link, "/SeamWiki/jwl/page.last.gif", 13, 11);
 	}
-	
-	private String encodePageText(IPaginator<TopicTO> paginator){
+
+	private UIComponent getPageText(IPaginator<TopicTO> paginator) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(paginator.getCurrentPageFirst());
 		sb.append(" - ");
 		sb.append(paginator.getCurrentPageLast());
 		sb.append(" out of ");
 		sb.append(paginator.getContentSize());
-		return sb.toString();
+		HtmlOutputText text = new HtmlOutputText();
+		text.setValue(sb.toString());
+		return text;
 	}
-	
-	private String encodeImageLink(String url, String imgSrc, int imgWidth, int imgHeight) throws IOException{
+
+	private UIComponent getImageLink(String url, String imgSrc, int imgWidth,
+			int imgHeight) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<a href=\""+url+"\" >");
-		sb.append("<img width =\""+imgWidth+"\" height =\""+imgHeight+"\" src=\""+imgSrc+"\" />");
+		sb.append("<a href=\"" + url + "\" >");
+		sb.append("<img width =\"" + imgWidth + "\" height =\"" + imgHeight
+				+ "\" src=\"" + imgSrc + "\" />");
 		sb.append("</a>");
-		return sb.toString();
+		HtmlFreeOutput component = new HtmlFreeOutput();
+		component.setFreeOutput(sb.toString());
+		return component;
 	}
-	
-	private String encodeImage(String imgSrc, int imgWidth, int imgHeight) throws IOException{
-		return "<img width =\""+imgWidth+"\" height =\""+imgHeight+"\" src=\""+imgSrc+"\" />";
+
+	private UIComponent getImage(String imgSrc, int imgWidth, int imgHeight)
+			throws IOException {
+		String image = "<img width =\"" + imgWidth + "\" height =\"" + imgHeight
+		+ "\" src=\"" + imgSrc + "\" />";
+		HtmlFreeOutput component = new HtmlFreeOutput();
+		component.setFreeOutput(image);
+		return component;
 	}
-	
+
 	@Override
 	protected String getFormAction() {
 		WikiURLParser parser = new WikiURLParser();
@@ -309,6 +332,15 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 		params.put(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_LIST);
 		params.put(JWLURLParameters.ARTICLE_ID, articleId.getId().toString());
 		return getFormActionString(context, target, params);
+	}
+	
+	protected UIComponent getTopicLink(Integer topicId, String title){
+		HtmlLinkProperties properties = new HtmlLinkProperties();
+		properties.setValue(title);
+		properties.addParameter(JWLURLParameters.ACTION, ArticleActions.FORUM_TOPIC_VIEW);
+		properties.addParameter(JWLURLParameters.TOPIC_ID, topicId);
+		properties.addParameter(JWLURLParameters.ARTICLE_ID, articleId.getId().toString());
+		return super.getHtmlLinkComponent(properties);
 	}
 
 }

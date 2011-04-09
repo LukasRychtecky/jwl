@@ -15,6 +15,7 @@ public class AttachmentConvertor {
 			AttachmentTO attTO = new AttachmentTO(att.getTitle(), att
 					.getOriginalFileName(), att.getUniqueFileName(), att
 					.getDescription());
+			attTO.setId(att.getId());
 			attachmentsTO.add(attTO);
 		}
 		return attachmentsTO;

@@ -26,6 +26,7 @@ import com.jwl.presentation.component.renderer.EncodeError;
 import com.jwl.presentation.component.renderer.EncodeHistoryListing;
 import com.jwl.presentation.component.renderer.EncodeHistoryView;
 import com.jwl.presentation.component.renderer.EncodeTopicList;
+import com.jwl.presentation.component.renderer.EncodeTopicView;
 import com.jwl.presentation.component.renderer.EncodeView;
 import com.jwl.presentation.component.renderer.FlashMessage;
 import com.jwl.presentation.component.renderer.FlashMessageType;
@@ -96,6 +97,9 @@ public class ArticleController implements JWLController {
 				case FORUM_TOPIC_CREATE:
 //					encoder = new  EncodeCreateTopic(id);
 					break;
+				case FORUM_TOPIC_VIEW:
+					encoder = new  EncodeTopicView(facade, recognizer.getTopicId(), id, recognizer.isAnswering(), recognizer.getQuotePostId());
+					break;	
 				default:
 					encoder = new EncodeError();
 					encoder.addImplicitErrorFlashMessage();

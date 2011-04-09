@@ -15,7 +15,14 @@ public class FreeOutputRenderer extends TextRenderer {
 			throws IOException {
 		ResponseWriter writer = context.getResponseWriter();
 		HtmlFreeOutput myComponent = (HtmlFreeOutput) component;
-		writer.write(myComponent.getFreeOutput());
+		encodeChildren(context, myComponent);
+		if (myComponent.getFreeOutput() != null
+				&& myComponent.getFreeOutput() != "") {
+			writer.write(myComponent.getFreeOutput());
+		}
+		for(UIComponent child : myComponent.getChildren()){
+			child.encodeAll(context);
+		}
 	}
 
 	@Override

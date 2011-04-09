@@ -21,6 +21,7 @@ IMPORT_ACL ("import_acl"),
 	DEAD_ARTICLE_LIST ("dead_article_list"),
 	DEAD_ARTICLE_VIEW ("dead_article_view"),
 	FORUM_TOPIC_LIST ("topic_list"),
+	FORUM_TOPIC_VIEW ("topic_view"),
 	FORUM_TOPIC_CREATE ("topic_create");
 
 	public String action;

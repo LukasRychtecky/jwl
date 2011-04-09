@@ -52,23 +52,48 @@ public class ArticleDecoder implements JWLDecoder {
 		if(isTopicCreateRequest()) {
 			handleTopicCreate();
 		}
+		
+		if(isPostReplyRequest()){
+			handlePostReplyRequest();
+		}
 	}
 	
 	private void handleTopicCreate() throws ModelException{
 		TopicTO topic = new TopicTO();
+<<<<<<< HEAD
 		String subject = parameterMap.get(JWLElements.FORUM_SUBJECT.id);
+=======
+		String subject = map.get(getFullKey(JWLElements.FORUM_SUBJECT.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id));
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 		if(subject == ""){
 			throw new ModelException("Subject cannot be left empty");
 		}
 		topic.setTitle(subject);
 		PostTO post = new PostTO();
+<<<<<<< HEAD
 		post.setText(parameterMap.get(JWLElements.FORUM_TOPIC_TEXT.id));
 		List<PostTO> posts =new ArrayList<PostTO>();
 		posts.add(post);
 		topic.setPosts(posts);
 		String id = parameterMap.get(JWLElements.FORUM_ARTICLE_ID.id);
+=======
+		post.setText(map.get(getFullKey(JWLElements.FORUM_TOPIC_TEXT.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id)));
+		List<PostTO> posts =new ArrayList<PostTO>();
+		posts.add(post);
+		topic.setPosts(posts);
+		String id = map.get(getFullKey(JWLElements.FORUM_ARTICLE_ID.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id));
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 		ArticleId articleId = new ArticleId(new Integer(id));
 		this.facade.createForumTopic(topic, articleId);
+	}
+	
+	private void handlePostReplyRequest() throws ModelException{
+		PostTO post = new PostTO();
+		String text = map.get(getFullKey(JWLElements.FORUM_POST_TEXT.id, JWLElements.FORUM_POST_REPLY_FORM.id));
+		post.setText(text);
+		String id = map.get(getFullKey(JWLElements.FORUM_POST_TOPIC_ID.id, JWLElements.FORUM_POST_REPLY_FORM.id));
+		Integer postId = new Integer(id);
+		this.facade.addForumPost(post, postId);		
 	}
 
 	private ArticleTO getFilledArticle() {
@@ -113,6 +138,14 @@ public class ArticleDecoder implements JWLDecoder {
 	}
 	
 	private boolean isTopicCreateRequest(){
+<<<<<<< HEAD
 		return parameterMap.containsKey(JWLElements.FORUM_TOPIC_CREATE.id);
+=======
+		return map.containsKey(getFullKey(JWLElements.FORUM_TOPIC_CREATE.id,JWLElements.FORUM_CREATE_TOPIC_FORM.id));
+	}
+	
+	private boolean isPostReplyRequest(){
+		return map.containsKey(getFullKey(JWLElements.FORUM_POST_REPLY.id,JWLElements.FORUM_POST_REPLY_FORM.id));
+>>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 	}
 }
