@@ -1,18 +1,13 @@
 package com.jwl.presentation.core;
 
+import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseStream;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -21,51 +16,62 @@ import javax.ws.rs.core.Response;
 public class AjaxListener implements PhaseListener {
 
 	private static final long serialVersionUID = -4978877094917671154L;
-	private static final String AJAX_VIEW_ID = "ajax-listener";
 
 	@Override
 	public void afterPhase(PhaseEvent pe) {
-		this.handleAjaxRequest(pe);
+		try {
+			this.handleAjaxRequest(pe);
+		} catch (IOException ex) {
+			Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 	@Override
 	public void beforePhase(PhaseEvent pe) {
-
 	}
 
-	private void handleAjaxRequest(PhaseEvent event) {
+	private void handleAjaxRequest(PhaseEvent event) throws IOException {
+		
 		FacesContext context = event.getFacesContext();
-
 		if (context == null) {
 			return;
 		}
 		
-		for (String key : context.getExternalContext().getRequestParameterMap().keySet()) {
-			System.out.println("KEY: " + key);
-		}
-
-		if (context.getExternalContext().getRequestParameterMap().get("neco") == null) {
-			return;
-		}
-		HtmlOutputText message = new HtmlOutputText();
-		message.setValue("AJAX!!!");
-		String r = message.getRendererType();
 		try {
-			ResponseStream res = context.getRenderKit().createResponseStream(context.getExternalContext().getResponseOutputStream());
-			
-		} catch (IOException ex) {
-			Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		try {
-			HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-			response.getWriter().write("<b>AJAX!!!</b>");
-			context.renderResponse();
-			context.responseComplete();
-		} catch (IOException ex) {
-			Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
+			String method = context.getExternalContext().getRequestParameterMap().get(JWLURLParameters.METHOD);
+			if (method == null || !method.equals("ajax")) {
+				return;
+			}
+
+			StringBuilder packageName = new StringBuilder(this.getClass().getPackage().getName());
+			String className = 
+					packageName.substring(0, packageName.lastIndexOf(".")) +
+					".presenters." +
+					context.getExternalContext().getRequestParameterMap().get(JWLURLParameters.PRESENTER).toLowerCase() +
+					".Component";
+
+			Class c = Class.forName(className);
+			AbstractComponent component = (AbstractComponent) c.newInstance();
+			component.encodeAll(context);
+
+		} catch (InstantiationException ex) {
+			this.handleException(context, ex);
+		} catch (IllegalAccessException ex) {
+			this.handleException(context, ex);
+		} catch (ClassNotFoundException ex) {
+			this.handleException(context, ex);
 		}
 
+	}
 
+	private void handleException(FacesContext context, Exception ex) throws IOException {
+		AbstractPresenter presenter = new AbstractPresenter(context) {};
+		if (ex instanceof ClassNotFoundException) {
+			presenter.render404();
+		} else {
+			presenter.render500();
+		}
+		Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
 	@Override

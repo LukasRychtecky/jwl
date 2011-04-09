@@ -23,6 +23,13 @@ public class Linker {
 	private String presenter;
 	private Map<String, String> foreingParams = null;
 
+	public Linker(FacesContext context, String presenter, String uri) {
+		this(context, presenter);
+		if (uri != null) {
+			this.parser.setURI(uri);
+		}
+	}
+
 	public Linker(FacesContext context, String presenter) {
 		this.parser = new WikiURLParser(context);
 		this.presenter = presenter;

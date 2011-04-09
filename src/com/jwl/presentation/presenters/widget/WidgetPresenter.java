@@ -3,13 +3,12 @@ package com.jwl.presentation.presenters.widget;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.core.AbstractPresenter;
+import com.jwl.presentation.html.HtmlLink;
 import com.jwl.util.html.component.HtmlActionForm;
 import com.jwl.util.html.component.HtmlDivCommandButton;
 import com.jwl.util.html.component.HtmlDivInputText;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
@@ -25,13 +24,18 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	public WidgetPresenter(FacesContext context) {
 		super(context);
-		this.renderer = new Renderer(this.context, super.linker);
+		this.renderer = new Renderer(this.context, super.linker, super.container);
 	}
 
 	@Override
 	public void renderDefault() throws IOException {
 		this.renderer.renderDefault();
 		this.createForm();
+
+		HtmlLink link = new HtmlLink();
+		link.setValue(this.linker.build("detail"));
+		link.setText("CLick mee");
+		this.container.add(link);
 	}
 
 	public void renderDetail() throws IOException {
@@ -41,11 +45,7 @@ public class WidgetPresenter extends AbstractPresenter {
 	public void formValid() {
 		HtmlOutputText message = new HtmlOutputText();
 		message.setValue("Hledas: " + this.getFormValue(JWLElements.SEARCH_INPUT.id));
-		try {
-			message.encodeAll(this.context);
-		} catch (IOException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		}
+		super.container.add(message);
 	}
 
 	private void createForm() {
@@ -64,11 +64,7 @@ public class WidgetPresenter extends AbstractPresenter {
 
 
 		form.getChildren().add(table);
-		try {
-			form.encodeAll(context);
-		} catch (IOException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		}
+		super.container.add(form);
 	}
 
 	protected HtmlDivCommandButton getHtmlSubmitComponent(JWLElements element, String styleClass) {
