@@ -1,12 +1,12 @@
 package com.jwl.presentation.component.renderer;
 
-import com.jwl.business.IFacade;
-import com.jwl.business.article.HistoryId;
-import com.jwl.business.article.HistoryTO;
-import com.jwl.business.exceptions.ModelException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.jwl.business.article.HistoryId;
+import com.jwl.business.article.HistoryTO;
+import com.jwl.business.exceptions.ModelException;
 
 /**
  *
@@ -15,13 +15,12 @@ import java.util.logging.Logger;
 public class EncodeHistoryView extends AbstractEncodeHistoryView {
 	private HistoryId id;
 
-	public EncodeHistoryView(IFacade facade, HistoryId id) {
-		super(facade);
+	public EncodeHistoryView(HistoryId id) {
 		this.id = id;
 	}
 
 	@Override
-	protected void encodeResponse() {
+	public void encodeResponse() {
 		HistoryTO history = null;
 		try {
 			super.encodeFlashMessages();

@@ -13,7 +13,6 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 import com.jwl.business.ArticlePair;
-import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.administration.enumerations.AdministrationActions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
@@ -33,10 +32,6 @@ public class EncodeMergeSuggestionList extends JWLEncoder {
 
 	private final String[] headers = new String[] {"Title", "Tags", "Editor",
 			"Editing count", "Created", "Rating"};
-
-	public EncodeMergeSuggestionList(IFacade facade) {
-		super(facade);
-	}
 
 	private List<String> getHeaderNames() {		
 		List<String> result = new ArrayList<String>();	

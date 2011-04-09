@@ -6,6 +6,7 @@ import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
+import com.jwl.presentation.global.Global;
 import com.jwl.presentation.global.WikiURLParser;
 
 public class AdministrationStateRecognizer {
@@ -13,8 +14,8 @@ public class AdministrationStateRecognizer {
 	private WikiURLParser wikiURLParser;
 	private IFacade facade;
 
-	public AdministrationStateRecognizer(IFacade facade) {
-		this.facade = facade;
+	public AdministrationStateRecognizer() {
+		this.facade = Global.getInstance().getFacade();
 		this.wikiURLParser = new WikiURLParser();
 	}
 
@@ -53,7 +54,7 @@ public class AdministrationStateRecognizer {
 					state = AdministrationStates.LIST;
 				}
 				break;
-case IMPORT_ACL:
+			case IMPORT_ACL:
 				state = AdministrationStates.LIST;
 				break;
 				case MERGE_SUGGESTION_LIST:

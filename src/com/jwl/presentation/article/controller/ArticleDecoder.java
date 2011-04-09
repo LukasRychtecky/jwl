@@ -3,7 +3,10 @@ package com.jwl.presentation.article.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.faces.component.UIComponent;
+import javax.naming.NoPermissionException;
+
 import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
@@ -11,15 +14,24 @@ import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.component.controller.JWLDecoder;
+import com.jwl.presentation.component.controller.RequestParameterMapDecoder;
+import com.jwl.presentation.component.controller.UIComponentHelper;
 import com.jwl.presentation.component.enumerations.JWLElements;
+import com.jwl.presentation.global.Global;
 import com.jwl.presentation.global.WikiURLParser;
-import javax.naming.NoPermissionException;
 
-public class ArticleDecoder extends JWLDecoder {
+public class ArticleDecoder implements JWLDecoder {
 
-	public ArticleDecoder(Map<String, String> map, UIComponent component,
-			IFacade facade) {
-		super(map, component, facade, JWLElements.EDIT_FORM.id);
+	private IFacade facade;
+	private Map<String, String> parameterMap;
+	protected UIComponent component;
+	private RequestParameterMapDecoder decoder;
+	
+	public ArticleDecoder(Map<String, String> parameterMap, UIComponent component) {
+		this.facade = Global.getInstance().getFacade();
+		this.parameterMap = parameterMap;
+		this.component = component;
+		decoder = new RequestParameterMapDecoder(parameterMap, JWLElements.EDIT_FORM);
 	}
 
 	@Override
@@ -28,7 +40,7 @@ public class ArticleDecoder extends JWLDecoder {
 			ArticleTO article = getFilledArticle();
 
 			if (this.isArticleEditRequest()) {
-				String stringId = getMapValue(JWLElements.EDIT_ID);
+				String stringId = decoder.getMapValue(JWLElements.EDIT_ID);
 				ArticleId articleId = new ArticleId(Integer.parseInt(stringId));
 				article.setId(articleId);
 				this.facade.updateArticle(article);
@@ -36,41 +48,40 @@ public class ArticleDecoder extends JWLDecoder {
 			} else if (this.isArticleSaveRequest()) {
 				this.facade.createArticle(article);
 			}
-			
 		}
-		if(isTopicCreateRequest()){
+		if(isTopicCreateRequest()) {
 			handleTopicCreate();
 		}
 	}
 	
 	private void handleTopicCreate() throws ModelException{
 		TopicTO topic = new TopicTO();
-		String subject = map.get(JWLElements.FORUM_SUBJECT.id);
+		String subject = parameterMap.get(JWLElements.FORUM_SUBJECT.id);
 		if(subject == ""){
 			throw new ModelException("Subject cannot be left empty");
 		}
 		topic.setTitle(subject);
 		PostTO post = new PostTO();
-		post.setText(map.get(JWLElements.FORUM_TOPIC_TEXT.id));
+		post.setText(parameterMap.get(JWLElements.FORUM_TOPIC_TEXT.id));
 		List<PostTO> posts =new ArrayList<PostTO>();
 		posts.add(post);
 		topic.setPosts(posts);
-		String id = map.get(JWLElements.FORUM_ARTICLE_ID.id);
+		String id = parameterMap.get(JWLElements.FORUM_ARTICLE_ID.id);
 		ArticleId articleId = new ArticleId(new Integer(id));
 		this.facade.createForumTopic(topic, articleId);
 	}
 
 	private ArticleTO getFilledArticle() {
 		ArticleTO article = new ArticleTO();
-		article.setText(getMapValue(JWLElements.EDIT_TEXT));
-		article.setTitle(getMapValue(JWLElements.EDIT_TITLE));
+		article.setText(decoder.getMapValue(JWLElements.EDIT_TEXT));
+		article.setTitle(decoder.getMapValue(JWLElements.EDIT_TITLE));
 
-		String[] tags = this.getMapValue(JWLElements.EDIT_TAGS).split(",");
+		String[] tags = decoder.getMapValue(JWLElements.EDIT_TAGS).split(",");
 		for (int i = 0; i < tags.length; i++) {
 			article.addTag(tags[i]);
 		}
 
-		article.setChangeNote(getMapValue(JWLElements.EDIT_CHANGE_NOTE));
+		article.setChangeNote(decoder.getMapValue(JWLElements.EDIT_CHANGE_NOTE));
 		article.setEditor(findEditor());
 		return article;
 	}
@@ -81,7 +92,7 @@ public class ArticleDecoder extends JWLDecoder {
 	 * @return user name or IP address
 	 */
 	private String findEditor() {
-		String editor = getLogedUser();
+		String editor = UIComponentHelper.getLogedUser(component);
 		if (editor.isEmpty()) {
 			WikiURLParser parser = new WikiURLParser();
 			editor = parser.getUserIP();
@@ -94,14 +105,14 @@ public class ArticleDecoder extends JWLDecoder {
 	}
 
 	private boolean isArticleEditRequest() {
-		return map.containsKey(this.getFullKey(JWLElements.EDIT_SAVE.id));
+		return parameterMap.containsKey(decoder.getFullKey(JWLElements.EDIT_SAVE.id));
 	}
 
 	private boolean isArticleSaveRequest() {
-		return map.containsKey(this.getFullKey(JWLElements.CREATE_SAVE.id));
+		return parameterMap.containsKey(decoder.getFullKey(JWLElements.CREATE_SAVE.id));
 	}
 	
 	private boolean isTopicCreateRequest(){
-		return map.containsKey(JWLElements.FORUM_TOPIC_CREATE.id);
+		return parameterMap.containsKey(JWLElements.FORUM_TOPIC_CREATE.id);
 	}
 }

@@ -12,7 +12,6 @@ import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.context.ResponseWriter;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.administration.enumerations.AdministrationActions;
@@ -32,10 +31,6 @@ import com.jwl.util.html.component.HtmlLinkProperties;
  * @author Lukas Rychtecky
  */
 public class EncodeListing extends AbstractEncodeListing {
-
-	public EncodeListing(IFacade facade) {
-		super(facade);
-	}
 
 	@Override
 	protected void encodeResponse() {

@@ -6,17 +6,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.article.enumerations.ListColumns;
 import com.jwl.presentation.component.renderer.AbstractEncodeListing;
 
 public class EncodeListing extends AbstractEncodeListing {
-
-	public EncodeListing(IFacade facade) {
-		super(facade);
-	}
 
 	@Override
 	public void encodeResponse() {

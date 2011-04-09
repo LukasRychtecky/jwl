@@ -11,13 +11,13 @@ import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.component.html.HtmlInputTextarea;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
+import com.jwl.presentation.core.Linker;
 import com.jwl.presentation.global.WikiURLParser;
 import com.jwl.util.html.component.HtmlActionForm;
 import com.jwl.util.html.component.HtmlDiv;
@@ -25,13 +25,15 @@ import com.jwl.util.html.component.HtmlDiv;
 public class EncodeCreateTopic extends JWLEncoder{
 
 	private ArticleId articleId;
-	public EncodeCreateTopic(IFacade facade, ArticleId articleId) {
-		super(facade);
+	private Linker linker;
+	
+	public EncodeCreateTopic(ArticleId articleId, Linker linker) {
 		this.articleId = articleId;
+		this.linker = linker;
 	}
 
 	@Override
-	protected void encodeResponse() {
+	public void encodeResponse() {
 		try {
 			super.encodeFlashMessages();
 			encodeForm();
@@ -55,7 +57,8 @@ public class EncodeCreateTopic extends JWLEncoder{
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.FORUM_CREATE_TOPIC_FORM.id);
 		form.setEnctype("application/x-www-form-urlencoded");
-		form.setAction(this.getFormAction());
+		form.setAction(this.linker.buildForm("topicSave"));
+//		form.setAction(this.getFormAction());
 		encodePanel(form.getChildren());
 		encodePanelActions(form.getChildren());
 		form.encodeAll(context);

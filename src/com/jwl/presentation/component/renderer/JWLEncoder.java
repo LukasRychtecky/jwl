@@ -40,8 +40,8 @@ public abstract class JWLEncoder {
 	protected ResponseWriter writer;
 	protected List<FlashMessage> messages;
 
-	public JWLEncoder(IFacade facade) {
-		this.facade = facade;
+	public JWLEncoder() {
+		this.facade = Global.getInstance().getFacade();
 		this.context = FacesContext.getCurrentInstance();
 		this.writer = context.getResponseWriter();
 		this.context.getAttributes().put("javax.faces.SEPARATOR_CHAR",
@@ -122,7 +122,7 @@ public abstract class JWLEncoder {
 		writer.write("</div>");
 	}
 
-	public void encodePlainText(String text) throws IOException {
+	protected void encodePlainText(String text) throws IOException {
 		writer.write(text);
 	}
 

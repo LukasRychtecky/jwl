@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import javax.faces.component.html.HtmlOutputLink;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
@@ -21,8 +20,7 @@ public class EncodeDeadArticleView extends AbstractEncodeView {
 
 	protected ArticleId id;
 
-	public EncodeDeadArticleView(IFacade facade, ArticleId id) {
-		super(facade);
+	public EncodeDeadArticleView(ArticleId id) {
 		this.id = id;
 	}
 

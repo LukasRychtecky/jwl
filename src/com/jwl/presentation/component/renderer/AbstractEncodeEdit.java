@@ -4,17 +4,20 @@ import static com.jwl.presentation.component.enumerations.JWLElements.EDIT_CHANG
 import static com.jwl.presentation.component.enumerations.JWLElements.EDIT_TAGS;
 import static com.jwl.presentation.component.enumerations.JWLElements.EDIT_TEXT;
 import static com.jwl.presentation.component.enumerations.JWLElements.EDIT_TITLE;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputTextarea;
-import com.jwl.business.IFacade;
+
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
+import com.jwl.presentation.core.Linker;
 import com.jwl.util.html.component.HtmlActionForm;
 
 /**
@@ -24,15 +27,14 @@ import com.jwl.util.html.component.HtmlActionForm;
  */
 public abstract class AbstractEncodeEdit extends JWLEncoder {
 
-	protected boolean existUserName;
-
-	public AbstractEncodeEdit(IFacade facade, boolean existUserName) {
-		super(facade);
-		this.existUserName = existUserName;
+	protected Linker linker;
+	protected String presenterName;
+	
+	public AbstractEncodeEdit() {
 	}
 
 	@Override
-	protected void encodeResponse() {
+	public void encodeResponse() {
 		try {
 			renderCode();
 		} catch (IOException ex) {
@@ -50,42 +52,6 @@ public abstract class AbstractEncodeEdit extends JWLEncoder {
 		}
 	}
 
-	protected void encodeCommonContent(List<UIComponent> formData,
-			ArticleTO article, boolean existUserName, JWLElements element)
-			throws IOException {
-		if (element == JWLElements.CREATE_SAVE) {
-			formData.add(this.encodeLabelForTitleInCreate());
-			formData.add(this.encodeTitleInCreate(article.getTitle()));
-		} else {
-			formData.add(this.encodeLabelForTitleInEdit());
-			formData.add(this.encodeTitleInEdit(article.getTitle()));
-		}
-
-		formData.add(this.encodeLabelForText());
-		formData.add(this.encodeText(article.getText()));
-
-		formData.add(this.encodeLabelForTags());
-		StringBuilder tags = new StringBuilder();
-		for (String tag : article.getTags()) {
-			tags.append(tag).append(", ");
-		}
-
-		String tagAsString = "";
-		if (tags.length() > 0) {
-			tagAsString = tags.substring(0, tags.length() - 1);
-		}
-		formData.add(this.encodeTags(tagAsString));
-
-		formData.add(this.encodeLabelForChangeNote());
-		formData.add(this.encodeChangeNote(""));
-
-		if (!existUserName) {
-			formData.add(this.encodeUnknownUserMessage());
-		}
-
-		formData.add(this.getHtmlSubmitComponent(element,
-				JWLStyleClass.EDIT_INPUT_SUBMIT));
-	}
 
 	/**
 	 * Rendering all component
@@ -96,7 +62,7 @@ public abstract class AbstractEncodeEdit extends JWLEncoder {
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.EDIT_FORM.id);
 		form.setEnctype("application/x-www-form-urlencoded");
-		form.setAction(this.getFormAction());
+		form.setAction(this.linker.buildForm("articleSave"));
 
 		encodeContent(form.getChildren());
 
@@ -116,6 +82,63 @@ public abstract class AbstractEncodeEdit extends JWLEncoder {
 	protected abstract void encodeContent(List<UIComponent> formData)
 			throws IOException, ModelException;
 
+	
+	protected void encodeEdit(List<UIComponent> formData, ArticleTO article) 
+			throws IOException {
+		
+		formData.add(this.encodeLabelForTitleInEdit());
+		formData.add(this.encodeTitleInEdit(article.getTitle()));
+		
+		this.encodeCommonContent(formData, article);
+		
+		formData.add(this.getHtmlSubmitComponent(JWLElements.EDIT_SAVE,
+				JWLStyleClass.EDIT_INPUT_SUBMIT));
+	}
+	
+	protected void encodeCreate(List<UIComponent> formData) 
+			throws IOException {
+		ArticleTO article = new ArticleTO();
+		
+		formData.add(this.encodeLabelForTitleInCreate());
+		formData.add(this.encodeTitleInCreate(article.getTitle()));
+		
+		this.encodeCommonContent(formData, article);
+		
+		formData.add(this.getHtmlSubmitComponent(JWLElements.CREATE_SAVE,
+				JWLStyleClass.EDIT_INPUT_SUBMIT));
+	}
+	
+	private void encodeCommonContent(List<UIComponent> formData,
+			ArticleTO article)
+			throws IOException {
+		
+		formData.add(this.encodeLabelForText());
+		formData.add(this.encodeText(article.getText()));
+
+		formData.add(this.encodeLabelForTags());
+		StringBuilder tags = new StringBuilder();
+		for (String tag : article.getTags()) {
+			tags.append(tag).append(", ");
+		}
+
+		String tagAsString = "";
+		if (tags.length() > 0) {
+			tagAsString = tags.substring(0, tags.length() - 1);
+		}
+		formData.add(this.encodeTags(tagAsString));
+
+		formData.add(this.encodeLabelForChangeNote());
+		formData.add(this.encodeChangeNote(""));
+
+		if (!isUserLogged()) {
+			formData.add(this.encodeUnknownUserMessage());
+		}
+	}
+
+	private boolean isUserLogged() {
+		return (facade.getIdentity().getUserName() != null);
+	}
+	
 	protected UIComponent encodeLabelForTitleInEdit() throws IOException {
 		return getHtmlTextComponent(EDIT_TITLE.value,
 				JWLStyleClass.EDIT_LABEL_OF_TITLE);

@@ -8,7 +8,6 @@
 		<tag-name>article</tag-name>
 		<component>
 			<component-type>com.jwl.component.Article</component-type>
-			<renderer-type>com.jwl.component.ArticleRenderer</renderer-type>
 		</component>
 	</tag>
 	<tag>
@@ -23,6 +22,12 @@
 		<component>
 			<component-type>com.jwl.component.Search</component-type>
 			<renderer-type>com.jwl.component.SearchRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>wiki</tag-name>
+		<component>
+			<component-type>com.jwl.component.Wiki</component-type>
 		</component>
 	</tag>
 	<tag>

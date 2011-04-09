@@ -7,10 +7,6 @@ import java.util.logging.Logger;
 
 final public class EncodeError extends JWLEncoder {
 
-	public EncodeError() {
-		super(null);
-	}
-
 	@Override
 	protected void encodeResponse() {
 		try {

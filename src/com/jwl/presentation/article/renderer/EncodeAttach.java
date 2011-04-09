@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.component.html.HtmlInputText;
-import com.jwl.business.IFacade;
+
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.controller.JWLComponent;
 import com.jwl.presentation.component.enumerations.JWLElements;
@@ -21,12 +22,8 @@ import com.jwl.util.html.component.HtmlInputFile;
 
 public class EncodeAttach extends JWLEncoder {
 
-	public EncodeAttach(IFacade facade) {
-		super(facade);
-	}
-
 	@Override
-	protected void encodeResponse() {
+	public void encodeResponse() {
 		try {
 			this.encodeForm();
 		} catch (IOException ex) {

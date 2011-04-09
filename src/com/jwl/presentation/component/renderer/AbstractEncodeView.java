@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.faces.component.html.HtmlOutputLink;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
@@ -20,10 +19,6 @@ import com.jwl.presentation.convertor.MarkupToMarkdown;
 import com.jwl.util.html.component.HtmlLinkProperties;
 
 public abstract class AbstractEncodeView extends JWLEncoder {
-
-	public AbstractEncodeView(IFacade facade) {
-		super(facade);
-	}
 
 	protected void encondeArticle(ArticleTO article) throws IOException,
 			ModelException {

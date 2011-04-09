@@ -12,7 +12,6 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectManyCheckbox;
 import javax.faces.model.SelectItem;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.component.enumerations.JWLElements;
@@ -22,10 +21,6 @@ import com.jwl.presentation.search.enumerations.SearchCategories;
 import com.jwl.util.html.component.HtmlActionForm;
 
 public class EncodeSearch extends AbstractEncodeListing {
-
-	public EncodeSearch(IFacade facade) {
-		super(facade);
-	}
 
 	@Override
 	protected void encodeResponse() {

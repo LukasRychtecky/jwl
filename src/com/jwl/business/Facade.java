@@ -179,7 +179,7 @@ public class Facade implements IFacade {
 	@Override
 	public void setSearchParametres(SearchTO searchTO) {
 		if (this.searchPaginator == null) {
-			this.searchPaginator = new KeyWordPaginator(new WikiURLParser(), Environment.getKnowledgeFacade());
+			this.searchPaginator = new KeyWordPaginator(Environment.getKnowledgeFacade());
 		}
 		searchPaginator.setSearch(searchTO);
 	}

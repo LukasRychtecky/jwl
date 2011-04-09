@@ -13,20 +13,26 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.BreakBusinessRuleException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
-import com.jwl.presentation.article.controller.ArticleDecoder;
+import com.jwl.presentation.component.controller.JWLDecoder;
 import com.jwl.presentation.component.enumerations.JWLElements;
+import com.jwl.presentation.global.Global;
 
-public class AdministrationDecoder extends ArticleDecoder {
+public class AdministrationDecoder implements JWLDecoder {
 
-	public AdministrationDecoder(Map<String, String> map,
-			UIComponent component, IFacade facade) {
-		super(map, component, facade);
-
+	private IFacade facade;
+	protected UIComponent component;
+	private Map<String, String> parameterMap;
+	
+	public AdministrationDecoder(Map<String, String> parameterMap,
+			UIComponent component) {
+		this.parameterMap = parameterMap;
+		this.component = component;
+		this.facade = Global.getInstance().getFacade();
+		this.parameterMap = parameterMap;
 	}
 
 	@Override
 	public void processDecode() throws ModelException, NoPermissionException {
-		super.processDecode();
 		if (isMergeIgnoreRequest()) {
 			List<ArticleIdPair> idPairs = getIdPairs();
 			facade.addToMergeSuggestionsIgnored(idPairs);
@@ -58,32 +64,32 @@ public class AdministrationDecoder extends ArticleDecoder {
 	}
 
 	private boolean isMergeIgnoreRequest() {
-		return map.containsKey(JWLElements.KNOWLEDGE_IGNORE.id);
+		return parameterMap.containsKey(JWLElements.KNOWLEDGE_IGNORE.id);
 	}
 
 	private boolean isDeadDeleteRequest() {
-		return map.containsKey(JWLElements.KNOWLEDGE_DEAD_DELETE.id);
+		return parameterMap.containsKey(JWLElements.KNOWLEDGE_DEAD_DELETE.id);
 	}
 
 	private boolean isLivabilityIncreaseRequest() {
-		return map.containsKey(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id);
+		return parameterMap.containsKey(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id);
 	}
 
 	private boolean isDeleteTopicRequest() {
-		return map.containsKey(JWLElements.FORUM_TOPIC_DELETE.id);
+		return parameterMap.containsKey(JWLElements.FORUM_TOPIC_DELETE.id);
 	}
 	
 	private boolean isCloseTopicRequest() {
-		return map.containsKey(JWLElements.FORUM_TOPIC_CLOSE.id);
+		return parameterMap.containsKey(JWLElements.FORUM_TOPIC_CLOSE.id);
 	}
 	
 	private boolean isOpenTopicRequest() {
-		return map.containsKey(JWLElements.FORUM_TOPIC_OPEN.id);
+		return parameterMap.containsKey(JWLElements.FORUM_TOPIC_OPEN.id);
 	}
 
 	private List<ArticleIdPair> getIdPairs() {
 		List<ArticleIdPair> result = new ArrayList<ArticleIdPair>();
-		for (Entry<String, String> e : map.entrySet()) {
+		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id)) {
 				ArticleIdPair pair = getPairFromCheckboxName(e.getKey());
 				result.add(pair);
@@ -105,7 +111,7 @@ public class AdministrationDecoder extends ArticleDecoder {
 
 	private List<ArticleId> getArticleIds() {
 		List<ArticleId> result = new ArrayList<ArticleId>();
-		for (Entry<String, String> e : map.entrySet()) {
+		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.KNOWLEDGE_ID_CHECKBOX.id)) {
 				ArticleId id = getIdFromCheckbox(e.getKey());
 				result.add(id);
@@ -123,7 +129,7 @@ public class AdministrationDecoder extends ArticleDecoder {
 
 	private double getLivabilityIncreaseValue()
 			throws BreakBusinessRuleException {
-		String value = map.get(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
+		String value = parameterMap.get(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
 		if (value == null || value == "") {
 			throw new BreakBusinessRuleException("Livability must be filled");
 		}
@@ -139,7 +145,7 @@ public class AdministrationDecoder extends ArticleDecoder {
 
 	private void handleDeleteTopic() throws ModelException {
 		List<Integer> topicIds = new ArrayList<Integer>();
-		for (Entry<String, String> e : map.entrySet()) {
+		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
 				int topicId = getTopicIdFromCheckbox(e.getKey());
 				topicIds.add(topicId);
@@ -152,7 +158,7 @@ public class AdministrationDecoder extends ArticleDecoder {
 	
 	private void handleCloseTopic() throws ModelException {
 		List<Integer> topicIds = new ArrayList<Integer>();
-		for (Entry<String, String> e : map.entrySet()) {
+		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
 				int topicId = getTopicIdFromCheckbox(e.getKey());
 				topicIds.add(topicId);
@@ -165,7 +171,7 @@ public class AdministrationDecoder extends ArticleDecoder {
 	
 	private void handleOpenTopic() throws ModelException {
 		List<Integer> topicIds = new ArrayList<Integer>();
-		for (Entry<String, String> e : map.entrySet()) {
+		for (Entry<String, String> e : parameterMap.entrySet()) {
 			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
 				int topicId = getTopicIdFromCheckbox(e.getKey());
 				topicIds.add(topicId);

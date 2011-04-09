@@ -1,6 +1,13 @@
 package com.jwl.presentation.component.renderer;
 
-import com.jwl.business.IFacade;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlOutputLink;
+import javax.faces.component.html.HtmlPanelGrid;
+
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.presentation.article.enumerations.ArticleActions;
@@ -8,12 +15,6 @@ import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.util.html.component.HtmlHeaderPanelGrid;
 import com.jwl.util.html.component.HtmlLinkProperties;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlOutputLink;
-import javax.faces.component.html.HtmlPanelGrid;
 
 /**
  *
@@ -22,10 +23,6 @@ import javax.faces.component.html.HtmlPanelGrid;
 abstract public class AbstractEncodeHistoryListing extends JWLEncoder {
 
 	private final String[] headers = new String[]{"Modified", "Change note", "Actions"};
-
-	public AbstractEncodeHistoryListing(IFacade facade) {
-		super(facade);
-	}
 
 	protected List<String> getHeaderNames() {
 		return Arrays.asList(this.headers);

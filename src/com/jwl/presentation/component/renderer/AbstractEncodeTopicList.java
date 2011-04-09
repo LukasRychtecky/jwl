@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlPanelGrid;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.PostTO;
@@ -33,8 +32,7 @@ public abstract class AbstractEncodeTopicList extends JWLEncoder {
 	protected final String[] headers = new String[] { "Topic", "Author",
 			"Created", "Replies", "Last post" };
 
-	public AbstractEncodeTopicList(IFacade facade, ArticleId articleId) {
-		super(facade);
+	public AbstractEncodeTopicList(ArticleId articleId) {
 		this.articleId = articleId;
 	}
 

@@ -29,9 +29,9 @@ public class URLBuilder {
 		return query.toString();
 	}
 	
-	private static String encodeToUTF8(String stirng){
+	private static String encodeToUTF8(String string){
 		try {
-			return URLEncoder.encode(stirng, URLParser.CHARSET);
+			return URLEncoder.encode(string, URLParser.CHARSET);
 		} catch (UnsupportedEncodingException e) {
 			return "";
 		}

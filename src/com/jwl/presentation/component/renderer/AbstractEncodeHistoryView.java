@@ -1,14 +1,15 @@
 package com.jwl.presentation.component.renderer;
 
-import com.jwl.business.IFacade;
+import java.io.IOException;
+
+import javax.faces.component.html.HtmlOutputLink;
+
 import com.jwl.business.article.HistoryTO;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.convertor.MarkupToMarkdown;
 import com.jwl.util.html.component.HtmlLinkProperties;
-import java.io.IOException;
-import javax.faces.component.html.HtmlOutputLink;
 
 /**
  *
@@ -16,10 +17,6 @@ import javax.faces.component.html.HtmlOutputLink;
  */
 abstract public class AbstractEncodeHistoryView extends JWLEncoder {
 
-	public AbstractEncodeHistoryView(IFacade facade) {
-		super(facade);
-	}
-	
 	private void encodeTitle(String title) throws IOException {
 		super.encodeH1Text(title, JWLStyleClass.VIEW_TITLE);
 	}

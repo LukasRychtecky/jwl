@@ -1,16 +1,14 @@
 package com.jwl.presentation.core;
 
-import com.jwl.presentation.component.enumerations.JWLURLParameters;
-import com.jwl.presentation.global.WikiURLParser;
-import com.jwl.util.html.url.URLParser;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.faces.context.FacesContext;
+
+import com.jwl.presentation.component.enumerations.JWLURLParameters;
+import com.jwl.presentation.global.WikiURLParser;
+import com.jwl.util.html.url.URLBuilder;
 
 /**
  *
@@ -47,28 +45,10 @@ public class Linker {
 	}
 
 	private String buildLink(Map<String, String> params) {
-		StringBuilder link = new StringBuilder(this.parser.getCurrentURI());
 		params.putAll(this.getForeingParams());
-
-		link.append("?");
-		for (Entry<String, String> entry : params.entrySet()) {
-			link.append(this.encodeToUTF8(entry.getKey()));
-			link.append("=");
-			link.append(this.encodeToUTF8(entry.getValue()));
-			link.append("&");
-		}
-		link.deleteCharAt(link.length() - 1);
-		return link.toString();
-	}
-
-	private String encodeToUTF8(String string) {
-		try {
-			return URLEncoder.encode(string, URLParser.CHARSET);
-		} catch (UnsupportedEncodingException e) {
-			Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, e);
-			return "";
-		}
-	}
+		params.put(JWLURLParameters.ARTICLE_TITLE, this.getArticleTitle());
+		return URLBuilder.buildURL(this.parser.getCurrentURI(), params);
+	}		
 
 	private Map<String, String> getForeingParams() {
 		if (this.foreingParams == null) {
@@ -82,4 +62,10 @@ public class Linker {
 		}
 		return foreingParams;
 	}
+	
+	private String getArticleTitle() {
+		return parser.getArticleTitle();
+	}
+
+
 }

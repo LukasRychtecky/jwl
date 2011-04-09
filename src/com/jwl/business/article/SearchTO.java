@@ -53,4 +53,11 @@ public class SearchTO {
 		this.tags = tags;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("SearchTO: [searchPhrase=%s] [title=%b] [keyWords=%b]" +
+				" [editor=%b] [tags=%b]", searchPhrase, title, keyWords, editors,
+				tags);
+	}
+
 }

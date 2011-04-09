@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.faces.component.html.HtmlOutputLink;
 
-import com.jwl.business.IFacade;
 import com.jwl.presentation.article.enumerations.ArticleActions;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.presentation.component.renderer.JWLEncoder;
@@ -16,11 +15,6 @@ import com.jwl.util.html.component.HtmlLinkProperties;
  * @author ostatnickyjiri
  */
 public class EncodeNotExist extends JWLEncoder {
-
-	public EncodeNotExist(IFacade facade) {
-		super(facade);
-		// TODO fix this
-	}
 
 	@Override
 	protected void encodeResponse() {

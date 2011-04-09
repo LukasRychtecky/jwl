@@ -1,6 +1,5 @@
 package com.jwl.presentation.article.controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +16,6 @@ import com.jwl.presentation.article.enumerations.ArticlePermissions;
 import com.jwl.presentation.article.enumerations.ArticleStates;
 import com.jwl.presentation.global.Global;
 import com.jwl.presentation.global.WikiURLParser;
-import java.lang.reflect.Method;
 
 public class ArticleStateRecognizer {
 
@@ -27,8 +25,8 @@ public class ArticleStateRecognizer {
 	private String action;
 	private String articleTitle;
 
-	public ArticleStateRecognizer(IFacade facade){
-		this.facade = facade;
+	public ArticleStateRecognizer(){
+		this.facade = Global.getInstance().getFacade();
 		this.wikiURLParser = new WikiURLParser();
 	}
 	
@@ -159,6 +157,9 @@ public class ArticleStateRecognizer {
 	}
 	
 	private boolean isInitialPageSet(UIComponent component) throws ModelException {
+		return false;
+		
+		/*
 		if (!(component instanceof ArticleComponent)) {
 			return false;
 		}
@@ -171,6 +172,7 @@ public class ArticleStateRecognizer {
 			this.id = article.getId();
 		}
 		return null != this.id;
+		 */
 	}
 
 	public ArticleId getArticleId() {

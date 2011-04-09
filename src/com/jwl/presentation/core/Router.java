@@ -33,7 +33,7 @@ public class Router {
 		if (action != null && !action.isEmpty()) {
 			methodName = "render" + action.substring(0, 1).toUpperCase().concat(action.substring(1));
 		} else {
-			methodName = formDo;
+			methodName = "decode" + formDo.substring(0, 1).toUpperCase().concat(formDo.substring(1));
 		}
 
 		try {

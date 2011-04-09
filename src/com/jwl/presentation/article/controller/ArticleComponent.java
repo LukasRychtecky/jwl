@@ -1,19 +1,23 @@
 package com.jwl.presentation.article.controller;
 
-import com.jwl.presentation.component.controller.JWLComponent;
-import com.jwl.presentation.component.enumerations.JWLTagAttributes;
+import javax.faces.context.FacesContext;
 
-public class ArticleComponent extends JWLComponent {
+import com.jwl.presentation.component.controller.UIComponentHelper;
+import com.jwl.presentation.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractPresenter;
+
+public class ArticleComponent extends AbstractComponent {
 
 	public static final String COMPONENT_TYPE = "com.jwl.component.Article";
-	public static final String DEFAULT_RENDERER = "com.jwl.component.ArticleRenderer";
 
-	private String initialPage;
-
-	public ArticleComponent() {
-		super();
-		this.setRendererType(DEFAULT_RENDERER);
+	@Override
+	public AbstractPresenter getPresenter(FacesContext context) {
+		UIComponentHelper.setUserNameAndRoles(this);
+		return new ArticlePresenter(context);
 	}
+
+	/*
+	private String initialPage;
 
 	public String getInitialPage() {
 		if (null == initialPage) {
@@ -27,5 +31,6 @@ public class ArticleComponent extends JWLComponent {
 	public void setInitialPage(String initialPage) {
 		this.initialPage = initialPage;
 	}
+	 */
 	
 }

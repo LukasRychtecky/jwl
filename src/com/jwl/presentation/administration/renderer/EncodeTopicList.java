@@ -10,7 +10,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.TopicTO;
@@ -23,8 +22,8 @@ import com.jwl.util.html.component.HtmlDiv;
 
 public class EncodeTopicList extends AbstractEncodeTopicList{
 
-	public EncodeTopicList(IFacade facade, ArticleId articleId) {
-		super(facade, articleId);
+	public EncodeTopicList(ArticleId articleId) {
+		super(articleId);
 	}
 
 	@Override

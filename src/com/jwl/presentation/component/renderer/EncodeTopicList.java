@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.TopicTO;
@@ -13,14 +12,12 @@ import com.jwl.presentation.administration.renderer.EncodeListing;
 
 public class EncodeTopicList extends AbstractEncodeTopicList{
 
-	
-	
-	public EncodeTopicList(IFacade facade, ArticleId id) {
-		super(facade, id);
+	public EncodeTopicList(ArticleId id) {
+		super(id);
 	}
 
 	@Override
-	protected void encodeResponse() {
+	public void encodeResponse() {
 		try {
 			super.encodeFlashMessages();
 			IPaginator<TopicTO> paginator= super.facade.getArticleForumTopics(articleId);

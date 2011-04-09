@@ -12,10 +12,9 @@ public class KeyWordPaginator extends AbstractEagerPaginator<ArticleTO> {
 
 	private IKnowledgeManagementFacade knowledge;	
 	
-	public KeyWordPaginator(WikiURLParser wup,
-			IKnowledgeManagementFacade knowledge) {
+	public KeyWordPaginator(IKnowledgeManagementFacade knowledge) {
 		super();
-		this.wup = wup;
+		this.wup = new WikiURLParser();
 		this.knowledge = knowledge;
 	}
 

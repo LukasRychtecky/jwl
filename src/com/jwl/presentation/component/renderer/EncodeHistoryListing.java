@@ -1,14 +1,14 @@
 package com.jwl.presentation.component.renderer;
 
-import com.jwl.business.IFacade;
-import com.jwl.business.article.ArticleId;
-import com.jwl.business.article.HistoryTO;
-import com.jwl.business.exceptions.ModelException;
-import com.jwl.presentation.administration.renderer.EncodeListing;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.jwl.business.article.ArticleId;
+import com.jwl.business.article.HistoryTO;
+import com.jwl.business.exceptions.ModelException;
+import com.jwl.presentation.administration.renderer.EncodeListing;
 
 /**
  *
@@ -18,14 +18,13 @@ public class EncodeHistoryListing extends AbstractEncodeHistoryListing {
 
 	private ArticleId id;
 
-	public EncodeHistoryListing(IFacade facade, ArticleId id) {
-		super(facade);
+	public EncodeHistoryListing(ArticleId id) {
 		this.id = id;
 	}
 
 
 	@Override
-	protected void encodeResponse() {
+	public void encodeResponse() {
 		try {
 			super.encodeFlashMessages();
 			List<HistoryTO> histories = super.facade.getHistories(this.id);

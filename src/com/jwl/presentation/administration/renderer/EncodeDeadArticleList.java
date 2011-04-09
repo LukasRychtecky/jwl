@@ -15,7 +15,6 @@ import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.administration.enumerations.AdministrationActions;
 import com.jwl.presentation.article.enumerations.ArticleActions;
@@ -34,8 +33,8 @@ public class EncodeDeadArticleList extends JWLEncoder {
 	private final String[] headers = new String[] { "", "Title", "Tags", "Editor",
 			"Editing count", "Created", "Rating" };
 
-	public EncodeDeadArticleList(IFacade facade) {
-		super(facade);
+	public EncodeDeadArticleList() {
+		super();
 	}
 	
 	@Override

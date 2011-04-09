@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlPanelGroup;
-import com.jwl.business.IFacade;
+
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
@@ -26,11 +27,6 @@ public abstract class AbstractEncodeListing extends JWLEncoder {
 
 	private final String[] headers = new String[]{"Title", "Tags", "Editor",
 "Editing count", "Created", "Rating", "Actions" };
-
-
-	public AbstractEncodeListing(IFacade facade) {
-		super(facade);
-	}
 
 	protected List<String> getHeaderNames() {
 		return Arrays.asList(this.headers);

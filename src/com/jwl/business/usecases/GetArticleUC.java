@@ -28,7 +28,7 @@ public class GetArticleUC extends AbstractUC implements IGetArticleUC {
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}
-		Environment.getKnowledgeFacade().handleArticleViewLivability(article.getId());
+//		Environment.getKnowledgeFacade().handleArticleViewLivability(article.getId());
 		return article;
 	}
 }

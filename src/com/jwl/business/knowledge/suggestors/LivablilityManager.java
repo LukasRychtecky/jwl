@@ -182,7 +182,7 @@ public class LivablilityManager {
 			articleDAO.update(article);
 		} catch (Exception e) {
 			Logger.getLogger(LivablilityManager.class.getName()).log(
-					Level.SEVERE, "Could not update article livability");
+					Level.SEVERE, "Could not update article livability", e);
 		}
 	}
 }
