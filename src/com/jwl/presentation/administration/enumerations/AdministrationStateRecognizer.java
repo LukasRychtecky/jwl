@@ -39,38 +39,12 @@ public class AdministrationStateRecognizer {
 				state = AdministrationStates.VIEW;
 			} else {
 				state = AdministrationStates.LIST;
-<<<<<<< HEAD
-				break;
-			case VIEW:
-				if (null != getArticleId()) {
-					state = AdministrationStates.VIEW;
-				} else {
-					state = AdministrationStates.LIST;
-				}
-				break;
-			case HISTORY_LIST:
-				if (this.getArticleId() != null) {
-					state = AdministrationStates.HISTORY_LIST;
-				} else {
-					state = AdministrationStates.LIST;
-				}
-				break;
-			case HISTORY_VIEW:
-				if (!this.wikiURLParser.getHistoryId().isEmpty()) {
-					state = AdministrationStates.HISTORY_VIEW;
-				} else {
-					state = AdministrationStates.LIST;
-				}
-				break;
-			case IMPORT_ACL:
-=======
 			}
 			break;
 		case HISTORY_LIST:
 			if (this.getArticleId() != null) {
 				state = AdministrationStates.HISTORY_LIST;
 			} else {
->>>>>>> 1399f2b6759522195f92d151631659ea0cb31674
 				state = AdministrationStates.LIST;
 			}
 			break;
