@@ -22,7 +22,7 @@ public class EncodeTopicView extends AbstractEncodeTopicView {
 
 	public EncodeTopicView(IFacade facade, Integer topicId,
 			ArticleId articleId, boolean answering, Integer quotePostId) {
-		super(facade);
+//		super(facade);
 		this.topicId = topicId;
 		this.articleId = articleId;
 		this.answering = answering;

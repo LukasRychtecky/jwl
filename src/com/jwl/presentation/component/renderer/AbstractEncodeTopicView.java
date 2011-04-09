@@ -14,7 +14,6 @@ import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
@@ -33,8 +32,7 @@ import com.jwl.util.html.component.HtmlLinkProperties;
 
 public abstract class AbstractEncodeTopicView extends JWLEncoder {
 
-	public AbstractEncodeTopicView(IFacade facade) {
-		super(facade);
+	public AbstractEncodeTopicView() {
 	}
 
 	protected void encodeTopicPanel(TopicTO topic) throws IOException,

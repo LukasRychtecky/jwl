@@ -56,7 +56,6 @@ public class AdministrationStateRecognizer {
 			}
 			break;
 		case IMPORT_ACL:
-			state = AdministrationStates.LIST;
 			break;
 		case MERGE_SUGGESTION_LIST:
 			state = AdministrationStates.MERGE_SUGGESTION_LIST;
