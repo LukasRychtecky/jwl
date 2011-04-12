@@ -24,7 +24,7 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 			ModelException {
 		this.encodeTitle(article.getTitle());
 		this.encodeText(article.getText());
-		this.encodeAttachments(article.getAttachments());
+		this.encodeAttachments(article.getAttachments(), article.getTitle());
 		this.encodeTags(article.getTags());
 	}
 
@@ -54,12 +54,14 @@ public abstract class AbstractEncodeView extends JWLEncoder {
 		}
 	}
 	
-	private void encodeAttachments(Set<AttachmentTO> attachments) throws IOException {
+	private void encodeAttachments(Set<AttachmentTO> attachments, String title) throws IOException {
 		if (!attachments.isEmpty()) {
 			super.encodeDivClassStart(JWLStyleClass.VIEW_ATTACHMENTS);
 			for (AttachmentTO att : attachments) {
 				HtmlLinkProperties properties = new HtmlLinkProperties();
-				properties.addParameter(JWLURLParameters.FILE_NAME, att.getUniqueName());
+				properties.addParameter(JWLURLParameters.ARTICLE_TITLE, title);
+				properties.addParameter(JWLURLParameters.ACTION, ArticleActions.VIEW);
+				properties.addParameter(JWLURLParameters.FILE_NAME, att.getTitle());
 				properties.setValue(att.getTitle());
 				super.getHtmlLinkComponent(properties).encodeAll(context);
 			}
