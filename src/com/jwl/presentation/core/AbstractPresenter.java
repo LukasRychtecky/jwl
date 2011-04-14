@@ -2,13 +2,13 @@ package com.jwl.presentation.core;
 
 import com.jwl.business.Facade;
 import com.jwl.business.IFacade;
+import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
+import com.jwl.presentation.component.renderer.FlashMessage;
 import com.jwl.presentation.html.AppForm;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlContainer;
 import com.jwl.presentation.html.HtmlInputExtended;
-import com.jwl.presentation.html.HtmlLink;
-import com.sun.faces.renderkit.RenderKitImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -29,7 +29,7 @@ import javax.servlet.ServletResponse;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import javax.faces.application.StateManager;
-import javax.faces.component.UIInput;
+import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 /**
@@ -55,9 +55,11 @@ abstract public class AbstractPresenter {
 	protected List<UIComponent> container;
 	private Boolean isAjax = Boolean.FALSE;
 	protected AppForm form;
+	protected List<FlashMessage> messages;
 
 	public AbstractPresenter(FacesContext context) {
 		this.context = context;
+		this.messages = new ArrayList<FlashMessage>();
 		this.container = new ArrayList<UIComponent>();
 		String className = this.getClass().getSimpleName();
 		Integer lastIndex = className.lastIndexOf("Presenter");
@@ -246,9 +248,29 @@ abstract public class AbstractPresenter {
 		}
 	}
 
+	protected UIComponent renderMessages() {
+		HtmlContainer messagesContainer = new HtmlContainer();
+		messagesContainer.setId("jwl-messages");
+
+		for (FlashMessage flashMessage : this.messages) {
+			HtmlContainer messageWidget = new HtmlContainer();
+			messageWidget.getStyleClasses().add(JWLStyleClass.FLASH_MESSAGE);
+			messageWidget.getStyleClasses().add(JWLStyleClass.FLASH_PREFIX +
+											flashMessage.getType().getType() +
+											(flashMessage.isHide() ? "" : JWLStyleClass.NO_HIDE));
+			HtmlOutputText text = new HtmlOutputText();
+			text.setValue(flashMessage.getMessage());
+			messageWidget.getChildren().add(text);
+			messagesContainer.getChildren().add(messageWidget);
+		}
+
+		return messagesContainer;
+	}
+
 	public void sendResponse() throws IOException {
 		HtmlContainer componentCover = new HtmlContainer();
 		componentCover.getStyleClasses().add(COMPONENT_CLASS);
+		componentCover.getChildren().add(this.renderMessages());
 		componentCover.getChildren().addAll(this.container);
 		
 		if (this.isAjax) {

@@ -2,6 +2,8 @@ package com.jwl.presentation.presenters.widget;
 
 import com.jwl.presentation.component.enumerations.JWLElements;
 import com.jwl.presentation.component.enumerations.JWLStyleClass;
+import com.jwl.presentation.component.renderer.FlashMessage;
+import com.jwl.presentation.component.renderer.FlashMessageType;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.html.AppForm;
 import com.jwl.presentation.html.HtmlAppForm;
