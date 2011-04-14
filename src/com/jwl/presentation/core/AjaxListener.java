@@ -2,6 +2,7 @@ package com.jwl.presentation.core;
 
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
@@ -38,27 +39,28 @@ public class AjaxListener implements PhaseListener {
 		}
 		
 		try {
-			String method = context.getExternalContext().getRequestParameterMap().get(JWLURLParameters.METHOD);
+			Map<String, String> requestParams = context.getExternalContext().getRequestParameterMap();
+			String method = requestParams.get(JWLURLParameters.METHOD);
 			if (method == null || !method.equals("ajax")) {
 				return;
+			}
+
+			if (!requestParams.containsKey(JWLURLParameters.PRESENTER)) {
+				throw new IllegalArgumentException("No " + JWLURLParameters.PRESENTER + " found.");
 			}
 
 			StringBuilder packageName = new StringBuilder(this.getClass().getPackage().getName());
 			String className = 
 					packageName.substring(0, packageName.lastIndexOf(".")) +
 					".presenters." +
-					context.getExternalContext().getRequestParameterMap().get(JWLURLParameters.PRESENTER).toLowerCase() +
+					requestParams.get(JWLURLParameters.PRESENTER).toLowerCase() +
 					".Component";
 
 			Class c = Class.forName(className);
 			AbstractComponent component = (AbstractComponent) c.newInstance();
 			component.encodeAll(context);
 
-		} catch (InstantiationException ex) {
-			this.handleException(context, ex);
-		} catch (IllegalAccessException ex) {
-			this.handleException(context, ex);
-		} catch (ClassNotFoundException ex) {
+		} catch (Exception ex) {
 			this.handleException(context, ex);
 		}
 

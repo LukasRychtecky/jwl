@@ -1,6 +1,8 @@
 package com.jwl.presentation.presenters.widget;
 
 import com.jwl.presentation.core.Linker;
+import com.jwl.presentation.html.HtmlAppForm;
+import com.jwl.presentation.html.HtmlLink;
 import java.io.IOException;
 import java.util.List;
 import javax.faces.component.UIComponent;
@@ -38,13 +40,19 @@ public class Renderer extends com.jwl.presentation.core.AbstractRenderer {
 		message.setValue("Renderujeme detail!");
 		super.components.add(message);
 
-		HtmlOutputLink link = new HtmlOutputLink();
+		HtmlLink link = new HtmlLink();
+		link.setText("odkaz native default");
 		link.setValue(this.linker.build("default"));
-
-		HtmlOutputText text = new HtmlOutputText();
-		text.setValue("odkaz na default");
-		link.getChildren().add(text);
 		super.components.add(link);
+
+		HtmlAppForm form = new HtmlAppForm("mujForm");
+		form.addHidden("hidden", "Hidden", "default");
+		form.addPassword("pass", "Pass");
+		form.addText("text", "Text", "default");
+		form.addCheckbox("checkbox", "Checkbox");
+		form.addTextArea("textarea", "Textarea", "blaaaaah");
+		form.addSubmit("submit", "Send", "click");
+//		super.components.add(form);
 	}
 
 }

@@ -3,9 +3,15 @@ package com.jwl.presentation.core;
 import com.jwl.business.Facade;
 import com.jwl.business.IFacade;
 import com.jwl.presentation.component.enumerations.JWLURLParameters;
+import com.jwl.presentation.html.AppForm;
+import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlContainer;
+import com.jwl.presentation.html.HtmlInputExtended;
+import com.jwl.presentation.html.HtmlLink;
+import com.sun.faces.renderkit.RenderKitImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +26,11 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
+import javax.faces.application.StateManager;
+import javax.faces.component.UIInput;
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 /**
  *
@@ -27,7 +38,9 @@ import javax.servlet.ServletResponse;
  */
 abstract public class AbstractPresenter {
 
+	public static final String SERIALIZED_STATE_KEY = "com.jwl.presentation.core.view.serializedstate";
 	public static final String COMPONENT_CLASS = "jwl-component";
+	public static final String CREATE_FORM = "createForm";
 	
 	public static final String HTML_ELEMENT = "html";
 	public static final String BODY_ELEMENT = "body";
@@ -41,12 +54,17 @@ abstract public class AbstractPresenter {
 	private IFacade facade = null;
 	protected List<UIComponent> container;
 	private Boolean isAjax = Boolean.FALSE;
+	protected AppForm form;
 
 	public AbstractPresenter(FacesContext context) {
 		this.context = context;
 		this.container = new ArrayList<UIComponent>();
 		String className = this.getClass().getSimpleName();
-		String presenterName = className.substring(0, className.lastIndexOf("Presenter"));
+		Integer lastIndex = className.lastIndexOf("Presenter");
+		String presenterName = "";
+		if (lastIndex > -1) {
+			presenterName = className.substring(0, lastIndex);
+		}
 
 		Map<String, String> requestParams = context.getExternalContext().getRequestParameterMap();
 		
@@ -59,7 +77,57 @@ abstract public class AbstractPresenter {
 		} else {
 			this.linker = new Linker(context, presenterName);
 		}
-		
+		try {
+			this.prepareForm();
+		} catch (IOException ex) {
+			Logger.getLogger(AbstractPresenter.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private void prepareForm() throws IOException {
+		Map<String, String> request = this.context.getExternalContext().getRequestParameterMap();
+		String formName = request.get(AppForm.FORM_NAME);
+		if (formName != null && !formName.isEmpty()) {
+			Method method;
+			try {
+				method = this.getClass().getMethod(CREATE_FORM + formName);
+				HtmlAppForm form = (HtmlAppForm) method.invoke(this);
+
+				for (String key : request.keySet()) {
+					if (!key.startsWith(AppForm.PREFIX)) {
+						continue;
+					}
+
+					HtmlInputExtended input = form.get(key.substring(AppForm.PREFIX.length()));
+					if (input == null) {
+						continue;
+					}
+
+					Object value = request.get(key);
+					if (input.getComponent() instanceof HtmlSelectBooleanCheckbox) {
+						value = (value.toString().equals("on") ? Boolean.TRUE : Boolean.FALSE);
+					}
+					input.setValue(value);
+				}
+
+				this.form = form;
+			} catch (NoSuchMethodException ex) {
+				this.logException(new RuntimeException("No such method found " + this.getClass().toString() + "." + CREATE_FORM + formName, ex));
+				this.render404();
+			} catch (SecurityException ex) {
+				this.logException(new RuntimeException("Method " + this.getClass().toString() + "." + CREATE_FORM + formName + " must be declarated as public.", ex));
+				this.render500();
+			} catch (IllegalAccessException ex) {
+				this.logException(ex);
+				this.render500();
+			} catch (IllegalArgumentException ex) {
+				this.logException(ex);
+				this.render500();
+			} catch (InvocationTargetException ex) {
+				this.logException(ex);
+				this.render500();
+			}
+		}
 	}
 
 	protected IFacade getFacade() {
@@ -144,10 +212,11 @@ abstract public class AbstractPresenter {
 		this.context.setResponseWriter(writer);
 		writer.startDocument();
 		this.encodeAjaxBegin(this.context);
-
+		
 		this.context.getViewRoot().getChildren().add(componentCover);
 		this.context.getViewRoot().encodeAll(this.context);
 
+		this.saveViewState(this.context);
 		this.encodeAjaxEnd(this.context);
 		writer.endDocument();
 		writer.flush();
@@ -155,6 +224,26 @@ abstract public class AbstractPresenter {
 		servletWriter.close();
 
 		this.context.responseComplete();
+	}
+
+	public void saveViewState(FacesContext context) throws IOException {
+		ResponseWriter writer = context.getResponseWriter();
+		StateManager stateManager = context.getApplication().getStateManager();
+		Object serializedView = stateManager.saveView(context);
+		if (null != serializedView && null != writer) {
+			StringWriter bufWriter = new StringWriter();
+			ResponseWriter tempWriter;
+			tempWriter = writer.cloneWithWriter(bufWriter);
+			context.setResponseWriter(tempWriter);
+			stateManager.writeState(context, serializedView);
+			tempWriter.flush();
+			if (bufWriter.getBuffer().length() > 0) {
+				context.getExternalContext().getRequestMap().put(
+						SERIALIZED_STATE_KEY,
+						bufWriter.toString());
+			}
+			context.setResponseWriter(writer);
+		}
 	}
 
 	public void sendResponse() throws IOException {

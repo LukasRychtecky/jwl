@@ -42,8 +42,8 @@ public class Linker {
 	}
 
 	public String build(String action, Map<String, String> params) {
+		params.put(JWLURLParameters.PRESENTER, this.presenter);
 		if (!action.equals("default")) {
-			params.put(JWLURLParameters.PRESENTER, this.presenter);
 			params.put(JWLURLParameters.ACTION, action);
 		}
 		return this.buildLink(params);
