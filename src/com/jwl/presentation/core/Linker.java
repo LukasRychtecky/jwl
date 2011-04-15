@@ -21,6 +21,13 @@ public class Linker {
 	private String presenter;
 	private Map<String, String> foreingParams = null;
 
+	public Linker(FacesContext context, String presenter, String uri) {
+		this(context, presenter);
+		if (uri != null) {
+			this.parser.setURI(uri);
+		}
+	}
+
 	public Linker(FacesContext context, String presenter) {
 		this.parser = new WikiURLParser(context);
 		this.presenter = presenter;
@@ -33,8 +40,8 @@ public class Linker {
 	}
 
 	public String build(String action, Map<String, String> params) {
+		params.put(JWLURLParameters.PRESENTER, this.presenter);
 		if (!action.equals("default")) {
-			params.put(JWLURLParameters.PRESENTER, this.presenter);
 			params.put(JWLURLParameters.ACTION, action);
 		}
 		return this.buildLink(params);

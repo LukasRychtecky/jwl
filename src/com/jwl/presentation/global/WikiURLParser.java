@@ -9,6 +9,8 @@ import com.jwl.presentation.component.enumerations.JWLURLParameters;
 import com.jwl.util.html.url.URLParser;
 
 public class WikiURLParser extends URLParser {
+
+	private String uri = null;
 	
 	public WikiURLParser(){
 		setRequest(getHttpRequest());
@@ -105,5 +107,17 @@ public class WikiURLParser extends URLParser {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public void setURI(String uri) {
+		this.uri = uri;
+	}
+
+	@Override
+	public String getCurrentURI() {
+		if (this.uri != null) {
+			return this.uri;
+		}
+		return super.getCurrentURI();
 	}
 }

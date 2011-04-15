@@ -25,6 +25,7 @@ public class Router {
 		String formDo = this.parser.getFormDo();
 		if ((action == null || action.isEmpty()) && (formDo == null || formDo.isEmpty())) {
 			presenter.renderDefault();
+			presenter.sendResponse();
 			return;
 		}
 
@@ -39,6 +40,7 @@ public class Router {
 		try {
 			Method method = presenter.getClass().getMethod(methodName);
 			method.invoke(presenter);
+			presenter.sendResponse();
 		} catch (IllegalAccessException ex) {
 			this.logException(new RouteException("Method " + presenter.getClass().toString() + "." + methodName + " must be declarated as public.", ex));
 			presenter.render404();
@@ -54,6 +56,8 @@ public class Router {
 		} catch (SecurityException ex) {
 			this.logException(ex);
 			presenter.render500();
+		} catch (IOException ex) {
+			this.logException(ex);
 		}
 	}
 

@@ -25,7 +25,7 @@ public class WikiPresenter extends AbstractPresenter {
 
 	public WikiPresenter(FacesContext context) {
 		super(context);
-		this.renderer = new WikiRenderer(this.context, super.linker);
+		this.renderer = new WikiRenderer(this.context, super.linker, super.container);
 	}
 
 	@Override

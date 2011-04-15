@@ -1,7 +1,10 @@
 package com.jwl.presentation.wiki;
 
+import com.jwl.presentation.core.AbstractRenderer;
 import com.jwl.presentation.core.Linker;
 import java.io.IOException;
+import java.util.List;
+import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
@@ -10,10 +13,10 @@ import javax.faces.context.FacesContext;
  *
  * @author Lukas Rychtecky
  */
-public class WikiRenderer extends com.jwl.presentation.core.Renderer {
+public class WikiRenderer extends AbstractRenderer {
 
-	public WikiRenderer(FacesContext context, Linker linker) {
-		super(context, linker);
+	public WikiRenderer(FacesContext context, Linker linker, List<UIComponent> components) {
+		super(context, linker, components);
 	}
 
 	@Override

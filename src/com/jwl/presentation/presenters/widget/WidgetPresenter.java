@@ -1,18 +1,15 @@
 package com.jwl.presentation.presenters.widget;
 
 import com.jwl.presentation.component.enumerations.JWLElements;
-import com.jwl.presentation.component.enumerations.JWLStyleClass;
 import com.jwl.presentation.core.AbstractPresenter;
-import com.jwl.util.html.component.HtmlActionForm;
+import com.jwl.presentation.html.HtmlAppForm;
+import com.jwl.presentation.html.HtmlInputExtended;
+import com.jwl.presentation.html.HtmlLink;
 import com.jwl.util.html.component.HtmlDivCommandButton;
 import com.jwl.util.html.component.HtmlDivInputText;
 import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.faces.component.UIComponent;
+import java.util.Map.Entry;
 import javax.faces.component.html.HtmlOutputText;
-import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 
 /**
@@ -25,50 +22,48 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	public WidgetPresenter(FacesContext context) {
 		super(context);
-		this.renderer = new Renderer(this.context, super.linker);
+		this.renderer = new Renderer(this.context, super.linker, super.container);
 	}
 
 	@Override
 	public void renderDefault() throws IOException {
 		this.renderer.renderDefault();
-		this.createForm();
+//		this.createForm();
+
+		HtmlLink link = new HtmlLink();
+		link.setValue(this.linker.build("detail"));
+		link.setText("CLick mee");
+		this.container.add(link);
+
+		if (this.form != null) {
+			for (Entry<String, HtmlInputExtended> entry : this.form.getInputs().entrySet()) {
+				System.out.println(entry.getKey() + ": " + entry.getValue().getValue());
+			}
+		}
 	}
 
 	public void renderDetail() throws IOException {
+		HtmlAppForm form = this.createFormMujForm();
+		super.container.add(form);
 		this.renderer.renderDetail();
 	}
 
 	public void formValid() {
 		HtmlOutputText message = new HtmlOutputText();
 		message.setValue("Hledas: " + this.getFormValue(JWLElements.SEARCH_INPUT.id));
-		try {
-			message.encodeAll(this.context);
-		} catch (IOException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		}
+		super.container.add(message);
 	}
 
-	private void createForm() {
-
-		HtmlActionForm form = new HtmlActionForm();
-		form.setAction(this.buildFormLink("formValid"));
-
-		HtmlPanelGrid table = new HtmlPanelGrid();
-		table.setColumns(2);
-		table.setBorder(0);
-		List<UIComponent> children = table.getChildren();
-		children.add(this.getHtmlInputComponent("", JWLElements.SEARCH_INPUT,
-				JWLStyleClass.SEARCH_INPUT));
-		children.add(this.getHtmlSubmitComponent(JWLElements.SEARCH_BUTTON,
-				JWLStyleClass.SEARCH_INPUT_SUBMIT));
-
-
-		form.getChildren().add(table);
-		try {
-			form.encodeAll(context);
-		} catch (IOException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		}
+	public HtmlAppForm createFormMujForm() {
+		HtmlAppForm form = new HtmlAppForm("MujForm");
+		form.addHidden("hidden", "Hidden", "default");
+		form.addPassword("pass", "Pass");
+		form.addText("text", "Text", "default");
+		form.addCheckbox("checkbox", "Checkbox");
+		form.addTextArea("textarea", "Textarea", "blaaaaah");
+		form.addSubmit("submit", "Send", "click");
+		form.setAction(this.linker.build("default"));
+		return form;
 	}
 
 	protected HtmlDivCommandButton getHtmlSubmitComponent(JWLElements element, String styleClass) {
