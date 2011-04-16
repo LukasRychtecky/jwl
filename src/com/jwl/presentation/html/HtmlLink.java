@@ -41,7 +41,10 @@ public class HtmlLink extends HtmlOutputLink {
 		for (String className : this.styleClasses) {
 			styleClass.append(className).append(" ");
 		}
-		super.setStyleClass(styleClass.substring(0, styleClass.length() - 1));
+		int toIndex = styleClass.length() - 1;
+		if (toIndex > 0) {
+			super.setStyleClass(styleClass.substring(0, styleClass.length() - 1));
+		}
 		super.encodeBegin(context);
 	}
 
