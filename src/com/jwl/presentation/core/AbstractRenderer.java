@@ -1,7 +1,6 @@
 package com.jwl.presentation.core;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
