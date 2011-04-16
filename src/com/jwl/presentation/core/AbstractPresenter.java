@@ -168,12 +168,14 @@ abstract public class AbstractPresenter {
 
 	public void render404() throws IOException {
 		AbstractRenderer renderer = new AbstractRenderer(this.context, this.linker, this.container);
-		renderer.render404(this.getRequestParam(JWLURLParameters.ACTION).toString());
+		renderer.render404(this.context.getExternalContext().getRequestParameterMap().get(JWLURLParameters.ACTION).toString());
+		this.sendResponse();
 	}
 
 	public void render500() throws IOException {
 		AbstractRenderer renderer = new AbstractRenderer(this.context, this.linker, this.container);
 		renderer.render500();
+		this.sendResponse();
 	}
 
 	public void encodeAjaxBegin(FacesContext context) throws IOException {
