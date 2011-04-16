@@ -53,7 +53,10 @@ public class Linker {
 
 	private String buildLink(Map<String, String> params) {
 		params.putAll(this.getForeingParams());
-		params.put(JWLURLParameters.ARTICLE_TITLE, this.getArticleTitle());
+		String title = this.getArticleTitle();
+		if (title != null) {
+			params.put(JWLURLParameters.ARTICLE_TITLE, this.getArticleTitle());
+		}
 		return URLBuilder.buildURL(this.parser.getCurrentURI(), params);
 	}		
 
