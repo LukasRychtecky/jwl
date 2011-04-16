@@ -2,7 +2,7 @@ package com.jwl.presentation.html;
 
 import com.jwl.util.html.component.HtmlInputFile;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
@@ -14,7 +14,6 @@ import javax.faces.component.html.HtmlOutputLabel;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
-import javax.faces.component.html.HtmlSelectOneRadio;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -42,7 +41,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		this.name = name;
 		this.method = METHOD_POST;
 		this.enctype = "application/x-www-form-urlencoded";
-		this.components = new HashMap<String, HtmlInputExtended>();
+		this.components = new LinkedHashMap<String, HtmlInputExtended>();
 	}
 
 	@Override
@@ -130,7 +129,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		input.setValue(value);
 		input.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(input, label);
-		this.components.put(name, labeled);
+		this.addComponent(name, labeled);
 		return input;
 	}
 
@@ -140,7 +139,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		input.setId(this.createName(name));
 		input.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(input, label);
-		this.components.put(name, labeled);
+		this.addComponent(name, labeled);
 		return input;
 	}
 
@@ -150,7 +149,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		input.setId(this.createName(name));
 		input.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(input, label);
-		this.components.put(name, labeled);
+		this.addComponent(name, labeled);
 		return input;
 	}
 
@@ -160,7 +159,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		input.setId(this.createName(name));
 		input.setValue(value);
 		HtmlInputExtended extended = new HtmlInputExtended(input, null);
-		this.components.put(name, extended);
+		this.addComponent(name, extended);
 		return input;
 	}
 
@@ -171,7 +170,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		textarea.setValue(value);
 		textarea.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(textarea, label);
-		this.components.put(name, labeled);
+		this.addComponent(name, labeled);
 		return textarea;
 	}
 
@@ -182,7 +181,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		button.setValue(caption);
 		button.setLabel(label);
 		HtmlInputExtended extended = new HtmlInputExtended(button, null);
-		this.components.put(name, extended);
+		this.addComponent(name, extended);
 		return button;
 	}
 
@@ -193,8 +192,18 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		checkbox.setLabel(caption);
 		checkbox.setValue(false);
 		HtmlInputExtended labeled = new HtmlInputExtended(checkbox, caption);
-		this.components.put(name, labeled);
+		this.addComponent(name, labeled);
 		return checkbox;
+	}
+
+	@Override
+	public Map<String, HtmlInputExtended> getInputs() {
+		return this.components;
+	}
+
+	@Override
+	public HtmlInputExtended get(String name) {
+		return this.components.get(name);
 	}
 
 	protected String createName(String name) {
@@ -208,14 +217,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return comp;
 	}
 
-	@Override
-	public HtmlInputExtended get(String name) {
-		return this.components.get(name);
+	protected void addComponent(String name, HtmlInputExtended component) {
+		this.components.put(name, component);
 	}
-
-	@Override
-	public Map<String, HtmlInputExtended> getInputs() {
-		return this.components;
-	}
-
 }
