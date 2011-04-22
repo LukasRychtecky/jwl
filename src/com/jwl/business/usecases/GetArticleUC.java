@@ -1,6 +1,5 @@
 package com.jwl.business.usecases;
 
-import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;

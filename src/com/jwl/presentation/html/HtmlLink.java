@@ -3,6 +3,7 @@ package com.jwl.presentation.html;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
@@ -13,7 +14,7 @@ import javax.faces.context.FacesContext;
  */
 public class HtmlLink extends HtmlOutputLink {
 
-	private Boolean isAjax = Boolean.TRUE;
+	private Boolean isAjax = Boolean.FALSE;
 	private List<String> styleClasses;
 
 	public HtmlLink() {
@@ -45,11 +46,19 @@ public class HtmlLink extends HtmlOutputLink {
 		if (toIndex > 0) {
 			super.setStyleClass(styleClass.substring(0, styleClass.length() - 1));
 		}
+		
 		super.encodeBegin(context);
 	}
 
-	public List<String> getStyleClasses() {
-		return styleClasses;
+	@Override
+	public void setStyleClass(String style) {
+		styleClasses.add(style);
+	}
+
+	public void setStyleClasses(String... styles) {
+		for (String style : styles) {
+			styleClasses.add(style);
+		}
 	}
 
 	public final void setText(String text) {

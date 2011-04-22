@@ -13,8 +13,6 @@ import com.jwl.business.exceptions.PermissionDeniedException;
  */
 public interface IIdentity {
 
-	public void addUserRole(Role role);
-
 	public void addUserRoles(List<Role> roles);
 
 	public Boolean hasUserRole(Role role);

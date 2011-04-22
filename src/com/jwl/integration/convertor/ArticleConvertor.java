@@ -7,15 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.jwl.business.Facade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
-import com.jwl.business.exceptions.ModelException;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.entity.Attachment;
 import com.jwl.integration.entity.Tag;
-import com.jwl.presentation.global.Global;
 
 public class ArticleConvertor {
 
@@ -47,15 +44,11 @@ public class ArticleConvertor {
 			article.addTag(tag.getName());
 		}
 
-		article.setAttachments(AttachmentConvertor.convertFromEntity(entity
-				.getAttachments()));
+		article.setAttachments(AttachmentConvertor.convertFromEntity(entity.getAttachments()));
 
-		article.setRatings(RatingConvertor.convertFromEntities(entity
-				.getRatings()));
+		article.setRatings(RatingConvertor.convertFromEntities(entity.getRatings()));
 
-		article
-				.setKeyWords(KeyWordConvertor
-						.fromEntities(entity.getKeyWords()));
+		article.setKeyWords(KeyWordConvertor.fromEntities(entity.getKeyWords()));
 
 		// for (RoleEntity roleEntity : entity.getRoles()) {
 		// article.addRole(RoleConvertor.toObject(roleEntity));

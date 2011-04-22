@@ -4,98 +4,47 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
  <component>
   <component-type>com.jwl.component.Article</component-type>
-  <component-class>com.jwl.presentation.article.controller.ArticleComponent</component-class>
+  <component-class>com.jwl.presentation.components.article.ArticleComponent</component-class>
  </component>
  <component>
   <component-type>com.jwl.component.Administration</component-type>
-  <component-class>com.jwl.presentation.administration.controller.AdministrationComponent</component-class>
+  <component-class>com.jwl.presentation.components.administration.AdministrationComponent</component-class>
  </component>
  <component>
   <component-type>com.jwl.component.Search</component-type>
-  <component-class>com.jwl.presentation.search.controller.SearchComponent</component-class>
+  <component-class>com.jwl.presentation.components.search.SearchComponent</component-class>
  </component>
   <component>
   <component-type>com.jwl.component.Wiki</component-type>
-  <component-class>com.jwl.presentation.wiki.WikiComponent</component-class>
+  <component-class>com.jwl.presentation.components.wiki.WikiComponent</component-class>
  </component>
  <component>
   <component-type>com.jwl.component.Widget</component-type>
-  <component-class>com.jwl.presentation.presenters.widget.Component</component-class>
+  <component-class>com.jwl.presentation.components.widget.WidgetComponent</component-class>
  </component>
  <render-kit>
-  <!-- JWL COMPONENT RENDERERS -->
-  <renderer>
-   <component-family>com.jwl.component</component-family>
-   <renderer-type>com.jwl.component.ArticleRenderer</renderer-type>
-   <renderer-class>com.jwl.presentation.article.renderer.ArticleRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>com.jwl.component</component-family>
-   <renderer-type>com.jwl.component.AdministrationRenderer</renderer-type>
-   <renderer-class>com.jwl.presentation.administration.renderer.AdministrationRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>com.jwl.component</component-family>
-   <renderer-type>com.jwl.component.SearchRenderer</renderer-type>
-   <renderer-class>com.jwl.presentation.search.renderer.SearchRenderer</renderer-class>
-  </renderer>
   <!-- ADVANCED HTML RENDERERS -->
   <renderer>
    <component-family>javax.faces.Panel</component-family>
    <renderer-type>com.jwl.html.HeaderPanelGridRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.HeaderPanelGridRenderer</renderer-class>
+   <renderer-class>com.jwl.presentation.html.renderer.HeaderPanelGridRenderer</renderer-class>
   </renderer>
   <renderer>
    <component-family>javax.faces.Form</component-family>
    <renderer-type>com.jwl.html.ActionFormRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.ActionFormRenderer</renderer-class>
+   <renderer-class>com.jwl.presentation.html.renderer.ActionFormRenderer</renderer-class>
   </renderer>
   <renderer>
    <component-family>javax.faces.Input</component-family>
    <renderer-type>com.jwl.html.InputFileRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.InputFileRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>javax.faces.Command</component-family>
-   <renderer-type>com.jwl.html.DivCommandButtonRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.DivCommandButtonRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>javax.faces.Input</component-family>
-   <renderer-type>com.jwl.html.DivInputTextRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.DivInputTextRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>javax.faces.Output</component-family>
-   <renderer-type>com.jwl.html.DivOutputLabelRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.DivOutputLabelRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>javax.faces.Output</component-family>
-   <renderer-type>com.jwl.html.DivOutputTextRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.DivOutputTextRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>javax.faces.Input</component-family>
-   <renderer-type>com.jwl.html.DivInputFileRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.DivInputFileRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>javax.faces.Output</component-family>
-   <renderer-type>com.jwl.html.FreeOutputRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.FreeOutputRenderer</renderer-class>
-  </renderer>
-  <renderer>
-   <component-family>javax.faces.Output</component-family>
-   <renderer-type>com.jwl.html.DivRenderer</renderer-type>
-   <renderer-class>com.jwl.util.html.renderer.DivRenderer</renderer-class>
+   <renderer-class>com.jwl.presentation.html.renderer.InputFileRenderer</renderer-class>
   </renderer>
  </render-kit>
  <lifecycle>
-   <phase-listener>com.jwl.presentation.component.knowledgeajax.KnowledgeAjaxPhaseListener</phase-listener>
-</lifecycle>
+   <phase-listener>com.jwl.presentation.knowledgeajax.KnowledgeAjaxPhaseListener</phase-listener>
+	</lifecycle>
  <lifecycle>
-   <phase-listener>com.jwl.presentation.core.AjaxListener</phase-listener>
-</lifecycle>
+   <phase-listener>com.jwl.presentation.components.core.AjaxListener</phase-listener>
+	</lifecycle>
 
 </faces-config>

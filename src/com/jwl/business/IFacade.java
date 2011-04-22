@@ -37,7 +37,7 @@ public interface IFacade {
 	 * 
 	 * @param articleTO
 	 */
-	public void createArticle(ArticleTO article) throws ModelException, NoPermissionException;
+	public ArticleId createArticle(ArticleTO article) throws ModelException, NoPermissionException;
 
 	/**
 	 * Deletes given article
@@ -98,7 +98,7 @@ public interface IFacade {
 	
 	public IPaginator<TopicTO> getArticleForumTopics(ArticleId articleId) throws ModelException;
 	
-	public void createForumTopic(TopicTO topic, ArticleId article) throws ModelException;
+	public Integer createForumTopic(TopicTO topic, ArticleId article) throws ModelException;
 	
 	public void deleteForumTopics(List<Integer> topicIds) throws ModelException;
 	

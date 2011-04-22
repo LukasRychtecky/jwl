@@ -20,15 +20,16 @@ public class CreateForumTopicUC extends AbstractUC implements
 	}
 
 	@Override
-	public void createTopic(TopicTO topic, ArticleId articleId)
+	public Integer createTopic(TopicTO topic, ArticleId articleId)
 			throws ModelException {
 		checkPermission(AccessPermissions.FORUM_CREATE_TOPIC);
 		try {
 			PostTO initialPost = topic.getPosts().get(0);
 			initialPost.setAuthor(Environment.getIdentity().getUserName());
 			initialPost.setCreated(new Date());
-			Integer topicId =factory.getTopicDAO().create(topic, articleId);
+			Integer topicId = factory.getTopicDAO().create(topic, articleId);
 			factory.getPostDAO().create(initialPost, topicId);
+			return topicId;
 		} catch (DAOException e) {
 			throw new ModelException(e);
 		}

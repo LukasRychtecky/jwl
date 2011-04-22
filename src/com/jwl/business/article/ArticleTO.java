@@ -1,6 +1,8 @@
 package com.jwl.business.article;
 
 import com.jwl.business.security.Role;
+
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +27,7 @@ public class ArticleTO {
 	private List<RatingTO> ratings;
 	private Set<Role> excludedRoles;
 	private List<KeyWordTO> keyWords;
-	private Set<AttachmentTO> attachments;
+	private Set<AttachmentTO> attachments = Collections.emptySet();
 	private double livability;
 	private List<TopicTO> topics;
 	
@@ -206,6 +208,9 @@ public class ArticleTO {
 	
 	public float getRatingAverage(){
 		float total =0;
+		if (ratings == null) {
+			return total;
+		}
 		for(RatingTO r:ratings){
 			total += r.getRating();
 		}

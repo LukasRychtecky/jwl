@@ -12,14 +12,15 @@ public enum AccessPermissions {
 	ARTICLE_RESTORE ("Article", "restore"),
 	ARTICLE_LOCK ("Article", "lock"),
 	ARTICLE_DELETE ("Article", "delete"),
-	ARTICLE_EXCLUDEROLE ("Article", "excludeRole"),
+	ARTICLE_EXCLUDE_ROLE ("Article", "exclude_role"),
 	ARTICLE_RATE ("Article", "rate"),
 	KNOWLEDGE_ADMINISTER ("Knowledge", "administer"),
 
 	ATTACHMENT_VIEW ("Attachment", "view"),
 	ATTACHMENT_ADD ("Attachment", "add"),
 	ATTACHMENT_DELETE ("Attachment", "delete"),
-		SECURITY_IMPORT("Security", "import"),
+	SECURITY_IMPORT("Security", "import"),
+	
 	FORUM_VIEW ("Forum", "view"),
 	FORUM_CLOSE_TOPIC ("Forum", "close_topic"),
 	FORUM_ADD_POST ("Forum", "add_post"),

@@ -5,13 +5,13 @@
 
 package com.jwl.integration.filesystem.article;
 
+import java.util.List;
+import java.util.Set;
+
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
-import java.io.File;
-import java.util.List;
-import java.util.Set;
 
 /**
  *

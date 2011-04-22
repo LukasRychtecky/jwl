@@ -14,14 +14,12 @@
 		<tag-name>administration</tag-name>
 		<component>
 			<component-type>com.jwl.component.Administration</component-type>
-			<renderer-type>com.jwl.component.AdministrationRenderer</renderer-type>
 		</component>
 	</tag>
 	<tag>
 		<tag-name>search</tag-name>
 		<component>
 			<component-type>com.jwl.component.Search</component-type>
-			<renderer-type>com.jwl.component.SearchRenderer</renderer-type>
 		</component>
 	</tag>
 	<tag>

@@ -11,7 +11,7 @@ import com.jwl.business.article.SearchTO;
 import com.jwl.integration.ConnectionFactory;
 import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
-import com.jwl.presentation.article.enumerations.ListColumns;
+import com.jwl.presentation.enumerations.JWLTableHeaders;
 
 public class SearchPaginator extends AbstractArticlePaginator {
 
@@ -117,9 +117,9 @@ public class SearchPaginator extends AbstractArticlePaginator {
 	private String buildOrderByPart() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("ORDER BY ");
-		if (this.orderByColumn.equals(ListColumns.CREATED)) {
+		if (this.orderByColumn.equals(JWLTableHeaders.CREATED)) {
 			sb.append("a.created ");
-		} else if (this.orderByColumn.equals(ListColumns.EDITOR)) {
+		} else if (this.orderByColumn.equals(JWLTableHeaders.EDITOR)) {
 			sb.append("a.editor ");
 		} else {
 			sb.append("a.title ");

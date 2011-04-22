@@ -1,7 +1,9 @@
 package com.jwl.business;
 
 // <editor-fold defaultstate="collapsed">
+import java.io.File;
 import java.util.List;
+
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
@@ -15,6 +17,7 @@ import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.usecases.AddForumPostUC;
 import com.jwl.business.usecases.AddToMergeSuggestionsIgnoreUC;
+import com.jwl.business.usecases.CloseForumTopicsUC;
 import com.jwl.business.usecases.CreateArticleUC;
 import com.jwl.business.usecases.CreateForumTopicUC;
 import com.jwl.business.usecases.DeleteArticleUC;
@@ -29,10 +32,9 @@ import com.jwl.business.usecases.GetFileUC;
 import com.jwl.business.usecases.GetHistoriesUC;
 import com.jwl.business.usecases.GetHistoryUC;
 import com.jwl.business.usecases.GetMergeSuggestionsUC;
+import com.jwl.business.usecases.GetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.GetTopicUC;
 import com.jwl.business.usecases.ImportACLUC;
-import com.jwl.business.usecases.GetSimilarArticlesInViewUC;
-import com.jwl.business.usecases.CloseForumTopicsUC;
 import com.jwl.business.usecases.IncreaseLivabilityUC;
 import com.jwl.business.usecases.LockArticleUC;
 import com.jwl.business.usecases.OpenForumTopicsUC;
@@ -40,9 +42,9 @@ import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
-import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.UploadAttachmentUC;
 import com.jwl.business.usecases.interfaces.IAddForumPostUC;
+import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.interfaces.ICloseForumTopicsUC;
 import com.jwl.business.usecases.interfaces.ICreateArticleUC;
 import com.jwl.business.usecases.interfaces.ICreateForumTopicUC;
@@ -58,9 +60,9 @@ import com.jwl.business.usecases.interfaces.IGetFileUC;
 import com.jwl.business.usecases.interfaces.IGetHistoriesUC;
 import com.jwl.business.usecases.interfaces.IGetHistoryUC;
 import com.jwl.business.usecases.interfaces.IGetMergeSuggestionsUC;
+import com.jwl.business.usecases.interfaces.IGetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.interfaces.IGetTopicUC;
 import com.jwl.business.usecases.interfaces.IImportACLUC;
-import com.jwl.business.usecases.interfaces.IGetSimilarArticlesInViewUC;
 import com.jwl.business.usecases.interfaces.IIncreaseLivablityUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IOpenForumTopicsUC;
@@ -68,9 +70,7 @@ import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
-import com.jwl.presentation.global.WikiURLParser;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
-import java.io.File;
 
 /**
  * This interface provides communication between Model(business tier,
@@ -112,9 +112,9 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void createArticle(ArticleTO article) throws ModelException {
+	public ArticleId createArticle(ArticleTO article) throws ModelException {
 		ICreateArticleUC uc = new CreateArticleUC(Environment.getDAOFactory());
-		uc.create(article);
+		return uc.create(article);
 	}
 
 	@Override
@@ -263,10 +263,10 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void createForumTopic(TopicTO topic, ArticleId article)
+	public Integer createForumTopic(TopicTO topic, ArticleId article)
 			throws ModelException {
 		ICreateForumTopicUC uc = new CreateForumTopicUC(Environment.getDAOFactory());
-		uc.createTopic(topic, article);	
+		return uc.createTopic(topic, article);	
 	}
 
 	@Override

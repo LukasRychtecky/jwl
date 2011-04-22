@@ -6,5 +6,5 @@ import com.jwl.business.exceptions.ModelException;
 
 public interface ICreateForumTopicUC {
 	
-	public void createTopic(TopicTO topic, ArticleId articleId) throws ModelException;
+	public Integer createTopic(TopicTO topic, ArticleId articleId) throws ModelException;
 }

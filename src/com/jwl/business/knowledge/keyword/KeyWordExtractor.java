@@ -17,7 +17,7 @@ import com.jwl.business.knowledge.util.ArticleIterator;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.keyword.IKeyWordDAO;
-import com.jwl.util.markdown.MarkdownRemover;
+import com.jwl.presentation.markdown.MarkdownRemover;
 
 public class KeyWordExtractor {
 	private IArticleDAO articleDAO;

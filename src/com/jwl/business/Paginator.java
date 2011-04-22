@@ -9,7 +9,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.integration.ConnectionFactory;
 import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
-import com.jwl.presentation.article.enumerations.ListColumns;
+import com.jwl.presentation.enumerations.JWLTableHeaders;
 
 public class Paginator extends AbstractArticlePaginator {
 	private static String OB_TITLE_A = "Article.allOrderedByTitleASC";
@@ -38,18 +38,18 @@ public class Paginator extends AbstractArticlePaginator {
 
 	private String getQueryName() {
 		if (this.ascendingOrder) {
-			if (this.orderByColumn.equals(ListColumns.CREATED)) {
+			if (this.orderByColumn.equals(JWLTableHeaders.CREATED)) {
 				return OB_CREATED_A;
 			}
-			if (this.orderByColumn.equals(ListColumns.EDITOR)) {
+			if (this.orderByColumn.equals(JWLTableHeaders.EDITOR)) {
 				return OB_EDITOR_A;
 			}
 			return OB_TITLE_A;
 		}
-		if (this.orderByColumn.equals(ListColumns.CREATED)) {
+		if (this.orderByColumn.equals(JWLTableHeaders.CREATED)) {
 			return OB_CREATED_D;
 		}
-		if (this.orderByColumn.equals(ListColumns.EDITOR)) {
+		if (this.orderByColumn.equals(JWLTableHeaders.EDITOR)) {
 			return OB_EDITOR_D;
 		}
 		return OB_TITLE_D;

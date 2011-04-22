@@ -1,7 +1,8 @@
 package com.jwl.presentation.global;
 
 import com.jwl.business.article.AttachmentTO;
-import com.jwl.presentation.component.enumerations.JWLElements;
+import com.jwl.presentation.enumerations.JWLElements;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;

@@ -4,8 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.jwl.business.article.ArticleTO;
-import com.jwl.presentation.article.enumerations.ListColumns;
-import com.jwl.presentation.global.WikiURLParser;
+import com.jwl.presentation.enumerations.JWLTableHeaders;
+import com.jwl.presentation.url.WikiURLParser;
 
 public abstract class AbstractArticlePaginator implements IPaginator<ArticleTO> {
 
@@ -86,7 +86,7 @@ public abstract class AbstractArticlePaginator implements IPaginator<ArticleTO> 
 			this.pageIndex = 1;
 		} else {
 			if (this.orderByColumn == null) {
-				this.orderByColumn = ListColumns.TITLE;
+				this.orderByColumn = JWLTableHeaders.TITLE.value;
 			}
 		}
 	}

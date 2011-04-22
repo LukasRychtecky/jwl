@@ -4,7 +4,6 @@ import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.filesystem.article.FSArticleDAO;
 import com.jwl.integration.filesystem.history.FSHistoryDAO;
-import com.jwl.integration.filesystem.rating.FSRatingDAO;
 import com.jwl.integration.filesystem.tag.FSTagDAO;
 import com.jwl.integration.history.IHistoryDAO;
 import com.jwl.integration.keyword.IKeyWordDAO;

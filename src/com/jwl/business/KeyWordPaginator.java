@@ -6,7 +6,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
 import com.jwl.business.knowledge.exceptions.KnowledgeException;
-import com.jwl.presentation.global.WikiURLParser;
+import com.jwl.presentation.url.WikiURLParser;
 
 public class KeyWordPaginator extends AbstractEagerPaginator<ArticleTO> {
 

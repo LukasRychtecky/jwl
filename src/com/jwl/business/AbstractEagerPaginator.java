@@ -3,7 +3,7 @@ package com.jwl.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jwl.presentation.global.WikiURLParser;
+import com.jwl.presentation.url.WikiURLParser;
 
 public class AbstractEagerPaginator<T> implements IPaginator<T> {
 

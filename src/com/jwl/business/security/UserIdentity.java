@@ -42,18 +42,11 @@ public class UserIdentity implements IIdentity {
 	}
 
 	@Override
-	public void addUserRole(Role role) {
-		this.roles.add(role);
-	}
-
-	@Override
 	public void addUserRoles(List<Role> roles) {
-		if (roles == null) {
-			return;
-		}
-		
-		for (Role role : roles) {
-			this.addUserRole(role);
+		if (roles != null) {
+			for (Role role : roles) {
+				this.roles.add(role);
+			}
 		}
 	}
 

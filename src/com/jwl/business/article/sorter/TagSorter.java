@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.jwl.util.TagComparator;
 
 /**
  * Class for sorting of tags.
