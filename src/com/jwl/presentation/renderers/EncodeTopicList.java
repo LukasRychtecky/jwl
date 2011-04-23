@@ -82,7 +82,7 @@ public class EncodeTopicList extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		
 		HtmlActionForm form = new HtmlActionForm();
-		form.setId(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id);
+		form.setId(JWLElements.FORUM_TOPIC_ADMIN_FORM.id);
 		form.setEnctype("application/x-www-form-urlencoded");
 		form.setAction(this.linker.buildLink(params));
 		
@@ -159,8 +159,7 @@ public class EncodeTopicList extends AbstractEncoder {
 	private void encodeRowData(TopicTO topic, List<UIComponent> topicTable) {
 		if (hasDeleteTopicPermission()) {
 			HtmlSelectBooleanCheckbox chbx = new HtmlSelectBooleanCheckbox();
-			chbx.setId(JWLElements.FORUM_TOPIC_ADMIN_FORM.id + JWLStyleClass.HTML_ID_SEPARATOR
-					+ JWLElements.FORUM_TOPIC_CHBX.id + JWLStyleClass.HTML_ID_SEPARATOR + topic.getId());
+			chbx.setId(JWLElements.FORUM_TOPIC_CHBX.id + JWLStyleClass.HTML_ID_SEPARATOR + topic.getId());
 			topicTable.add(chbx);
 		}
 		topicTable.add(this.getServiceColumn(topic));
@@ -200,8 +199,7 @@ public class EncodeTopicList extends AbstractEncoder {
 	
 	protected UIComponent getDeleteButton() {
 		HtmlCommandButton button = new HtmlCommandButton();
-		button.setId(JWLElements.FORUM_TOPIC_ADMIN_FORM.id + JWLStyleClass.HTML_ID_SEPARATOR
-				+ JWLElements.FORUM_TOPIC_DELETE.id);
+		button.setId(JWLElements.FORUM_TOPIC_DELETE.id);
 		button.setValue(JWLElements.FORUM_TOPIC_DELETE.value);
 		button.setType("submit");
 		return button;
@@ -209,8 +207,7 @@ public class EncodeTopicList extends AbstractEncoder {
 
 	protected UIComponent getCloseButton() {
 		HtmlCommandButton button = new HtmlCommandButton();
-		button.setId(JWLElements.FORUM_TOPIC_ADMIN_FORM.id + JWLStyleClass.HTML_ID_SEPARATOR
-				+ JWLElements.FORUM_TOPIC_CLOSE.id);
+		button.setId(JWLElements.FORUM_TOPIC_CLOSE.id);
 		button.setValue(JWLElements.FORUM_TOPIC_CLOSE.value);
 		button.setType("submit");
 		return button;
@@ -218,8 +215,7 @@ public class EncodeTopicList extends AbstractEncoder {
 
 	protected UIComponent getOpenButton() {
 		HtmlCommandButton button = new HtmlCommandButton();
-		button.setId(JWLElements.FORUM_TOPIC_ADMIN_FORM.id + JWLStyleClass.HTML_ID_SEPARATOR
-				+ JWLElements.FORUM_TOPIC_OPEN.id);
+		button.setId(JWLElements.FORUM_TOPIC_OPEN.id);
 		button.setValue(JWLElements.FORUM_TOPIC_OPEN.value);
 		button.setType("submit");
 		return button;
