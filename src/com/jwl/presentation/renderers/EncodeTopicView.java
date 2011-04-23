@@ -16,6 +16,8 @@ import javax.faces.component.html.HtmlPanelGrid;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
+import com.jwl.business.exceptions.ModelException;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
@@ -33,11 +35,12 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected boolean answering;
 	protected Integer quotePostId;
 
-	public EncodeTopicView(TopicTO topic, ArticleTO article, 
-			boolean answering, Integer quotePostId) {
+	public EncodeTopicView(boolean answering, Integer quotePostId) throws ModelException {
 		super();
-		this.topic = topic;
-		this.article = article;
+		Integer topicId = (Integer) this.context.getAttributes().get(JWLContextKey.TOPIC_ID);
+		this.topic = this.getFacade().getTopic(topicId);
+		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		
 		this.answering = answering;
 		this.quotePostId = quotePostId;
 	}

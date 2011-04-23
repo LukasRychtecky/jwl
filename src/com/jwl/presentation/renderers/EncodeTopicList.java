@@ -16,8 +16,10 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.TopicTO;
+import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
@@ -42,10 +44,10 @@ public class EncodeTopicList extends AbstractEncoder {
 	protected ArticleTO article;
 	private IPaginator<TopicTO> paginator;
 	
-	public EncodeTopicList(ArticleTO article, IPaginator<TopicTO> paginator) {
+	public EncodeTopicList() throws ModelException {
 		super();
-		this.article = article;
-		this.paginator = paginator;
+		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		this.paginator = super.getFacade().getArticleForumTopics(article.getId());
 		this.paginator.setUpPaginator();
 	}
 

@@ -18,13 +18,12 @@ public class EncodeView extends AbstractEncodeView {
 
 	private List<ArticleTO> similarArticles;
 	
-	public EncodeView(ArticleTO article, List<ArticleTO> similarArticles) {
-		super(article);
+	public EncodeView(List<ArticleTO> similarArticles) {
 		this.similarArticles = similarArticles;
 	}
 	
-	public EncodeView(ArticleTO article) {
-		super(article);
+	public EncodeView() {
+		super();
 	}
 
 	@Override

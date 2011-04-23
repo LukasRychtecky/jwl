@@ -7,7 +7,6 @@ import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.components.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.renderers.EncodeListing;
-import com.jwl.presentation.renderers.EncodeNotExist;
 import com.jwl.presentation.renderers.EncodeSearch;
 import com.jwl.presentation.url.RequestMapDecoder;
 
@@ -15,13 +14,8 @@ public class SearchPresenter extends AbstractPresenter {
 
 	@Override
 	public void renderDefault() {
-		String articleTitle = getArticleTitle();
 		IPaginator<ArticleTO> paginator = this.getFacade().getPaginator();
-		if (articleTitle != null) {
-			new EncodeNotExist().getEncodedComponent();
-		} else {
-			new EncodeListing(paginator).getEncodedComponent();
-		}
+		container.addAll(new EncodeListing(paginator).getEncodedComponent());
 	}
 
 	public void renderSearch() {

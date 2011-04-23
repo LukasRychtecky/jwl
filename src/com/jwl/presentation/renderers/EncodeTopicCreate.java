@@ -13,6 +13,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.enumerations.JWLActions;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
@@ -24,9 +25,9 @@ public class EncodeTopicCreate extends AbstractEncoder {
 
 	private ArticleTO article;
 	
-	public EncodeTopicCreate(ArticleTO article) {
+	public EncodeTopicCreate() {
 		super();
-		this.article = article;
+		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
 	}
 
 	@Override

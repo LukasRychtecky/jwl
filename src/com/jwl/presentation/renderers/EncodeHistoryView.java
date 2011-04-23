@@ -8,7 +8,10 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
+import com.jwl.business.exceptions.ModelException;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
@@ -26,10 +29,11 @@ public class EncodeHistoryView extends AbstractEncoder {
 	private ArticleTO article;
 	private HistoryTO history;
 
-	public EncodeHistoryView(ArticleTO article, HistoryTO history) {
+	public EncodeHistoryView() throws ModelException {
 		super();
-		this.article = article;
-		this.history = history;
+		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		HistoryId historyId = (HistoryId) context.getAttributes().get(JWLContextKey.HISTORY_ID);
+		this.history = super.getFacade().getHistory(historyId);;
 	}
 
 	@Override

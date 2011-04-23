@@ -11,7 +11,9 @@ import javax.faces.component.html.HtmlPanelGrid;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
+import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.enumerations.JWLActions;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
@@ -30,10 +32,10 @@ public class EncodeHistoryListing extends AbstractEncoder {
 	private ArticleTO article;
 	List<HistoryTO> histories;
 	
-	public EncodeHistoryListing(ArticleTO article, List<HistoryTO> histories) {
+	public EncodeHistoryListing() throws ModelException {
 		super();
-		this.article = article;
-		this.histories = histories;
+		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		this.histories = super.getFacade().getHistories(article.getId());;
 	}
 	
 	private List<UIComponent> getHeaderNames() {

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.faces.component.UIComponent;
 
-import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
@@ -15,8 +14,8 @@ import com.jwl.presentation.html.HtmlLink;
 
 public class EncodeMergeSuggestionView extends AbstractEncodeView {
 
-	public EncodeMergeSuggestionView(ArticleTO aricle) {
-		super(aricle);
+	public EncodeMergeSuggestionView() {
+		super();
 	}
 
 	@Override

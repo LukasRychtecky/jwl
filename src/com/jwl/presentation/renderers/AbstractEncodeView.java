@@ -14,6 +14,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.security.AccessPermissions;
 import com.jwl.presentation.components.core.AbstractComponent;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
@@ -27,9 +28,9 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 	protected ArticleTO article;
 
-	public AbstractEncodeView(ArticleTO article) {
+	public AbstractEncodeView() {
 		super();
-		this.article = article;
+		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
 	}
 	
 	protected List<UIComponent> encondedArticle() {

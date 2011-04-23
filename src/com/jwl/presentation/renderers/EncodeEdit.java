@@ -10,6 +10,7 @@ import javax.faces.component.html.HtmlInputHidden;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.enumerations.JWLActions;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.html.HtmlDiv;
@@ -23,9 +24,9 @@ public class EncodeEdit extends AbstractEncodeEdit {
 
 	private ArticleTO article;
 	
-	public EncodeEdit(ArticleTO article) {
+	public EncodeEdit() {
 		super();
-		this.article = article;
+		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
 	}
 
 	@Override

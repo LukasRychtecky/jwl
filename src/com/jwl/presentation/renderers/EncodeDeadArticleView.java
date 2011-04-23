@@ -17,8 +17,8 @@ public class EncodeDeadArticleView extends AbstractEncodeView {
 
 	protected ArticleTO article;
 
-	public EncodeDeadArticleView(ArticleTO article) {
-		super(article);
+	public EncodeDeadArticleView() {
+		super();
 	}
 
 	@Override

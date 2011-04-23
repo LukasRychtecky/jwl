@@ -14,6 +14,7 @@ import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.AccessPermissions;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.global.Global;
@@ -27,11 +28,12 @@ public abstract class AbstractEncoder {
 	private IFacade facade;
 	protected WikiURLParser parser;
 	protected Linker linker;
+	protected FacesContext context;
 	
 	public AbstractEncoder() {		
 		this.parser = new WikiURLParser();
-		this.linker = (Linker) FacesContext.getCurrentInstance()
-			.getAttributes().get("jwllinker");
+		this.context = FacesContext.getCurrentInstance();
+		this.linker = (Linker) context.getAttributes().get(JWLContextKey.LINKER);
 	}
 
 	public abstract List<UIComponent> getEncodedComponent();

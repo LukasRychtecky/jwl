@@ -1,22 +1,21 @@
 package com.jwl.presentation.components.article;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.faces.component.html.HtmlOutputText;
 import javax.naming.NoPermissionException;
 
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
-import com.jwl.business.article.HistoryTO;
+import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.components.core.AbstractPresenter;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
 import com.jwl.presentation.renderers.EncodeAttach;
@@ -25,7 +24,6 @@ import com.jwl.presentation.renderers.EncodeEdit;
 import com.jwl.presentation.renderers.EncodeHistoryListing;
 import com.jwl.presentation.renderers.EncodeHistoryView;
 import com.jwl.presentation.renderers.EncodeListing;
-import com.jwl.presentation.renderers.EncodeNotExist;
 import com.jwl.presentation.renderers.EncodeTopicCreate;
 import com.jwl.presentation.renderers.EncodeTopicList;
 import com.jwl.presentation.renderers.EncodeTopicView;
@@ -37,13 +35,8 @@ public class ArticlePresenter extends AbstractPresenter {
 
 	@Override
 	public void renderDefault() {
-		String articleTitle = getArticleTitle();
-		if (articleTitle != null) {
-			container.addAll(new EncodeNotExist().getEncodedComponent());
-		} else {
-			IPaginator<ArticleTO> paginator = this.getFacade().getPaginator();
-			container.addAll(new EncodeListing(paginator).getEncodedComponent());
-		}
+		IPaginator<ArticleTO> paginator = this.getFacade().getPaginator();
+		container.addAll(new EncodeListing(paginator).getEncodedComponent());
 	}
 	
 	public void renderCreate() {
@@ -51,7 +44,7 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 	
 	public void renderEdit() {
-		container.addAll(new EncodeEdit(this.getArticle()).getEncodedComponent());
+		container.addAll(new EncodeEdit().getEncodedComponent());
 	}
 	
 	public void renderList() {
@@ -60,67 +53,43 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 	
 	public void renderView() throws ModelException {
-		this.renderView(getArticle());
-	}
-	
-	public void renderView(ArticleTO article) throws ModelException {
 //		List<ArticleTO> similarArticles = getFacade().getSimilarArticlesInView(article);		
-		container.addAll(new EncodeView(article).getEncodedComponent());
+		container.addAll(new EncodeView().getEncodedComponent());
 	}
 
 	public void renderAttachFile() {
-		ArticleTO article = getArticle();
-		container.addAll(new EncodeAttach(article).getEncodedComponent());
+		container.addAll(new EncodeAttach().getEncodedComponent());
 	}
-	
-	public void renderDownloadFile() throws IOException {
-		HtmlOutputText output = new HtmlOutputText();
-		output.setValue("Not yet implement.");
-		output.encodeAll(this.context);
-		container.add(output);
-	}
-	
+
 	public void renderAdministrationConsole() {
 		container.addAll(new EncodeAdministrationConsole().getEncodedComponent());
 	}
 
 	public void renderHistoryView() throws ModelException {
-		HistoryTO history = super.getFacade().getHistory(this.getHistoryId());
-		container.addAll(new EncodeHistoryView(this.getArticle(), history).getEncodedComponent());
+		container.addAll(new EncodeHistoryView().getEncodedComponent());
 	}
 
 	public void renderHistoryList() throws ModelException {
-		ArticleTO article = this.getArticle();
-		List<HistoryTO> histories = super.getFacade().getHistories(article.getId());
-		container.addAll(new EncodeHistoryListing(article, histories).getEncodedComponent());
+		container.addAll(new EncodeHistoryListing().getEncodedComponent());
 	}
 	
 	public void renderTopicList() throws ModelException {
-		IPaginator<TopicTO> topics = this.getFacade().getArticleForumTopics(getArticle().getId());
-		container.addAll(new EncodeTopicList(getArticle(), topics).getEncodedComponent());
+		container.addAll(new EncodeTopicList().getEncodedComponent());
 	}
 	
 	public void renderTopicCreate() {
-		container.addAll(new EncodeTopicCreate(getArticle()).getEncodedComponent());
+		container.addAll(new EncodeTopicCreate().getEncodedComponent());
 	}
 	
 	public void renderTopicView() throws ModelException {
-		Integer topicId = this.getTopicId();
-		this.renderTopicView(topicId);
-	}
-	
-	public void renderTopicView(Integer topicId) throws ModelException {
-		TopicTO topic = this.getFacade().getTopic(topicId);
-		ArticleTO article = super.getArticle();
 		boolean isAnswering = super.urlParser.containsAnswering();
-		
 		String stringQuopteTopicId = super.urlParser.getQuopteTopicId();
 		Integer quopteTopicId = null;
 		if (stringQuopteTopicId != null) {
 			quopteTopicId = Integer.parseInt(stringQuopteTopicId);
 		}
 		
-		container.addAll(new EncodeTopicView(topic, article, isAnswering, quopteTopicId).getEncodedComponent());
+		container.addAll(new EncodeTopicView(isAnswering, quopteTopicId).getEncodedComponent());
 	}
 	
 	public void decodeTopicCreate() throws ModelException {
@@ -136,8 +105,10 @@ public class ArticlePresenter extends AbstractPresenter {
 		topic.setTitle(subject);
 		topic.setPosts(posts);
 		
-		Integer topicId = this.getFacade().createForumTopic(topic, getArticleId());
-		renderTopicView(topicId);
+		ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
+		Integer topicId = this.getFacade().createForumTopic(topic, articleId);
+
+		super.context.getAttributes().put(JWLContextKey.TOPIC_ID, topicId);
 	}
 	
 	public void decodePostReplyRequest() throws ModelException {
@@ -158,44 +129,43 @@ public class ArticlePresenter extends AbstractPresenter {
 		article.setId(articleId);
 		
 		messages.add(new FlashMessage("Article was saved."));
-		renderView(article);
+		
+		super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
 	}
 	
 	public void decodeArticleUpdate() throws NoPermissionException, ModelException {
-		
 		ArticleTO article = getFilledArticle();
-		
-		ArticleId articleId = getArticleIdFromFacade(article.getTitle());
-		article.setId(articleId);
+		article.setId(this.getFacade().findArticleByTitle(article.getTitle()).getId());
 		
 		this.getFacade().updateArticle(article);
 		
 		messages.add(new FlashMessage("Article was saved."));
-		renderView(article);
+		
+		super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
 	}
 	
 	public void decodeArticleDelete() throws ModelException {
-		this.getFacade().deleteArticle(getArticleId());
+		ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
+		this.getFacade().deleteArticle(articleId);
 		messages.add(new FlashMessage("Article was deleted."));
-		renderList();
 	}
 	
 	public void decodeArticleLock() throws ModelException {
-		this.getFacade().lockArticle(getArticleId());
+		ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
+		this.getFacade().lockArticle(articleId);
 		messages.add(new FlashMessage("Article was locked."));
-		renderList();
 	}
 	
 	public void decodeArticleUnlock() throws ModelException {
-		this.getFacade().unlockArticle(getArticleId());
+		ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
+		this.getFacade().unlockArticle(articleId);
 		messages.add(new FlashMessage("Article was locked."));
-		renderList();
 	}
 	
 	public void decodeHistoryRestore() throws ModelException {
-		this.getFacade().restoreArticle(getHistoryId());
+		HistoryId historyId = (HistoryId) super.context.getAttributes().get(JWLContextKey.HISTORY_ID);
+		this.getFacade().restoreArticle(historyId);
 		messages.add(new FlashMessage("Article was restored."));
-		renderView();
 	}
 	
 	public void decodeTopicList() throws ModelException {
@@ -203,8 +173,6 @@ public class ArticlePresenter extends AbstractPresenter {
 		if (decoder.containsKey(JWLElements.FORUM_TOPIC_DELETE)) {
 			this.deleteTopicRequest();
 		} 
-		
-		renderTopicList();
 	}
 	
 	
@@ -244,7 +212,12 @@ public class ArticlePresenter extends AbstractPresenter {
 		}
 
 		article.setChangeNote(decoder.getValue(JWLElements.EDIT_CHANGE_NOTE));
-		article.setEditor(getEditor());
+		
+		String editor = getFacade().getIdentity().getUserName();
+		if (editor.isEmpty()) {
+			editor = (String) this.context.getAttributes().get(JWLContextKey.USER_IP);
+		}
+		article.setEditor(editor);
 		
 		return article;
 	}

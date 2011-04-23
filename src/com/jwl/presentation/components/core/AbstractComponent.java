@@ -49,7 +49,6 @@ abstract public class AbstractComponent extends UIInput implements StateHolder  
 		String presenterParametr = parser.getPresenter();
 
 		AbstractPresenter presenter = null;
-		
 		if (presenterParametr == null) {
 			presenter = this.getPresenter();
 		} else {
@@ -169,6 +168,7 @@ abstract public class AbstractComponent extends UIInput implements StateHolder  
 			userName = parser.getUserIP();
 		}
 		
+		// TODO LR Is this right facade instance to set user roles.
 		IFacade facade = Global.getInstance().getFacade();
 		facade.getIdentity().addUserName(userName);
 		facade.getIdentity().addUserRoles(roles);

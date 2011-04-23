@@ -28,8 +28,6 @@ public class Router {
 		if (doAction != null && !doAction.isEmpty()) {
 			methodName = "decode" + doAction.substring(0, 1).toUpperCase().concat(doAction.substring(1));
 			invokeMethod(presenter, methodName);
-			presenter.sendResponse();
-			return;
 		}
 			
 		if (state != null && !state.isEmpty()) {
@@ -37,6 +35,7 @@ public class Router {
 		} else {
 			methodName = "renderDefault";
 		}
+		
 		invokeMethod(presenter, methodName);
 		presenter.sendResponse();
 	}

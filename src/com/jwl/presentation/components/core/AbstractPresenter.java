@@ -26,12 +26,12 @@ import javax.servlet.ServletResponse;
 
 import com.jwl.business.Facade;
 import com.jwl.business.IFacade;
-import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.components.article.ArticlePresenter;
 import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.global.ExceptionLogger;
@@ -89,10 +89,10 @@ abstract public class AbstractPresenter {
 			ExceptionLogger.severe(getClass(), ex);
 		}
 		
-		context.getAttributes().put("jwllinker", linker);
-		context.getAttributes().put("javax.faces.SEPARATOR_CHAR", 
-				AbstractComponent.JWL_HTML_ID_SEPARATOR.charAt(0));
+		this.initializeFacesContext();
+		
 	}
+	
 	
 	private String getPresenterName() {
 		String className = this.getClass().getSimpleName();
@@ -308,57 +308,52 @@ abstract public class AbstractPresenter {
 			componentCover.encodeAll(this.context);
 		}
 	}
-	
-	protected Integer getTopicId() {
-		return Integer.parseInt(this.urlParser.getTopicId());
-	}
-	
-	protected HistoryId getHistoryId() {
+
+	private void initializeFacesContext() {
+		String articleTitle = this.urlParser.getArticleTitle();
+		String topicId = this.urlParser.getTopicId();
 		String historyId = this.urlParser.getHistoryId();
-		return new HistoryId(Integer.parseInt(historyId), this.getArticleId());
+		String userIP = this.urlParser.getUserIP();
+		ArticleTO article = getArticle(articleTitle);
+		
+		if (articleTitle != null) {
+			context.getAttributes().put(JWLContextKey.ARTICLE_TITLE, articleTitle);
+		}
+		
+		if (article != null) {
+			context.getAttributes().put(JWLContextKey.ARTICLE, article);
+		}
+		
+		if (article != null && article.getId() != null) {
+			context.getAttributes().put(JWLContextKey.ARTICLE_ID, article.getId());
+		}
+		
+		if (topicId != null) {
+			context.getAttributes().put(JWLContextKey.TOPIC_ID, Integer.parseInt(topicId));
+		}
+		
+		if (historyId != null) {
+			HistoryId history = new HistoryId(Integer.parseInt(historyId), article.getId());
+			context.getAttributes().put(JWLContextKey.HISTORY_ID, history);
+		}
+		
+		if (userIP != null) {
+			context.getAttributes().put(JWLContextKey.USER_IP, userIP);
+		}
+		
+		context.getAttributes().put(JWLContextKey.LINKER, linker);
+		context.getAttributes().put("javax.faces.SEPARATOR_CHAR", 
+				AbstractComponent.JWL_HTML_ID_SEPARATOR.charAt(0));
 	}
 
-	protected ArticleId getArticleIdFromFacade(String title) throws ModelException {
-		ArticleTO article = this.getFacade().findArticleByTitle(title);
-		if (article != null) {
-			return article.getId();
-		} else {
-			return null;
-		}
-	}
-	
-	protected ArticleId getArticleId() {
-		ArticleTO article = getArticle();
-		
-		if (article != null) {
-			return article.getId(); 
-		} else {
-			return null;
-		}
-	}
-	
-	protected ArticleTO getArticle() {
-		String articleTitle = this.getArticleTitle();
+	protected ArticleTO getArticle(String title) {
 		ArticleTO articleTO = null;
-		
 		try {
-			articleTO = getFacade().findArticleByTitle(articleTitle);
+			articleTO = getFacade().findArticleByTitle(title);
 		} catch (ModelException e) {
 			Logger.getLogger(ArticlePresenter.class.getName()).log(Level.SEVERE, null, e);
 		}
 		return articleTO;
-	}
-	
-	protected String getArticleTitle() {
-		return this.urlParser.getArticleTitle();
-	}
-	
-	protected String getEditor() {
-		String editor = getFacade().getIdentity().getUserName();
-		if (editor.isEmpty()) {
-			editor = this.urlParser.getUserIP();
-		}
-		return editor;
 	}
 
 }

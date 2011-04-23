@@ -20,7 +20,6 @@ import com.jwl.presentation.renderers.EncodeDeadArticleView;
 import com.jwl.presentation.renderers.EncodeListing;
 import com.jwl.presentation.renderers.EncodeMergeSuggestionList;
 import com.jwl.presentation.renderers.EncodeMergeSuggestionView;
-import com.jwl.presentation.renderers.EncodeNotExist;
 import com.jwl.presentation.url.RequestMapDecoder;
 
 public class AdministrationPresenter extends AbstractPresenter {
@@ -29,13 +28,8 @@ public class AdministrationPresenter extends AbstractPresenter {
 	
 	@Override
 	public void renderDefault() {
-		String articleTitle = getArticleTitle();
 		IPaginator<ArticleTO> paginator = this.getFacade().getPaginator();
-		if (articleTitle != null) {
-			new EncodeNotExist().getEncodedComponent();
-		} else {
-			new EncodeListing(paginator).getEncodedComponent();
-		}
+		new EncodeListing(paginator).getEncodedComponent();
 	}
 	
 	public void renderAdminConsole() {
@@ -48,8 +42,7 @@ public class AdministrationPresenter extends AbstractPresenter {
 	}
 	
 	public void renderMergeSuggestionView() throws ModelException {
-		ArticleTO article = this.getArticle();
-		container.addAll(new EncodeMergeSuggestionView(article).getEncodedComponent());
+		container.addAll(new EncodeMergeSuggestionView().getEncodedComponent());
 	}
 	
 	public void renderDeadArticleList() throws ModelException {
@@ -58,8 +51,7 @@ public class AdministrationPresenter extends AbstractPresenter {
 	}
 	
 	public void renderDeadArticleView() throws ModelException {
-		ArticleTO article = this.getArticle();
-		container.addAll(new EncodeDeadArticleView(article).getEncodedComponent());
+		container.addAll(new EncodeDeadArticleView().getEncodedComponent());
 	}
 	
 	public void decodeDeleteForumPost() throws ModelException {
