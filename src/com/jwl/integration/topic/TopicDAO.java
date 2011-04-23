@@ -68,10 +68,10 @@ public class TopicDAO extends BaseDAO implements ITopicDAO {
 			em.joinTransaction();
 			Topic topic = em.find(Topic.class, id);
 			em.remove(topic);
+			em.flush();
 			if (localTrans) {
 				ut.commit();
 			}
-			em.flush();
 		} catch (EntityExistsException e) {
 			try {
 				ut.rollback();
@@ -103,7 +103,9 @@ public class TopicDAO extends BaseDAO implements ITopicDAO {
 			}
 			em.joinTransaction();
 			Topic topic = em.find(Topic.class, id);
+			
 			topic.setClosed(true);
+			em.flush();
 			if (localTrans) {
 				ut.commit();
 			}
@@ -139,6 +141,7 @@ public class TopicDAO extends BaseDAO implements ITopicDAO {
 			em.joinTransaction();
 			Topic topic = em.find(Topic.class, id);
 			topic.setClosed(false);
+			em.flush();
 			if (localTrans) {
 				ut.commit();
 			}

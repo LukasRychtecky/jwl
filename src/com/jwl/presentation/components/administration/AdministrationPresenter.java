@@ -5,19 +5,16 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.jwl.business.ArticlePair;
-import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.BreakBusinessRuleException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
-import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.components.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
 import com.jwl.presentation.renderers.EncodeDeadArticleList;
 import com.jwl.presentation.renderers.EncodeDeadArticleView;
-import com.jwl.presentation.renderers.EncodeListing;
 import com.jwl.presentation.renderers.EncodeMergeSuggestionList;
 import com.jwl.presentation.renderers.EncodeMergeSuggestionView;
 import com.jwl.presentation.url.RequestMapDecoder;
@@ -109,35 +106,6 @@ public class AdministrationPresenter extends AbstractPresenter {
 	}
 	
 	
-	public void decodeCloseTopicRequest() throws ModelException {
-//		map.containsKey(decoder.getFullKey(JWLElements.FORUM_TOPIC_CLOSE.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id));
-		List<Integer> topicIds = new ArrayList<Integer>();
-		for (Entry<String, String> e : getRequestParamMap().entrySet()) {
-			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
-				int topicId = getTopicIdFromCheckbox(e.getKey());
-				topicIds.add(topicId);
-			}
-		}
-		if(!topicIds.isEmpty()){
-			this.getFacade().closeForumTopics(topicIds);
-		}
-		
-		renderAdminConsole();
-	}
-	
-	public void decodeOpenTopicRequest() throws ModelException {
-//		map.containsKey(decoder.getFullKey(JWLElements.FORUM_TOPIC_OPEN.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id));
-		List<Integer> topicIds = new ArrayList<Integer>();
-		for (Entry<String, String> e : getRequestParamMap().entrySet()) {
-			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
-				int topicId = getTopicIdFromCheckbox(e.getKey());
-				topicIds.add(topicId);
-			}
-		}
-		if(!topicIds.isEmpty()){
-			this.getFacade().openForumTopics(topicIds);
-		}
-	}
 	
 	public void decodeDeadDeleteRequest() throws ModelException {
 //		map.containsKey(decoder.getFullKey(JWLElements.KNOWLEDGE_DEAD_DELETE.id, JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id));
@@ -153,15 +121,6 @@ public class AdministrationPresenter extends AbstractPresenter {
 		double increase = getLivabilityIncreaseValue();
 		this.getFacade().increaseLivability(ids, increase);
 		renderAdminConsole();
-	}
-	
-	private int getTopicIdFromCheckbox(String name) {
-		int elementIdLength = JWLElements.FORUM_TOPIC_ADMIN_FORM.id.length()
-			+ AbstractComponent.JWL_HTML_ID_SEPARATOR.length()
-			+ JWLElements.FORUM_TOPIC_CHBX.id.length();
-		
-		String idPart = name.substring(elementIdLength);
-		return Integer.parseInt(idPart);
 	}
 	
 	private List<ArticleId> getArticleIds() {

@@ -170,33 +170,35 @@ public class ArticlePresenter extends AbstractPresenter {
 	
 	public void decodeTopicList() throws ModelException {
 		RequestMapDecoder decoder = getRequestMapDecoder(JWLElements.FORUM_TOPIC_ADMIN_FORM);
+		
+		List<Integer> topicIds = getCheckedTopicIds();
+		if(topicIds.isEmpty()){
+			return;
+		}
+		
 		if (decoder.containsKey(JWLElements.FORUM_TOPIC_DELETE)) {
-			this.deleteTopicRequest();
-		} 
+			this.getFacade().deleteForumTopics(topicIds);
+		} else if (decoder.containsKey(JWLElements.FORUM_TOPIC_CLOSE)) {
+			this.getFacade().closeForumTopics(topicIds);
+		} else if (decoder.containsKey(JWLElements.FORUM_TOPIC_OPEN)) {
+			this.getFacade().openForumTopics(topicIds);
+		}
 	}
 	
-	
-	public void deleteTopicRequest() throws ModelException {
+	private List<Integer> getCheckedTopicIds() {
+		int elementCheckBoxLength = JWLElements.FORUM_TOPIC_ADMIN_FORM.id.length()
+			+ JWLElements.FORUM_TOPIC_CHBX.id.length()
+			+ (2 * AbstractComponent.JWL_HTML_ID_SEPARATOR.length());
+		
 		List<Integer> topicIds = new ArrayList<Integer>();
 		for (Entry<String, String> e : getRequestParamMap().entrySet()) {
 			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
-				int topicId = getTopicIdFromCheckbox(e.getKey());
+				String idPart = e.getKey().substring(elementCheckBoxLength);
+				int topicId = Integer.parseInt(idPart);;
 				topicIds.add(topicId);
 			}
 		}
-		if(!topicIds.isEmpty()){
-			this.getFacade().deleteForumTopics(topicIds);
-		}
-	}
-	
-	private int getTopicIdFromCheckbox(String name) {
-		int elementIdLength = JWLElements.FORUM_TOPIC_ADMIN_FORM.id.length()
-			+ AbstractComponent.JWL_HTML_ID_SEPARATOR.length()
-			+ JWLElements.FORUM_TOPIC_CHBX.id.length()
-			+ 1;
-		
-		String idPart = name.substring(elementIdLength);
-		return Integer.parseInt(idPart);
+		return topicIds;
 	}
 	
 	private ArticleTO getFilledArticle() {

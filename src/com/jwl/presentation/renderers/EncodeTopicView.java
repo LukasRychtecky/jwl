@@ -35,6 +35,8 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected boolean answering;
 	protected Integer quotePostId;
 
+	private final String png_lock = "/jwl/lock.png";
+	
 	public EncodeTopicView(boolean answering, Integer quotePostId) throws ModelException {
 		super();
 		Integer topicId = (Integer) this.context.getAttributes().get(JWLContextKey.TOPIC_ID);
@@ -176,7 +178,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		
 		div.addChildren(title);
 		if (topic.isClosed()) {
-			div.addChildren(getImageComponent("/SeamWiki/jwl/lock.png", 16, 16));
+			div.addChildren(getImageComponent(png_lock, 16, 16));
 		}
 		
 		HtmlOutputText date = getHtmlText(post.getCreated().toString());
