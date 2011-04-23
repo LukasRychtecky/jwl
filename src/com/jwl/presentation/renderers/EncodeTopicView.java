@@ -17,6 +17,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
@@ -251,6 +252,10 @@ public class EncodeTopicView extends AbstractEncoder {
 		Map<String, String> params = new HashMap<String, String>();
 		// TODO set again all jwl parameters that have been set in former request
 		params.put(JWLURLParams.ANSWERING, "yes");
+		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_VIEW.id);
+//		params.put(JWLURLParameters.QUOTE_POST_ID, ArticleActions.FORUM_TOPIC_VIEW);
+		params.put(JWLURLParams.TOPIC_ID,  String.valueOf(topic.getId()));
+		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		
 		HtmlLink link = this.getHtmlLink("Reply", params);
 		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
@@ -262,6 +267,9 @@ public class EncodeTopicView extends AbstractEncoder {
 		// TODO set again all jwl parameters that have been set in former request
 		params.put(JWLURLParams.ANSWERING, "yes");
 		params.put(JWLURLParams.QUOTE_POST_ID, postId.toString());
+		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_VIEW.id);
+		params.put(JWLURLParams.TOPIC_ID,  String.valueOf(topic.getId()));
+		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		
 		HtmlLink link = this.getHtmlLink("Quote", params);
 		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
@@ -283,9 +291,10 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	protected HtmlActionForm encodedReplyForm(TopicTO topic, PostTO quotedPost) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.remove(JWLURLParams.ANSWERING);
-		params.remove(JWLURLParams.QUOTE_POST_ID);
-		params.put(JWLURLParams.DO, "postReplyRequest");
+		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_VIEW.id);
+		params.put(JWLURLParams.TOPIC_ID, String.valueOf(topic.getId()));
+		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
+		params.put(JWLURLParams.DO, JWLActions.FORUM_POST_REPLY.id);
 		
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.FORUM_POST_REPLY_FORM.id);

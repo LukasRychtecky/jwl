@@ -18,7 +18,9 @@ public enum JWLActions {
 	HISTORY_RESTORE("historyRestore"),
 	
 	FORUM_TOPIC_CREATE("topicCreate"),
-	FORUM_TOPIC_LIST("topicList");
+	FORUM_TOPIC_LIST("topicList"),
+	
+	FORUM_POST_REPLY("postReplyRequest");
 
 	public final String id;
 	
