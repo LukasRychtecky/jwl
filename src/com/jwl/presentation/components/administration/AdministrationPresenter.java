@@ -28,8 +28,7 @@ public class AdministrationPresenter extends AbstractPresenter {
 	
 	@Override
 	public void renderDefault() {
-		IPaginator<ArticleTO> paginator = this.getFacade().getPaginator();
-		new EncodeListing(paginator).getEncodedComponent();
+		container.addAll(new EncodeAdministrationConsole().getEncodedComponent());
 	}
 	
 	public void renderAdminConsole() {
