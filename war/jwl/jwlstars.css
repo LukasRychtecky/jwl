@@ -1,5 +1,5 @@
 .jwl-view-stars div a {
-    background: transparent url(sprite_rate.png) 0 0 no-repeat;
+    background: transparent url(img/sprite_rate.png) 0 0 no-repeat;
     display: inline-block;
     height: 17px;
     width: 9px;
@@ -29,7 +29,7 @@
 }
 
 .smallstars div {
-    background: transparent url(sprite_rate_small.png) 0 0 no-repeat;
+    background: transparent url(img/sprite_rate_small.png) 0 0 no-repeat;
     display: inline-block;
     height: 15px;
     width: 8px;

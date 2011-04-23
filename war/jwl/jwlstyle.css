@@ -377,7 +377,7 @@ thead.jwl-tableHearderOfArticles a:hover {
     font-weight: bold;
     background-image: url("/bugtrack/a4j/g/3_3_1.GAorg.richfaces.renderkit.html.GradientA/DATB/eAH7!!3Tj2v7mAAZZAV3");
     font-size: 12px !important;
-    background: url("/SeamWiki/jwl/3DlayoutBlue3Big.png") repeat-x scroll 0 0 #D0DBFF
+    background: url("/SeamWiki/jwl/img/3DlayoutBlue3Big.png") repeat-x scroll 0 0 #D0DBFF
 }
 
 .jwl-panelBody {
@@ -432,7 +432,7 @@ thead.jwl-tableHearderOfArticles a:hover {
     width: 65%;
     border: 1px solid #CCCCCC;
     padding: 5px;
-    background: url("/SeamWiki/jwl/postBackground.png") repeat-x;
+    background: url("/SeamWiki/jwl/img/postBackground.png") repeat-x;
 }
 
 .jwl-forum-actionsForm {

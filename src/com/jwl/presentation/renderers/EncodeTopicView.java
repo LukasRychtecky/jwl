@@ -36,7 +36,7 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected boolean answering;
 	protected Integer quotePostId;
 
-	private final String png_lock = "/jwl/lock.png";
+	private final String png_lock = "/jwl/img/lock.png";
 	
 	public EncodeTopicView(boolean answering, Integer quotePostId) throws ModelException {
 		super();
