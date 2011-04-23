@@ -3,6 +3,7 @@ package com.jwl.presentation.components.article;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.faces.component.html.HtmlOutputText;
 import javax.naming.NoPermissionException;
@@ -14,6 +15,7 @@ import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.components.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
@@ -194,6 +196,39 @@ public class ArticlePresenter extends AbstractPresenter {
 		this.getFacade().restoreArticle(getHistoryId());
 		messages.add(new FlashMessage("Article was restored."));
 		renderView();
+	}
+	
+	public void decodeTopicList() throws ModelException {
+		RequestMapDecoder decoder = getRequestMapDecoder(JWLElements.FORUM_TOPIC_ADMIN_FORM);
+		if (decoder.containsKey(JWLElements.FORUM_TOPIC_DELETE)) {
+			this.deleteTopicRequest();
+		} 
+		
+		renderTopicList();
+	}
+	
+	
+	public void deleteTopicRequest() throws ModelException {
+		List<Integer> topicIds = new ArrayList<Integer>();
+		for (Entry<String, String> e : getRequestParamMap().entrySet()) {
+			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
+				int topicId = getTopicIdFromCheckbox(e.getKey());
+				topicIds.add(topicId);
+			}
+		}
+		if(!topicIds.isEmpty()){
+			this.getFacade().deleteForumTopics(topicIds);
+		}
+	}
+	
+	private int getTopicIdFromCheckbox(String name) {
+		int elementIdLength = JWLElements.FORUM_TOPIC_ADMIN_FORM.id.length()
+			+ AbstractComponent.JWL_HTML_ID_SEPARATOR.length()
+			+ JWLElements.FORUM_TOPIC_CHBX.id.length()
+			+ 1;
+		
+		String idPart = name.substring(elementIdLength);
+		return Integer.parseInt(idPart);
 	}
 	
 	private ArticleTO getFilledArticle() {

@@ -2,7 +2,7 @@ package com.jwl.presentation.url;
 
 import java.util.Map;
 
-import com.jwl.presentation.components.core.AbstractPresenter;
+import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLElements;
 
 public class RequestMapDecoder {
@@ -30,7 +30,7 @@ public class RequestMapDecoder {
 	
 	private String getFullKey(String elementId, String formId) {
 		if (null != formId && !formId.isEmpty()){
-			return formId + AbstractPresenter.HTML_ID_SEPARATOR + elementId; 
+			return formId + AbstractComponent.JWL_HTML_ID_SEPARATOR + elementId; 
 		} else {
 			return elementId;
 		}

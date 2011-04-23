@@ -71,6 +71,7 @@ public class TopicDAO extends BaseDAO implements ITopicDAO {
 			if (localTrans) {
 				ut.commit();
 			}
+			em.flush();
 		} catch (EntityExistsException e) {
 			try {
 				ut.rollback();

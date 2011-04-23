@@ -13,8 +13,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLElements;
-import com.jwl.presentation.enumerations.JWLStyleClass;
 
 /**
  * Attaches javascript and css to pages containing wiki
@@ -115,7 +115,7 @@ public class AttachCSSAndJSFilter implements Filter {
 			+ "$(document).ready(function()	{"
 			+ "$('#"
 			+ JWLElements.EDIT_FORM.id
-			+ JWLStyleClass.HTML_ID_SEPARATOR
+			+ AbstractComponent.JWL_HTML_ID_SEPARATOR
 			+ JWLElements.EDIT_TEXT.id
 			+ "').markItUp(mySettings);"
 			+ "});"

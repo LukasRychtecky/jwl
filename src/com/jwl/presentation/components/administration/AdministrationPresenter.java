@@ -11,6 +11,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.BreakBusinessRuleException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
+import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.components.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
@@ -116,21 +117,6 @@ public class AdministrationPresenter extends AbstractPresenter {
 		renderAdminConsole();
 	}
 	
-	public void decodeDeleteTopicRequest() throws ModelException {
-//		map.containsKey(decoder.getFullKey(JWLElements.FORUM_TOPIC_DELETE.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id));
-		List<Integer> topicIds = new ArrayList<Integer>();
-		for (Entry<String, String> e : getRequestParamMap().entrySet()) {
-			if (e.getKey().contains(JWLElements.FORUM_TOPIC_CHBX.id)) {
-				int topicId = getTopicIdFromCheckbox(e.getKey());
-				topicIds.add(topicId);
-			}
-		}
-		if(!topicIds.isEmpty()){
-			this.getFacade().deleteForumTopics(topicIds);
-		}
-		
-		renderAdminConsole();
-	}
 	
 	public void decodeCloseTopicRequest() throws ModelException {
 //		map.containsKey(decoder.getFullKey(JWLElements.FORUM_TOPIC_CLOSE.id,JWLElements.FORUM_TOPIC_ADMIN_FORM.id));
@@ -180,7 +166,8 @@ public class AdministrationPresenter extends AbstractPresenter {
 	
 	private int getTopicIdFromCheckbox(String name) {
 		int elementIdLength = JWLElements.FORUM_TOPIC_ADMIN_FORM.id.length()
-			+ JWLElements.FORUM_TOPIC_CHBX.id.length() + 1;
+			+ AbstractComponent.JWL_HTML_ID_SEPARATOR.length()
+			+ JWLElements.FORUM_TOPIC_CHBX.id.length();
 		
 		String idPart = name.substring(elementIdLength);
 		return Integer.parseInt(idPart);

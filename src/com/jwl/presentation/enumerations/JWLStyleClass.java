@@ -4,8 +4,6 @@ public class JWLStyleClass {
 
 	/** Prefix for determine html tags by jwl */
 	public static final String JWL_PREFIX = "jwl-";
-	/** Separator */
-	public static final char HTML_ID_SEPARATOR = '-';
 	
 	public static final String NO_HIDE = JWL_PREFIX +							"no-hide";
 

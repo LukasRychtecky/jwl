@@ -63,14 +63,11 @@ abstract public class AbstractPresenter {
 	public static final String CONTENT_TYPE = "text/html";
 	public static final String ENCODING = "utf-8";
 
-	public static final char HTML_ID_SEPARATOR = JWLStyleClass.HTML_ID_SEPARATOR;
-	
 	protected FacesContext context;
 	protected Linker linker;
 	protected WikiURLParser urlParser;
 	private IFacade facade = null;
 	protected List<UIComponent> container;
-	private Boolean isAjax = Boolean.FALSE;
 	protected AppForm form;
 	protected List<FlashMessage> messages;
 
@@ -79,13 +76,8 @@ abstract public class AbstractPresenter {
 		this.urlParser = new WikiURLParser();
 		this.messages = new ArrayList<FlashMessage>();
 		this.container = new ArrayList<UIComponent>();
-		
-		String method = getRequestParam(JWLURLParams.METHOD);
-		if (method != null && method.equals("ajax")) {
-			this.isAjax = Boolean.TRUE;
-		}
 
-		if (this.isAjax) {
+		if (isAjax()) {
 			this.linker = new Linker(getPresenterName(), getRequestParam(JWLURLParams.URI));
 		} else {
 			this.linker = new Linker(getPresenterName());
@@ -97,12 +89,9 @@ abstract public class AbstractPresenter {
 			ExceptionLogger.severe(getClass(), ex);
 		}
 		
-		FacesContext.getCurrentInstance().getAttributes().put(
-				"jwllinker", linker);
-		
-		// TODO PD Is this useful?
-		FacesContext.getCurrentInstance().getAttributes().put(
-				"javax.faces.SEPARATOR_CHAR",HTML_ID_SEPARATOR);
+		context.getAttributes().put("jwllinker", linker);
+		context.getAttributes().put("javax.faces.SEPARATOR_CHAR", 
+				AbstractComponent.JWL_HTML_ID_SEPARATOR.charAt(0));
 	}
 	
 	private String getPresenterName() {
@@ -173,7 +162,11 @@ abstract public class AbstractPresenter {
 	}
 
 	protected Boolean isAjax() {
-		return this.isAjax;
+		String method = getRequestParam(JWLURLParams.METHOD);
+		if (method != null && method.equals("ajax")) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 
 	protected RequestMapDecoder getRequestMapDecoder(JWLElements root) {
@@ -309,7 +302,7 @@ abstract public class AbstractPresenter {
 		componentCover.getChildren().add(this.renderMessages());
 		componentCover.getChildren().addAll(this.container);
 		
-		if (this.isAjax) {
+		if (isAjax()) {
 			this.ajaxResponse(componentCover);
 		} else {
 			componentCover.encodeAll(this.context);
