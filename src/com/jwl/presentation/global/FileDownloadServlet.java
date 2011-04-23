@@ -1,14 +1,15 @@
 package com.jwl.presentation.global;
 
-import com.jwl.business.exceptions.ModelException;
+import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+
+import com.jwl.business.exceptions.ModelException;
+import com.jwl.presentation.enumerations.JWLURLParams;
 
 public class FileDownloadServlet extends HttpServlet {
 
@@ -17,11 +18,12 @@ public class FileDownloadServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			File file = Global.getInstance().getFacadeOutsideJSF().getFile(request.getParameter("jwlfilename"));
+			File file =  Global.getInstance().getFacadeOutsideJSF()
+					.getFile(request.getParameter(JWLURLParams.FILE_NAME));
 			FileDownloader downloader = new FileDownloader(response);
 			downloader.writeResponse(file);
 		} catch (ModelException ex) {
-			Logger.getLogger(FileDownloadServlet.class.getName()).log(Level.SEVERE, null, ex);
+			ExceptionLogger.severe(getClass(), ex);
 		}
 	}
 

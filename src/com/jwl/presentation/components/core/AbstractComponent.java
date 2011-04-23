@@ -9,6 +9,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import com.jwl.business.IFacade;
 import com.jwl.business.security.Role;
@@ -80,6 +81,7 @@ abstract public class AbstractComponent extends UIInput implements StateHolder  
 	@Override
 	public void encodeAll(FacesContext context) {
 		this.setUserNameAndRoles();
+		this.setJWLHome();
 		this.route(context);
 	}
 
@@ -156,6 +158,14 @@ abstract public class AbstractComponent extends UIInput implements StateHolder  
 		Object values[] = (Object[]) state;
 		user = (String) values[1];
 		super.restoreState(context, values[0]);
+	}
+
+	private void setJWLHome() {
+		HttpServletRequest request = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
+		
+		IFacade facade = Global.getInstance().getFacade();
+		facade.setJWLHome(request.getSession().getServletContext().getRealPath("/jwl/"));
 	}
 
 	

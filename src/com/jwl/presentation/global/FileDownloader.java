@@ -28,8 +28,7 @@ public class FileDownloader {
 	public void writeResponse(File file) throws IOException {
 		ServletOutputStream op = this.response.getOutputStream();
 		this.response.setContentType("application/image");
-		this.response.setHeader("Content-Disposition", "attachment; filename="
-				+ file.getName());
+		this.response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
 		this.response.setContentLength((int) file.length());
 		try {
 			this.writeFileInStream(file, op);

@@ -21,12 +21,12 @@ public class Environment {
 
 	public static final String IMPLICIT_PU = "jsfwiki";
 	public static final String FILESYSTEM_PU = "jsf-filesystem";
-	private static String JWL_HOME = "";
+	private static String JWL_HOME = "jwl";
 	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
 //	 private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
 	private static IIdentity identity = null;
-private static ISettingsSource knowledgeSettings = null;
+	private static ISettingsSource knowledgeSettings = null;
 	private static IKnowledgeManagementFacade knowledgeFacade = null;
 	private static final String ACL_FILE_NAME = "acl.csv";
 	private static final String FILESYSTEM_STORE = "/Users/ostatnickyjiri/Desktop";
@@ -71,8 +71,6 @@ private static ISettingsSource knowledgeSettings = null;
 	public static String getAttachmentStorage() {
 		return Environment.JWL_HOME + File.separator + "private" + File.separator + "jwl-files";
 	}
-
-
 
 	public static IIdentity getIdentity() {
 		if (Environment.identity == null) {
