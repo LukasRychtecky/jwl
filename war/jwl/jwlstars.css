@@ -1,0 +1,52 @@
+.jwl-view-stars div a {
+    background: transparent url(sprite_rate.png) 0 0 no-repeat;
+    display: inline-block;
+    height: 17px;
+    width: 9px;
+    text-indent: -999em;
+    overflow: hidden;
+}
+
+.jwl-view-stars a.rating-right {
+    background-position: 0 -17px;
+    padding-right: 1px;
+}
+
+.jwl-view-stars a.rating-over {
+    background-position: 0 -34px;
+}
+
+.jwl-view-stars a.rating-over.rating-right {
+    background-position: 0 -51px;
+}
+
+.jwl-view-stars a.rating {
+    background-position: 0 -68px;
+}
+
+.jwl-view-stars a.rating.rating-right {
+    background-position: 0 -85px;
+}
+
+.smallstars div {
+    background: transparent url(sprite_rate_small.png) 0 0 no-repeat;
+    display: inline-block;
+    height: 15px;
+    width: 8px;
+    text-indent: -999em;
+    overflow: hidden;
+}
+
+.smallstars div.rating-right {
+    background-position: 0 -15px;
+    padding-right: 0px;
+}
+
+.smallstars div.rating {
+    background-position: 0 -60px;
+}
+
+.smallstars div.rating.rating-right {
+    background-position: 0 -75px;
+}
+

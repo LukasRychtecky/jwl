@@ -33,12 +33,12 @@ import com.jwl.presentation.html.HtmlLink;
 
 public class EncodeTopicList extends AbstractEncoder {
 
-	private final String gif_blank = "/SeamWiki/jwl/blank.gif";
-	private final String gif_page_next = "/SeamWiki/jwl/page.next.gif";
-	private final String gif_page_previous = "/SeamWiki/jwl/page.previous.gif";
-	private final String gif_page_first = "/SeamWiki/jwl/page.first.gif";
-	private final String gif_page_last = "/SeamWiki/jwl/page.last.gif";
-	private final String png_lock = "/SeamWiki/jwl/lock.png";
+	private final String gif_blank = "/jwl/blank.gif";
+	private final String gif_page_next = "/jwl/page.next.gif";
+	private final String gif_page_previous = "/jwl/page.previous.gif";
+	private final String gif_page_first = "/jwl/page.first.gif";
+	private final String gif_page_last = "/jwl/page.last.gif";
+	private final String png_lock = "/jwl/lock.png";
 	
 	private List<UIComponent> columns;
 	protected ArticleTO article;
