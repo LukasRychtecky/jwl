@@ -31,7 +31,7 @@ public class EncodeView extends AbstractEncodeView {
 		List<UIComponent> components = new ArrayList<UIComponent>(); 
 		components.add(super.encodedArticlePanel());
 		components.add(super.encodedPanelActionButtons());
-		//components.add(this.encodedSimilarArticles());
+		components.add(this.encodedSimilarArticles());
 		return components;
 	}
 

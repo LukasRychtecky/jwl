@@ -53,8 +53,9 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 	
 	public void renderView() throws ModelException {
-//		List<ArticleTO> similarArticles = getFacade().getSimilarArticlesInView(article);		
-		container.addAll(new EncodeView().getEncodedComponent());
+		ArticleTO article = (ArticleTO) super.context.getAttributes().get(JWLContextKey.ARTICLE);
+		List<ArticleTO> similarArticles = getFacade().getSimilarArticlesInView(article);		
+		container.addAll(new EncodeView(similarArticles).getEncodedComponent());
 	}
 
 	public void renderAttachFile() {

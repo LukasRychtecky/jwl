@@ -107,19 +107,20 @@ public class EncodeTopicList extends AbstractEncoder {
 		panel.getChildren().add(panelHeader);
 		
 		
+		HtmlDiv panelBody = new HtmlDiv();
+		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		
 		List<TopicTO> topics = paginator.getCurrentPageContent();
 		if(!topics.isEmpty()) {
-			HtmlDiv panelBody = new HtmlDiv();
-			panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
 			panelBody.getChildren().add(encodedListing());
 			panelBody.getChildren().add(encodedPaginator());
-			panelBody.getChildren().add(encodedSubmitActions());
-			panel.getChildren().add(panelBody);
 		} else {
-			panel.getChildren().add(getHtmlText("No topics found."));
+			panelBody.getChildren().add(getHtmlText("No topics found."));
 		}
+	
+		panelBody.getChildren().add(encodedActions(!topics.isEmpty()));
 		
-		panel.getChildren().add(encodedLinkActions());
+		panel.getChildren().add(panelBody);
 		
 		return panel;
 	}
@@ -263,17 +264,23 @@ public class EncodeTopicList extends AbstractEncoder {
 		return image;
 	}
 	
-	private HtmlDiv encodedSubmitActions() {
+	private HtmlDiv encodedActions(boolean topicActions) {
 		
 		HtmlDiv buttonsPanel = new HtmlDiv();
 		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		
-		if (hasDeleteTopicPermission()) {
+		if (topicActions && hasDeleteTopicPermission()) {
 			buttonsPanel.addChildren(getDeleteButton());
 		}
-		if (hasCloseTopicPermission()) {
+		if (topicActions && hasCloseTopicPermission()) {
 			buttonsPanel.addChildren(getCloseButton());
 			buttonsPanel.addChildren(getOpenButton());
+		}
+		
+		buttonsPanel.addChildren(this.getArticleLinkComponent());
+		
+		if(hasCreateTopicPermission()){
+			buttonsPanel.addChildren(this.getCreateTopicLinkComponent());
 		}
 		
 		return buttonsPanel;
@@ -301,15 +308,6 @@ public class EncodeTopicList extends AbstractEncoder {
 		button.setValue(JWLElements.FORUM_TOPIC_OPEN.value);
 		button.setType("submit");
 		return button;
-	}
-	
-	private HtmlDiv encodedLinkActions() {
-		HtmlDiv linkPanel = new HtmlDiv();
-		linkPanel.addChildren(this.getArticleLinkComponent());
-		if(hasCreateTopicPermission()){
-			linkPanel.addChildren(this.getCreateTopicLinkComponent());
-		}
-		return linkPanel;
 	}
 
 	private HtmlLink getArticleLinkComponent() {

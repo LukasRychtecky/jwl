@@ -99,17 +99,17 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	
 	protected HtmlDiv encodedActionButtons(TopicTO topic, ArticleTO article) {
-		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		HtmlDiv actionButtons = new HtmlDiv();
+		actionButtons.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		
-		panel.addChildren(getArticleLinkComponent(article.getTitle()));
-		panel.addChildren(getTopicListLink(article.getTitle()));
+		actionButtons.addChildren(getArticleLinkComponent(article.getTitle()));
+		actionButtons.addChildren(getTopicListLink(article.getTitle()));
 		
 		if (!topic.isClosed() && hasPostReplyPermission()) {
-			panel.addChildren(getReplyLinkComponent());
-			panel.addChildren(getQuoteLinkComponent(topic.getOpeningPost().getId()));
+			actionButtons.addChildren(getReplyLinkComponent());
+			actionButtons.addChildren(getQuoteLinkComponent(topic.getOpeningPost().getId()));
 		}
-		return panel;
+		return actionButtons;
 	}
 
 	protected HtmlDiv encodedReply(List<PostTO> replies, boolean adminMode, 
@@ -167,26 +167,25 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected UIComponent getPostHeader(TopicTO topic, PostTO post)  {
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setStyleClass(JWLStyleClass.FORUM_POST_HEADER);
-		table.setColumns(2);
+		table.setColumns(3);
 		table.setColumnClasses(
-				JWLStyleClass.FORUM_POST_HEADER_TITLE + ","
-				+ JWLStyleClass.FORUM_POST_AUTHOR);
+				JWLStyleClass.FORUM_POST_HEADER_TITLE + "," +
+				JWLStyleClass.FORUM_POST_HEADER_TITLE + "," +
+				JWLStyleClass.FORUM_POST_AUTHOR);
 		
-		HtmlDiv div = new HtmlDiv();
-		
+		HtmlDiv titleDiv = new HtmlDiv();
 		HtmlOutputText title = getHtmlText(topic.getTitle());
-		
-		div.addChildren(title);
+		titleDiv.addChildren(title);
 		if (topic.isClosed()) {
-			div.addChildren(getImageComponent(png_lock, 16, 16));
+			titleDiv.addChildren(getImageComponent(png_lock, 16, 16));
 		}
 		
-		HtmlOutputText date = getHtmlText(post.getCreated().toString());
 		HtmlOutputText author = getHtmlText(post.getAuthor());
+		HtmlOutputText date = getHtmlText(post.getCreated().toString());
 		
-		table.getChildren().add(div);
-		table.getChildren().add(date);
+		table.getChildren().add(titleDiv);
 		table.getChildren().add(author);
+		table.getChildren().add(date);
 		return table;
 	}
 
@@ -244,7 +243,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, title);
 
 		HtmlLink link = getHtmlLink("Topic list", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_ATTACH);
+		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		return link;
 	}
 

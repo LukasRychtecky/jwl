@@ -50,8 +50,10 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		HtmlDiv titleDiv = new HtmlDiv();
 		titleDiv.setStyleClass(JWLStyleClass.VIEW_TITLE);
 		
-		HtmlFreeOutput output = new HtmlFreeOutput();
-		output.setFreeOutput(article.getTitle());
+		HtmlOutputText output = getHtmlText(article.getTitle());
+		output.setStyleClass(JWLStyleClass.VIEW_TITLE);
+//		new HtmlFreeOutput();
+//		output.setFreeOutput(article.getTitle());
 		
 		titleDiv.addChildren(output);
 		return titleDiv;
@@ -204,7 +206,6 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 	protected HtmlDiv encodedPanelActionButtons() {
 		HtmlDiv panelButtons = new HtmlDiv();
 		panelButtons.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
-		
 		panelButtons.addChildren(this.encodedCommonLinks(article));
 		
 		return panelButtons;
