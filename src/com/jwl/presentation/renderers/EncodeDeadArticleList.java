@@ -14,6 +14,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
@@ -56,6 +57,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	private HtmlActionForm encodedForm() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, JWLStates.DEAD_ARTICLE_LIST.id);
+		params.put(JWLURLParams.DO, JWLActions.DEAD_ARTICLE.id);
 		
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id);
@@ -71,9 +73,12 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	protected HtmlDiv encodedPanel(List<ArticleTO> articles) {
 		HtmlDiv panel = new HtmlDiv();
 		panel.setStyleClass(JWLStyleClass.PANEL);
+		
 		HtmlDiv panelHeader = new HtmlDiv();
 		panelHeader.setStyleClass(JWLStyleClass.PANEL_HEADER);
-		panelHeader.setValue("Possibly dead articles");
+		HtmlOutputText title = getHtmlText("Possibly dead articles");
+		panelHeader.addChildren(title);
+		
 		HtmlDiv panelBody = new HtmlDiv();
 		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
 		HtmlPanelGrid table = encodedListing(articles);
@@ -106,8 +111,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 		List<UIComponent> components = new ArrayList<UIComponent>();
 		
 		HtmlSelectBooleanCheckbox chbx = new HtmlSelectBooleanCheckbox();
-		chbx.setId(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id+"-"+
-				JWLElements.KNOWLEDGE_ID_CHECKBOX.id+article.getId().getId().intValue());
+		chbx.setId(JWLElements.KNOWLEDGE_ID_CHECKBOX.id+article.getId().getId().intValue());
 		
 		components.add(chbx);
 		components.add(this.encodedArticleLinkComponent(article.getTitle()));
@@ -164,7 +168,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 		
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
 		panelChildren.add(encodedLivabilityInput());
-		panelChildren.add(encodedLinkToListing());
+		panelChildren.add(encodedLinkToAdministrationConsole());
 		panelChildren.add(encodedDeleteButton());
 		panelChildren.add(encodedLivabilityIncreaseButton());		
 		return buttonsPanel;
@@ -173,10 +177,10 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	protected HtmlPanelGrid encodedLivabilityInput(){
 		HtmlInputText livabilityInput = new HtmlInputText();
 		livabilityInput.setSize(4);
-		livabilityInput.setId(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id+"-"+JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
+		livabilityInput.setId(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
 		HtmlOutputLabel labelForFileName = new HtmlOutputLabel();
 		//labelForFileName.setDivStyleClass(styleClass);
-		labelForFileName.setFor(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id+"-"+JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
+		labelForFileName.setFor(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
 		labelForFileName.setValue("livability increase");
 		HtmlPanelGrid table= new HtmlPanelGrid();
 		table.setColumns(2);
@@ -188,21 +192,21 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 		return table;
 	}
 	
-	protected HtmlLink encodedLinkToListing() {
+	protected HtmlLink encodedLinkToAdministrationConsole() {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_LIST.id);
+		params.put(JWLURLParams.STATE, JWLStates.ADMINISTRATION_CONSOLE.id);
 
-		HtmlLink link = getHtmlLink("Back to listing", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
-		return link;
+		HtmlLink htmlLink = getHtmlLink("Back to administration", params);
+		htmlLink.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
+		
+		return htmlLink;
 	}
 	
 	protected HtmlCommandButton encodedDeleteButton(){
 		HtmlCommandButton submit = new HtmlCommandButton();
 		submit.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		submit.setType("submit");
-		submit.setDir("a");
-		submit.setId(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id+"-"+JWLElements.KNOWLEDGE_DEAD_DELETE.id);
+		submit.setId(JWLElements.KNOWLEDGE_DEAD_DELETE.id);
 		submit.setValue(JWLElements.KNOWLEDGE_DEAD_DELETE.value);
 		return submit;
 	}
@@ -211,7 +215,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 		HtmlCommandButton submit = new HtmlCommandButton();
 		submit.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		submit.setType("submit");
-		submit.setId(JWLElements.KNOWLEDGE_DEAD_SUG_FORM.id+"-"+JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id);
+		submit.setId(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id);
 		submit.setValue(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.value);
 		return submit;
 	}

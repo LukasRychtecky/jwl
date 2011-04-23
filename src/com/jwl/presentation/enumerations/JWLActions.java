@@ -19,9 +19,10 @@ public enum JWLActions {
 	
 	FORUM_TOPIC_CREATE("topicCreate"),
 	FORUM_TOPIC_LIST("topicList"),
-	
-	FORUM_POST_REPLY("postReplyRequest");
+	FORUM_POST_REPLY("postReply"),
 
+	DEAD_ARTICLE("deadArticle");
+	
 	public final String id;
 	
 	JWLActions(String id) {

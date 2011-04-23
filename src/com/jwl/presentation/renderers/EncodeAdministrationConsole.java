@@ -105,8 +105,7 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 	private HtmlLink encodedKeyWordLink() {
 		// TODO PJ Please fix invocation of creating key words
 		HtmlLink link = new HtmlLink();
-		link.setValue("#");
-		link.setText("create key words - did nothing");
+		link.setText("create key words - do nothing");
 		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		link.setId(JWLElements.ADMINISTRATION_KW_LINK.id);
 		

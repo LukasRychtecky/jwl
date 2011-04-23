@@ -112,7 +112,7 @@ public class ArticlePresenter extends AbstractPresenter {
 		super.context.getAttributes().put(JWLContextKey.TOPIC_ID, topicId);
 	}
 	
-	public void decodePostReplyRequest() throws ModelException {
+	public void decodePostReply() throws ModelException {
 		RequestMapDecoder decoder = getRequestMapDecoder(JWLElements.FORUM_POST_REPLY_FORM);
 		String text = decoder.getValue(JWLElements.FORUM_POST_TEXT);
 		String id = decoder.getValue(JWLElements.FORUM_POST_TOPIC_ID);

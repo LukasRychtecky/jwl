@@ -13,6 +13,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 import com.jwl.business.ArticlePair;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.presentation.components.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
@@ -97,7 +98,7 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 		HtmlDiv buttonsPanel = new HtmlDiv();
 		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
-		panelChildren.add(getLinkToListing());
+		panelChildren.add(getLinkAdminConsole());
 		panelChildren.add(getIgnoreButton());
 		formData.add(buttonsPanel);
 		
@@ -131,9 +132,11 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 			return Collections.emptyList();
 		}
 		HtmlSelectBooleanCheckbox chbx = new HtmlSelectBooleanCheckbox();
-		chbx.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id +"-"+
-				JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id+articlePair.getArticle1().getId().getId().intValue()+
-				"-"+articlePair.getArticle2().getId().getId().intValue());
+		chbx.setId(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id
+				+ AbstractComponent.JWL_HTML_ID_SEPARATOR
+				+articlePair.getArticle1().getId().getId().intValue()
+				+ AbstractComponent.JWL_HTML_ID_SEPARATOR
+				+articlePair.getArticle2().getId().getId().intValue());
 		articlesTableData.add(chbx);
 		articlesTableData.addAll(this.encodedArticleRowData(articlePair.getArticle1()));
 		articlesTableData.addAll(this.encodedArticleRowData(articlePair.getArticle2()));
@@ -190,12 +193,14 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 		return RatingComponent.getComponent(rating);
 	}
 	
-	protected HtmlLink getLinkToListing() {
+	protected HtmlLink getLinkAdminConsole() {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_LIST.id);
-		params.put(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
+		params.put(JWLURLParams.STATE, JWLStates.ADMINISTRATION_CONSOLE.id);
 
-		return getHtmlLink("Back to listing", params);
+		HtmlLink htmlLink = getHtmlLink("Back to administration", params);
+		htmlLink.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
+		
+		return htmlLink;
 	}
 
 	protected UIComponent getIgnoreButton(){
@@ -204,7 +209,7 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 		
 		HtmlCommandButton button = new HtmlCommandButton();
 		button.setType("submit");
-		button.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id+"-"+JWLElements.KNOWLEDGE_IGNORE.id);
+		button.setId(JWLElements.KNOWLEDGE_IGNORE.id);
 		button.setValue(JWLElements.KNOWLEDGE_IGNORE.value);
 		
 		div.addChildren(button);
