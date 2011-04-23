@@ -119,7 +119,7 @@
 	</target>
 	
 	<target name="JWL.resources" description="Copy JWL resources (css, javascripte) to SeamWiki">
-			<copy todir="../SeamWiki/${war.dir}/jwl">
+			<copy todir="../SeamWiki/view/jwl">
 				<fileset dir="war/jwl" />
 			</copy>
 		</target>
