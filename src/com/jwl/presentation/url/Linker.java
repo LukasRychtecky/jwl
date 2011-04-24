@@ -24,11 +24,15 @@ public class Linker {
 		this.presenter = presenter;
 	}
 	
-	public String buildForm(String doAction) {
+	public String buildForm(String doAction, String nextState) {
 		Map<String, String> params = new HashMap<String, String>();
 
 		if (doAction != null) {
 			params.put(JWLURLParams.DO, doAction);
+		}
+		
+		if (nextState != null) {
+			params.put(JWLURLParams.STATE, nextState);
 		}
 		
 		return this.buildLink(params);

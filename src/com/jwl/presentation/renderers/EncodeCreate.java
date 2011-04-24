@@ -6,16 +6,23 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 
 import com.jwl.business.article.ArticleTO;
-import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStyleClass;
+import com.jwl.presentation.html.HtmlAppForm;
 
 public class EncodeCreate extends AbstractEncodeEdit {
+	
+	private HtmlAppForm form;
+
+	public EncodeCreate(HtmlAppForm form) {
+		super();
+		this.form = form;
+	}
 
 	@Override
 	public List<UIComponent> getEncodedComponent() {
 		List<UIComponent> components = new ArrayList<UIComponent>(); 
-		components.add(encodedArticleForm(JWLActions.ARTICLE_CREATE));
+		components.add(this.form);
 		return components;
 	}
 

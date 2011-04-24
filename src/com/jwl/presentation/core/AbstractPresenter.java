@@ -161,7 +161,7 @@ abstract public class AbstractPresenter {
 		return this.facade;
 	}
 
-	protected Boolean isAjax() {
+	protected final Boolean isAjax() {
 		String method = getRequestParam(JWLURLParams.METHOD);
 		if (method != null && method.equals("ajax")) {
 			return Boolean.TRUE;
@@ -180,6 +180,10 @@ abstract public class AbstractPresenter {
 	protected Map<String, String> getRequestParamMap() {
 		return this.context.getExternalContext().getRequestParameterMap();
 	}
+	
+	protected void redirect(String state) {
+		this.context.getAttributes().put(JWLContextKey.STATE, state);
+	}
 
 	public void renderDefault() throws IOException {
 	}
@@ -196,9 +200,15 @@ abstract public class AbstractPresenter {
 		this.sendResponse();
 	}
 	
-	public void addImplicitErrorFlashMessage() {
+	public void defaultProcessException(Exception ex, String redirectState) {
+		ExceptionLogger.severe(this.getClass(), ex);
 		this.messages.add(new FlashMessage("Service is unavailable, sorry.",
 				FlashMessageType.ERROR, Boolean.FALSE));
+		this.redirect(redirectState);
+	}
+	
+	public void defaultProcessException(Exception ex) {
+		this.defaultProcessException(ex, "default");
 	}
 
 	public void encodeAjaxBegin(FacesContext context) throws IOException {

@@ -92,7 +92,7 @@ public class WidgetPresenter extends AbstractPresenter {
 		form.addCheckbox("checkbox", "Checkbox");
 		form.addTextArea("textarea", "Textarea", "blaaaaah");
 		form.addSubmit("submit", "Odesli", "click");
-		form.setAction(this.linker.buildForm("mujForm"));
+		form.setAction(this.linker.buildForm("mujForm", null));
 		return form;
 	}
 

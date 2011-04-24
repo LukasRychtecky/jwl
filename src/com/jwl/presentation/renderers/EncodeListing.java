@@ -1,5 +1,6 @@
 package com.jwl.presentation.renderers;
 
+// <editor-fold defaultstate="collapsed">
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
+// </editor-fold>
 
 public class EncodeListing extends AbstractEncoder {
 

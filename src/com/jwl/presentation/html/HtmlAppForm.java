@@ -9,7 +9,6 @@ import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputTextarea;
-import javax.faces.component.html.HtmlOutputLabel;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
@@ -163,7 +162,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 	}
 
 	@Override
-	public UIComponent addTextArea(String name, String label, String value) {
+	public HtmlInputTextarea addTextArea(String name, String label, String value) {
 		HtmlInputTextarea textarea = new HtmlInputTextarea();
 		textarea.setId(this.createName(name));
 		textarea.setValue(value);
@@ -210,8 +209,8 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 	}
 
 	protected UIComponent createLabel(String label, String id) {
-		HtmlOutputLabel comp = new HtmlOutputLabel();
-		comp.setValue(label);
+		HtmlLabel comp = new HtmlLabel();
+		comp.setText(label);
 		comp.setFor(id);
 		return comp;
 	}

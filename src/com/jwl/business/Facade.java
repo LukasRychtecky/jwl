@@ -72,6 +72,7 @@ import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
 
+// </editor-fold>
 /**
  * This interface provides communication between Model(business tier,
  * integration tier) and Controller, View. The class is designed as Facade.

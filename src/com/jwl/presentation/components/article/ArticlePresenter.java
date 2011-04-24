@@ -1,8 +1,11 @@
 package com.jwl.presentation.components.article;
 
+// <editor-fold defaultstate="collapsed">
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.NoPermissionException;
 
@@ -17,6 +20,7 @@ import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
 import com.jwl.presentation.renderers.EncodeAttach;
 import com.jwl.presentation.renderers.EncodeCreate;
@@ -30,6 +34,7 @@ import com.jwl.presentation.renderers.EncodeTopicView;
 import com.jwl.presentation.renderers.EncodeView;
 import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.url.RequestMapDecoder;
+// </editor-fold>
 
 public class ArticlePresenter extends AbstractPresenter {
 
@@ -40,7 +45,12 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 	
 	public void renderCreate() {
-		container.addAll(new EncodeCreate().getEncodedComponent());
+		if (!super.getFacade().getIdentity().isAuthenticated()) {
+			FlashMessage warn = new FlashMessage("Your user name is unknown! " +
+				"It will record your IP adress.", FlashMessage.FlashMessageType.WARNING);
+			this.messages.add(warn);
+		}
+		container.addAll(new EncodeCreate(this.createFormArticleCreate()).getEncodedComponent());
 	}
 	
 	public void renderEdit() {
@@ -93,6 +103,22 @@ public class ArticlePresenter extends AbstractPresenter {
 		container.addAll(new EncodeTopicView(isAnswering, quopteTopicId).getEncodedComponent());
 	}
 	
+	protected HtmlAppForm buildArticleForm(String name) {
+		HtmlAppForm form = new HtmlAppForm(name);
+		form.addText("title", "Title", null);
+		form.addTextArea("text", "Text", null).setStyleClass("markMe");
+		form.addText("tags", "Tags", null);
+		form.addText("changeNote", "Change note", null);
+		return form;
+	}
+	
+	public HtmlAppForm createFormArticleCreate() {
+		HtmlAppForm form = this.buildArticleForm("ArticleCreate");		
+		form.addSubmit("submit", "Create", null);		
+		form.setAction(this.linker.buildForm("articleCreate", "view"));
+		return form;
+	}
+	
 	public void decodeTopicCreate() throws ModelException {
 		RequestMapDecoder decoder = getRequestMapDecoder(JWLElements.FORUM_CREATE_TOPIC_FORM);
 		
@@ -123,26 +149,32 @@ public class ArticlePresenter extends AbstractPresenter {
 		this.getFacade().addForumPost(post, postId);
 	}
 	
-	public void decodeArticleCreate() throws NoPermissionException, ModelException {
-		
-		ArticleTO article = getFilledArticle();
-		ArticleId articleId = this.getFacade().createArticle(article);
-		article.setId(articleId);
-		
-		messages.add(new FlashMessage("Article was saved."));
-		
-		super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
+	public void decodeArticleCreate() {
+		try {
+			HtmlAppForm form = (HtmlAppForm) super.form;			
+			ArticleTO article = this.prepareArticle(form);
+			ArticleId articleId = this.getFacade().createArticle(article);
+			article.setId(articleId);
+			
+			messages.add(new FlashMessage("Article has been saved."));			
+			super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
+		} catch(NoPermissionException ex) {
+			FlashMessage message = new FlashMessage("You don't have a permission.", FlashMessage.FlashMessageType.WARNING);
+			super.messages.add(message);
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 	
 	public void decodeArticleUpdate() throws NoPermissionException, ModelException {
-		ArticleTO article = getFilledArticle();
-		article.setId(this.getFacade().findArticleByTitle(article.getTitle()).getId());
-		
-		this.getFacade().updateArticle(article);
-		
-		messages.add(new FlashMessage("Article was saved."));
-		
-		super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
+//		ArticleTO article = prepareArticle();
+//		article.setId(this.getFacade().findArticleByTitle(article.getTitle()).getId());
+//		
+//		this.getFacade().updateArticle(article);
+//		
+//		messages.add(new FlashMessage("Article was saved."));
+//		
+//		super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
 	}
 	
 	public void decodeArticleDelete() throws ModelException {
@@ -202,19 +234,17 @@ public class ArticlePresenter extends AbstractPresenter {
 		return topicIds;
 	}
 	
-	private ArticleTO getFilledArticle() {
-		RequestMapDecoder decoder = getRequestMapDecoder(JWLElements.EDIT_FORM);
-		
+	private ArticleTO prepareArticle(HtmlAppForm form) {		
 		ArticleTO article = new ArticleTO();
-		article.setTitle(decoder.getValue(JWLElements.EDIT_TITLE));
-		article.setText(decoder.getValue(JWLElements.EDIT_TEXT));
+		article.setTitle(form.get("title").getValue().toString());
+		article.setText(form.get("text").getValue().toString());
 
-		String[] tags = decoder.getValue(JWLElements.EDIT_TAGS).split(",");
+		String[] tags = form.get("tags").getValue().toString().split(",");
 		for (int i = 0; i < tags.length; i++) {
-			article.addTag(tags[i]);
+			article.addTag(tags[i].trim());
 		}
 
-		article.setChangeNote(decoder.getValue(JWLElements.EDIT_CHANGE_NOTE));
+		article.setChangeNote(form.get("changeNote").getValue().toString());
 		
 		String editor = getFacade().getIdentity().getUserName();
 		if (editor.isEmpty()) {

@@ -18,9 +18,6 @@ import com.jwl.presentation.enumerations.JWLElements;
 
 /**
  * Attaches javascript and css to pages containing wiki
- * 
- * @author Petr Janouch
- * @review Lukas Rychtecky
  */
 public class AttachCSSAndJSFilter implements Filter {
 
@@ -140,13 +137,6 @@ public class AttachCSSAndJSFilter implements Filter {
 			+ "').markItUp(mySettings);"
 			+ "});"
 			+ "</script>";
-		builder.insert(bodyBeginPosition, script);
-
-		script = "<script type=\"text/javascript\">"
-				+ "$(\"div.jwl-flash-message:not(.jwl-no-hide)\").livequery(function () {"
-				+ "var el = $(this);" + "setTimeout(function () {"
-				+ "el.animate({\"opacity\": 0}, 1500);" + "el.slideUp();"
-				+ "}, 7000);" + "});" + "</script>";
 		builder.insert(bodyBeginPosition, script);
 	}
 

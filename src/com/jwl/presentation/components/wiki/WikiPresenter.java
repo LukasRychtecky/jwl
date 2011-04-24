@@ -82,7 +82,7 @@ public class WikiPresenter extends AbstractPresenter {
 	private void createForm() {
 
 		HtmlActionForm form = new HtmlActionForm();
-		form.setAction(this.linker.buildForm("formValid"));
+		form.setAction(this.linker.buildForm("formValid", null));
 
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setColumns(2);

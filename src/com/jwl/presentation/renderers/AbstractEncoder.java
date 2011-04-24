@@ -42,6 +42,7 @@ public abstract class AbstractEncoder {
 		HtmlLink link = new HtmlLink();
 		link.setValue(linker.buildLink(params));
 		link.setText(text);
+//		link.setIsAjax(Boolean.TRUE);
 		return link;
 	}
 		
