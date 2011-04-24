@@ -1,7 +1,7 @@
 package com.jwl.presentation.components.wiki;
 
-import com.jwl.presentation.components.core.AbstractComponent;
-import com.jwl.presentation.components.core.AbstractPresenter;
+import com.jwl.presentation.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractPresenter;
 
 /**
  *

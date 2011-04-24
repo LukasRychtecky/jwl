@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 
-import com.jwl.presentation.components.core.AbstractPresenter;
+import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlLink;
 

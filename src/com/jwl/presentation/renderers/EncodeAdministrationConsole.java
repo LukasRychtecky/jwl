@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 
-import com.jwl.presentation.components.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;

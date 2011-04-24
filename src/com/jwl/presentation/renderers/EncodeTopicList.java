@@ -17,7 +17,7 @@ import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.presentation.components.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;

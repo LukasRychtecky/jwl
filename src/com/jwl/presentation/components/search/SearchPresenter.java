@@ -4,7 +4,7 @@ import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.exceptions.ModelException;
-import com.jwl.presentation.components.core.AbstractPresenter;
+import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.renderers.EncodeSearch;
 import com.jwl.presentation.url.RequestMapDecoder;

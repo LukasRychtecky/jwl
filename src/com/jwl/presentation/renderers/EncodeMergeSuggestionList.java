@@ -13,7 +13,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 import com.jwl.business.ArticlePair;
 import com.jwl.business.article.ArticleTO;
-import com.jwl.presentation.components.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;

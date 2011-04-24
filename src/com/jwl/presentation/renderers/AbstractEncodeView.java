@@ -13,7 +13,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.security.AccessPermissions;
-import com.jwl.presentation.components.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;

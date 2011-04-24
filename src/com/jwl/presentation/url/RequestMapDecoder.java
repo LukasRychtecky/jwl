@@ -2,7 +2,7 @@ package com.jwl.presentation.url;
 
 import java.util.Map;
 
-import com.jwl.presentation.components.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLElements;
 
 public class RequestMapDecoder {

@@ -9,7 +9,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputHidden;
 
 import com.jwl.business.article.ArticleTO;
-import com.jwl.presentation.components.core.AbstractComponent;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;

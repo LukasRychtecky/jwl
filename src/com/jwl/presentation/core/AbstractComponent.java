@@ -1,4 +1,4 @@
-package com.jwl.presentation.components.core;
+package com.jwl.presentation.core;
 
 import java.io.IOException;
 import java.util.ArrayList;

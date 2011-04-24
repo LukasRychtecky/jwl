@@ -7,7 +7,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
 
-import com.jwl.presentation.components.core.AbstractRenderer;
+import com.jwl.presentation.core.AbstractRenderer;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
 
