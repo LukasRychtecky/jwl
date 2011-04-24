@@ -292,10 +292,9 @@ abstract public class AbstractPresenter {
 				continue;
 			}
 			HtmlDiv messageWidget = new HtmlDiv();
-			messageWidget.setStyleClass(JWLStyleClass.FLASH_MESSAGE);
-			messageWidget.setStyleClass(JWLStyleClass.FLASH_PREFIX +
-											flashMessage.getType().getType() +
-											(flashMessage.isHide() ? "" : JWLStyleClass.NO_HIDE));
+			messageWidget.addStyleClass(JWLStyleClass.FLASH_MESSAGE);
+			messageWidget.addStyleClass(JWLStyleClass.FLASH_PREFIX + flashMessage.getType().getType());
+			messageWidget.addStyleClass(flashMessage.isHide() ? null : JWLStyleClass.NO_HIDE);
 			HtmlOutputText text = new HtmlOutputText();
 			text.setValue(flashMessage.getMessage());
 			messageWidget.getChildren().add(text);
@@ -308,7 +307,7 @@ abstract public class AbstractPresenter {
 	public void sendResponse() throws IOException {
 		HtmlDiv componentCover = new HtmlDiv();
 		componentCover.setId(COMPONENT_ID);
-		componentCover.setStyleClass(COMPONENT_CLASS);
+		componentCover.addStyleClass(COMPONENT_CLASS);
 		componentCover.getChildren().add(this.renderMessages());
 		componentCover.getChildren().addAll(this.container);
 		

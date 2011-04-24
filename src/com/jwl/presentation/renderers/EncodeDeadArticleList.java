@@ -72,15 +72,15 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	
 	protected HtmlDiv encodedPanel(List<ArticleTO> articles) {
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 		
 		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		HtmlOutputText title = getHtmlText("Possibly dead articles");
 		panelHeader.addChildren(title);
 		
 		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		HtmlPanelGrid table = encodedListing(articles);
 		panelBody.getChildren().add(table);
 		//panelBody.getChildren().add(getPageButtonsComponent(paginator));
@@ -164,7 +164,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 
 	protected HtmlDiv encodedPanelActions(){
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
 		panelChildren.add(encodedLivabilityInput());

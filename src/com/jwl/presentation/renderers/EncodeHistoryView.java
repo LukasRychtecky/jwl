@@ -47,7 +47,7 @@ public class EncodeHistoryView extends AbstractEncoder {
 	
 	private HtmlDiv encodedTitle(String title) {
 		HtmlDiv titleDiv = new HtmlDiv();
-		titleDiv.setStyleClass(JWLStyleClass.VIEW_TITLE);
+		titleDiv.addStyleClass(JWLStyleClass.VIEW_TITLE);
 		
 		HtmlFreeOutput output = new HtmlFreeOutput();
 		output.setFreeOutput(title);
@@ -58,7 +58,7 @@ public class EncodeHistoryView extends AbstractEncoder {
 	
 	private HtmlDiv encodedText(String text) {
 		HtmlDiv textDiv = new HtmlDiv();
-		textDiv.setStyleClass(JWLStyleClass.VIEW_TEXT);
+		textDiv.addStyleClass(JWLStyleClass.VIEW_TEXT);
 		
 		String html = MarkupToMarkdown.convert(text);
 		HtmlFreeOutput output = new HtmlFreeOutput();

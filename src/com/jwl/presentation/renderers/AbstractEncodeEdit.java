@@ -113,7 +113,7 @@ public abstract class AbstractEncodeEdit extends AbstractEncoder {
 
 	private UIComponent encodedUnknownUserMessage() {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(JWLStyleClass.EDIT_MESSAGE_WARNING);
+		div.addStyleClass(JWLStyleClass.EDIT_MESSAGE_WARNING);
 		div.getChildren().add(getHtmlText("Your user name is unknown! " +
 				"It will record your IP adress."));
 		return div;

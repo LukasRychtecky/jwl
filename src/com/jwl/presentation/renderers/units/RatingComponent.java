@@ -15,14 +15,14 @@ public class RatingComponent {
 		}
 
 		HtmlDiv stars = new HtmlDiv();
-		stars.setStyleClass("smallstars");
+		stars.addStyleClass("smallstars");
 		for (int i = 0; i < 10; i++) {
 			HtmlDiv star = new HtmlDiv();
 			if (i < sn) {
-				star.setStyleClass("rating");
+				star.addStyleClass("rating");
 			}
 			if (i % 2 == 1) {
-				star.setStyleClass("rating-right");
+				star.addStyleClass("rating-right");
 			}
 			stars.addChildren(star);
 		}

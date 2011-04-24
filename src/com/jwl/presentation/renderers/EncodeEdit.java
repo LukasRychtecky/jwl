@@ -53,14 +53,14 @@ public class EncodeEdit extends AbstractEncodeEdit {
 
 	private UIComponent encodedLabelForTitle() {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(JWLStyleClass.EDIT_LABEL_OF_TITLE);
+		div.addStyleClass(JWLStyleClass.EDIT_LABEL_OF_TITLE);
 		div.addChildren(getHtmlText(EDIT_TITLE.value));
 		return div;
 	}
 	
 	private UIComponent encodedTitle(String title) {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(JWLStyleClass.EDIT_TITLE);
+		div.addStyleClass(JWLStyleClass.EDIT_TITLE);
 		div.addChildren(getHtmlText(title));
 		return div;
 	}

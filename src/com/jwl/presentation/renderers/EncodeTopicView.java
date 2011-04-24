@@ -75,13 +75,13 @@ public class EncodeTopicView extends AbstractEncoder {
 	
 	protected HtmlDiv encodedTopic(TopicTO topic)  {
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 		
 		HtmlOutputText title = getHtmlText("Article topic");
 		title.setStyleClass(JWLStyleClass.PANEL_HEADER);
 		
 		HtmlDiv body = new HtmlDiv();
-		body.setStyleClass(JWLStyleClass.PANEL_BODY);
+		body.addStyleClass(JWLStyleClass.PANEL_BODY);
 		body.addChildren(getInitialPostComponent(topic.getOpeningPost(), topic));
 		
 		panel.addChildren(title);
@@ -92,7 +92,7 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	protected UIComponent getInitialPostComponent(PostTO post, TopicTO topic)  {
 		HtmlDiv component = new HtmlDiv();
-		component.setStyleClass(JWLStyleClass.FORUM_INITIAL_POST);
+		component.addStyleClass(JWLStyleClass.FORUM_INITIAL_POST);
 		component.addChildren(getPostHeader(topic, post));
 		component.addChildren(getPostTextComponet(post.getText()));
 		return component;
@@ -101,7 +101,7 @@ public class EncodeTopicView extends AbstractEncoder {
 	
 	protected HtmlDiv encodedActionButtons(TopicTO topic, ArticleTO article) {
 		HtmlDiv actionButtons = new HtmlDiv();
-		actionButtons.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		actionButtons.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		
 		actionButtons.addChildren(getArticleLinkComponent(article.getTitle()));
 		actionButtons.addChildren(getTopicListLink(article.getTitle()));
@@ -116,13 +116,13 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected HtmlDiv encodedReply(List<PostTO> replies, boolean adminMode, 
 			boolean topicLocked) {
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 		
 		HtmlOutputText title = getHtmlText(replies.size() + " replies");
 		title.setStyleClass(JWLStyleClass.PANEL_HEADER);
 		
 		HtmlDiv body = new HtmlDiv();
-		body.setStyleClass(JWLStyleClass.PANEL_BODY);
+		body.addStyleClass(JWLStyleClass.PANEL_BODY);
 		body.getChildren().add(getResponses(replies, adminMode, topicLocked));
 		
 		panel.addChildren(title);
@@ -158,7 +158,7 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected UIComponent getReplyComponent(PostTO post, boolean adminMode,
 			boolean topicLocked) {
 		HtmlDiv component = new HtmlDiv();
-		component.setStyleClass(JWLStyleClass.FORUM_INITIAL_POST);
+		component.addStyleClass(JWLStyleClass.FORUM_INITIAL_POST);
 		component.addChildren(getReplyHeader(post.getAuthor(), post.getCreated()));
 		component.addChildren(getPostTextComponet(post.getText()));
 		component.addChildren(getReplyActionsComponent(post, adminMode, topicLocked));
@@ -192,7 +192,7 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	protected UIComponent getReplyHeader(String author, Date date) {
 		HtmlDiv component = new HtmlDiv();
-		component.setStyleClass(JWLStyleClass.FORUM_POST_AUTHOR);
+		component.addStyleClass(JWLStyleClass.FORUM_POST_AUTHOR);
 		
 		HtmlOutputText dateDiv = getHtmlText(date.toString());
 		HtmlOutputText authorDiv = getHtmlText(author);
@@ -216,7 +216,7 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected UIComponent getReplyActionsComponent(PostTO post,
 			boolean adminMode, boolean topicLocked) {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(JWLStyleClass.FORUM_REPLY_ACTIONS);
+		div.addStyleClass(JWLStyleClass.FORUM_REPLY_ACTIONS);
 
 		if (!topicLocked&&hasPostReplyPermission()){
 			div.addChildren(getReplyLinkComponent());
@@ -336,13 +336,13 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	protected UIComponent getReplyFormPanel(TopicTO topic, PostTO quotedPost) {
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 		
 		HtmlOutputText text = getHtmlText("Post reply");
 		text.setStyleClass(JWLStyleClass.PANEL_HEADER);
 		
 		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		panelBody.addChildren(getReplyText(getInitText(quotedPost)));
 		panelBody.addChildren(getHiddenTopicId(topic.getId()));
 		
@@ -353,7 +353,7 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	protected UIComponent getReplyFormActionButtons(TopicTO topic) {
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		buttonsPanel.addChildren(getReplyButton());
 		buttonsPanel.addChildren(getReplyCancelButton());
 		return buttonsPanel;

@@ -67,7 +67,7 @@ public class HtmlDiv extends UIOutput {
 		return this.styleClasses;
 	}
 	
-	public void setStyleClass(String... styleClasses) {
+	public void addStyleClass(String... styleClasses) {
 		for (String styleClass : styleClasses) {
 			if (styleClass != null) {
 				this.styleClasses.add(styleClass);

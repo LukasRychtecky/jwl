@@ -54,7 +54,7 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 
 	private HtmlDiv encodedFileInput() {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(JWLStyleClass.ATTACH_FILE);
+		div.addStyleClass(JWLStyleClass.ATTACH_FILE);
 		
 		HtmlInputFile fileInput = new HtmlInputFile();
 		fileInput.setId(JWLElements.FILE_ITEM.id);

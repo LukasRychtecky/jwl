@@ -54,7 +54,7 @@ public abstract class AbstractEncoder {
 
 	protected HtmlDiv getHtmlLabelComponent(JWLElements element, String styleClass) {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(styleClass);
+		div.addStyleClass(styleClass);
 		
 		HtmlOutputLabel labelForFileName = new HtmlOutputLabel();
 		labelForFileName.setFor(element.id);
@@ -67,7 +67,7 @@ public abstract class AbstractEncoder {
 	protected HtmlDiv getHtmlInputComponent(JWLElements element, 
 			String value, String styleClass) {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(styleClass);
+		div.addStyleClass(styleClass);
 		
 		HtmlInputText inputText = new HtmlInputText();
 		inputText.setValue(value);
@@ -79,7 +79,7 @@ public abstract class AbstractEncoder {
 
 	protected HtmlDiv getHtmlSubmitComponent(JWLElements element, String styleClass) {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(styleClass);
+		div.addStyleClass(styleClass);
 		
 		HtmlCommandButton submit = new HtmlCommandButton();
 		submit.setType("submit");
