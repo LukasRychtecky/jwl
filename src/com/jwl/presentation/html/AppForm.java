@@ -17,12 +17,13 @@ public interface AppForm {
 	public UIComponent addText(String name, String label, String value);
 	public UIComponent addFile(String name, String label);
 	public UIComponent addPassword(String name, String label);
-	public UIComponent addHidden(String name, String label, String value);
+	public UIComponent addHidden(String name, String value);
 	public UIComponent addTextArea(String name, String label, String value);
 	public UIComponent addSubmit(String name, String caption, String label);
 	public UIComponent addCheckbox(String name, String label);
 
 	public HtmlInputExtended get(String name);
+	public void remove(String name);
 	public Map<String, HtmlInputExtended> getInputs();
 	public String getAction();
 	public void setAction(String action);

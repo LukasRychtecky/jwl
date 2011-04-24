@@ -98,17 +98,17 @@ public class EncodeTopicList extends AbstractEncoder {
 
 	private HtmlDiv encodedPanel() {
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 		
 		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		panelHeader.addChildren(getHtmlText("Article topics"));
 		
 		panel.getChildren().add(panelHeader);
 		
 		
 		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		
 		List<TopicTO> topics = paginator.getCurrentPageContent();
 		if(!topics.isEmpty()) {
@@ -267,7 +267,7 @@ public class EncodeTopicList extends AbstractEncoder {
 	private HtmlDiv encodedActions(boolean topicActions) {
 		
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		
 		if (topicActions && hasDeleteTopicPermission()) {
 			buttonsPanel.addChildren(getDeleteButton());

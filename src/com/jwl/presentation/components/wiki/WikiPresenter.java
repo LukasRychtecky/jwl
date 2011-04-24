@@ -82,7 +82,7 @@ public class WikiPresenter extends AbstractPresenter {
 	private void createForm() {
 
 		HtmlActionForm form = new HtmlActionForm();
-		form.setAction(this.linker.buildForm("formValid"));
+		form.setAction(this.linker.buildForm("formValid", null));
 
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setColumns(2);
@@ -104,7 +104,7 @@ public class WikiPresenter extends AbstractPresenter {
 
 	protected HtmlDiv getHtmlSubmitComponent(JWLElements element, String styleClass) {
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(styleClass);
+		div.addStyleClass(styleClass);
 		
 		HtmlCommandButton submit = new HtmlCommandButton();
 		submit.setType("submit");
@@ -119,7 +119,7 @@ public class WikiPresenter extends AbstractPresenter {
 			String styleClass) {
 		
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(styleClass);
+		div.addStyleClass(styleClass);
 		
 		HtmlInputText inputText = new HtmlInputText();
 		inputText.setValue(value);

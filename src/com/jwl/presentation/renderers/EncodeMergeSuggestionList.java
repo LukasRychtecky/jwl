@@ -75,12 +75,12 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 		List<UIComponent> formData = new ArrayList<UIComponent>();
 		
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		panelHeader.setValue("Merge Suggestion");
 		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		HtmlPanelGrid table = encodeListing(articlePairs);
 		panelBody.getChildren().add(table);
 		//panelBody.getChildren().add(getPageButtonsComponent(paginator));
@@ -96,7 +96,7 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 		List<UIComponent> formData = new ArrayList<UIComponent>();
 		
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
 		panelChildren.add(getLinkAdminConsole());
 		panelChildren.add(getIgnoreButton());
@@ -205,7 +205,7 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 
 	protected UIComponent getIgnoreButton(){
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		div.addStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		
 		HtmlCommandButton button = new HtmlCommandButton();
 		button.setType("submit");

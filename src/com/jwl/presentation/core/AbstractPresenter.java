@@ -1,5 +1,6 @@
 package com.jwl.presentation.core;
 
+// <editor-fold defaultstate="collapsed">
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -44,7 +45,9 @@ import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.RequestMapDecoder;
 import com.jwl.presentation.url.WikiURLParser;
+import java.util.HashMap;
 
+// </editor-fold>
 /**
  *
  * @author Lukas Rychtecky
@@ -70,12 +73,14 @@ abstract public class AbstractPresenter {
 	protected List<UIComponent> container;
 	protected AppForm form;
 	protected List<FlashMessage> messages;
+	protected Map<String, HtmlAppForm> forms;
 
 	public AbstractPresenter() {
 		this.context = FacesContext.getCurrentInstance();
 		this.urlParser = new WikiURLParser();
 		this.messages = new ArrayList<FlashMessage>();
 		this.container = new ArrayList<UIComponent>();
+		this.forms = new HashMap<String, HtmlAppForm>();
 
 		if (isAjax()) {
 			this.linker = new Linker(getPresenterName(), getRequestParam(JWLURLParams.URI));
@@ -84,7 +89,7 @@ abstract public class AbstractPresenter {
 		}
 		
 		try {
-			this.prepareForm();
+			this.prepareFormFromRequest();
 		} catch (IOException ex) {
 			ExceptionLogger.severe(getClass(), ex);
 		}
@@ -103,8 +108,20 @@ abstract public class AbstractPresenter {
 		}
 		return presenterName;
 	}
+	
+	private HtmlAppForm buildForm(String formName) {
+		Method method;
+		HtmlAppForm form = null;
+		try {
+			method = this.getClass().getMethod(CREATE_FORM + formName);
+			form = (HtmlAppForm) method.invoke(this);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+		return form;
+	}
 
-	private void prepareForm() throws IOException {
+	private void prepareFormFromRequest() throws IOException {
 		String formName = getRequestParam(AppForm.FORM_NAME);
 		if (formName != null && !formName.isEmpty()) {
 			Method method;
@@ -129,7 +146,7 @@ abstract public class AbstractPresenter {
 					input.setValue(value);
 				}
 
-				this.form = form;
+				this.forms.put(formName, form);
 			} catch (NoSuchMethodException ex) {
 				ExceptionLogger.severe(getClass(), new RuntimeException(
 						"No such method found " + this.getClass().toString()
@@ -161,7 +178,7 @@ abstract public class AbstractPresenter {
 		return this.facade;
 	}
 
-	protected Boolean isAjax() {
+	protected final Boolean isAjax() {
 		String method = getRequestParam(JWLURLParams.METHOD);
 		if (method != null && method.equals("ajax")) {
 			return Boolean.TRUE;
@@ -180,6 +197,10 @@ abstract public class AbstractPresenter {
 	protected Map<String, String> getRequestParamMap() {
 		return this.context.getExternalContext().getRequestParameterMap();
 	}
+	
+	protected void redirect(String state) {
+		this.context.getAttributes().put(JWLContextKey.STATE, state);
+	}
 
 	public void renderDefault() throws IOException {
 	}
@@ -196,9 +217,15 @@ abstract public class AbstractPresenter {
 		this.sendResponse();
 	}
 	
-	public void addImplicitErrorFlashMessage() {
+	public void defaultProcessException(Exception ex, String redirectState) {
+		ExceptionLogger.severe(this.getClass(), ex);
 		this.messages.add(new FlashMessage("Service is unavailable, sorry.",
 				FlashMessageType.ERROR, Boolean.FALSE));
+		this.redirect(redirectState);
+	}
+	
+	public void defaultProcessException(Exception ex) {
+		this.defaultProcessException(ex, "default");
 	}
 
 	public void encodeAjaxBegin(FacesContext context) throws IOException {
@@ -282,10 +309,9 @@ abstract public class AbstractPresenter {
 				continue;
 			}
 			HtmlDiv messageWidget = new HtmlDiv();
-			messageWidget.setStyleClass(JWLStyleClass.FLASH_MESSAGE);
-			messageWidget.setStyleClass(JWLStyleClass.FLASH_PREFIX +
-											flashMessage.getType().getType() +
-											(flashMessage.isHide() ? "" : JWLStyleClass.NO_HIDE));
+			messageWidget.addStyleClass(JWLStyleClass.FLASH_MESSAGE);
+			messageWidget.addStyleClass(JWLStyleClass.FLASH_PREFIX + flashMessage.getType().getType());
+			messageWidget.addStyleClass(flashMessage.isHide() ? null : JWLStyleClass.NO_HIDE);
 			HtmlOutputText text = new HtmlOutputText();
 			text.setValue(flashMessage.getMessage());
 			messageWidget.getChildren().add(text);
@@ -298,7 +324,7 @@ abstract public class AbstractPresenter {
 	public void sendResponse() throws IOException {
 		HtmlDiv componentCover = new HtmlDiv();
 		componentCover.setId(COMPONENT_ID);
-		componentCover.setStyleClass(COMPONENT_CLASS);
+		componentCover.addStyleClass(COMPONENT_CLASS);
 		componentCover.getChildren().add(this.renderMessages());
 		componentCover.getChildren().addAll(this.container);
 		
@@ -354,6 +380,18 @@ abstract public class AbstractPresenter {
 			Logger.getLogger(ArticlePresenter.class.getName()).log(Level.SEVERE, null, e);
 		}
 		return articleTO;
+	}
+	
+	protected HtmlAppForm getForm(String name) {
+		HtmlAppForm form = this.forms.get(name);
+		if (form == null) {
+			form = this.buildForm(name);
+			
+			if (form != null) {
+				this.forms.put(name, form);
+			}
+		}
+		return form;
 	}
 
 }

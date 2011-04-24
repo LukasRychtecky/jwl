@@ -48,20 +48,17 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 	private HtmlDiv encodedTitle() {
 		HtmlDiv titleDiv = new HtmlDiv();
-		titleDiv.setStyleClass(JWLStyleClass.VIEW_TITLE);
+		titleDiv.addStyleClass(JWLStyleClass.VIEW_TITLE);
 		
 		HtmlOutputText output = getHtmlText(article.getTitle());
-		output.setStyleClass(JWLStyleClass.VIEW_TITLE);
-//		new HtmlFreeOutput();
-//		output.setFreeOutput(article.getTitle());
-		
+		output.setStyleClass(JWLStyleClass.VIEW_TITLE);		
 		titleDiv.addChildren(output);
 		return titleDiv;
 	}
 
 	private HtmlDiv encodedText() {
 		HtmlDiv textDiv = new HtmlDiv();
-		textDiv.setStyleClass(JWLStyleClass.VIEW_TEXT);
+		textDiv.addStyleClass(JWLStyleClass.VIEW_TEXT);
 		
 		String html = MarkupToMarkdown.convert(article.getText());
 		HtmlFreeOutput out = new HtmlFreeOutput();
@@ -73,7 +70,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 	private HtmlDiv encodedAttachments() {		
 		HtmlDiv div = new HtmlDiv();
-		div.setStyleClass(JWLStyleClass.VIEW_ATTACHMENTS);
+		div.addStyleClass(JWLStyleClass.VIEW_ATTACHMENTS);
 		
 		for (AttachmentTO attachment : article.getAttachments()) {
 			Map<String, String> params = new HashMap<String, String>();
@@ -94,7 +91,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 	private HtmlDiv encodedTags() {
 		Set<String> tags = article.getTags();
 		HtmlDiv tagsDiv = new HtmlDiv();
-		tagsDiv.setStyleClass(JWLStyleClass.VIEW_TAGS);
+		tagsDiv.addStyleClass(JWLStyleClass.VIEW_TAGS);
 		for (String tag : tags) {
 			// TODO Refactoring to search articles with the same tag
 			/*HtmlLinkProperties properties = new HtmlLinkProperties();
@@ -127,6 +124,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_LIST.id);
 
 		HtmlLink link = getHtmlLink("Back to listing", params);
+		link.setIsAjax(Boolean.TRUE);
 		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
 		return link;
 	}
@@ -137,6 +135,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, title);
 
 		HtmlLink link = getHtmlLink("Edit", params);
+		link.setIsAjax(Boolean.TRUE);
 		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_EDIT);
 		return link;
 	}
@@ -171,7 +170,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 	protected HtmlDiv encodedArticlePanel() {
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 		
 		panel.getChildren().add(this.encodedPanelHeader());
 		panel.getChildren().add(this.encodedPanelBody());
@@ -181,7 +180,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 	
 	private UIComponent encodedPanelHeader() {
 		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		
 		HtmlOutputText text = new HtmlOutputText();
 		text.setValue("Wiki Article");
@@ -192,7 +191,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 	private UIComponent encodedPanelBody() {
 		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		
 		panelBody.getChildren().addAll(this.encondedArticle());
 		
@@ -205,7 +204,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 	
 	protected HtmlDiv encodedPanelActionButtons() {
 		HtmlDiv panelButtons = new HtmlDiv();
-		panelButtons.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		panelButtons.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		panelButtons.addChildren(this.encodedCommonLinks(article));
 		
 		return panelButtons;

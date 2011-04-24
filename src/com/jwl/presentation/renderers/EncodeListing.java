@@ -1,5 +1,6 @@
 package com.jwl.presentation.renderers;
 
+// <editor-fold defaultstate="collapsed">
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
+// </editor-fold>
 
 public class EncodeListing extends AbstractEncoder {
 
@@ -78,6 +80,7 @@ public class EncodeListing extends AbstractEncoder {
 
 		HtmlLink link = this.getHtmlLink("Create new article", params);
 		link.setStyleClasses(JWLStyleClass.CREATE_NEW_ARTICLE, JWLStyleClass.ACTION_BUTTON);
+		link.setIsAjax(Boolean.TRUE);
 		return link;
 	}
 
@@ -130,7 +133,9 @@ public class EncodeListing extends AbstractEncoder {
 		List<UIComponent> rowDataCells = new ArrayList<UIComponent>(); 
 		
 		String title = article.getTitle();
-		rowDataCells.add(this.encodeActionLink(title, title, JWLStates.ARTICLE_VIEW, null));
+		HtmlLink link = this.encodeActionLink(title, title, JWLStates.ARTICLE_VIEW, null);
+		link.setIsAjax(Boolean.TRUE);
+		rowDataCells.add(link);
 
 		StringBuilder tags = new StringBuilder();
 		for (String tag : article.getTags()) {
@@ -233,6 +238,7 @@ public class EncodeListing extends AbstractEncoder {
 		params.put(JWLURLParams.LIST_PAGE_NUMBER, String.valueOf(pageNumber));
 		
 		HtmlLink link = this.getHtmlLink(text, params);
+		link.setIsAjax(Boolean.TRUE);
 		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, styleCass);
 		return link;
 	}

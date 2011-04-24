@@ -68,13 +68,13 @@ public class AjaxListener implements PhaseListener {
 	}
 
 	private void handleException(Exception ex) throws IOException {
+		Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
 		AbstractPresenter presenter = new AbstractPresenter() {};
 		if (ex instanceof ClassNotFoundException) {
 			presenter.render404();
 		} else {
 			presenter.render500();
 		}
-		Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
 	@Override

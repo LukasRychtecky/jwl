@@ -1,11 +1,13 @@
 package com.jwl.presentation.core;
 
+import com.jwl.presentation.enumerations.JWLContextKey;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.url.WikiURLParser;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -20,8 +22,8 @@ public class Router {
 	}
 
 	public void route(AbstractPresenter presenter) throws IOException {
-		String state = this.parser.getState();
 		String doAction = this.parser.getDoAction();
+		FacesContext.getCurrentInstance().getAttributes().put(JWLContextKey.STATE, this.parser.getState());
 		
 		String methodName = null;
 		
@@ -29,8 +31,10 @@ public class Router {
 			methodName = "decode" + doAction.substring(0, 1).toUpperCase().concat(doAction.substring(1));
 			invokeMethod(presenter, methodName);
 		}
-			
-		if (state != null && !state.isEmpty()) {
+		
+		Object stateAttr = FacesContext.getCurrentInstance().getAttributes().get(JWLContextKey.STATE);
+		String state = 	(stateAttr != null ? stateAttr.toString() : "");
+		if (!state.isEmpty()) {
 			methodName = "render" + state.substring(0, 1).toUpperCase().concat(state.substring(1));
 		} else {
 			methodName = "renderDefault";

@@ -2,6 +2,7 @@ package com.jwl.presentation.html;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.component.html.HtmlOutputLink;
@@ -56,9 +57,7 @@ public class HtmlLink extends HtmlOutputLink {
 	}
 
 	public void setStyleClasses(String... styles) {
-		for (String style : styles) {
-			styleClasses.add(style);
-		}
+		styleClasses.addAll(Arrays.asList(styles));
 	}
 
 	public final void setText(String text) {

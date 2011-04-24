@@ -56,14 +56,14 @@ public class EncodeTopicCreate extends AbstractEncoder {
 	
 	private HtmlDiv encodedPanel() {
 		HtmlDiv panel = new HtmlDiv();
-		panel.setStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass(JWLStyleClass.PANEL);
 
 		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		panelHeader.setValue("Create new Topic:");
 		
 		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.setStyleClass(JWLStyleClass.PANEL_BODY);
+		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		panelBody.addChildren(this.encodePanelBody());
 		
 		List<UIComponent> panelChildern =  panel.getChildren();
@@ -75,7 +75,7 @@ public class EncodeTopicCreate extends AbstractEncoder {
 	
 	private HtmlDiv encodedPanelActions() {
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.setStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
 		panelChildren.add(encodedCreateButton());
 		panelChildren.add(encodedCancelButton());
@@ -129,7 +129,7 @@ public class EncodeTopicCreate extends AbstractEncoder {
 	
 	private UIComponent encodedCancelButton(){
 		HtmlCommandButton button = new HtmlCommandButton();
-		//button.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		//button.addStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		button.setType("submit");
 		button.setId(JWLElements.FORUM_TOPIC_CANCEL.id);
 		button.setValue(JWLElements.FORUM_TOPIC_CANCEL.value);
