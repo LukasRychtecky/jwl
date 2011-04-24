@@ -86,7 +86,7 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	public HtmlAppForm createFormMujForm() {
 		HtmlAppForm form = new HtmlAppForm("MujForm");
-		form.addHidden("hidden", "Skryte pole", "defaultValue");
+		form.addHidden("hidden", "defaultValue");
 		form.addPassword("pass", "Heslo");
 		form.addText("text", "Text", "defaultValue");
 		form.addCheckbox("checkbox", "Checkbox");

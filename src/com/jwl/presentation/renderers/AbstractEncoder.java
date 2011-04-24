@@ -1,5 +1,6 @@
 package com.jwl.presentation.renderers;
 
+// <editor-fold defaultstate="collapsed">
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.WikiURLParser;
+// </editor-fold>
 
 public abstract class AbstractEncoder {
 
@@ -42,7 +44,6 @@ public abstract class AbstractEncoder {
 		HtmlLink link = new HtmlLink();
 		link.setValue(linker.buildLink(params));
 		link.setText(text);
-//		link.setIsAjax(Boolean.TRUE);
 		return link;
 	}
 		

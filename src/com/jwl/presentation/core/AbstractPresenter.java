@@ -1,5 +1,6 @@
 package com.jwl.presentation.core;
 
+// <editor-fold defaultstate="collapsed">
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -44,7 +45,9 @@ import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.RequestMapDecoder;
 import com.jwl.presentation.url.WikiURLParser;
+import java.util.HashMap;
 
+// </editor-fold>
 /**
  *
  * @author Lukas Rychtecky
@@ -70,12 +73,14 @@ abstract public class AbstractPresenter {
 	protected List<UIComponent> container;
 	protected AppForm form;
 	protected List<FlashMessage> messages;
+	protected Map<String, HtmlAppForm> forms;
 
 	public AbstractPresenter() {
 		this.context = FacesContext.getCurrentInstance();
 		this.urlParser = new WikiURLParser();
 		this.messages = new ArrayList<FlashMessage>();
 		this.container = new ArrayList<UIComponent>();
+		this.forms = new HashMap<String, HtmlAppForm>();
 
 		if (isAjax()) {
 			this.linker = new Linker(getPresenterName(), getRequestParam(JWLURLParams.URI));
@@ -84,7 +89,7 @@ abstract public class AbstractPresenter {
 		}
 		
 		try {
-			this.prepareForm();
+			this.prepareFormFromRequest();
 		} catch (IOException ex) {
 			ExceptionLogger.severe(getClass(), ex);
 		}
@@ -103,8 +108,20 @@ abstract public class AbstractPresenter {
 		}
 		return presenterName;
 	}
+	
+	private HtmlAppForm buildForm(String formName) {
+		Method method;
+		HtmlAppForm form = null;
+		try {
+			method = this.getClass().getMethod(CREATE_FORM + formName);
+			form = (HtmlAppForm) method.invoke(this);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+		return form;
+	}
 
-	private void prepareForm() throws IOException {
+	private void prepareFormFromRequest() throws IOException {
 		String formName = getRequestParam(AppForm.FORM_NAME);
 		if (formName != null && !formName.isEmpty()) {
 			Method method;
@@ -129,7 +146,7 @@ abstract public class AbstractPresenter {
 					input.setValue(value);
 				}
 
-				this.form = form;
+				this.forms.put(formName, form);
 			} catch (NoSuchMethodException ex) {
 				ExceptionLogger.severe(getClass(), new RuntimeException(
 						"No such method found " + this.getClass().toString()
@@ -363,6 +380,18 @@ abstract public class AbstractPresenter {
 			Logger.getLogger(ArticlePresenter.class.getName()).log(Level.SEVERE, null, e);
 		}
 		return articleTO;
+	}
+	
+	protected HtmlAppForm getForm(String name) {
+		HtmlAppForm form = this.forms.get(name);
+		if (form == null) {
+			form = this.buildForm(name);
+			
+			if (form != null) {
+				this.forms.put(name, form);
+			}
+		}
+		return form;
 	}
 
 }

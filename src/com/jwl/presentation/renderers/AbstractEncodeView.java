@@ -51,10 +51,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		titleDiv.addStyleClass(JWLStyleClass.VIEW_TITLE);
 		
 		HtmlOutputText output = getHtmlText(article.getTitle());
-		output.setStyleClass(JWLStyleClass.VIEW_TITLE);
-//		new HtmlFreeOutput();
-//		output.setFreeOutput(article.getTitle());
-		
+		output.setStyleClass(JWLStyleClass.VIEW_TITLE);		
 		titleDiv.addChildren(output);
 		return titleDiv;
 	}
@@ -127,6 +124,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_LIST.id);
 
 		HtmlLink link = getHtmlLink("Back to listing", params);
+		link.setIsAjax(Boolean.TRUE);
 		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
 		return link;
 	}
@@ -137,6 +135,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, title);
 
 		HtmlLink link = getHtmlLink("Edit", params);
+		link.setIsAjax(Boolean.TRUE);
 		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_EDIT);
 		return link;
 	}

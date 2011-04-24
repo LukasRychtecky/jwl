@@ -9,11 +9,11 @@ import com.jwl.presentation.components.wiki.WikiPresenter;
 
 public enum JWLPresenters {
 
-	ARTICLE("article", ArticlePresenter.class),
-	ADMINISTRATION("administration", AdministrationPresenter.class),
-	SEARCH("search", SearchPresenter.class),
-	WIKI("wiki", WikiPresenter.class),
-	WIDGET("widget", WidgetPresenter.class);
+	ARTICLE("Article", ArticlePresenter.class),
+	ADMINISTRATION("Administration", AdministrationPresenter.class),
+	SEARCH("Search", SearchPresenter.class),
+	WIKI("Wiki", WikiPresenter.class),
+	WIDGET("Widget", WidgetPresenter.class);
 	
 	public final String id;
 	public final Class<? extends AbstractPresenter> clazz;

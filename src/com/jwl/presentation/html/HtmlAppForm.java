@@ -152,7 +152,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 	}
 
 	@Override
-	public UIComponent addHidden(String name, String label, String value) {
+	public UIComponent addHidden(String name, String value) {
 		HtmlInputHidden input = new HtmlInputHidden();
 		input.setId(this.createName(name));
 		input.setValue(value);
@@ -217,5 +217,10 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 
 	protected void addComponent(String name, HtmlInputExtended component) {
 		this.components.put(name, component);
+	}
+
+	@Override
+	public void remove(String name) {
+		this.components.remove(name);
 	}
 }

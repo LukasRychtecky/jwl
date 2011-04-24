@@ -54,7 +54,26 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 	
 	public void renderEdit() {
-		container.addAll(new EncodeEdit().getEncodedComponent());
+		ArticleTO article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		if (article == null) {
+			FlashMessage message = new FlashMessage("Article not found!", FlashMessage.FlashMessageType.WARNING);
+			super.messages.add(message);
+			super.redirect("default");
+		} else {
+			HtmlAppForm form = super.getForm("ArticleEdit");
+			form.get("text").setValue(article.getText());
+			
+			StringBuilder tags = new StringBuilder();
+			for (String tag : article.getTags()) {
+				tags.append(tag).append(", ");
+			}
+			if (tags.length() > 0) {
+				form.get("tags").setValue(tags.substring(0, tags.length() - 1));
+			}
+			
+			form.get("title").setValue(article.getTitle());
+			container.addAll(new EncodeEdit(article, form).getEncodedComponent());			
+		}
 	}
 	
 	public void renderList() {
@@ -119,6 +138,14 @@ public class ArticlePresenter extends AbstractPresenter {
 		return form;
 	}
 	
+	public HtmlAppForm createFormArticleEdit() {
+		HtmlAppForm form = this.buildArticleForm("ArticleEdit");	
+		form.addHidden("title", null);
+		form.addSubmit("submit", "Save", null);		
+		form.setAction(this.linker.buildForm("articleUpdate", "view"));
+		return form;
+	}
+	
 	public void decodeTopicCreate() throws ModelException {
 		RequestMapDecoder decoder = getRequestMapDecoder(JWLElements.FORUM_CREATE_TOPIC_FORM);
 		
@@ -151,7 +178,7 @@ public class ArticlePresenter extends AbstractPresenter {
 	
 	public void decodeArticleCreate() {
 		try {
-			HtmlAppForm form = (HtmlAppForm) super.form;			
+			HtmlAppForm form = super.getForm("ArticleCreate");			
 			ArticleTO article = this.prepareArticle(form);
 			ArticleId articleId = this.getFacade().createArticle(article);
 			article.setId(articleId);
@@ -166,33 +193,50 @@ public class ArticlePresenter extends AbstractPresenter {
 		}
 	}
 	
-	public void decodeArticleUpdate() throws NoPermissionException, ModelException {
-//		ArticleTO article = prepareArticle();
-//		article.setId(this.getFacade().findArticleByTitle(article.getTitle()).getId());
-//		
-//		this.getFacade().updateArticle(article);
-//		
-//		messages.add(new FlashMessage("Article was saved."));
-//		
-//		super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
+	public void decodeArticleUpdate() {
+		try {
+			HtmlAppForm form = super.getForm("ArticleEdit");
+			ArticleTO article = this.prepareArticle(form);
+			article.setId(this.getFacade().findArticleByTitle(article.getTitle()).getId());		
+			this.getFacade().updateArticle(article);		
+			messages.add(new FlashMessage("Article has been saved."));		
+			super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
+		} catch (NoPermissionException ex) {
+			FlashMessage message = new FlashMessage("You don't have a permission.", FlashMessage.FlashMessageType.WARNING);
+			super.messages.add(message);
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 	
-	public void decodeArticleDelete() throws ModelException {
-		ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
-		this.getFacade().deleteArticle(articleId);
-		messages.add(new FlashMessage("Article was deleted."));
+	public void decodeArticleDelete() {
+		try {
+			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
+			this.getFacade().deleteArticle(articleId);
+			messages.add(new FlashMessage("Article was deleted."));
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 	
-	public void decodeArticleLock() throws ModelException {
-		ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
-		this.getFacade().lockArticle(articleId);
-		messages.add(new FlashMessage("Article was locked."));
+	public void decodeArticleLock() {
+		try {
+			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
+			this.getFacade().lockArticle(articleId);
+			messages.add(new FlashMessage("Article was locked."));
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 	
-	public void decodeArticleUnlock() throws ModelException {
-		ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
-		this.getFacade().unlockArticle(articleId);
-		messages.add(new FlashMessage("Article was locked."));
+	public void decodeArticleUnlock() {
+		try {
+			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
+			this.getFacade().unlockArticle(articleId);
+			messages.add(new FlashMessage("Article was locked."));
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 	
 	public void decodeHistoryRestore() throws ModelException {
@@ -254,7 +298,5 @@ public class ArticlePresenter extends AbstractPresenter {
 		
 		return article;
 	}
-	
-
 	
 }
