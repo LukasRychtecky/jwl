@@ -63,8 +63,7 @@ public class RatingComponent {
 		StringBuilder builder = new StringBuilder();
 		builder.append("<label for=\"rating-" + elementNumber + "\">");
 		builder.append("<input id=\"rating-" + elementNumber
-				+ "\" name=\"rating\" type=\"radio\" value=\"" + elementNumber
-				+ "\"");
+				+ "\" name=\"rating\" type=\"radio\" value=\"" + elementNumber);
 		if (checked) {
 			builder.append(" checked");
 		}
