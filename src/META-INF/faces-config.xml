@@ -44,7 +44,7 @@
    <phase-listener>com.jwl.presentation.knowledgeajax.KnowledgeAjaxPhaseListener</phase-listener>
 	</lifecycle>
  <lifecycle>
-   <phase-listener>com.jwl.presentation.components.core.AjaxListener</phase-listener>
+   <phase-listener>com.jwl.presentation.core.AjaxListener</phase-listener>
 	</lifecycle>
 
 </faces-config>
