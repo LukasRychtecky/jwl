@@ -23,6 +23,7 @@ public class Router {
 
 	public void route(AbstractPresenter presenter) throws IOException {
 		String doAction = this.parser.getDoAction();
+		FacesContext.getCurrentInstance().getAttributes().put(JWLContextKey.STATE, this.parser.getState());
 		
 		String methodName = null;
 		
@@ -31,8 +32,9 @@ public class Router {
 			invokeMethod(presenter, methodName);
 		}
 		
-		String state = FacesContext.getCurrentInstance().getAttributes().get(JWLContextKey.STATE).toString();	
-		if (state != null && !state.isEmpty()) {
+		Object stateAttr = FacesContext.getCurrentInstance().getAttributes().get(JWLContextKey.STATE);
+		String state = 	(stateAttr != null ? stateAttr.toString() : "");
+		if (!state.isEmpty()) {
 			methodName = "render" + state.substring(0, 1).toUpperCase().concat(state.substring(1));
 		} else {
 			methodName = "renderDefault";
