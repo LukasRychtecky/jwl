@@ -25,13 +25,13 @@ public class WidgetRenderer extends AbstractRenderer {
 		super.components.add(message);
 
 		HtmlLink link = new HtmlLink();
-		link.setValue(this.linker.buildState("detail"));
+		link.setValue(this.linker.buildLink("detail"));
 		link.setText("ja jsem AJAXovy odkaz na detail");
 		link.setIsAjax(Boolean.TRUE);
 		super.components.add(link);
 
 		HtmlLink linkNonAjax = new HtmlLink();
-		linkNonAjax.setValue(this.linker.buildState("detail"));
+		linkNonAjax.setValue(this.linker.buildLink("detail"));
 		linkNonAjax.setText("ja jsem NEajaxovy odkaz na detail");
 		linkNonAjax.setIsAjax(Boolean.FALSE);
 		super.components.add(linkNonAjax);
@@ -43,7 +43,7 @@ public class WidgetRenderer extends AbstractRenderer {
 		super.components.add(message);
 
 		HtmlLink link = new HtmlLink();
-		link.setValue(this.linker.buildState("default"));
+		link.setValue(this.linker.buildLink("default"));
 		link.setText("ja jsem AJAXovy odkaz na default");
 		super.components.add(link);
 	}

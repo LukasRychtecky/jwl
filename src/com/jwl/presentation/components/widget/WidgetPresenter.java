@@ -77,7 +77,7 @@ public class WidgetPresenter extends AbstractPresenter {
 		super.container.add(table);
 
 		HtmlLink link = new HtmlLink();
-		link.setValue(this.linker.buildState("default"));
+		link.setValue(this.linker.buildLink("default"));
 		link.setText("ja jsem AJAXovy odkaz na default");
 		link.setIsAjax(Boolean.TRUE);
 		super.container.add(link);

@@ -186,7 +186,7 @@ abstract public class AbstractPresenter {
 
 	public void render404() throws IOException {
 		AbstractRenderer renderer = new AbstractRenderer(this.context, this.linker, this.container);
-		renderer.render404(this.getRequestParam(JWLURLParams.ACTION));
+		renderer.render404(this.getRequestParam(JWLURLParams.STATE).toString());
 		this.sendResponse();
 	}
 

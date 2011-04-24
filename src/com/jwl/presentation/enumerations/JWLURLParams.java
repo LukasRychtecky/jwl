@@ -11,7 +11,6 @@ public class JWLURLParams {
 	public static final String PRESENTER = "jwlpresenter";
 	public static final String ARTICLE_TITLE = "jwltitle";
 	public static final String STATE = "jwlstate";
-	public static final String ACTION = "jwlaction";
 	public static final String FILE_NAME = "jwlfilename";
 	public static final String REDIRECT_TARGET = "jwlpage";
 	public static final String LIST_PAGE_NUMBER = "jwlpageindex";
@@ -33,7 +32,6 @@ public class JWLURLParams {
 		ALL_URL_PARAMETERS.add(PRESENTER);
 		ALL_URL_PARAMETERS.add(ARTICLE_TITLE);
 		ALL_URL_PARAMETERS.add(STATE);
-		ALL_URL_PARAMETERS.add(ACTION);
 		ALL_URL_PARAMETERS.add(FILE_NAME);
 		ALL_URL_PARAMETERS.add(REDIRECT_TARGET);
 		ALL_URL_PARAMETERS.add(LIST_PAGE_NUMBER);
@@ -51,7 +49,6 @@ public class JWLURLParams {
 		ALL_URL_PARAMETERS_BUT_TITLE.add(PRESENTER);
 		ALL_URL_PARAMETERS_BUT_TITLE.add(ARTICLE_TITLE);
 		ALL_URL_PARAMETERS_BUT_TITLE.add(STATE);
-		ALL_URL_PARAMETERS_BUT_TITLE.add(ACTION);
 		ALL_URL_PARAMETERS_BUT_TITLE.add(FILE_NAME);
 		ALL_URL_PARAMETERS_BUT_TITLE.add(REDIRECT_TARGET);
 		ALL_URL_PARAMETERS_BUT_TITLE.add(LIST_PAGE_NUMBER);

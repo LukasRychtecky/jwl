@@ -1,4 +1,4 @@
-package com.jwl.presentation.core;
+	package com.jwl.presentation.core;
 
 import java.io.IOException;
 import java.util.Map;
@@ -54,10 +54,9 @@ public class AjaxListener implements PhaseListener {
 			StringBuilder packageName = new StringBuilder(this.getClass().getPackage().getName());
 			String className = 
 					packageName.substring(0, packageName.lastIndexOf(".")) +
-					".presenters." +
-					requestParams.get(JWLURLParams.PRESENTER).toLowerCase() +
-					".Component";
-
+					".components." +
+					requestParams.get(JWLURLParams.PRESENTER).toLowerCase() + "." +
+					requestParams.get(JWLURLParams.PRESENTER) + "Component";
 			Class<?> c = Class.forName(className);
 			AbstractComponent component = (AbstractComponent) c.newInstance();
 			component.encodeAll(context);

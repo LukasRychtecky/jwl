@@ -33,14 +33,10 @@ public class Linker {
 		
 		return this.buildLink(params);
 	}
-
-	public String buildState(String state) {
+	
+	public String buildLink(String state) {
 		Map<String, String> params = new HashMap<String, String>();
-
-		if (state != null) {
-			params.put(JWLURLParams.STATE, state);
-		}
-		
+		params.put(JWLURLParams.STATE, state);
 		return this.buildLink(params);
 	}
 	

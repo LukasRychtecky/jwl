@@ -29,9 +29,9 @@ public class AbstractRenderer {
 		
 	}
 
-	public void render404(String action) throws IOException {
+	public void render404(String state) throws IOException {
 		HtmlOutputText message = new HtmlOutputText();
-		message.setValue("Action not found: " + action);
+		message.setValue("State not found: " + state);
 		this.components.add(message);
 	}
 
