@@ -16,6 +16,7 @@ var JWL = {
 				success: function(data) {
 					$(thisTrigger).parents('.jwl-component').html(data);
 					JWL.markIt();
+					starRating.create('.jwl-view-stars');
 				}
 			});
 		});
