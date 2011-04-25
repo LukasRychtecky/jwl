@@ -34,7 +34,7 @@ public class WidgetPresenter extends AbstractPresenter {
 	}
 
 	public void decodeMujForm() {
-		HtmlAppForm form = (HtmlAppForm) super.form;
+		HtmlAppForm form = super.getForm("MujForm");
 
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setColumns(2);

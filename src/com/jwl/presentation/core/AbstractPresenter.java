@@ -71,7 +71,6 @@ abstract public class AbstractPresenter {
 	protected WikiURLParser urlParser;
 	private IFacade facade = null;
 	protected List<UIComponent> container;
-	protected AppForm form;
 	protected List<FlashMessage> messages;
 	protected Map<String, HtmlAppForm> forms;
 
