@@ -1,6 +1,7 @@
 package com.jwl.presentation.renderers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlActionForm;
 import com.jwl.presentation.html.HtmlDiv;
+import com.jwl.presentation.html.HtmlLink;
 
 public class EncodeTopicCreate extends AbstractEncoder {
 
@@ -60,7 +62,7 @@ public class EncodeTopicCreate extends AbstractEncoder {
 
 		HtmlDiv panelHeader = new HtmlDiv();
 		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
-		panelHeader.setValue("Create new Topic:");
+		panelHeader.setText("Create new Topic:");
 		
 		HtmlDiv panelBody = new HtmlDiv();
 		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
@@ -115,6 +117,7 @@ public class EncodeTopicCreate extends AbstractEncoder {
 		textArea.setRows(15);
 		textArea.setCols(40);
 		textArea.setId(JWLElements.FORUM_TOPIC_TEXT.id);
+		textArea.setStyleClass(JWLStyleClass.MARK_ME);
 		return textArea;
 	}
 	
@@ -128,12 +131,13 @@ public class EncodeTopicCreate extends AbstractEncoder {
 	}
 	
 	private UIComponent encodedCancelButton(){
-		HtmlCommandButton button = new HtmlCommandButton();
-		//button.addStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
-		button.setType("submit");
-		button.setId(JWLElements.FORUM_TOPIC_CANCEL.id);
-		button.setValue(JWLElements.FORUM_TOPIC_CANCEL.value);
-		return button;		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_LIST.id);
+		params.put(JWLURLParams.ARTICLE_TITLE, article.getTitle());
+
+		HtmlLink link = getHtmlLink(JWLElements.FORUM_TOPIC_CANCEL.value, params);
+		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		return link;		
 	}
 
 }

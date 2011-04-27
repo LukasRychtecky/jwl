@@ -81,7 +81,6 @@ public class AttachCSSAndJSFilter implements Filter {
 		List<String> styles = new ArrayList<String>();
 		styles.add(JWL_DIRECTORY + "markitup/sets/markdown/style.css");
 		styles.add(JWL_DIRECTORY + "markitup/skins/simple/style.css");
-		styles.add(JWL_DIRECTORY + "jwlstars.css");
 
 		for (String href : styles) {
 			String link = "<link rel=\"stylesheet\" type=\"text/css\" "
@@ -97,8 +96,6 @@ public class AttachCSSAndJSFilter implements Filter {
 		scripts.add(JWL_DIRECTORY + "jwlengine.js");
 		scripts.add(JWL_DIRECTORY + "markitup/jquery.markitup.js");
 		scripts.add(JWL_DIRECTORY + "markitup/sets/markdown/set.js");
-		scripts.add(JWL_DIRECTORY + "knowledgemanagement.js");
-		scripts.add(JWL_DIRECTORY + "jwlstarscript.js");
 
 		for (String scriptName : scripts) {
 			String script = "<script type=\"text/javascript\" src=\""
@@ -119,25 +116,6 @@ public class AttachCSSAndJSFilter implements Filter {
 			+ "</script>";
 		builder.insert(bodyBeginPosition, script);
 		
-		script = "<script type=\"text/javascript\">"
-			+ "$(document).ready(function()	{"
-			+ "$('#"
-			+ JWLElements.FORUM_CREATE_TOPIC_FORM.id+"-"
-			+ JWLElements.FORUM_TOPIC_TEXT.id
-			+ "').markItUp(mySettings);"
-			+ "});"
-			+ "</script>";
-		builder.insert(bodyBeginPosition, script);
-		
-		script = "<script type=\"text/javascript\">"
-			+ "$(document).ready(function()	{"
-			+ "$('#"
-			+ JWLElements.FORUM_POST_REPLY_FORM.id+"-"
-			+ JWLElements.FORUM_POST_TEXT.id
-			+ "').markItUp(mySettings);"
-			+ "});"
-			+ "</script>";
-		builder.insert(bodyBeginPosition, script);
 	}
 
 	public void addWikiCSS(StringBuilder builder) {

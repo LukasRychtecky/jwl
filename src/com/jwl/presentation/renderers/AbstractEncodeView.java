@@ -195,7 +195,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		
 		panelBody.getChildren().addAll(this.encondedArticle());
 		
-		HtmlFreeOutput rating = RatingComponent.encodedRating(
+		UIComponent rating = RatingComponent.getRatingComponent(
 					article.getRatingAverage(), article.getId());
 		
 		panelBody.getChildren().add(rating);

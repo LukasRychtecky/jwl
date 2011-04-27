@@ -82,6 +82,7 @@ public class PostDAO extends BaseDAO implements IPostDAO {
 			em.joinTransaction();
 			Post post = em.find(Post.class, postId);
 			em.remove(post);
+			em.flush();
 			if (localTrans) {
 				ut.commit();
 			}

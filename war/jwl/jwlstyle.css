@@ -437,6 +437,7 @@ thead.jwl-tableHearderOfArticles a:hover {
 
 .jwl-forum-actionsForm {
     display: inline;
+	width:20%;
 }
 
 .jwl-forum-replies {
@@ -458,4 +459,62 @@ blockquote{
 	border:1px solid #C0C0C0;
 	padding: 0.5em;
 }
+
+
+/*
+ * star rating
+ */
+.jwl-view-stars div a {
+    background: transparent url(img/sprite_rate.png) 0 0 no-repeat;
+    display: inline-block;
+    height: 17px;
+    width: 9px;
+    text-indent: -999em;
+    overflow: hidden;
+}
+
+.jwl-view-stars a.jwl-rating-right {
+    background-position: 0 -17px;
+    padding-right: 1px;
+}
+
+.jwl-view-stars a.jwl-rating-over {
+    background-position: 0 -34px;
+}
+
+.jwl-view-stars a.jwl-rating-over.jwl-rating-right {
+    background-position: 0 -51px;
+}
+
+.jwl-view-stars a.jwl-rating {
+    background-position: 0 -68px;
+}
+
+.jwl-view-stars a.jwl-rating.jwl-rating-right {
+    background-position: 0 -85px;
+}
+
+.jwl-smallstars div {
+    background: transparent url(img/sprite_rate_small.png) 0 0 no-repeat;
+    display: inline-block;
+    height: 15px;
+    width: 8px;
+    text-indent: -999em;
+    overflow: hidden;
+}
+
+.jwl-smallstars div.jwl-rating-right {
+    background-position: 0 -15px;
+    padding-right: 0px;
+}
+
+.jwl-smallstars div.jwl-rating {
+    background-position: 0 -60px;
+}
+
+.jwl-smallstars div.jwl-rating.jwl-rating-right {
+    background-position: 0 -75px;
+}
+
+
 

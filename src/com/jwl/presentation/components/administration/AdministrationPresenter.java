@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.jwl.business.ArticlePair;
+import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
@@ -52,6 +53,10 @@ public class AdministrationPresenter extends AbstractPresenter {
 		container.addAll(new EncodeDeadArticleView().getEncodedComponent());
 	}
 	
+	public void renderKeyWordGeneration() throws ModelException{
+		
+	}
+	
 	public void decodeDeleteForumPost() throws ModelException {
 		Integer postId = null;
 		for(Entry<String, String> e: getRequestParamMap().entrySet()){
@@ -78,11 +83,11 @@ public class AdministrationPresenter extends AbstractPresenter {
 			}
 		
 		}
-		renderAdminConsole();
+		//renderAdminConsole();
 	}
 	
 	
-	public void decodeMergeIgnoreRequest() throws ModelException {
+	public void decodeMergeIgnore() throws ModelException {
 //		map.containsKey(decoder.getFullKey(JWLElements.KNOWLEDGE_IGNORE.id, JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id));
 		
 		List<ArticleIdPair> idPairs = new ArrayList<ArticleIdPair>();
@@ -90,7 +95,7 @@ public class AdministrationPresenter extends AbstractPresenter {
 			if (e.getKey().contains(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id)) {
 				
 				int elementIdLength = JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id.length()
-						+ JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id.length() + 1;
+						+ JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id.length() + 2;
 				
 				String pairPart = e.getKey().substring(elementIdLength);
 				String[] split = pairPart.split("-");
@@ -104,7 +109,6 @@ public class AdministrationPresenter extends AbstractPresenter {
 		}
 		this.getFacade().addToMergeSuggestionsIgnored(idPairs);
 		
-		renderAdminConsole();
 	}
 	
 	public void decodeDeadArticle() throws ModelException {
@@ -119,6 +123,10 @@ public class AdministrationPresenter extends AbstractPresenter {
 			String value = decoder.getValue(JWLElements.KNOWLEDGE_LIVABILITY_INPUT);
 			this.increaseLivability(articleIds, value);
 		}
+	}
+	
+	public void decodeKeyWordGeneration() throws ModelException{
+		Environment.getKnowledgeFacade().extractKeyWords();
 	}
 	
 	private List<ArticleId> getArticleIds() {

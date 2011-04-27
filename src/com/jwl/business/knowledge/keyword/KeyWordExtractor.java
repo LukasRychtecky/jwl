@@ -30,24 +30,24 @@ public class KeyWordExtractor {
 		this.keyWordDAO = keyWordDAO;
 	}
 
-	public void extractKeyWords() {
-		try {
+	public void extractKeyWords(){
+		try{
 			countWordsInArticles();
-		} catch (DAOException e) {
+		}catch(DAOException e){
 		}
 		WordCountsFileManager fileManager = new WordCountsFileManager();
 		fileManager.saveToFile(wordsInArticles);
 		ArticleIterator articleIterator = new ArticleIterator(articleDAO, 100);
-		try {
-			while (articleIterator.hasNext()) {
+		try{
+			while(articleIterator.hasNext()){
 				ArticleTO article = articleIterator.getNextArticle();
 				processArticle(article);
 			}
-		} catch (DAOException e) {
+		}catch(DAOException e){
 		}
 	}
 
-	public List<String> extractKeyWordsOnRun(String title, String text) {
+	public List<String> extractKeyWordsOnRun(String title, String text){
 		WordCountsFileManager fileManager = new WordCountsFileManager();
 		wordsInArticles = fileManager.getFromFile();
 		Map<String, Float> keyWordsWeights = computeKeyWordWeights(title, text);
@@ -55,11 +55,11 @@ public class KeyWordExtractor {
 		return keyWordList;
 	}
 
-	private void countWordsInArticles() throws DAOException {
+	private void countWordsInArticles() throws DAOException{
 		wordsInArticles = new HashMap<String, Integer>();
 		MarkdownRemover mr = new MarkdownRemover();
 		ArticleIterator articleIterator = new ArticleIterator(articleDAO, 100);
-		while (articleIterator.hasNext()) {
+		while(articleIterator.hasNext()){
 			ArticleTO article = articleIterator.getNextArticle();
 			Set<String> titleWords = WordProcessor.getWordsCountInString(
 					article.getTitle()).keySet();
@@ -71,21 +71,21 @@ public class KeyWordExtractor {
 		}
 	}
 
-	private void insertWordsInMap(Map<String, Integer> map, Set<String> words) {
-		for (String word : words) {
-			if (map.containsKey(word)) {
+	private void insertWordsInMap(Map<String, Integer> map, Set<String> words){
+		for (String word : words){
+			if(map.containsKey(word)){
 				map.put(word, map.get(word).intValue() + 1);
-			} else {
+			}else{
 				map.put(word, 1);
 			}
 		}
 	}
 
-	private float computeTFIDF(String word, int articleOccur, int articleLenght) {
+	private float computeTFIDF(String word, int articleOccur, int articleLenght){
 		int articleSum = 0;
-		try {
+		try{
 			articleSum = articleDAO.getCount();
-		} catch (DAOException e) {
+		}catch(DAOException e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -95,19 +95,19 @@ public class KeyWordExtractor {
 		return tf * idf;
 	}
 
-	private void processArticle(ArticleTO article) {
+	private void processArticle(ArticleTO article){
 		Map<String, Float> wordWeights = computeKeyWordWeights(
 				article.getTitle(), article.getText());
-		try {
+		try{
 			keyWordDAO.deleteAll(article.getId());
 			List<KeyWordTO> keyWords = createKeyWords(wordWeights);
 			keyWordDAO.create(keyWords, article.getId());
-		} catch (DAOException e) {
+		}catch(DAOException e){
 
 		}
 	}
 
-	private Map<String, Float> computeKeyWordWeights(String title, String text) {
+	private Map<String, Float> computeKeyWordWeights(String title, String text){
 		Map<String, Integer> wordCounts = new HashMap<String, Integer>();
 		MarkdownRemover mr = new MarkdownRemover();
 		title = mr.removeMarkdown(title);
@@ -122,8 +122,8 @@ public class KeyWordExtractor {
 		insertWordsInMap(wordCounts, textWords);
 
 		Map<String, Float> wordWeights = new HashMap<String, Float>();
-		for (Entry<String, Integer> wc : wordCounts.entrySet()) {
-			if (wordsInArticles.containsKey(wc.getKey())) {
+		for (Entry<String, Integer> wc : wordCounts.entrySet()){
+			if(wordsInArticles.containsKey(wc.getKey())){
 				float weight = computeTFIDF(wc.getKey(), wc.getValue(),
 						titleWordNum + textWordNum);
 				wordWeights.put(wc.getKey(), weight);
@@ -133,29 +133,29 @@ public class KeyWordExtractor {
 	}
 
 	private void insertWordsInMap(Map<String, Integer> map,
-			Map<String, Integer> words) {
-		for (Entry<String, Integer> word : words.entrySet()) {
-			if (map.containsKey(word)) {
+			Map<String, Integer> words){
+		for (Entry<String, Integer> word : words.entrySet()){
+			if(map.containsKey(word)){
 				map.put(word.getKey(), map.get(word) + word.getValue());
-			} else {
+			}else{
 				map.put(word.getKey(), word.getValue());
 			}
 		}
 	}
 
-	private List<KeyWordTO> createKeyWords(Map<String, Float> wordWeights) {
+	private List<KeyWordTO> createKeyWords(Map<String, Float> wordWeights){
 		List<Entry<String, Float>> list = new LinkedList<Map.Entry<String, Float>>(
 				wordWeights.entrySet());
 		Collections.sort(list, new Comparator<Entry<String, Float>>() {
 			@Override
 			public int compare(Entry<String, Float> arg0,
-					Entry<String, Float> arg1) {
+					Entry<String, Float> arg1){
 				return arg1.getValue().compareTo(arg0.getValue());
 			}
 		});
 
 		List<KeyWordTO> keyWords = new ArrayList<KeyWordTO>();
-		for (int i = 0; i < TAG_COUNT && i < list.size(); i++) {
+		for (int i = 0; i < TAG_COUNT && i < list.size(); i++){
 			Entry<String, Float> e = list.get(i);
 			KeyWordTO kw = createKeyWord(e.getKey(), e.getValue());
 			keyWords.add(kw);
@@ -163,25 +163,25 @@ public class KeyWordExtractor {
 		return keyWords;
 	}
 
-	private List<String> createKeyWordList(Map<String, Float> wordWeights) {
+	private List<String> createKeyWordList(Map<String, Float> wordWeights){
 		List<Entry<String, Float>> list = new LinkedList<Map.Entry<String, Float>>(
 				wordWeights.entrySet());
 		Collections.sort(list, new Comparator<Entry<String, Float>>() {
 			@Override
 			public int compare(Entry<String, Float> arg0,
-					Entry<String, Float> arg1) {
+					Entry<String, Float> arg1){
 				return arg1.getValue().compareTo(arg0.getValue());
 			}
 		});
 		List<String> keyWordList = new ArrayList<String>();
-		for (int i = 0; i < TAG_COUNT && i < list.size(); i++) {
+		for (int i = 0; i < TAG_COUNT && i < list.size(); i++){
 			Entry<String, Float> e = list.get(i);
 			keyWordList.add(e.getKey());
 		}
 		return keyWordList;
 	}
 
-	private KeyWordTO createKeyWord(String word, float weight) {
+	private KeyWordTO createKeyWord(String word, float weight){
 		KeyWordTO keyWord = new KeyWordTO();
 		keyWord.setWord(word);
 		keyWord.setWeight((double) weight);

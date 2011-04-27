@@ -14,6 +14,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import com.jwl.business.ArticlePair;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.presentation.core.AbstractComponent;
+import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
@@ -28,7 +29,7 @@ import com.jwl.presentation.renderers.units.RatingComponent;
 public class EncodeMergeSuggestionList extends AbstractEncoder {
 
 	private final String[] headers = new String[] {"Title", "Tags", "Editor",
-			"Editing count", "Created", "Rating", ""};
+			"Editing count", "Created", "Rating"};
 
 	private List<ArticlePair> articlePairs;
 	
@@ -46,8 +47,15 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 	}
 	
 	private List<UIComponent> getHeaderNames() {		
+		List<String> headerList = new ArrayList<String>();
+		headerList.add("");
+		for(int i = 0; i<2;i++){
+			for(String header: headers){
+				headerList.add(header);
+			}
+		}
 		List<UIComponent> result = new ArrayList<UIComponent>();
-		for(String header : headers){
+		for(String header : headerList){
 			HtmlFreeOutput output = new HtmlFreeOutput();
 			output.setFreeOutput(header);
 			result.add(output);
@@ -58,6 +66,7 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 	private HtmlActionForm encodedForm() {
 		Map<String, String> params = parser.getURLParametersAndArticleTitle();
 		params.put(JWLURLParams.STATE, JWLStates.MERGE_SUGGESTION_LIST.id);
+		params.put(JWLURLParams.DO, JWLActions.MERGE_ARTICLE.id);
 		
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id);
@@ -190,7 +199,7 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 	}
 
 	private HtmlDiv getRatingComponent(float rating) {
-		return RatingComponent.getComponent(rating);
+		return RatingComponent.getStarComponent(rating);
 	}
 	
 	protected HtmlLink getLinkAdminConsole() {

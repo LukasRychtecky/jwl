@@ -18,8 +18,8 @@ public class JWLURLParams {
 	public static final String HISTORY_ID = "jwlhistoryid";
 	public static final String FILE_ACTION = "jwlfileaction";
 	public static final String TOPIC_ID = "topicid";
-	public static final String ANSWERING = "answering";
-	public static final String QUOTE_POST_ID = "quotepostid";
+	public static final String ANSWERING = "jwlanswering";
+	public static final String QUOTE_POST_ID = "jwlquotepostid";
 	
 	public static List<String> ALL_URL_PARAMETERS;
 	public static List<String> ALL_URL_PARAMETERS_BUT_TITLE;

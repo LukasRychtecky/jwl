@@ -93,6 +93,8 @@ public class EncodeTopicList extends AbstractEncoder {
 		
 		form.getChildren().add(encodedPanel());
 		
+		form.getChildren().add(encodedActions(!paginator.getCurrentPageContent().isEmpty()));
+		
 		return form;
 	}
 
@@ -117,8 +119,6 @@ public class EncodeTopicList extends AbstractEncoder {
 		} else {
 			panelBody.getChildren().add(getHtmlText("No topics found."));
 		}
-	
-		panelBody.getChildren().add(encodedActions(!topics.isEmpty()));
 		
 		panel.getChildren().add(panelBody);
 		

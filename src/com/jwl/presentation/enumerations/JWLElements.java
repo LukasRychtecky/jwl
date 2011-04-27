@@ -16,8 +16,11 @@ public enum JWLElements {
 	EDIT_TAGS           	("tags", "Tags"),
 	EDIT_CHANGE_NOTE		("changeNote", "Change note"),
 	EDIT_SAVE				("edit", "Save"),
-	EDIT_SIMILAR_ARTICLE_DIV ("sad", ""),
+	EDIT_SIMILAR_ARTICLE_DIV ("jwl-sad", ""),
 	VIEW_SIMILAR_ARTICLE_DIV ("jwl-vsad", ""),
+	VIEW_RATING_ARTICLE_ID 	("jwl-rating-article-id", ""),
+	VIEW_RATING_RADIO 		("jwl-rating-", ""),
+	VIEW_RATING_DIV			("jwl-rating", ""),
 	CREATE_SAVE				("create", "Create"),
 	FILE_FORM				("jwl-upload",""),
 	FILE_TITLE				("fileTitle","File name:"),
@@ -56,6 +59,7 @@ public enum JWLElements {
 	FORUM_POST_CANCEL 		("cancel", "Cancel"),
 	FORUM_POST_TEXT 		("text", ""),
 	FORUM_POST_TOPIC_ID		("topic-id",""),
+	FORUM_POST_ADMIN_FORM 	("jwl-admin-post", ""),
 	
 	FORM_DELETE				("delete" , "Delete");
 	

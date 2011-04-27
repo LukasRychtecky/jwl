@@ -27,7 +27,11 @@ public enum JWLStates {
 	
 	FORUM_TOPIC_LIST("topicList"),
 	FORUM_TOPIC_CREATE("topicCreate"),
-	FORUM_TOPIC_VIEW("topicView");
+	FORUM_TOPIC_VIEW("topicView"),
+	
+	AJAX_RATING("rating"),
+	AJAX_KEY_WORD_GENERATION("keyWordGeneration"),
+	AJAX_ARTICLE_SUGGESTIONS("articleSuggestions");
 	
 	public final String id;
 

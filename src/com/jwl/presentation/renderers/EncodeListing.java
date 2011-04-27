@@ -269,7 +269,7 @@ public class EncodeListing extends AbstractEncoder {
 	}
 
 	private HtmlDiv getRatingComponent(float rating) {
-		return RatingComponent.getComponent(rating);
+		return RatingComponent.getStarComponent(rating);
 	}
 
 	private UIComponent getTagsComponent(String tagsString) {

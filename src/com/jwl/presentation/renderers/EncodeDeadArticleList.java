@@ -159,7 +159,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	}
 
 	private HtmlDiv encodedRatingComponent(float rating) {
-		return RatingComponent.getComponent(rating);
+		return RatingComponent.getStarComponent(rating);
 	}
 
 	protected HtmlDiv encodedPanelActions(){

@@ -57,7 +57,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		List<PostTO> replies = topic.getPosts();
 		PostTO initialPost = replies.get(0);
 		replies.remove(0);
-		components.add(this.encodedReply(replies, false, topic.isClosed()));
+		components.add(this.encodedReply(replies, topic.isClosed()));
 		replies.add(initialPost);
 		if (answering) {
 			PostTO quotedPost = null;
@@ -77,8 +77,9 @@ public class EncodeTopicView extends AbstractEncoder {
 		HtmlDiv panel = new HtmlDiv();
 		panel.addStyleClass(JWLStyleClass.PANEL);
 		
-		HtmlOutputText title = getHtmlText("Article topic");
-		title.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		HtmlDiv title = new HtmlDiv();
+		title.setText("Article topic");
+		title.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		
 		HtmlDiv body = new HtmlDiv();
 		body.addStyleClass(JWLStyleClass.PANEL_BODY);
@@ -113,17 +114,17 @@ public class EncodeTopicView extends AbstractEncoder {
 		return actionButtons;
 	}
 
-	protected HtmlDiv encodedReply(List<PostTO> replies, boolean adminMode, 
-			boolean topicLocked) {
+	protected HtmlDiv encodedReply(List<PostTO> replies, boolean topicLocked) {
 		HtmlDiv panel = new HtmlDiv();
 		panel.addStyleClass(JWLStyleClass.PANEL);
 		
-		HtmlOutputText title = getHtmlText(replies.size() + " replies");
-		title.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		HtmlDiv title = new HtmlDiv();
+		title.setText(replies.size() + " replies");
+		title.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		
 		HtmlDiv body = new HtmlDiv();
 		body.addStyleClass(JWLStyleClass.PANEL_BODY);
-		body.getChildren().add(getResponses(replies, adminMode, topicLocked));
+		body.getChildren().add(getResponses(replies, topicLocked));
 		
 		panel.addChildren(title);
 		panel.addChildren(body);
@@ -133,9 +134,14 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected HtmlActionForm getAdministrationForm(Integer postId) {
 		// TODO PJ Doesn't we should set some parameters to form action
 		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_VIEW.id);
+		params.put(JWLURLParams.TOPIC_ID, String.valueOf(topic.getId()));
+		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
+		params.put(JWLURLParams.DO, JWLActions.FORUM_POST_DELETE.id);
+		
 		
 		HtmlActionForm form = new HtmlActionForm();
-		form.setId(JWLElements.FORUM_TOPIC_ADMIN_FORM.id + "-" + postId.toString());
+		form.setId(JWLElements.FORUM_POST_ADMIN_FORM.id + "-" + postId.toString());
 		form.setStyleClass(JWLStyleClass.FORUM_ACTIONS_FORM);
 		form.setEnctype("application/x-www-form-urlencoded");
 		form.setAction(this.linker.buildLink(params));
@@ -143,34 +149,32 @@ public class EncodeTopicView extends AbstractEncoder {
 		return form;
 	}
 
-	protected UIComponent getResponses(List<PostTO> replies, boolean adminMode,
-			boolean topicLocked) {
+	protected UIComponent getResponses(List<PostTO> replies, boolean topicLocked) {
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setStyleClass(JWLStyleClass.FORUM_REPLIES);
 		table.setColumns(1);
 		List<UIComponent> tableData = table.getChildren();
 		for (PostTO reply : replies) {
-			tableData.add(getReplyComponent(reply, adminMode, topicLocked));
+			tableData.add(getReplyComponent(reply, topicLocked));
 		}
 		return table;
 	}
 
-	protected UIComponent getReplyComponent(PostTO post, boolean adminMode,
+	protected UIComponent getReplyComponent(PostTO post,
 			boolean topicLocked) {
 		HtmlDiv component = new HtmlDiv();
 		component.addStyleClass(JWLStyleClass.FORUM_INITIAL_POST);
 		component.addChildren(getReplyHeader(post.getAuthor(), post.getCreated()));
 		component.addChildren(getPostTextComponet(post.getText()));
-		component.addChildren(getReplyActionsComponent(post, adminMode, topicLocked));
+		component.addChildren(getReplyActionsComponent(post, topicLocked));
 		return component;
 	}
 
 	protected UIComponent getPostHeader(TopicTO topic, PostTO post)  {
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setStyleClass(JWLStyleClass.FORUM_POST_HEADER);
-		table.setColumns(3);
+		table.setColumns(2);
 		table.setColumnClasses(
-				JWLStyleClass.FORUM_POST_HEADER_TITLE + "," +
 				JWLStyleClass.FORUM_POST_HEADER_TITLE + "," +
 				JWLStyleClass.FORUM_POST_AUTHOR);
 		
@@ -181,12 +185,17 @@ public class EncodeTopicView extends AbstractEncoder {
 			titleDiv.addChildren(getImageComponent(png_lock, 16, 16));
 		}
 		
-		HtmlOutputText author = getHtmlText(post.getAuthor());
-		HtmlOutputText date = getHtmlText(post.getCreated().toString());
+		HtmlDiv authorDiv = new HtmlDiv();
+		authorDiv.setText(post.getAuthor());
+		HtmlDiv dateDiv = new HtmlDiv();
+		dateDiv.setText(post.getCreated().toString());
+		
+		HtmlFreeOutput headerData = new HtmlFreeOutput();
+		headerData.getChildren().add(dateDiv);
+		headerData.getChildren().add(authorDiv);
 		
 		table.getChildren().add(titleDiv);
-		table.getChildren().add(author);
-		table.getChildren().add(date);
+		table.getChildren().add(headerData);
 		return table;
 	}
 
@@ -194,8 +203,10 @@ public class EncodeTopicView extends AbstractEncoder {
 		HtmlDiv component = new HtmlDiv();
 		component.addStyleClass(JWLStyleClass.FORUM_POST_AUTHOR);
 		
-		HtmlOutputText dateDiv = getHtmlText(date.toString());
-		HtmlOutputText authorDiv = getHtmlText(author);
+		HtmlDiv authorDiv = new HtmlDiv();
+		authorDiv.setText(author);
+		HtmlDiv dateDiv = new HtmlDiv();
+		dateDiv.setText(date.toString());
 		
 		component.addChildren(dateDiv);
 		component.addChildren(authorDiv);
@@ -213,8 +224,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		return div;
 	}
 
-	protected UIComponent getReplyActionsComponent(PostTO post,
-			boolean adminMode, boolean topicLocked) {
+	protected UIComponent getReplyActionsComponent(PostTO post, boolean topicLocked) {
 		HtmlDiv div = new HtmlDiv();
 		div.addStyleClass(JWLStyleClass.FORUM_REPLY_ACTIONS);
 
@@ -222,7 +232,7 @@ public class EncodeTopicView extends AbstractEncoder {
 			div.addChildren(getReplyLinkComponent());
 			div.addChildren(getQuoteLinkComponent(post.getId()));
 		}
-		if (adminMode&&hasDeletePostPermission()){
+		if (hasDeletePostPermission()){
 			div.addChildren(getAdministrationForm(post.getId()));
 		}
 		return div;
@@ -314,8 +324,14 @@ public class EncodeTopicView extends AbstractEncoder {
 	}
 
 	protected UIComponent getReplyCancelButton() {
-		return super.getHtmlSubmitComponent(JWLElements.FORUM_POST_CANCEL, 
-				null);
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_VIEW.id);
+		params.put(JWLURLParams.TOPIC_ID, String.valueOf(topic.getId()));
+		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
+
+		HtmlLink link = getHtmlLink(JWLElements.FORUM_TOPIC_CANCEL.value, params);
+		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		return link;
 	}
 
 	protected UIComponent getHiddenTopicId(Integer topicId) {
@@ -331,6 +347,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		textArea.setCols(40);
 		textArea.setValue(initText);
 		textArea.setId(JWLElements.FORUM_POST_TEXT.id);
+		textArea.setStyleClass(JWLStyleClass.MARK_ME);
 		return textArea;
 	}
 
@@ -338,15 +355,16 @@ public class EncodeTopicView extends AbstractEncoder {
 		HtmlDiv panel = new HtmlDiv();
 		panel.addStyleClass(JWLStyleClass.PANEL);
 		
-		HtmlOutputText text = getHtmlText("Post reply");
-		text.setStyleClass(JWLStyleClass.PANEL_HEADER);
+		HtmlDiv head = new HtmlDiv();
+		head.setText("Post reply");
+		head.addStyleClass(JWLStyleClass.PANEL_HEADER);
 		
 		HtmlDiv panelBody = new HtmlDiv();
 		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		panelBody.addChildren(getReplyText(getInitText(quotedPost)));
 		panelBody.addChildren(getHiddenTopicId(topic.getId()));
 		
-		panel.addChildren(text);
+		panel.addChildren(head);
 		panel.addChildren(panelBody);
 		return panel;
 	}

@@ -1,4 +1,4 @@
-	package com.jwl.presentation.core;
+package com.jwl.presentation.core;
 
 import java.io.IOException;
 import java.util.Map;
@@ -13,7 +13,7 @@ import javax.faces.event.PhaseListener;
 import com.jwl.presentation.enumerations.JWLURLParams;
 
 /**
- *
+ * 
  * @author Lukas Rychtecky
  */
 public class AjaxListener implements PhaseListener {
@@ -21,64 +21,71 @@ public class AjaxListener implements PhaseListener {
 	private static final long serialVersionUID = -4978877094917671154L;
 
 	@Override
-	public void afterPhase(PhaseEvent pe) {
-		try {
+	public void afterPhase(PhaseEvent pe){
+		try{
 			this.handleAjaxRequest(pe);
-		} catch (IOException ex) {
-			Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
+		}catch(IOException ex){
+			Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE,
+					null, ex);
 		}
 	}
 
 	@Override
-	public void beforePhase(PhaseEvent pe) {
+	public void beforePhase(PhaseEvent pe){
 	}
 
-	private void handleAjaxRequest(PhaseEvent event) throws IOException {
-		
+	private void handleAjaxRequest(PhaseEvent event) throws IOException{
+
 		FacesContext context = event.getFacesContext();
-		if (context == null) {
+		if(context == null){
 			return;
 		}
-		
-		try {
-			Map<String, String> requestParams = context.getExternalContext().getRequestParameterMap();
+
+		try{
+			Map<String, String> requestParams = context.getExternalContext()
+					.getRequestParameterMap();
 			String method = requestParams.get(JWLURLParams.METHOD);
-			if (method == null || !method.equals("ajax")) {
+			if(method == null || !method.equals("ajax")){
 				return;
 			}
-
-			if (!requestParams.containsKey(JWLURLParams.PRESENTER)) {
-				throw new IllegalArgumentException("No " + JWLURLParams.PRESENTER + " found.");
+			if(!requestParams.containsKey(JWLURLParams.PRESENTER)){
+				throw new IllegalArgumentException("No "
+						+ JWLURLParams.PRESENTER + " found.");
 			}
 
-			StringBuilder packageName = new StringBuilder(this.getClass().getPackage().getName());
-			String className = 
-					packageName.substring(0, packageName.lastIndexOf(".")) +
-					".components." +
-					requestParams.get(JWLURLParams.PRESENTER).toLowerCase() + "." +
-					requestParams.get(JWLURLParams.PRESENTER) + "Component";
+			StringBuilder packageName = new StringBuilder(this.getClass()
+					.getPackage().getName());
+			String className = packageName.substring(0,
+					packageName.lastIndexOf("."))
+					+ ".components."
+					+ requestParams.get(JWLURLParams.PRESENTER).toLowerCase()
+					+ "."
+					+ requestParams.get(JWLURLParams.PRESENTER)
+					+ "Component";
 			Class<?> c = Class.forName(className);
 			AbstractComponent component = (AbstractComponent) c.newInstance();
 			component.encodeAll(context);
 
-		} catch (Exception ex) {
+		}catch(Exception ex){
 			this.handleException(ex);
 		}
 
 	}
 
-	private void handleException(Exception ex) throws IOException {
-		Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null, ex);
-		AbstractPresenter presenter = new AbstractPresenter() {};
-		if (ex instanceof ClassNotFoundException) {
+	private void handleException(Exception ex) throws IOException{
+		Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null,
+				ex);
+		AbstractPresenter presenter = new AbstractPresenter() {
+		};
+		if(ex instanceof ClassNotFoundException){
 			presenter.render404();
-		} else {
+		}else{
 			presenter.render500();
 		}
 	}
 
 	@Override
-	public PhaseId getPhaseId() {
+	public PhaseId getPhaseId(){
 		return PhaseId.RESTORE_VIEW;
 	}
 }

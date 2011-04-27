@@ -71,10 +71,12 @@ public class JWLStyleClass {
 	public static final String FORUM_PAGE_BUTTON = JWL_PREFIX + 				"forum-pageButton";
 	public static final String FORUM_PAGE_TEXT = JWL_PREFIX + 					"forum-pageText";
 	public static final String FORUM_PAGE_BUTTONS_TABLE = JWL_PREFIX + 			"forum-pageTable";
+	
 	public static final String PANEL = JWL_PREFIX + 							"panel";
 	public static final String PANEL_HEADER = JWL_PREFIX + 						"panelHeader";
 	public static final String PANEL_BODY = JWL_PREFIX + 						"panelBody";
 	public static final String PANEL_ACTION_BUTTONS = JWL_PREFIX + 				"panelActionButtons";
+	
 	public static final String FORUM_POST_HEADER = JWL_PREFIX + 				"forum-postHeader";
 	public static final String FORUM_POST_HEADER_TITLE = JWL_PREFIX + 			"forum-postHeaderTitle";
 	public static final String FORUM_POST_AUTHOR = JWL_PREFIX + 				"forum-postAuthor";
@@ -84,4 +86,16 @@ public class JWLStyleClass {
 	public static final String FORUM_ACTIONS_FORM = JWL_PREFIX + 				"forum-actionsForm";
 	public static final String FORUM_REPLIES_DELETE = JWL_PREFIX + 				"forum-replies-delete";
 	
+	//adds markdown editor
+	public static final String MARK_ME = "markMe";
+	
+	//stars
+	public static final String STARS_SMALL = JWL_PREFIX + "smallstars";
+	public static final String STARS_RATING = JWL_PREFIX + "rating";
+	public static final String STARS_RATING_RIGHT = JWL_PREFIX + "rating-right";
+	public static final String STARS_RATING_DIV = JWL_PREFIX + "rating-div";
+	
+	//similar article suggestor
+	public static final String SUGGESTOR_DIV = JWL_PREFIX + "suggestor";
+	public static final String SUGGESTOR_DIV_VIEW = JWL_PREFIX + "suggestor-view";
 }
