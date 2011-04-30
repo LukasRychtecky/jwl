@@ -13,11 +13,9 @@ import javax.faces.context.FacesContext;
 
 import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
-import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.AccessPermissions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
-import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.global.Global;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlLink;
@@ -92,10 +90,8 @@ public abstract class AbstractEncoder {
 	}
 
 	protected boolean hasAdministrationPermission() {
-		// TODO Fix this. I am logged as admin and mehtod still returns false 
-		return true;
-//		return this.hasPermission(AccessPermissions.KNOWLEDGE_ADMINISTER) &&
-//			this.hasPermission(AccessPermissions.SECURITY_IMPORT);
+		return this.hasPermission(AccessPermissions.KNOWLEDGE_ADMINISTER) &&
+			this.hasPermission(AccessPermissions.SECURITY_IMPORT);
 	}
 
 	protected boolean hasArticleViewPermission(ArticleId id) {
