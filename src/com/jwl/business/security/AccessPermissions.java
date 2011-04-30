@@ -12,7 +12,7 @@ public enum AccessPermissions {
 	ARTICLE_RESTORE ("Article", "restore"),
 	ARTICLE_LOCK ("Article", "lock"),
 	ARTICLE_DELETE ("Article", "delete"),
-	ARTICLE_EXCLUDE_ROLE ("Article", "exclude_role"),
+	ARTICLE_EXCLUDE_ROLE ("Article", "excludeRole"),
 	ARTICLE_RATE ("Article", "rate"),
 	KNOWLEDGE_ADMINISTER ("Knowledge", "administer"),
 
@@ -22,11 +22,11 @@ public enum AccessPermissions {
 	SECURITY_IMPORT("Security", "import"),
 	
 	FORUM_VIEW ("Forum", "view"),
-	FORUM_CLOSE_TOPIC ("Forum", "close_topic"),
-	FORUM_ADD_POST ("Forum", "add_post"),
-	FORUM_CREATE_TOPIC ("Forum", "create_topic"),
-	FORUM_DELETE_TOPIC ("Forum", "delete_topic"),
-	FORUM_DELETE_POST ("Forum", "delete_post");
+	FORUM_CLOSE_TOPIC ("Forum", "closeTopic"),
+	FORUM_ADD_POST ("Forum", "addPost"),
+	FORUM_CREATE_TOPIC ("Forum", "createTopic"),
+	FORUM_DELETE_TOPIC ("Forum", "deleteTopic"),
+	FORUM_DELETE_POST ("Forum", "deletePost");
 	
 
 	private String context;

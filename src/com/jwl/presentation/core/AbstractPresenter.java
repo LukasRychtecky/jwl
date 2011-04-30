@@ -1,6 +1,5 @@
 package com.jwl.presentation.core;
 
-// <editor-fold defaultstate="collapsed">
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -50,7 +49,6 @@ import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
-// </editor-fold>
 /**
  *
  * @author Lukas Rychtecky

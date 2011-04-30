@@ -133,6 +133,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 
 	@Override
 	public UIComponent addFile(String name, String label) {
+		this.enctype = "multipart/form-data";
 		HtmlInputFile input = new HtmlInputFile();
 		input.setId(this.createName(name));
 		input.setLabel(label);
