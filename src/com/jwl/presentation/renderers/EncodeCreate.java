@@ -9,6 +9,7 @@ import javax.faces.component.UIComponent;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlDiv;
+import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
 import java.util.Map;
 
@@ -26,6 +27,13 @@ public class EncodeCreate extends AbstractEncoder {
 		List<UIComponent> components = new ArrayList<UIComponent>();
 		components.add(this.form);
 		components.add(encodeArticleSuggestorDiv());
+		
+		HtmlLink link = new HtmlLink();
+		link.setText("Back to listing");
+		link.setIsAjax(Boolean.TRUE);
+		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setValue(this.linker.buildLink("default"));
+		components.add(link);
 		return components;
 	}
 
