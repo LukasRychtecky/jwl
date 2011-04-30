@@ -64,7 +64,6 @@ public class EncodeListing extends AbstractEncoder {
 
 	private HtmlLink encodedLinkToAdministrationConsole() {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, JWLStates.ADMINISTRATION_CONSOLE.id);
 		params.put(JWLURLParams.PRESENTER, JWLPresenters.ADMINISTRATION.id);
 		
 		HtmlLink link = this.getHtmlLink("Administration Console", params);
