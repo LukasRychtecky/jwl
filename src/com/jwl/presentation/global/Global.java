@@ -35,24 +35,6 @@ public class Global {
 		return Global.instance;
 	}
 
-	/**
-	 * Returns facade
-	 * 
-	 * @return
-	 */
-	public IFacade getFacade() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		ExternalContext externalContext = context.getExternalContext();
-		HttpSession session = (HttpSession) externalContext.getSession(false);
-		if (facade == null) {
-			this.facade = (IFacade) session.getAttribute(FACADE_VAR);
-		}
-		if (facade == null) {
-			this.facade = new Facade();
-		}
-		return facade;
-	}
-
 	public IFacade getFacadeOutsideJSF() {
 		return new Facade();
 	}

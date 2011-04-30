@@ -173,8 +173,8 @@ public class ArticlePresenter extends AbstractPresenter {
 		float ratedValueNum = Float.parseFloat(ratedValue);
 		int articleIdNum = Integer.parseInt(articleId);
 		ArticleId id = new ArticleId(articleIdNum);
-		Global.getInstance().getFacade().rateArticle(id, ratedValueNum);
-		ArticleTO article = Global.getInstance().getFacade().getArticle(id);
+		this.getFacade().rateArticle(id, ratedValueNum);
+		ArticleTO article = this.getFacade().getArticle(id);
 		List<UIComponent> components = new ArrayList<UIComponent>();
 		components.add(RatingComponent.getRatingInternals(article.getRatingAverage(), article.getId()));
 		container.addAll(components);
