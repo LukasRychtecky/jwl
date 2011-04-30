@@ -21,12 +21,17 @@ import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLTableHeaders;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.helpers.HumanDate;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
+import com.jwl.presentation.html.HtmlHeadline;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.Linker;
+import java.util.Calendar;
+import java.util.Date;
+import javax.faces.component.html.HtmlHead;
 // </editor-fold>
 
 public class EncodeListing extends AbstractEncoder {
@@ -43,7 +48,8 @@ public class EncodeListing extends AbstractEncoder {
 	
 	@Override
 	public List<UIComponent> getEncodedComponent() {
-		List<UIComponent> components = new ArrayList<UIComponent>(); 
+		List<UIComponent> components = new ArrayList<UIComponent>();
+		HtmlHeadline h = new HtmlHeadline(1);
 		if (this.hasAdministrationPermission()) {
 			components.add(this.encodedLinkToAdministrationConsole());
 		}
@@ -153,7 +159,7 @@ public class EncodeListing extends AbstractEncoder {
 		rowDataCells.add(this.getTagsComponent(separatedTags));
 		rowDataCells.add(this.getEditorComponent(article.getEditor()));
 		rowDataCells.add(this.getEditingCountComponent(article.getEditCount()));
-		rowDataCells.add(this.getCreatedComponent(article.getCreated().toString()));
+		rowDataCells.add(this.getCreatedComponent(article.getCreated()));
 		rowDataCells.add(this.getRatingComponent(article.getRatingAverage()));
 		rowDataCells.add(this.encodeAdditionalRowData(article));
 		
@@ -287,8 +293,8 @@ public class EncodeListing extends AbstractEncoder {
 		return this.getHtmlText(editingCountValue);
 	}
 
-	private UIComponent getCreatedComponent(String createdValue) {
-		return this.getHtmlText(createdValue);
+	private UIComponent getCreatedComponent(Date createdValue) {
+		return this.getHtmlText(HumanDate.format(createdValue));
 	}
 
 	private List<JWLTableHeaders> getHeaders() {
