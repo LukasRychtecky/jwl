@@ -1,5 +1,6 @@
 package com.jwl.business;
 
+import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
 import com.jwl.business.knowledge.KnowledgeManagementFacade;
 import com.jwl.business.security.IIdentity;
@@ -8,10 +9,16 @@ import com.jwl.business.security.UserIdentity;
 
 import com.jwl.business.knowledge.util.ISettingsSource;
 import com.jwl.business.knowledge.util.SettingsSource;
+import com.jwl.business.security.Principal;
+import com.jwl.business.security.Role;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
 import com.jwl.integration.filesystem.FSDAOFactory;
 import java.io.File;
+import java.util.Set;
+import java.util.Map;
+import java.util.Set;
+import javax.faces.context.FacesContext;
 
 /**
  * 
@@ -21,7 +28,7 @@ public class Environment {
 
 	public static final String IMPLICIT_PU = "jsfwiki";
 	public static final String FILESYSTEM_PU = "jsf-filesystem";
-	private static String JWL_HOME = "jwl";
+	private static String JWL_HOME = null;
 	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
 //	 private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
@@ -32,7 +39,6 @@ public class Environment {
 	private static final String FILESYSTEM_STORE = "/Users/ostatnickyjiri/Desktop";
 
 	private Environment() {
-
 	}
 
 	public static String getPersistenceUnit() {
@@ -47,7 +53,7 @@ public class Environment {
 
 	public static IDAOFactory getDAOFactory() {
 		if (Environment.factory == null) {
-			if (Environment.PERSISTENCE_UNIT == Environment.FILESYSTEM_PU) {
+			if (Environment.PERSISTENCE_UNIT == null ? Environment.FILESYSTEM_PU == null : Environment.PERSISTENCE_UNIT.equals(Environment.FILESYSTEM_PU)) {
 				Environment.factory = new FSDAOFactory();
 			} else {
 				Environment.factory = new JPADAOFactory();
@@ -61,7 +67,9 @@ public class Environment {
 	}
 
 	public static void setJWLHome(String jwlHome) {
-		Environment.JWL_HOME = jwlHome;
+		if (Environment.JWL_HOME == null) {
+			Environment.JWL_HOME = jwlHome;
+		}
 	}
 
 	public static String getACLFileName() {
@@ -73,21 +81,29 @@ public class Environment {
 	}
 
 	public static IIdentity getIdentity() {
-		if (Environment.identity == null) {
-			Environment.identity = new UserIdentity(Environment.getDAOFactory());
-		}
 		return Environment.identity;
 	}
+
+	public static IIdentity createIdentity(String username, Set<Role> roles) throws ModelException {
+		Environment.identity = new UserIdentity(username, roles, getDAOFactory(), getPermissionStorage());
+		return Environment.identity;
+	}
+
 	public static ISettingsSource getKnowledgeSettings() {
 		if (knowledgeSettings == null) {
 			knowledgeSettings = new SettingsSource(JWL_HOME);
 		}
 		return knowledgeSettings;
 	}
+
 	public static IKnowledgeManagementFacade getKnowledgeFacade() {
 		if (knowledgeFacade == null) {
 			knowledgeFacade = new KnowledgeManagementFacade();
 		}
 		return knowledgeFacade;
+	}
+	
+	private static Map<String, Object> getPermissionStorage() {
+		return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 	}
 }

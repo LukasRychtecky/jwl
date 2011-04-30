@@ -15,6 +15,7 @@ import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
+import com.jwl.business.security.Role;
 import com.jwl.business.usecases.AddForumPostUC;
 import com.jwl.business.usecases.AddToMergeSuggestionsIgnoreUC;
 import com.jwl.business.usecases.CloseForumTopicsUC;
@@ -71,6 +72,8 @@ import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
+import java.util.Collection;
+import java.util.Set;
 
 // </editor-fold>
 /**
@@ -121,6 +124,11 @@ public class Facade implements IFacade {
 	@Override
 	public IIdentity getIdentity() {
 		return Environment.getIdentity();
+	}
+
+	@Override
+	public IIdentity createIdentity(String username, Set<Role> roles) throws ModelException {
+		return Environment.createIdentity(username, roles);
 	}
 
 	@Override

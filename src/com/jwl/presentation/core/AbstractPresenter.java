@@ -30,6 +30,7 @@ import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.Role;
 import com.jwl.presentation.components.article.ArticlePresenter;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLContextKey;
@@ -46,6 +47,8 @@ import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.RequestMapDecoder;
 import com.jwl.presentation.url.WikiURLParser;
 import java.util.HashMap;
+import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 
 // </editor-fold>
 /**
@@ -73,6 +76,7 @@ abstract public class AbstractPresenter {
 	protected List<UIComponent> container;
 	protected List<FlashMessage> messages;
 	protected Map<String, HtmlAppForm> forms;
+	private Boolean isInicialized = false;
 
 	public AbstractPresenter() {
 		this.context = FacesContext.getCurrentInstance();
@@ -81,22 +85,20 @@ abstract public class AbstractPresenter {
 		this.container = new ArrayList<UIComponent>();
 		this.forms = new HashMap<String, HtmlAppForm>();
 
-		if (isAjax()) {
+		if (this.isAjax()) {
 			this.linker = new Linker(getPresenterName(), getRequestParam(JWLURLParams.URI));
 		} else {
 			this.linker = new Linker(getPresenterName());
 		}
+		
+		this.setJWLHome();
 		
 		try {
 			this.prepareFormFromRequest();
 		} catch (IOException ex) {
 			ExceptionLogger.severe(getClass(), ex);
 		}
-		
-		this.initializeFacesContext();
-		
-	}
-	
+	}	
 	
 	private String getPresenterName() {
 		String className = this.getClass().getSimpleName();
@@ -189,7 +191,7 @@ abstract public class AbstractPresenter {
 		return new RequestMapDecoder(getRequestParamMap(), root);		
 	}
 	
-	protected String getRequestParam(String key) {
+	protected final String getRequestParam(String key) {
 		return this.getRequestParamMap().get(key);
 	}
 
@@ -199,6 +201,18 @@ abstract public class AbstractPresenter {
 	
 	protected void redirect(String state) {
 		this.context.getAttributes().put(JWLContextKey.STATE, state);
+	}
+
+	private void setJWLHome() {
+		HttpServletRequest request = (HttpServletRequest) this.context.getExternalContext().getRequest();
+		this.getFacade().setJWLHome(request.getSession().getServletContext().getRealPath("/jwl/"));
+	}
+	
+	public void loginUser(String username, Set<Role> roles) throws ModelException {
+		this.getFacade().createIdentity(username, roles);
+		if (!this.isInicialized) {
+			this.initializeFacesContext();
+		}
 	}
 
 	public void renderDefault() throws IOException {
@@ -369,6 +383,7 @@ abstract public class AbstractPresenter {
 		context.getAttributes().put(JWLContextKey.LINKER, linker);
 		context.getAttributes().put("javax.faces.SEPARATOR_CHAR", 
 				AbstractComponent.JWL_HTML_ID_SEPARATOR.charAt(0));
+		this.isInicialized = true;
 	}
 
 	protected ArticleTO getArticle(String title) {

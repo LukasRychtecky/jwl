@@ -21,40 +21,38 @@ public class AjaxListener implements PhaseListener {
 	private static final long serialVersionUID = -4978877094917671154L;
 
 	@Override
-	public void afterPhase(PhaseEvent pe){
-		try{
+	public void afterPhase(PhaseEvent pe) {
+		try {
 			this.handleAjaxRequest(pe);
-		}catch(IOException ex){
+		} catch (IOException ex) {
 			Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 	}
 
 	@Override
-	public void beforePhase(PhaseEvent pe){
+	public void beforePhase(PhaseEvent pe) {
 	}
 
-	private void handleAjaxRequest(PhaseEvent event) throws IOException{
+	private void handleAjaxRequest(PhaseEvent event) throws IOException {
 
 		FacesContext context = event.getFacesContext();
-		if(context == null){
+		if (context == null) {
 			return;
 		}
 
-		try{
-			Map<String, String> requestParams = context.getExternalContext()
-					.getRequestParameterMap();
+		try {
+			Map<String, String> requestParams = context.getExternalContext().getRequestParameterMap();
 			String method = requestParams.get(JWLURLParams.METHOD);
-			if(method == null || !method.equals("ajax")){
+			if (method == null || !method.equals("ajax")) {
 				return;
 			}
-			if(!requestParams.containsKey(JWLURLParams.PRESENTER)){
+			if (!requestParams.containsKey(JWLURLParams.PRESENTER)) {
 				throw new IllegalArgumentException("No "
 						+ JWLURLParams.PRESENTER + " found.");
 			}
 
-			StringBuilder packageName = new StringBuilder(this.getClass()
-					.getPackage().getName());
+			StringBuilder packageName = new StringBuilder(this.getClass().getPackage().getName());
 			String className = packageName.substring(0,
 					packageName.lastIndexOf("."))
 					+ ".components."
@@ -66,26 +64,26 @@ public class AjaxListener implements PhaseListener {
 			AbstractComponent component = (AbstractComponent) c.newInstance();
 			component.encodeAll(context);
 
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			this.handleException(ex);
 		}
 
 	}
 
-	private void handleException(Exception ex) throws IOException{
+	private void handleException(Exception ex) throws IOException {
 		Logger.getLogger(AjaxListener.class.getName()).log(Level.SEVERE, null,
 				ex);
 		AbstractPresenter presenter = new AbstractPresenter() {
 		};
-		if(ex instanceof ClassNotFoundException){
+		if (ex instanceof ClassNotFoundException) {
 			presenter.render404();
-		}else{
+		} else {
 			presenter.render500();
 		}
 	}
 
 	@Override
-	public PhaseId getPhaseId(){
+	public PhaseId getPhaseId() {
 		return PhaseId.RESTORE_VIEW;
 	}
 }

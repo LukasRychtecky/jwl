@@ -49,7 +49,7 @@ var knowledgeAjax = {
         data: "jwltitle=" + $("#jwl-title").val() + "&jwltags=" + $("#jwl-tags").val() + "&jwltext=" + $("#jwl-text").val(),
         success: function(data){
             $(".jwl-suggestor").html(data);
-        },
+        }
     });
 	},
 	
@@ -71,7 +71,7 @@ var knowledgeAjax = {
     $("#jwl-admin-kn-kw").click(function(){
         $.ajax({
             type: "POST",
-            url: "ajax.seam?jwlmethod=ajax&jwldo=keyWordGeneration&jwlstate=keyWordGeneration&jwlpresenter=Administration",
+            url: "ajax.seam?jwlmethod=ajax&jwldo=keyWordGeneration&jwlstate=keyWordGeneration&jwlpresenter=Administration"
         });
     });
 	}		
@@ -132,7 +132,7 @@ var starRating = {
                     success: function(data){
                         $(".jwl-rating-div").html(data);
 						starRating.create('.jwl-view-stars');
-                    },
+                    }
                 });
             }
             sendRating();
