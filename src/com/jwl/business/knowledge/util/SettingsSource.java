@@ -18,8 +18,21 @@ import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsExceptio
 public class SettingsSource implements ISettingsSource {
 	Map<String, FeatureRecord> neuronRecords;
 	Map<String, String> schedulerRecords;
-	private static final String settingsFile = "C:\\JWL_BW\\SeamWiki\\resources\\KnowledgeManagementSettings.xml";
-
+	private String settingsFile;
+	private String wordCountsFile;
+	private String mergeFile;
+	private String mergeIgnoreFile;
+	
+	public SettingsSource(String jwlHomePath){
+		jwlHomePath="C:\\JWL_BW\\jwl\\war\\jwl";
+		String pathSeparator = System.getProperty("file.separator");
+		String settingFilePath = pathSeparator+"private"+pathSeparator+"jwl"+pathSeparator;
+		settingsFile = jwlHomePath + settingFilePath+"KnowledgeManagementSettings.xml";
+		wordCountsFile = jwlHomePath + settingFilePath+"WordCounts";
+		mergeFile = jwlHomePath + settingFilePath+"Merge";
+		mergeIgnoreFile = jwlHomePath + settingFilePath+"MergeIgnore";
+	}
+		
 	@Override
 	public Map<String, WeightRecord> getWeights(String featureName)
 			throws KnowledgeManagementSettingsException {
@@ -153,7 +166,24 @@ public class SettingsSource implements ISettingsSource {
 					continue;
 				}
 			}
+			cronExpression = "0 "+cronExpression;
 			schedulerRecords.put(jobName, cronExpression);
 		}
 	}
+
+	@Override
+	public String getWordCountsFile(){
+		return wordCountsFile;
+	}
+
+	@Override
+	public String getMergeFile(){
+		return mergeFile;
+	}
+
+	@Override
+	public String getMergeIgnoreFile(){
+		return mergeIgnoreFile;
+	}
+	
 }

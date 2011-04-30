@@ -1,5 +1,6 @@
 package com.jwl.integration.article;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -268,4 +269,35 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 		}
 		return ArticleConvertor.convertList(result);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTO> fullScanSearch(Set<String> searchWords)
+			throws DAOException{
+		if(searchWords.isEmpty()){
+			return new ArrayList<ArticleTO>();
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT a FROM Article a WHERE a.text = LIKE %?0");
+		for(int i = 1; i< searchWords.size();i++){
+			sb.append(" AND a.text = LIKE %?0");
+		}
+		EntityManager em = getEntityManager();
+		List<Article> result = null;
+		Query query = em.createQuery(sb.toString());
+		int i= 0;
+		for(String searchWord: searchWords){			
+			query.setParameter(i, searchWord);
+			i++;
+		}
+		try {					
+			result = query.getResultList();
+		} catch (Exception e) {
+			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
+		}
+		return ArticleConvertor.convertList(result);	
+	}
+	
 }

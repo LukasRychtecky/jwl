@@ -31,26 +31,28 @@ import com.jwl.integration.article.IArticleDAO;
 
 public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 
-	private static final String MERGE_FILEPATH = "C:\\JWL_BW\\SeamWiki\\resources\\merge.txt";
-	private static final String MERGE_IGNORED_FILEPATH = "C:\\JWL_BW\\SeamWiki\\resources\\ignoredmerge";
+	private String mergeFile;
+	private String mergeIgnoreFile;
 
 	public MergeArticleSuggestor(IArticleDAO articleDAO,
-			ISettingsSource knowledgeSettings) {
-		super(articleDAO, knowledgeSettings);
+			ISettingsSource settings) {
+		super(articleDAO, settings);
 		this.neuron = new Neuron(settingsSource, "MergeSuggestion");
+		mergeFile = settings.getMergeFile();
+		mergeIgnoreFile = settings.getMergeIgnoreFile();
 	}
 
-	public List<ArticleIdPair> suggestArticleMerge() {
+	public List<ArticleIdPair> suggestArticleMerge(){
 		Map<ArticleIdPair, Float> articleIdPairs = new HashMap<ArticleIdPair, Float>();
 		IArticleIterator iterator1 = new ArticleIterator(articleDAO, 50);
 		List<ArticleIdPair> ignoredPairs = null;
-		try {
-			ignoredPairs = getIdPairsFromFile(MERGE_IGNORED_FILEPATH);
-		} catch (KnowledgeException e1) {
+		try{
+			ignoredPairs = getIdPairsFromFile(mergeIgnoreFile);
+		}catch(KnowledgeException e1){
 			ignoredPairs = new ArrayList<ArticleIdPair>();
 		}
-		try {
-			while (iterator1.hasNext()) {
+		try{
+			while(iterator1.hasNext()){
 				ArticleTO article1 = iterator1.getNextArticle();
 				Set<String> a1NameWords = WordProcessor.getWords(article1
 						.getTitle());
@@ -59,128 +61,128 @@ public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 						f.extractKeyWordsOnRun(article1.getTitle(),
 								article1.getText()));
 				IArticleIterator iterator2 = new ArticleIterator(articleDAO, 50);
-				while (iterator2.hasNext()) {
+				while(iterator2.hasNext()){
 					ArticleTO article2 = iterator2.getNextArticle();
 					ArticleIdPair aip = new ArticleIdPair(article1.getId(),
 							article2.getId());
-					if (article1.getId().equals(article2.getId())
+					if(article1.getId().equals(article2.getId())
 							|| articleIdPairs.containsKey(aip)
-							|| ignoredPairs.contains(aip)) {
+							|| ignoredPairs.contains(aip)){
 						continue;
 					}
 					Map<String, WeightRecord> neuronInput = processArticle(
 							a1NameWords, article1.getTags(), a1KeyWords,
 							article2);
 					float neuronOutput = neuron.getOutput(neuronInput);
-					if (neuronOutput != 0) {
+					if(neuronOutput != 0){
 						articleIdPairs.put(new ArticleIdPair(article1.getId(),
 								article2.getId()), neuronOutput);
 					}
 				}
 			}
-		} catch (Exception e) {
+		}catch(Exception e){
 			return null;
 		}
 
 		return createOrderedPairList(articleIdPairs);
 	}
 
-	public void pregenerateMergeSuggestion() throws KnowledgeException {
+	public void pregenerateMergeSuggestion() throws KnowledgeException{
 		List<ArticleIdPair> suggestedMerge = suggestArticleMerge();
-		saveIdPairsToFile(suggestedMerge, MERGE_FILEPATH);
+		saveIdPairsToFile(suggestedMerge, mergeFile);
 	}
 
 	public List<ArticleIdPair> getPregeneratedMergeSuggestions()
-			throws KnowledgeException {
-		List<ArticleIdPair> mergeSuggestions = getIdPairsFromFile(MERGE_FILEPATH);
-		filterIgnored(mergeSuggestions);	
+			throws KnowledgeException{
+		List<ArticleIdPair> mergeSuggestions = getIdPairsFromFile(mergeFile);
+		filterIgnored(mergeSuggestions);
 		return mergeSuggestions;
 	}
-	
+
 	private void filterIgnored(List<ArticleIdPair> mergeSuggestions){
-		List<ArticleIdPair> ignoredPairs =null;
-		try {
-			ignoredPairs = getIdPairsFromFile(MERGE_IGNORED_FILEPATH);
-		} catch (KnowledgeException e) {
+		List<ArticleIdPair> ignoredPairs = null;
+		try{
+			ignoredPairs = getIdPairsFromFile(mergeIgnoreFile);
+		}catch(KnowledgeException e){
 			return;
 		}
 		mergeSuggestions.removeAll(ignoredPairs);
 	}
 
 	private List<ArticleIdPair> createOrderedPairList(
-			Map<ArticleIdPair, Float> wordWeights) {
+			Map<ArticleIdPair, Float> wordWeights){
 		List<Entry<ArticleIdPair, Float>> list = new LinkedList<Map.Entry<ArticleIdPair, Float>>(
 				wordWeights.entrySet());
 		Collections.sort(list, new Comparator<Entry<ArticleIdPair, Float>>() {
 			@Override
 			public int compare(Entry<ArticleIdPair, Float> arg0,
-					Entry<ArticleIdPair, Float> arg1) {
+					Entry<ArticleIdPair, Float> arg1){
 				return arg1.getValue().compareTo(arg0.getValue());
 			}
 		});
 		List<ArticleIdPair> result = new ArrayList<ArticleIdPair>();
-		for (Entry<ArticleIdPair, Float> e : list) {
+		for (Entry<ArticleIdPair, Float> e : list){
 			result.add(e.getKey());
 		}
 		return result;
 	}
 
 	public void addIgnoredMergeSuggestion(ArticleIdPair articleIdPair)
-			throws KnowledgeException {
-		File f = new File(MERGE_IGNORED_FILEPATH);
+			throws KnowledgeException{
+		File f = new File(mergeIgnoreFile);
 		List<ArticleIdPair> ignoredIdPairs = null;
-		if (f.exists()) {
-			ignoredIdPairs = getIdPairsFromFile(MERGE_IGNORED_FILEPATH);
-		} else {
+		if(f.exists()){
+			ignoredIdPairs = getIdPairsFromFile(mergeIgnoreFile);
+		}else{
 			ignoredIdPairs = new ArrayList<ArticleIdPair>();
 		}
 		ignoredIdPairs.add(articleIdPair);
-		saveIdPairsToFile(ignoredIdPairs, MERGE_IGNORED_FILEPATH);
+		saveIdPairsToFile(ignoredIdPairs, mergeIgnoreFile);
 	}
 
-	public void cleanIgnoredMergeSuggestions() {
+	public void cleanIgnoredMergeSuggestions(){
 		List<ArticleIdPair> ignoredPairs = null;
-		try {
-			ignoredPairs = getIdPairsFromFile(MERGE_IGNORED_FILEPATH);
-		} catch (KnowledgeException e) {
+		try{
+			ignoredPairs = getIdPairsFromFile(mergeIgnoreFile);
+		}catch(KnowledgeException e){
 			return;
 		}
-		try {
-			for (ArticleIdPair idPair : ignoredPairs) {
+		try{
+			for (ArticleIdPair idPair : ignoredPairs){
 				ArticleTO a1 = articleDAO.get(idPair.getId1());
 				ArticleTO a2 = articleDAO.get(idPair.getId2());
-				if (a1 == null || a2 == null) {
+				if(a1 == null || a2 == null){
 					ignoredPairs.remove(idPair);
 				}
 			}
-			saveIdPairsToFile(ignoredPairs, MERGE_IGNORED_FILEPATH);
-		} catch (Exception e) {
+			saveIdPairsToFile(ignoredPairs, mergeIgnoreFile);
+		}catch(Exception e){
 		}
 	}
 
 	private void saveIdPairsToFile(List<ArticleIdPair> idPairs, String filePath)
-			throws KnowledgeException {
-		try {
+			throws KnowledgeException{
+		try{
 			File f = new File(filePath);
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream out = new ObjectOutputStream(fos);
 			out.writeObject(idPairs);
 			out.close();
-		} catch (IOException e) {
+		}catch(IOException e){
 			throw new KnowledgeException(e);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private List<ArticleIdPair> getIdPairsFromFile(String filePath)
-			throws KnowledgeException {
+			throws KnowledgeException{
 		List<ArticleIdPair> result = null;
-		try {
+		try{
 			File f = new File(filePath);
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream in = new ObjectInputStream(fis);
 			result = (List<ArticleIdPair>) in.readObject();
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new KnowledgeException(e);
 		}
 		return result;

@@ -12,4 +12,10 @@ public interface ISettingsSource {
 	public float getWeight(String neuronName, String inputName)throws KnowledgeManagementSettingsException;
 	
 	public String getCronExpression(String taskName) throws KnowledgeManagementSettingsException;
+	
+	public String getWordCountsFile();
+	
+	public String getMergeFile();
+	
+	public String getMergeIgnoreFile();
 }

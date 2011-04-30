@@ -32,7 +32,7 @@ public class KnowledgeManagementFacade implements IKnowledgeManagementFacade {
 	public void extractKeyWords() {
 		IArticleDAO adao = Environment.getDAOFactory().getArticleDAO();
 		IKeyWordDAO kwdao = Environment.getDAOFactory().getKeyWordDAO();
-		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao);
+		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao, Environment.getKnowledgeSettings());
 		kwe.extractKeyWords();
 	}
 
@@ -40,7 +40,7 @@ public class KnowledgeManagementFacade implements IKnowledgeManagementFacade {
 	public List<String> extractKeyWordsOnRun(String title, String text) {
 		IArticleDAO adao = Environment.getDAOFactory().getArticleDAO();
 		IKeyWordDAO kwdao = Environment.getDAOFactory().getKeyWordDAO();
-		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao);
+		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao, Environment.getKnowledgeSettings());
 		return kwe.extractKeyWordsOnRun(title, text);
 	}
 

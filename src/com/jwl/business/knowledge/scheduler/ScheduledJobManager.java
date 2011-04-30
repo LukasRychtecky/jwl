@@ -28,7 +28,7 @@ public class ScheduledJobManager {
 			attachMergeSuggestionsGeneration(scheduler, settings);
 			attachMergeSuggestionsClenUp(scheduler, settings);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up scheduler", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up scheduler");
 		}
 	}
 	
@@ -49,7 +49,7 @@ public class ScheduledJobManager {
 					jobGroup, KeyWordGenerationJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up key word generation scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up key word generation scheduling");
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class ScheduledJobManager {
 					jobGroup, LivabilityPeriodicReductionJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up livability decrease scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up livability decrease scheduling");
 		}
 	}
 
@@ -91,7 +91,7 @@ public class ScheduledJobManager {
 					jobGroup, MergeSuggestionsGenerationJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions generation scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions generation scheduling");
 		}
 	}
 
@@ -112,7 +112,7 @@ public class ScheduledJobManager {
 					jobGroup, MergeSuggestionsCleanUpJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions clean up scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions clean up scheduling");
 		}
 	}
 

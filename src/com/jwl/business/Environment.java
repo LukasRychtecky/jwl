@@ -80,7 +80,7 @@ public class Environment {
 	}
 	public static ISettingsSource getKnowledgeSettings() {
 		if (knowledgeSettings == null) {
-			knowledgeSettings = new SettingsSource();
+			knowledgeSettings = new SettingsSource(JWL_HOME);
 		}
 		return knowledgeSettings;
 	}

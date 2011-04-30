@@ -14,6 +14,7 @@ import java.util.Set;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.KeyWordTO;
 import com.jwl.business.knowledge.util.ArticleIterator;
+import com.jwl.business.knowledge.util.ISettingsSource;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.keyword.IKeyWordDAO;
@@ -24,10 +25,12 @@ public class KeyWordExtractor {
 	private IKeyWordDAO keyWordDAO;
 	private Map<String, Integer> wordsInArticles;
 	private static int TAG_COUNT = 10;
+	private ISettingsSource settings;
 
-	public KeyWordExtractor(IArticleDAO articleDAO, IKeyWordDAO keyWordDAO) {
+	public KeyWordExtractor(IArticleDAO articleDAO, IKeyWordDAO keyWordDAO, ISettingsSource settings) {
 		this.articleDAO = articleDAO;
 		this.keyWordDAO = keyWordDAO;
+		this.settings = settings;
 	}
 
 	public void extractKeyWords(){
@@ -35,7 +38,7 @@ public class KeyWordExtractor {
 			countWordsInArticles();
 		}catch(DAOException e){
 		}
-		WordCountsFileManager fileManager = new WordCountsFileManager();
+		WordCountsFileManager fileManager = new WordCountsFileManager(settings);
 		fileManager.saveToFile(wordsInArticles);
 		ArticleIterator articleIterator = new ArticleIterator(articleDAO, 100);
 		try{
@@ -48,7 +51,7 @@ public class KeyWordExtractor {
 	}
 
 	public List<String> extractKeyWordsOnRun(String title, String text){
-		WordCountsFileManager fileManager = new WordCountsFileManager();
+		WordCountsFileManager fileManager = new WordCountsFileManager(settings);
 		wordsInArticles = fileManager.getFromFile();
 		Map<String, Float> keyWordsWeights = computeKeyWordWeights(title, text);
 		List<String> keyWordList = createKeyWordList(keyWordsWeights);

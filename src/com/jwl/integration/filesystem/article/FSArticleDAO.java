@@ -79,4 +79,11 @@ public class FSArticleDAO implements IArticleDAO {
 		return null;
 	}
 
+	@Override
+	public List<ArticleTO> fullScanSearch(Set<String> searchWords)
+			throws DAOException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

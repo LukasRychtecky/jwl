@@ -12,11 +12,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
+import com.jwl.business.knowledge.util.ISettingsSource;
+
 public class WordCountsFileManager {
-	private static String FILE_PATH = "C:\\JWL_BW\\SeamWiki\\resources\\WordCounts.txt";
+	private String filePath;
 	private static String RECORD_DELIMETR = ",";
 	private static String NUMBER_DELIMETR = ":";
-
+	
+	public WordCountsFileManager(ISettingsSource settings){
+		filePath = settings.getWordCountsFile();
+	}
+	
 	public void saveToFile(Map<String, Integer> wordCounts) {
 		StringBuilder sb = new StringBuilder();
 		boolean first = true;
@@ -78,13 +84,13 @@ public class WordCountsFileManager {
 	}
 
 	private void saveStringToFile(String str) throws IOException {
-		BufferedWriter out = new BufferedWriter(new FileWriter(FILE_PATH));
+		BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
 		out.write(str);
 		out.close();
 	}
 
 	private String getStringFromFile() throws IOException {
-		BufferedReader in = new BufferedReader(new FileReader(FILE_PATH));
+		BufferedReader in = new BufferedReader(new FileReader(filePath));
 		String str = in.readLine();
 		in.close();
 		return str;
