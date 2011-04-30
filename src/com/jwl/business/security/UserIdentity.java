@@ -1,17 +1,16 @@
 package com.jwl.business.security;
 
-import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.usecases.LoadPermissionsUC;
 import com.jwl.business.usecases.interfaces.ILoadPermissionsUC;
 import com.jwl.integration.IDAOFactory;
+import java.util.Collections;
+import java.util.Set;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -19,45 +18,43 @@ import java.util.Set;
  */
 public class UserIdentity implements IIdentity {
 
+	private static final String PRINCIPAL_KEY = "jwl-principal";
+	
 	private IDAOFactory factory;
 	private Map<Role, List<AccessPermissions>> permissions = null;
 	private Boolean isAuthenticated = Boolean.FALSE;
-	private Boolean isPermissionsLoaded = Boolean.FALSE;
-	private Set<Role> roles;
-	private String userName = null;
+	private Principal principal = null;
+	private Map<String, Object> principalStorage;
 
-	public UserIdentity(IDAOFactory factory) {
+	public UserIdentity(String username, Set<Role> roles, IDAOFactory factory, Map<String, Object> principalStorage) throws ModelException {
 		this.factory = factory;
 		this.permissions = new HashMap<Role, List<AccessPermissions>>();
-		this.roles = new HashSet<Role>();
+		this.principalStorage = principalStorage;
+		this.loadPrincipal(username, roles);
+		this.loadPermissions();
+	}
+	
+	private void loadPrincipal(String username, Set<Role> roles) {
+		this.principal = (Principal) this.principalStorage.get(PRINCIPAL_KEY);
+		if (this.principal == null) {
+			this.principal = new Principal(username, roles);
+			this.principalStorage.put(PRINCIPAL_KEY, this.principal);
+		}
 	}
 
 	private void loadPermissions() throws ModelException {
-		if (!this.isPermissionsLoaded && !this.roles.isEmpty()) {
-			ILoadPermissionsUC uc = new LoadPermissionsUC(this.factory);
-			this.permissions = uc.load(this.roles);
-			this.isPermissionsLoaded = Boolean.TRUE;
-			this.isAuthenticated = Boolean.TRUE;
-		}
-	}
-
-	@Override
-	public void addUserRoles(List<Role> roles) {
-		if (roles != null) {
-			for (Role role : roles) {
-				this.roles.add(role);
-			}
-		}
+		ILoadPermissionsUC uc = new LoadPermissionsUC(this.factory);
+		this.permissions = uc.load(this.principal.getRoles());
+		this.isAuthenticated = Boolean.TRUE;
 	}
 
 	@Override
 	public Boolean hasUserRole(Role role) {
-		return this.permissions.containsKey(role);
+		return this.principal.getRoles().contains(role);
 	}
 
 	@Override
-	public void checkPermission(AccessPermissions permission) throws ModelException, PermissionDeniedException {
-		this.loadPermissions();
+	public void checkPermission(AccessPermissions permission) throws PermissionDeniedException {
 		if (this.permissions.keySet().isEmpty()) {
 			throw new PermissionDeniedException("No roles found! Did you forget add role?");
 		}
@@ -67,16 +64,14 @@ public class UserIdentity implements IIdentity {
 	}
 
 	@Override
-	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws ModelException, PermissionDeniedException {
-		this.checkPermission(permission);
+	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws PermissionDeniedException {
 		if (!this.isAllowed(permission, articleId)) {
 			throw new PermissionDeniedException("Permission denied for article #" + articleId);
 		}
 	}
 
 	@Override
-	public Boolean isAllowed(AccessPermissions permission) throws ModelException {
-		this.loadPermissions();
+	public Boolean isAllowed(AccessPermissions permission) {
 		Boolean isAllowed = Boolean.FALSE;
 
 		for (List<AccessPermissions> perms : this.permissions.values()) {
@@ -89,7 +84,7 @@ public class UserIdentity implements IIdentity {
 	}
 
 	@Override
-	public Boolean isAllowed(AccessPermissions permission, ArticleId id) throws ModelException {
+	public Boolean isAllowed(AccessPermissions permission, ArticleId id) {
 		Boolean isAllowed = this.isAllowed(permission);
 
 		if (!isAllowed) {
@@ -112,13 +107,12 @@ public class UserIdentity implements IIdentity {
 	}
 
 	@Override
-	public void addUserName(String name) {
-		this.userName = name;
-		
-	}
-
-	@Override
 	public String getUserName() {
-		return userName;
+		return this.principal.getUsername();
+	}
+	
+	@Override
+	public Set<Role> getRoles() {
+		return Collections.unmodifiableSet(this.principal.getRoles());
 	}
 }

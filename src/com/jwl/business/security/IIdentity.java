@@ -1,11 +1,8 @@
 package com.jwl.business.security;
 
-import com.jwl.business.security.Role;
-import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.article.ArticleId;
-import java.util.List;
-import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.PermissionDeniedException;
+import java.util.Set;
 
 /**
  * 
@@ -13,22 +10,20 @@ import com.jwl.business.exceptions.PermissionDeniedException;
  */
 public interface IIdentity {
 
-	public void addUserRoles(List<Role> roles);
-
 	public Boolean hasUserRole(Role role);
 
-	public Boolean isAllowed(AccessPermissions permission) throws ModelException;
+	public Boolean isAllowed(AccessPermissions permission);
 
-	public Boolean isAllowed(AccessPermissions permission, ArticleId articleId) throws ModelException;
+	public Boolean isAllowed(AccessPermissions permission, ArticleId articleId);
 	
-	public void checkPermission(AccessPermissions permission) throws ModelException, PermissionDeniedException;
+	public void checkPermission(AccessPermissions permission) throws PermissionDeniedException;
 
-	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws ModelException, PermissionDeniedException;
+	public void checkPermission(AccessPermissions permission, ArticleId articleId) throws PermissionDeniedException;
 
 	public boolean isAuthenticated();
 	
-	public void addUserName(String name);
-	
 	public String getUserName();
+	
+	public Set<Role> getRoles();
 
 }

@@ -1,8 +1,10 @@
 package com.jwl.presentation.core;
 
+import com.jwl.business.exceptions.ModelException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
@@ -12,11 +14,14 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.jwl.business.IFacade;
+import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.Role;
 import com.jwl.presentation.enumerations.JWLPresenters;
 import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.global.Global;
 import com.jwl.presentation.url.WikiURLParser;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -103,8 +108,8 @@ abstract public class AbstractComponent extends UIInput implements StateHolder  
 		return role;
 	}
 
-	public List<Role> getRoles() {
-		List<Role> roles = new ArrayList<Role>();
+	public Set<Role> getRoles() {
+		Set<Role> roles = new HashSet<Role>();
 		String[] splitedRoles = this.getUserRole().split(ROLE_DELIMITER);
 
 		String role = null;
@@ -170,18 +175,19 @@ abstract public class AbstractComponent extends UIInput implements StateHolder  
 
 	
 	private void setUserNameAndRoles() {
-		String userName = getUserName();
-		List<Role> roles = getRoles();
+		try {
+			String userName = getUserName();
 
-		if (userName.isEmpty()) {
-			WikiURLParser parser = new WikiURLParser();
-			userName = parser.getUserIP();
+			if (userName.isEmpty()) {
+				WikiURLParser parser = new WikiURLParser();
+				userName = parser.getUserIP();
+			}
+			
+			IFacade facade = Global.getInstance().getFacade();
+			facade.createIdentity(userName, this.getRoles());
+		} catch (ModelException ex) {
+			Logger.getLogger(AbstractComponent.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		
-		// TODO LR Is this right facade instance to set user roles.
-		IFacade facade = Global.getInstance().getFacade();
-		facade.getIdentity().addUserName(userName);
-		facade.getIdentity().addUserRoles(roles);
 	}
 	
 

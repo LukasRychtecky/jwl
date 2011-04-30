@@ -16,6 +16,9 @@ import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
+import com.jwl.business.security.Role;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * This interface provides communication between Model(business tier,
@@ -54,13 +57,10 @@ public interface IFacade {
 
 
 	public ArticleTO findArticleByTitle(String title) throws ModelException;
-
-	/**
-	 * Returns identity that represents the user of application.
-	 * 
-	 * @return
-	 */
+	
 	public IIdentity getIdentity();
+	
+	public IIdentity createIdentity(String username, Set<Role> roles) throws ModelException;
 
 	public void uploadAttachment(AttachmentTO attachment, String source) throws ModelException;
 

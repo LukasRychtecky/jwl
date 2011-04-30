@@ -31,8 +31,8 @@ public abstract class AbstractEncoder {
 	protected WikiURLParser parser;
 	protected Linker linker;
 	protected FacesContext context;
-	
-	public AbstractEncoder() {		
+
+	public AbstractEncoder() {
 		this.parser = new WikiURLParser();
 		this.context = FacesContext.getCurrentInstance();
 		this.linker = (Linker) context.getAttributes().get(JWLContextKey.LINKER);
@@ -46,7 +46,7 @@ public abstract class AbstractEncoder {
 		link.setText(text);
 		return link;
 	}
-		
+
 	protected HtmlOutputText getHtmlText(Object value) {
 		HtmlOutputText component = new HtmlOutputText();
 		component.setValue(value);
@@ -56,24 +56,24 @@ public abstract class AbstractEncoder {
 	protected HtmlDiv getHtmlLabelComponent(JWLElements element, String styleClass) {
 		HtmlDiv div = new HtmlDiv();
 		div.addStyleClass(styleClass);
-		
+
 		HtmlOutputLabel labelForFileName = new HtmlOutputLabel();
 		labelForFileName.setFor(element.id);
 		labelForFileName.setValue(element.value);
-		
+
 		div.addChildren(labelForFileName);
 		return div;
 	}
-	
-	protected HtmlDiv getHtmlInputComponent(JWLElements element, 
+
+	protected HtmlDiv getHtmlInputComponent(JWLElements element,
 			String value, String styleClass) {
 		HtmlDiv div = new HtmlDiv();
 		div.addStyleClass(styleClass);
-		
+
 		HtmlInputText inputText = new HtmlInputText();
 		inputText.setValue(value);
 		inputText.setId(element.id);
-		
+
 		div.addChildren(inputText);
 		return div;
 	}
@@ -81,33 +81,27 @@ public abstract class AbstractEncoder {
 	protected HtmlDiv getHtmlSubmitComponent(JWLElements element, String styleClass) {
 		HtmlDiv div = new HtmlDiv();
 		div.addStyleClass(styleClass);
-		
+
 		HtmlCommandButton submit = new HtmlCommandButton();
 		submit.setType("submit");
 		submit.setId(element.id);
 		submit.setValue(element.value);
-		
+
 		div.addChildren(submit);
 		return div;
 	}
 
-
-	
-	protected boolean isUserLogged() {
-		return getFacade().getIdentity().isAuthenticated();
-	}
-	
 	protected boolean hasAdministrationPermission() {
 		// TODO Fix this. I am logged as admin and mehtod still returns false 
 		return true;
 //		return this.hasPermission(AccessPermissions.KNOWLEDGE_ADMINISTER) &&
 //			this.hasPermission(AccessPermissions.SECURITY_IMPORT);
 	}
-	
+
 	protected boolean hasArticleViewPermission(ArticleId id) {
 		return this.hasPermission(AccessPermissions.ARTICLE_VIEW, id);
 	}
-	
+
 	protected boolean hasRestorePermission(ArticleId id) {
 		return this.hasPermission(AccessPermissions.ARTICLE_RESTORE, id);
 	}
@@ -115,15 +109,15 @@ public abstract class AbstractEncoder {
 	protected boolean hasLockPermission(ArticleId id) {
 		return this.hasPermission(AccessPermissions.ARTICLE_LOCK, id);
 	}
-	
+
 	protected boolean hasDeletePermission(ArticleId id) {
 		return this.hasPermission(AccessPermissions.ARTICLE_DELETE, id);
 	}
-	
+
 	protected boolean hasCreateTopicPermission() {
 		return this.hasPermission(AccessPermissions.FORUM_CREATE_TOPIC);
 	}
-	
+
 	protected boolean hasDeleteTopicPermission() {
 		return this.hasPermission(AccessPermissions.FORUM_DELETE_TOPIC);
 	}
@@ -135,35 +129,23 @@ public abstract class AbstractEncoder {
 	protected boolean hasPostReplyPermission() {
 		return this.hasPermission(AccessPermissions.FORUM_ADD_POST);
 	}
-	
+
 	protected boolean hasDeletePostPermission() {
 		return this.hasPermission(AccessPermissions.FORUM_DELETE_POST);
 	}
 
-	
 	protected boolean hasPermission(AccessPermissions permission, ArticleId id) {
-		try {
-			return getFacade().getIdentity().isAllowed(permission, id);
-		} catch (ModelException ex) {
-			ExceptionLogger.severe(getClass(), ex);
-			return false;
-		}
+		return getFacade().getIdentity().isAllowed(permission, id);
 	}
-	
+
 	protected boolean hasPermission(AccessPermissions permission) {
-		try {
-			return getFacade().getIdentity().isAllowed(permission);
-		} catch (ModelException ex) {
-			ExceptionLogger.severe(getClass(), ex);
-			return false;
-		}
+		return getFacade().getIdentity().isAllowed(permission);
 	}
-	
+
 	protected IFacade getFacade() {
 		if (facade == null) {
 			this.facade = Global.getInstance().getFacade();
 		}
 		return facade;
 	}
-
 }
