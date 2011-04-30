@@ -13,6 +13,7 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 import com.jwl.business.ArticlePair;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
@@ -25,6 +26,7 @@ import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeMergeSuggestionList extends AbstractEncoder {
 
@@ -33,9 +35,10 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 
 	private List<ArticlePair> articlePairs;
 	
-	public EncodeMergeSuggestionList(List<ArticlePair> articlePairs) {
-		super();
-		this.articlePairs = articlePairs; 
+	@SuppressWarnings("unchecked")
+	public EncodeMergeSuggestionList(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
+		this.articlePairs = (List<ArticlePair>) params.get("articlePairs"); 
 		
 	}
 	

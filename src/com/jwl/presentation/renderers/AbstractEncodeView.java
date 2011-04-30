@@ -13,6 +13,7 @@ import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.security.AccessPermissions;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
@@ -23,13 +24,14 @@ import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.markdown.MarkupToMarkdown;
 import com.jwl.presentation.renderers.units.RatingComponent;
+import com.jwl.presentation.url.Linker;
 
 public abstract class AbstractEncodeView extends AbstractEncoder {
 
 	protected ArticleTO article;
 
-	public AbstractEncodeView() {
-		super();
+	public AbstractEncodeView(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
 	}
 	

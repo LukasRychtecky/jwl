@@ -13,13 +13,13 @@ public class SearchPresenter extends AbstractPresenter {
 
 	@Override
 	public void renderDefault() {
-		IPaginator<ArticleTO> paginator = this.getFacade().getSearchPaginator();
-		container.addAll(new EncodeSearch(paginator).getEncodedComponent());
+		renderParams.put("paginator", this.getFacade().getSearchPaginator());
+		container.addAll(new EncodeSearch(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderSearch() {
-		IPaginator<ArticleTO> paginator = this.getFacade().getSearchPaginator();
-		container.addAll(new EncodeSearch(paginator).getEncodedComponent());
+		renderParams.put("paginator", this.getFacade().getSearchPaginator());
+		container.addAll(new EncodeSearch(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
 	public void decodeSearchAction() throws ModelException {

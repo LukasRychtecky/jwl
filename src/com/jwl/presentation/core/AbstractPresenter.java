@@ -77,6 +77,7 @@ abstract public class AbstractPresenter {
 	protected List<FlashMessage> messages;
 	protected Map<String, HtmlAppForm> forms;
 	private Boolean isInicialized = false;
+	protected Map<String, Object> renderParams;
 
 	public AbstractPresenter() {
 		this.context = FacesContext.getCurrentInstance();
@@ -84,6 +85,7 @@ abstract public class AbstractPresenter {
 		this.messages = new ArrayList<FlashMessage>();
 		this.container = new ArrayList<UIComponent>();
 		this.forms = new HashMap<String, HtmlAppForm>();
+		this.renderParams = new HashMap<String, Object>();
 
 		if (this.isAjax()) {
 			this.linker = new Linker(getPresenterName(), getRequestParam(JWLURLParams.URI));
@@ -219,13 +221,13 @@ abstract public class AbstractPresenter {
 	}
 
 	public void render404() throws IOException {
-		AbstractRenderer renderer = new AbstractRenderer(this.context, this.linker, this.container);
+		AbstractRenderer renderer = new AbstractRenderer(this.linker, this.getFacade().getIdentity(), this.renderParams);
 		renderer.render404(this.getRequestParam(JWLURLParams.STATE).toString());
 		this.sendResponse();
 	}
 
 	public void render500() throws IOException {
-		AbstractRenderer renderer = new AbstractRenderer(this.context, this.linker, this.container);
+		AbstractRenderer renderer = new AbstractRenderer(this.linker, this.getFacade().getIdentity(), this.renderParams);
 		renderer.render500();
 		this.sendResponse();
 	}

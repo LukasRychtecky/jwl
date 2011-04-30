@@ -19,7 +19,7 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	public WidgetPresenter() {
 		super();
-		this.renderer = new WidgetRenderer(this.context, super.linker, super.container);
+		this.renderer = new WidgetRenderer(super.linker, getFacade().getIdentity() ,renderParams);
 	}
 
 	@Override

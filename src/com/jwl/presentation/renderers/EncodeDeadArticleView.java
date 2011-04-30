@@ -8,17 +8,17 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlLink;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeDeadArticleView extends AbstractEncodeView {
 
-	protected ArticleTO article;
-
-	public EncodeDeadArticleView() {
-		super();
+	public EncodeDeadArticleView(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 	}
 
 	@Override

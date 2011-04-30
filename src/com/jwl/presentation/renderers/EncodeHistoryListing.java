@@ -12,6 +12,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
@@ -20,6 +21,7 @@ import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
+import com.jwl.presentation.url.Linker;
 
 /**
  *
@@ -30,12 +32,13 @@ public class EncodeHistoryListing extends AbstractEncoder {
 	private final String[] headers = new String[]{"Modified", "Change note", "Actions"};
 	
 	private ArticleTO article;
-	List<HistoryTO> histories;
+	private List<HistoryTO> histories;
 	
-	public EncodeHistoryListing() throws ModelException {
-		super();
+	@SuppressWarnings("unchecked")
+	public EncodeHistoryListing(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
-		this.histories = super.getFacade().getHistories(article.getId());;
+		this.histories = (List<HistoryTO>) params.get("histories");
 	}
 	
 	private List<UIComponent> getHeaderNames() {

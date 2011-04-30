@@ -9,33 +9,25 @@ import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputLabel;
 import javax.faces.component.html.HtmlOutputText;
-import javax.faces.context.FacesContext;
 
-import com.jwl.business.IFacade;
 import com.jwl.business.article.ArticleId;
-import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.AccessPermissions;
-import com.jwl.presentation.enumerations.JWLContextKey;
+import com.jwl.business.security.IIdentity;
+import com.jwl.presentation.core.AbstractRenderer;
 import com.jwl.presentation.enumerations.JWLElements;
-import com.jwl.presentation.global.ExceptionLogger;
-import com.jwl.presentation.global.Global;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.WikiURLParser;
 // </editor-fold>
 
-public abstract class AbstractEncoder {
+public abstract class AbstractEncoder extends AbstractRenderer {
 
-	private IFacade facade;
 	protected WikiURLParser parser;
-	protected Linker linker;
-	protected FacesContext context;
-
-	public AbstractEncoder() {
+	
+	public AbstractEncoder(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 		this.parser = new WikiURLParser();
-		this.context = FacesContext.getCurrentInstance();
-		this.linker = (Linker) context.getAttributes().get(JWLContextKey.LINKER);
 	}
 
 	public abstract List<UIComponent> getEncodedComponent();
@@ -92,10 +84,8 @@ public abstract class AbstractEncoder {
 	}
 
 	protected boolean hasAdministrationPermission() {
-		// TODO Fix this. I am logged as admin and mehtod still returns false 
-		return true;
-//		return this.hasPermission(AccessPermissions.KNOWLEDGE_ADMINISTER) &&
-//			this.hasPermission(AccessPermissions.SECURITY_IMPORT);
+		return this.hasPermission(AccessPermissions.KNOWLEDGE_ADMINISTER) &&
+			this.hasPermission(AccessPermissions.SECURITY_IMPORT);
 	}
 
 	protected boolean hasArticleViewPermission(ArticleId id) {
@@ -135,17 +125,10 @@ public abstract class AbstractEncoder {
 	}
 
 	protected boolean hasPermission(AccessPermissions permission, ArticleId id) {
-		return getFacade().getIdentity().isAllowed(permission, id);
+		return super.identity.isAllowed(permission, id);
 	}
 
 	protected boolean hasPermission(AccessPermissions permission) {
-		return getFacade().getIdentity().isAllowed(permission);
-	}
-
-	protected IFacade getFacade() {
-		if (facade == null) {
-			this.facade = Global.getInstance().getFacade();
-		}
-		return facade;
+		return super.identity.isAllowed(permission);
 	}
 }

@@ -1,11 +1,10 @@
 package com.jwl.presentation.components.widget;
 
+import com.jwl.business.security.IIdentity;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
-import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
-import javax.faces.context.FacesContext;
 
 import com.jwl.presentation.core.AbstractRenderer;
 import com.jwl.presentation.html.HtmlLink;
@@ -14,8 +13,8 @@ import com.jwl.presentation.url.Linker;
 
 public class WidgetRenderer extends AbstractRenderer {
 
-	public WidgetRenderer(FacesContext context, Linker linker, List<UIComponent> components) {
-		super(context, linker, components);
+	public WidgetRenderer(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 	}
 
 	@Override
