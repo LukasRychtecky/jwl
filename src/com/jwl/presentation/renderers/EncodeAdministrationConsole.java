@@ -1,5 +1,7 @@
 package com.jwl.presentation.renderers;
 
+import com.jwl.business.security.IIdentity;
+import com.jwl.presentation.url.Linker;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,10 @@ import com.jwl.presentation.html.HtmlInputFile;
 import com.jwl.presentation.html.HtmlLink;
 
 public class EncodeAdministrationConsole extends AbstractEncoder {
+
+	public EncodeAdministrationConsole(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
+	}
 
 	@Override
 	public List<UIComponent> getEncodedComponent() {

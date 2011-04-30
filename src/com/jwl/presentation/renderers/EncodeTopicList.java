@@ -17,6 +17,7 @@ import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
@@ -30,6 +31,7 @@ import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeTopicList extends AbstractEncoder {
 
@@ -44,10 +46,11 @@ public class EncodeTopicList extends AbstractEncoder {
 	protected ArticleTO article;
 	private IPaginator<TopicTO> paginator;
 	
-	public EncodeTopicList() throws ModelException {
-		super();
+	@SuppressWarnings("unchecked")
+	public EncodeTopicList(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
-		this.paginator = super.getFacade().getArticleForumTopics(article.getId());
+		this.paginator = (IPaginator<TopicTO>) params.get("paginator");				
 		this.paginator.setUpPaginator();
 	}
 

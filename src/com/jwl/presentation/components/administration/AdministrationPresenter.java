@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.jwl.business.ArticlePair;
 import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
-import com.jwl.business.article.ArticleTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.presentation.core.AbstractComponent;
@@ -28,29 +26,29 @@ public class AdministrationPresenter extends AbstractPresenter {
 	
 	@Override
 	public void renderDefault() {
-		container.addAll(new EncodeAdministrationConsole().getEncodedComponent());
+		container.addAll(new EncodeAdministrationConsole(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
 	public void renderAdminConsole() {
-		container.addAll(new EncodeAdministrationConsole().getEncodedComponent());
+		container.addAll(new EncodeAdministrationConsole(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
 	public void renderMergeSuggestionList() throws ModelException {
-		List<ArticlePair> mergeSuggestions = this.getFacade().getMergeSuggestions();
-		container.addAll(new EncodeMergeSuggestionList(mergeSuggestions).getEncodedComponent());
+		renderParams.put("articlePairs", this.getFacade().getMergeSuggestions());
+		container.addAll(new EncodeMergeSuggestionList(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
 	public void renderMergeSuggestionView() throws ModelException {
-		container.addAll(new EncodeMergeSuggestionView().getEncodedComponent());
+		container.addAll(new EncodeMergeSuggestionView(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
 	public void renderDeadArticleList() throws ModelException {
-		List<ArticleTO> deadArticles = this.getFacade().getDeadArticles();
-		container.addAll(new EncodeDeadArticleList(deadArticles).getEncodedComponent());
+		super.renderParams.put("deadArticles", this.getFacade().getDeadArticles());
+		container.addAll(new EncodeDeadArticleList(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
 	public void renderDeadArticleView() throws ModelException {
-		container.addAll(new EncodeDeadArticleView().getEncodedComponent());
+		container.addAll(new EncodeDeadArticleView(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
 	public void renderKeyWordGeneration() throws ModelException{

@@ -13,6 +13,7 @@ import javax.faces.component.html.HtmlOutputLabel;
 import javax.faces.component.html.HtmlPanelGrid;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
@@ -22,13 +23,14 @@ import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlActionForm;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlLink;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeTopicCreate extends AbstractEncoder {
 
 	private ArticleTO article;
 	
-	public EncodeTopicCreate() {
-		super();
+	public EncodeTopicCreate(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
 	}
 

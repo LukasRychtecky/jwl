@@ -14,6 +14,7 @@ import javax.faces.component.html.HtmlPanelGroup;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLPresenters;
 import com.jwl.presentation.enumerations.JWLStates;
@@ -25,6 +26,7 @@ import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
+import com.jwl.presentation.url.Linker;
 // </editor-fold>
 
 public class EncodeListing extends AbstractEncoder {
@@ -33,9 +35,10 @@ public class EncodeListing extends AbstractEncoder {
 	private List<JWLTableHeaders> orderableColumns;
 	protected IPaginator<ArticleTO> paginator;
 	
-	public EncodeListing(IPaginator<ArticleTO> paginator) {
-		super();
-		this.paginator = paginator;
+	@SuppressWarnings("unchecked")
+	public EncodeListing(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
+		this.paginator = (IPaginator<ArticleTO>) params.get("paginator");
 	}
 	
 	@Override

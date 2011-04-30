@@ -14,6 +14,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
@@ -25,6 +26,7 @@ import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeDeadArticleList extends AbstractEncoder {
 	private final String[] headers = new String[] { "", "Title", "Tags", "Editor",
@@ -32,9 +34,10 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 
 	private List<ArticleTO> deadArticles;
 	
-	public EncodeDeadArticleList(List<ArticleTO> deadArticles) {
-		super();
-		this.deadArticles = deadArticles; 
+	@SuppressWarnings("unchecked")
+	public EncodeDeadArticleList(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
+		this.deadArticles = (List<ArticleTO>) params.get("deadArticles"); 
 	}
 	
 	private List<UIComponent> getHeaders() {

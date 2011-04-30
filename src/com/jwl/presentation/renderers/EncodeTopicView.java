@@ -17,6 +17,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
@@ -28,24 +29,23 @@ import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.markdown.MarkupToMarkdown;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeTopicView extends AbstractEncoder {
 
 	protected ArticleTO article;
 	private TopicTO topic;
-	protected boolean answering;
+	protected Boolean answering;
 	protected Integer quotePostId;
 
 	private final String png_lock = "/jwl/img/lock.png";
 	
-	public EncodeTopicView(boolean answering, Integer quotePostId) throws ModelException {
-		super();
-		Integer topicId = (Integer) this.context.getAttributes().get(JWLContextKey.TOPIC_ID);
-		this.topic = this.getFacade().getTopic(topicId);
+	public EncodeTopicView(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
-		
-		this.answering = answering;
-		this.quotePostId = quotePostId;
+		this.topic = (TopicTO) params.get("topic");
+		this.answering = (Boolean) params.get("answering");
+		this.quotePostId = (Integer) params.get("quotePostId");
 	}
 
 	@Override

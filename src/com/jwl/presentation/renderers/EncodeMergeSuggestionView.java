@@ -1,5 +1,6 @@
 package com.jwl.presentation.renderers;
 
+import com.jwl.business.security.IIdentity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +12,12 @@ import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlLink;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeMergeSuggestionView extends AbstractEncodeView {
 
-	public EncodeMergeSuggestionView() {
-		super();
+	public EncodeMergeSuggestionView(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 	}
 
 	@Override

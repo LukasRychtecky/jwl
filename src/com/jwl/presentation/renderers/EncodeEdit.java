@@ -6,18 +6,21 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlHeadline;
+import com.jwl.presentation.url.Linker;
+import java.util.Map;
 
 public class EncodeEdit extends AbstractEncoder {
 
 	private ArticleTO article;
 	private HtmlAppForm form;
 	
-	public EncodeEdit(ArticleTO article, HtmlAppForm form) {
-		super();
-		this.article = article;
-		this.form = form;
+	public EncodeEdit(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
+		this.article = (ArticleTO) params.get("article");
+		this.form = (HtmlAppForm) params.get("form");
 	}
 
 	@Override

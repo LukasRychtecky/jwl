@@ -11,14 +11,15 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlSelectManyCheckbox;
 import javax.faces.model.SelectItem;
 
-import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlActionForm;
+import com.jwl.presentation.url.Linker;
 
 public class EncodeSearch extends EncodeListing {
 
@@ -27,8 +28,8 @@ public class EncodeSearch extends EncodeListing {
 	public static final String TAGS = "Tags";
 	public static final String EDITORS = "Editors";
 	
-	public EncodeSearch(IPaginator<ArticleTO> paginator) {
-		super(paginator);
+	public EncodeSearch(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 	}
 
 	@Override

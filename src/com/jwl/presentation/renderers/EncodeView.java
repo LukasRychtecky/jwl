@@ -6,20 +6,21 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.renderers.units.ArticleSuggestionsComponent;
+import com.jwl.presentation.url.Linker;
+import java.util.Map;
 
 public class EncodeView extends AbstractEncodeView {
 
 	private List<ArticleTO> similarArticles;
 
-	public EncodeView(List<ArticleTO> similarArticles) {
-		this.similarArticles = similarArticles;
-	}
-
-	public EncodeView() {
-		super();
+	@SuppressWarnings("unchecked")
+	public EncodeView(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
+		this.similarArticles = (List<ArticleTO>) params.get("similarArticles");
 	}
 
 	@Override

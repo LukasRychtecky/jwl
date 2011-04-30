@@ -52,8 +52,8 @@ public class ArticlePresenter extends AbstractPresenter {
 
 	@Override
 	public void renderDefault() {
-		IPaginator<ArticleTO> paginator = this.getFacade().getPaginator();
-		container.addAll(new EncodeListing(paginator).getEncodedComponent());
+		super.renderParams.put("paginator", this.getFacade().getPaginator());
+		container.addAll(new EncodeListing(linker, this.getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderCreate() {
@@ -63,7 +63,8 @@ public class ArticlePresenter extends AbstractPresenter {
 					FlashMessage.FlashMessageType.WARNING);
 			this.messages.add(warn);
 		}
-		container.addAll(new EncodeCreate(this.createFormArticleCreate()).getEncodedComponent());
+		super.renderParams.put("form", this.createFormArticleCreate());
+		container.addAll(new EncodeCreate(linker, this.getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderEdit() {
@@ -87,7 +88,9 @@ public class ArticlePresenter extends AbstractPresenter {
 			}
 
 			form.get("title").setValue(article.getTitle());
-			container.addAll(new EncodeEdit(article, form).getEncodedComponent());
+			renderParams.put("article", article);
+			renderParams.put("form", form);
+			container.addAll(new EncodeEdit(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 		}
 	}
 
@@ -100,31 +103,38 @@ public class ArticlePresenter extends AbstractPresenter {
 				JWLContextKey.ARTICLE);
 		List<ArticleTO> similarArticles = getFacade().getSimilarArticlesInView(
 				article);
-		container.addAll(new EncodeView(similarArticles).getEncodedComponent());
+		renderParams.put("similarArticles", similarArticles);
+		container.addAll(new EncodeView(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderAttachFile() {
-		container.addAll(new EncodeAttach().getEncodedComponent());
+		container.addAll(new EncodeAttach(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderAdministrationConsole() {
-		container.addAll(new EncodeAdministrationConsole().getEncodedComponent());
+		container.addAll(new EncodeAdministrationConsole(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
-	public void renderHistoryView() throws ModelException {
-		container.addAll(new EncodeHistoryView().getEncodedComponent());
+	public void renderHistoryView() throws ModelException {		
+		HistoryId historyId = (HistoryId) context.getAttributes().get(JWLContextKey.HISTORY_ID);
+		renderParams.put("history", getFacade().getHistory(historyId));
+		container.addAll(new EncodeHistoryView(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderHistoryList() throws ModelException {
-		container.addAll(new EncodeHistoryListing().getEncodedComponent());
+		ArticleTO article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		renderParams.put("histories", super.getFacade().getHistories(article.getId()));
+		container.addAll(new EncodeHistoryListing(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderTopicList() throws ModelException {
-		container.addAll(new EncodeTopicList().getEncodedComponent());
+		ArticleTO article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		renderParams.put("paginator", super.getFacade().getArticleForumTopics(article.getId()));
+		container.addAll(new EncodeTopicList(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderTopicCreate() {
-		container.addAll(new EncodeTopicCreate().getEncodedComponent());
+		container.addAll(new EncodeTopicCreate(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderTopicView() throws ModelException {
@@ -134,8 +144,13 @@ public class ArticlePresenter extends AbstractPresenter {
 		if (stringQuopteTopicId != null) {
 			quopteTopicId = Integer.parseInt(stringQuopteTopicId);
 		}
-
-		container.addAll(new EncodeTopicView(isAnswering, quopteTopicId).getEncodedComponent());
+		
+		renderParams.put("answering", isAnswering);
+		renderParams.put("quotePostId", quopteTopicId);
+		
+		Integer topicId = (Integer) this.context.getAttributes().get(JWLContextKey.TOPIC_ID);
+		renderParams.put("topic", this.getFacade().getTopic(topicId));
+		container.addAll(new EncodeTopicView(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 
 	public void renderArticleSuggestions() {

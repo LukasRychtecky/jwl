@@ -11,6 +11,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.HistoryTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
@@ -19,6 +20,7 @@ import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.markdown.MarkupToMarkdown;
+import com.jwl.presentation.url.Linker;
 
 /**
  *
@@ -29,11 +31,10 @@ public class EncodeHistoryView extends AbstractEncoder {
 	private ArticleTO article;
 	private HistoryTO history;
 
-	public EncodeHistoryView() throws ModelException {
-		super();
+	public EncodeHistoryView(Linker linker, IIdentity identity, Map<String, Object> params) {
+		super(linker, identity, params);
 		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
-		HistoryId historyId = (HistoryId) context.getAttributes().get(JWLContextKey.HISTORY_ID);
-		this.history = super.getFacade().getHistory(historyId);;
+		this.history = (HistoryTO) params.get("history");
 	}
 
 	@Override
