@@ -24,7 +24,6 @@ public class SettingsSource implements ISettingsSource {
 	private String mergeIgnoreFile;
 	
 	public SettingsSource(String jwlHomePath){
-		jwlHomePath="C:\\JWL_BW\\jwl\\war\\jwl";
 		String pathSeparator = System.getProperty("file.separator");
 		String settingFilePath = pathSeparator+"private"+pathSeparator+"jwl"+pathSeparator;
 		settingsFile = jwlHomePath + settingFilePath+"KnowledgeManagementSettings.xml";
