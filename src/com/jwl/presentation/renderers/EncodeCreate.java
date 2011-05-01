@@ -28,12 +28,15 @@ public class EncodeCreate extends AbstractEncoder {
 		components.add(this.form);
 		components.add(encodeArticleSuggestorDiv());
 		
+		HtmlDiv navigation = new HtmlDiv();
+		navigation.addStyleClass("jwl-navigation");
 		HtmlLink link = new HtmlLink();
 		link.setText("Back to listing");
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClass("jwl-action-button");
 		link.setValue(this.linker.buildLink("default"));
-		components.add(link);
+		navigation.getChildren().add(link);
+		components.add(navigation);
 		return components;
 	}
 

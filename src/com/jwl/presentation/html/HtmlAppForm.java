@@ -97,6 +97,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 	public void encodeChildren(FacesContext context) throws IOException {
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setColumns(2);
+		table.setStyleClass("jwl-form");
 		for (HtmlInputExtended input : this.components.values()) {
 
 			if (input.getComponent() instanceof HtmlInputHidden) {

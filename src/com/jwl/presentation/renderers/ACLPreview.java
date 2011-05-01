@@ -5,8 +5,10 @@ import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.Role;
 import com.jwl.presentation.core.AbstractRenderer;
 import com.jwl.presentation.html.HtmlDiv;
+import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +16,7 @@ import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
 /**
@@ -30,15 +33,19 @@ public class ACLPreview extends AbstractRenderer {
 		@SuppressWarnings("unchecked")
 		Set<Role> roles = (Set<Role>) super.params.get("acl");
 		
-		HtmlPanelGrid table = new HtmlPanelGrid();
+		HtmlHeaderPanelGrid table = new HtmlHeaderPanelGrid();
 		table.setColumns(roles.size() + 2);
-		table.setStyleClass("jwl-acl-preview");
-		table.getChildren().add(this.buildCell("Context"));
-		table.getChildren().add(this.buildCell("Method"));
+		table.setStyleClass("jwl-acl-preview jwl-grid");
+		
+		List<UIComponent> headers = new ArrayList<UIComponent>();		
+		headers.add(this.buildCell("Context"));
+		headers.add(this.buildCell("Method"));
 		
 		for (Role role : roles) {
-			table.getChildren().add(this.buildCell(role.getCode()));
+			headers.add(this.buildCell(role.getCode()));
 		}
+		
+		table.setHeaders(headers);
 			
 		String context = "";
 		for (AccessPermissions perm : AccessPermissions.values()) {
@@ -62,6 +69,7 @@ public class ACLPreview extends AbstractRenderer {
 	
 	private void renderNavigation() {
 		HtmlDiv div = new HtmlDiv();
+		div.addStyleClass("jwl-navigation");
 		HtmlLink linkImport = new HtmlLink();
 		linkImport.setValue(this.linker.buildForm("importACL", "default"));
 		linkImport.setText("Import");

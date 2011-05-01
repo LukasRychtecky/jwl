@@ -10,16 +10,12 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 
-import com.jwl.presentation.core.AbstractComponent;
-import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
-import com.jwl.presentation.html.HtmlActionForm;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlDiv;
-import com.jwl.presentation.html.HtmlInputFile;
 import com.jwl.presentation.html.HtmlLink;
 
 public class EncodeAdministrationConsole extends AbstractEncoder {
@@ -38,18 +34,13 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 	
 	private HtmlDiv encodedKnowledgeLinks() {
 		HtmlDiv div = new HtmlDiv();
-		div.setId(JWLElements.ADMINISTRATION_KM_DIV.id);
+		div.addStyleClass("jwl-navigation");
 		
-		div.addChildren(this.encodedTitle());
 		div.addChildren(this.encodedMergeSuggestionsLink());
 		div.addChildren(this.encodedDeadArticlesLink());
 		div.addChildren(this.encodedKeyWordLink());
 		
 		return div;
-	}
-	
-	private HtmlOutputText encodedTitle() {
-		return getHtmlText("Knowledge manageent");
 	}
 
 	private HtmlLink encodedMergeSuggestionsLink() {

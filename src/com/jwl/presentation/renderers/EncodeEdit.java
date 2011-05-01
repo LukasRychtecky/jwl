@@ -10,6 +10,7 @@ import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlAppForm;
+import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlHeadline;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
@@ -39,13 +40,17 @@ public class EncodeEdit extends AbstractEncoder {
 		HtmlLink link = new HtmlLink();
 		link.setText("Back to detail");
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClass("jwl-action-button");
 		
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		params.put(JWLURLParams.STATE, "view");
 		link.setValue(this.linker.buildLink(params));
-		components.add(link);
+		
+		HtmlDiv navigation = new HtmlDiv();
+		navigation.addStyleClass("jwl-navigation");
+		navigation.getChildren().add(link);
+		components.add(navigation);
 		return components;
 	}	
 }
