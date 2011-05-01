@@ -27,8 +27,6 @@ import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.RequestMapDecoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AdministrationPresenter extends AbstractPresenter {
 

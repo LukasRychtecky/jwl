@@ -3,7 +3,6 @@ package com.jwl.business;
 import java.io.File;
 import java.util.List;
 
-import javax.naming.NoPermissionException;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
@@ -18,7 +17,6 @@ import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.Role;
-import java.util.Collection;
 import java.util.Set;
 
 /**

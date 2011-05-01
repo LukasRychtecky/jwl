@@ -16,7 +16,6 @@ import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.TopicTO;
-import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;

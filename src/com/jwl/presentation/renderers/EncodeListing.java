@@ -25,13 +25,10 @@ import com.jwl.presentation.helpers.HumanDate;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
-import com.jwl.presentation.html.HtmlHeadline;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.Linker;
-import java.util.Calendar;
 import java.util.Date;
-import javax.faces.component.html.HtmlHead;
 // </editor-fold>
 
 public class EncodeListing extends AbstractEncoder {

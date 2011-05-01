@@ -6,7 +6,6 @@ import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.security.Role;
 import com.jwl.business.usecases.interfaces.IParseACLUC;
 import com.jwl.integration.IDAOFactory;
-import com.jwl.integration.exceptions.DAOException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

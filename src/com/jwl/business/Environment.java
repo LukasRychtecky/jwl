@@ -9,7 +9,6 @@ import com.jwl.business.security.UserIdentity;
 
 import com.jwl.business.knowledge.util.ISettingsSource;
 import com.jwl.business.knowledge.util.SettingsSource;
-import com.jwl.business.security.Principal;
 import com.jwl.business.security.Role;
 import com.jwl.integration.IDAOFactory;
 import com.jwl.integration.JPADAOFactory;
@@ -17,7 +16,6 @@ import com.jwl.integration.filesystem.FSDAOFactory;
 import java.io.File;
 import java.util.Set;
 import java.util.Map;
-import java.util.Set;
 import javax.faces.context.FacesContext;
 
 /**
@@ -36,7 +34,7 @@ public class Environment {
 	private static ISettingsSource knowledgeSettings = null;
 	private static IKnowledgeManagementFacade knowledgeFacade = null;
 	private static final String ACL_FILE_NAME = "acl.csv";
-	private static final String FILESYSTEM_STORE = "/Users/ostatnickyjiri/Desktop";
+//	private static final String FILESYSTEM_STORE = "/Users/ostatnickyjiri/Desktop";
 
 	private Environment() {
 	}

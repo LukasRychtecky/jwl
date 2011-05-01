@@ -16,7 +16,6 @@ import javax.faces.component.html.HtmlPanelGrid;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
-import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;

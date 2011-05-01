@@ -74,7 +74,6 @@ import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
-import java.util.Collection;
 import java.util.Set;
 
 // </editor-fold>

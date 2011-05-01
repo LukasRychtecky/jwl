@@ -13,8 +13,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jwl.presentation.core.AbstractComponent;
-import com.jwl.presentation.enumerations.JWLElements;
 
 /**
  * Attaches javascript and css to pages containing wiki

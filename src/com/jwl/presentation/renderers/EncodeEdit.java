@@ -7,7 +7,6 @@ import javax.faces.component.UIComponent;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.security.IIdentity;
-import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlDiv;
