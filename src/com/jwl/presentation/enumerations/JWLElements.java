@@ -12,7 +12,6 @@ public enum JWLElements {
 	EDIT_FORM           	("jwl-edit", ""),
 	EDIT_ID             	("id", ""),
 	EDIT_TITLE          	("title", "Title"),
-	EDIT_TEXT           	("text", "Text"),
 	EDIT_TAGS           	("tags", "Tags"),
 	EDIT_CHANGE_NOTE		("changeNote", "Change note"),
 	EDIT_SAVE				("edit", "Save"),

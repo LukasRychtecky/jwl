@@ -27,7 +27,6 @@ public class AttachCSSAndJSFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -42,11 +41,6 @@ public class AttachCSSAndJSFilter implements Filter {
 		PrintWriter out = response.getWriter();
 		// saves user's instance of facade in the session
 		Global.getInstance().saveFacade();
-		// if (wrapper.getContentType() != null
-		// && wrapper.getContentType().contains("text/html")
-		// && wrapper.toString().indexOf("</head>") != -1
-		// && wrapper.toString().indexOf(
-		// "id=\"" + JWLElements.JWL_DIV.id + "\"") != -1) {
 
 		headEndPosition = wrapper.toString().indexOf("</head>");
 		bodyBeginPosition = wrapper.toString().indexOf("<body>") + 6;
@@ -57,16 +51,12 @@ public class AttachCSSAndJSFilter implements Filter {
 		this.addEditToolbarJavascript(builder);
 		response.setContentLength(builder.toString().length());
 		out.write(builder.toString());
-		// } else {
-		// out.write(wrapper.toString());
-		// }
 		out.close();
 
 	}
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// fc = arg0;
 	}
 
 	/**
@@ -104,17 +94,6 @@ public class AttachCSSAndJSFilter implements Filter {
 			headEndPosition += script.length();
 			bodyBeginPosition += script.length();
 		}
-
-		String script = "<script type=\"text/javascript\">"
-			+ "$(document).ready(function()	{"
-			+ "$('#"
-			+ JWLElements.EDIT_FORM.id
-			+ AbstractComponent.JWL_HTML_ID_SEPARATOR
-			+ JWLElements.EDIT_TEXT.id
-			+ "').markItUp(mySettings);"
-			+ "});"
-			+ "</script>";
-		builder.insert(bodyBeginPosition, script);
 		
 	}
 
