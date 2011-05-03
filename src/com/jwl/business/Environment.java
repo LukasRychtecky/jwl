@@ -69,9 +69,8 @@ public class Environment {
 	public static void setJWLHome(String jwlHome) {
 		if (Environment.JWL_HOME == null) {
 			Environment.JWL_HOME = jwlHome;
-
+			loadConfig();
 		}
-		loadConfig();
 	}
 
 	public static String getACLFileName() {
@@ -117,7 +116,8 @@ public class Environment {
 	}
 
 	private static void loadConfig() {
-		new JWLConfig(Environment.JWL_HOME + File.separator
+		new JWLConfig(Environment.JWL_HOME + File.separator + "private"
+				+ File.separator + "config" + File.separator
 				+ Environment.CONFIG_FILE_NAME);
 	}
 
