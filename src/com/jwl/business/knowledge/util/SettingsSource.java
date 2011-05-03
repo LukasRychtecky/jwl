@@ -18,7 +18,11 @@ import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsExceptio
 public class SettingsSource implements ISettingsSource {
 	Map<String, FeatureRecord> neuronRecords;
 	Map<String, String> schedulerRecords;
-	private static final String settingsFile = "C:\\JWL_BW\\SeamWiki\\resources\\KnowledgeManagementSettings.xml";
+	private static String settingsFile = null;
+	
+	public SettingsSource(String settingsFile) {
+		SettingsSource.settingsFile = settingsFile;
+	}
 
 	@Override
 	public Map<String, WeightRecord> getWeights(String featureName)
