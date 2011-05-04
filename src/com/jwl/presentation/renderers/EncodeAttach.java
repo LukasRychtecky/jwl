@@ -108,7 +108,7 @@ public class EncodeAttach extends AbstractEncoder {
 
 	private HtmlDiv encodedSubmit() {
 		return getHtmlSubmitComponent(JWLElements.FILE_SAVE,
-				JWLStyleClass.ATTACH_INPUT_SUBMIT);
+				JWLStyleClass.ACTION_BUTTON);
 	}
 
 	private HtmlInputHidden encodedHiddenArticleTitle() {

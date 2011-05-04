@@ -133,7 +133,8 @@ public class EncodeTopicList extends AbstractEncoder {
 		table.setCellpadding("0");
 		table.setCellspacing("0");
 		table.setHeaders(getHeaders());
-		table.setStyleClass(JWLStyleClass.TABLE_OF_ARTICLES);
+//		table.setStyleClass(JWLStyleClass.TABLE_OF_ARTICLES);
+		table.setStyleClass("jwl-grid");
 		table.setHeaderClass(JWLStyleClass.TABLE_HEADER_OF_ARTICLES);
 		
 		List<TopicTO> topics = paginator.getCurrentPageContent();
@@ -270,6 +271,7 @@ public class EncodeTopicList extends AbstractEncoder {
 		
 		HtmlDiv buttonsPanel = new HtmlDiv();
 		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass(JWLStyleClass.ACTION_BUTTON);
 		
 		if (topicActions && hasDeleteTopicPermission()) {
 			buttonsPanel.addChildren(getDeleteButton());
@@ -317,7 +319,7 @@ public class EncodeTopicList extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_VIEW.id);
 		HtmlLink link = this.getHtmlLink("Back to article", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -326,7 +328,7 @@ public class EncodeTopicList extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_CREATE.id);
 		HtmlLink link = this.getHtmlLink("Create topic", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 	
