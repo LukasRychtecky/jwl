@@ -2,6 +2,7 @@ package com.jwl.presentation.enumerations;
 
 import com.jwl.presentation.components.administration.AdministrationPresenter;
 import com.jwl.presentation.components.article.ArticlePresenter;
+import com.jwl.presentation.components.article.ArticlePresenter;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.components.search.SearchPresenter;
 import com.jwl.presentation.components.widget.WidgetPresenter;

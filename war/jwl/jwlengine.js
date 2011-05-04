@@ -39,7 +39,7 @@ var JWL = {
 };
 $(document).ready(function() {
 	JWL.init();
-	});
+});
 
 var knowledgeAjax = {
 	suggestSimilarArticle : function(){

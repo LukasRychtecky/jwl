@@ -26,6 +26,7 @@ import com.jwl.business.usecases.DeleteForumPostUC;
 import com.jwl.business.usecases.DeleteForumTopicsUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
 import com.jwl.business.usecases.FindArticlesUC;
+import com.jwl.business.usecases.GetAllTagsUC;
 import com.jwl.business.usecases.GetArticleTopicsUC;
 import com.jwl.business.usecases.GetArticleUC;
 import com.jwl.business.usecases.GetDeadArticlesUC;
@@ -55,6 +56,7 @@ import com.jwl.business.usecases.interfaces.IDeleteForumPostUC;
 import com.jwl.business.usecases.interfaces.IDeleteForumTopicsUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
+import com.jwl.business.usecases.interfaces.IGetAllTagsUC;
 import com.jwl.business.usecases.interfaces.IGetArticleTopicsUC;
 import com.jwl.business.usecases.interfaces.IGetArticleUC;
 import com.jwl.business.usecases.interfaces.IGetDeadArticlesUC;
@@ -130,6 +132,12 @@ public class Facade implements IFacade {
 	@Override
 	public IIdentity createIdentity(String username, Set<Role> roles) throws ModelException {
 		return Environment.createIdentity(username, roles);
+	}
+	
+	@Override
+	public List<String> getAllTags() throws ModelException {
+		IGetAllTagsUC uc = new GetAllTagsUC(Environment.getDAOFactory());
+		return uc.get();
 	}
 
 	@Override

@@ -48,6 +48,7 @@ import com.jwl.presentation.url.WikiURLParser;
 import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -64,9 +65,11 @@ abstract public class AbstractPresenter {
 	public static final String BODY_ELEMENT = "body";
 	public static final String LANG_ATTRIBUTE = "lang";
 
+	public static final String CONTENT_TYPE_JSON = "application/json";
 	public static final String CONTENT_TYPE = "text/html";
 	public static final String ENCODING = "utf-8";
 
+	private Boolean terminated = Boolean.FALSE;
 	protected FacesContext context;
 	protected Linker linker;
 	protected WikiURLParser urlParser;
@@ -255,19 +258,23 @@ abstract public class AbstractPresenter {
 		out.endElement(BODY_ELEMENT);
 		out.endElement(HTML_ELEMENT);
 	}
+	
+	private String getEncoding() {
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		String encoding = request.getCharacterEncoding();
+		if (encoding == null) {
+			encoding = ENCODING;
+		}
+		return encoding;
+	}
 
 	private void ajaxResponse(UIComponent componentCover) throws IOException {
-		String encoding = null;
+		String encoding = this.getEncoding();
 		ExternalContext externalContext = this.context.getExternalContext();
 
 		if (externalContext.getRequest() instanceof ServletRequest) {
-			ServletRequest request = (ServletRequest) externalContext.getRequest();
 			ServletResponse response = (ServletResponse) externalContext.getResponse();
 			String contentType = CONTENT_TYPE;
-			encoding = request.getCharacterEncoding();
-			if (encoding == null) {
-				encoding = ENCODING;
-			}
 			response.setContentType(contentType + ";charset=" + encoding);
 		} else {
 			encoding = ENCODING;
@@ -333,8 +340,27 @@ abstract public class AbstractPresenter {
 
 		return messagesContainer;
 	}
+	
+	protected void sendPayload(List<String> payload) {
+		try {
+			JSONEncoder json = new JSONEncoder(payload);
+			
+			HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+			String encoding = this.getEncoding();
+			response.setContentType(CONTENT_TYPE_JSON + ";charset=" + encoding);
+			response.getWriter().write(json.toString());
+			this.context.responseComplete();
+			this.terminated = Boolean.TRUE;
+		} catch (IOException ex) {
+			ExceptionLogger.severe(this.getClass(), ex);
+		}
+	}
+		
 
 	public void sendResponse() throws IOException {
+		if (terminated) {
+			return;
+		}
 		HtmlDiv componentCover = new HtmlDiv();
 		componentCover.setId(COMPONENT_ID);
 		componentCover.addStyleClass(COMPONENT_CLASS);

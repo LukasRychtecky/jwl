@@ -1,6 +1,5 @@
 package com.jwl.presentation.components.article;
 
-// <editor-fold defaultstate="collapsed">
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +21,7 @@ import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
 import com.jwl.presentation.renderers.EncodeAttach;
@@ -39,7 +39,6 @@ import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.RequestMapDecoder;
 
-// </editor-fold>
 public class ArticlePresenter extends AbstractPresenter {
 
 	@Override
@@ -170,6 +169,16 @@ public class ArticlePresenter extends AbstractPresenter {
 		List<UIComponent> components = new ArrayList<UIComponent>();
 		components.add(RatingComponent.getRatingInternals(article.getRatingAverage(), article.getId()));
 		container.addAll(components);
+	}
+	
+	public void renderTagsAutocomplete() {
+		List<String> tags = new ArrayList<String>();
+		try {
+			tags = super.getFacade().getAllTags();
+		} catch (ModelException ex) {
+			ExceptionLogger.severe(this.getClass(), ex);
+		}
+		this.sendPayload(tags);		
 	}
 
 	protected HtmlAppForm buildArticleForm(String name) {

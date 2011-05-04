@@ -50,6 +50,7 @@ public class EncodeEdit extends AbstractEncoder {
 		navigation.addStyleClass("jwl-navigation");
 		navigation.getChildren().add(link);
 		components.add(navigation);
+		components.add(this.getArticleFormJS());
 		return components;
 	}	
 }

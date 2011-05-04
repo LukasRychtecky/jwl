@@ -47,6 +47,8 @@ public interface IFacade {
 	 * @param ArticleId id
 	 */
 	public void deleteArticle(ArticleId id) throws ModelException;
+	
+	public List<String> getAllTags() throws ModelException;
 
 	public void setJWLHome(String home);
 

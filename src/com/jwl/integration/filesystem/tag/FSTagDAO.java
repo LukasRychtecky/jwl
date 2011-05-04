@@ -5,6 +5,7 @@ import java.util.Set;
 import com.jwl.business.article.ArticleId;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.tag.ITagDAO;
+import java.util.List;
 
 public class FSTagDAO implements ITagDAO {
 
@@ -25,7 +26,7 @@ public class FSTagDAO implements ITagDAO {
 	}
 
 	@Override
-	public Set<String> getAll() throws DAOException {
+	public List<String> getAll() throws DAOException {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

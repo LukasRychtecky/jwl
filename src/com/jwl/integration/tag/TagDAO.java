@@ -16,6 +16,7 @@ import com.jwl.integration.convertor.TagConvertor;
 import com.jwl.integration.entity.Article;
 import com.jwl.integration.entity.Tag;
 import com.jwl.integration.exceptions.DAOException;
+import java.util.ArrayList;
 
 /**
  * 
@@ -67,8 +68,8 @@ public class TagDAO extends BaseDAO implements ITagDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<String> getAll() throws DAOException {
-		Set<String> tags = new HashSet<String>();
+	public List<String> getAll() throws DAOException {
+		List<String> tags = new ArrayList<String>();
 		EntityManager em = getEntityManager();
 		try {
 			Query query = em.createNamedQuery(TagDAO.GET_ALL);
