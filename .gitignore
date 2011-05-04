@@ -3,3 +3,4 @@ build_ant/
 dist/
 build
 build-jwl.properties
+war/jwl/private/config/config.properties
