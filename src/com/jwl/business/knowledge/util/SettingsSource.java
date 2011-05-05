@@ -24,12 +24,17 @@ public class SettingsSource implements ISettingsSource {
 	private String mergeIgnoreFile;
 	
 	public SettingsSource(String jwlHomePath){
-		String pathSeparator = System.getProperty("file.separator");
-		String settingFilePath = pathSeparator+"private"+pathSeparator+"jwl"+pathSeparator;
+		String settingFilePath = getSettingsFilePath();
 		settingsFile = jwlHomePath + settingFilePath+"KnowledgeManagementSettings.xml";
 		wordCountsFile = jwlHomePath + settingFilePath+"WordCounts";
 		mergeFile = jwlHomePath + settingFilePath+"Merge";
 		mergeIgnoreFile = jwlHomePath + settingFilePath+"MergeIgnore";
+	}
+	
+	private static String getSettingsFilePath(){
+		String pathSeparator = System.getProperty("file.separator");
+		String settingFilePath = pathSeparator+"private"+pathSeparator+"jwl"+pathSeparator;
+		return settingFilePath;
 	}
 		
 	@Override
