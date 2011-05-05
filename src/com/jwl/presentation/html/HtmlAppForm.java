@@ -3,6 +3,7 @@ package com.jwl.presentation.html;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlInputHidden;
@@ -75,6 +76,7 @@ public class HtmlAppForm extends HtmlOutputText {
 	}
 
 	
+	@Override
 	public void encodeBegin(FacesContext context) throws IOException {
 		ResponseWriter writer = this.getWriter(context);
 		writer.startElement(ELEMENT, this);
@@ -90,12 +92,14 @@ public class HtmlAppForm extends HtmlOutputText {
 	}
 
 	
+	@Override
 	public void encodeEnd(FacesContext context) throws IOException {
 		ResponseWriter writer = this.getWriter(context);
 		writer.endElement(ELEMENT);
 	}
 
 	
+	@Override
 	public void encodeChildren(FacesContext context) throws IOException {
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setColumns(2);
@@ -209,7 +213,11 @@ public class HtmlAppForm extends HtmlOutputText {
 	}
 
 	protected String createName(String name) {
-		return PREFIX + name;
+		return this.getFormId() + name;
+	}
+	
+	protected String getFormId() {
+		return PREFIX + this.name + "-";
 	}
 
 	protected UIComponent createLabel(String label, String id) {
@@ -226,5 +234,24 @@ public class HtmlAppForm extends HtmlOutputText {
 	
 	public void remove(String name) {
 		this.components.remove(name);
+	}
+	
+	public void process(Map<String, String> requestMap) {
+		for (String key : requestMap.keySet()) {
+			if (!key.startsWith(this.getFormId())) {
+				continue;
+			}
+
+			HtmlInputExtended input = this.get(key.substring(this.getFormId().length()));
+			if (input == null) {
+				continue;
+			}
+
+			Object value = requestMap.get(key);
+			if (input.getComponent() instanceof HtmlSelectBooleanCheckbox) {
+				value = (value.toString().equals("on") ? Boolean.TRUE : Boolean.FALSE);
+			}
+			input.setValue(value);
+		}	
 	}
 }

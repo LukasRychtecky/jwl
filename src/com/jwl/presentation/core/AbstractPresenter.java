@@ -131,25 +131,8 @@ abstract public class AbstractPresenter {
 			try {
 				method = this.getClass().getMethod(CREATE_FORM + formName);
 				HtmlAppForm form = (HtmlAppForm) method.invoke(this);
-
-				for (String key : getRequestParamMap().keySet()) {
-					if (!key.startsWith(HtmlAppForm.PREFIX)) {
-						continue;
-					}
-
-					HtmlInputExtended input = form.get(key.substring(HtmlAppForm.PREFIX.length()));
-					if (input == null) {
-						continue;
-					}
-
-					Object value = getRequestParam(key);
-					if (input.getComponent() instanceof HtmlSelectBooleanCheckbox) {
-						value = (value.toString().equals("on") ? Boolean.TRUE : Boolean.FALSE);
-					}
-					input.setValue(value);
-				}
-
-				this.forms.put(formName, form);
+				form.process(this.getRequestParamMap());				
+				this.forms.put(formName, form);	
 			} catch (NoSuchMethodException ex) {
 				ExceptionLogger.severe(getClass(), new RuntimeException(
 						"No such method found " + this.getClass().toString()
