@@ -6,8 +6,11 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 
 import com.jwl.presentation.core.AbstractPresenter;
+import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlLink;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,6 +27,8 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	@Override
 	public void renderDefault() throws IOException {
+		HtmlAppForm form = this.createFormMujForm();
+		super.container.add(form);
 		this.renderer.renderDefault();
 	}
 
@@ -86,11 +91,16 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	public HtmlAppForm createFormMujForm() {
 		HtmlAppForm form = new HtmlAppForm("MujForm");
-		form.addHidden("hidden", "defaultValue");
-		form.addPassword("pass", "Heslo");
-		form.addText("text", "Text", "defaultValue");
-		form.addCheckbox("checkbox", "Checkbox");
-		form.addTextArea("textarea", "Textarea", "blaaaaah");
+		List args = new ArrayList();
+		args.add("AHOJ");
+		form.addText("text1", "Text", null).addRule(Validation.EQUAL, "Must be equal to AHOJ", args);
+		form.addText("text2", "Text", null).addRule(Validation.FILLED, "Must be filled");
+		args = new ArrayList();
+		args.add(3);
+		form.addText("text3", "Text", null).addRule(Validation.LENGTH, "Must has 3 size", args);args = new ArrayList();
+		args.add("AHOJ");
+		form.addText("text4", "Text", null).addRule(Validation.NOT_EQUAL, "Must be not equal to AHOJ", args);
+		form.addText("text5", "Text", null).addRule(Validation.NUMERIC, "Must be a numeric");
 		form.addSubmit("submit", "Odesli", "click");
 		form.setAction(this.linker.buildForm("mujForm", null));
 		return form;

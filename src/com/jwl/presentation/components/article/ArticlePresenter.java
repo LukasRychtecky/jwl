@@ -21,6 +21,7 @@ import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
@@ -183,8 +184,11 @@ public class ArticlePresenter extends AbstractPresenter {
 
 	protected HtmlAppForm buildArticleForm(String name) {
 		HtmlAppForm form = new HtmlAppForm(name);
-		form.addText("title", "Title", null);
-		form.addTextArea("text", "Text", null).setStyleClass("markMe");
+		form.addText("title", "Title", null)
+				.addRule(Validation.FILLED, "Title must be filled.");
+		form.addTextArea("text", "Text", null)
+				.addRule(Validation.FILLED, "Text must be filled")
+				.setStyleClass("markMe");
 		form.addText("tags", "Tags", null);
 		form.addText("changeNote", "Change note", null);
 		return form;

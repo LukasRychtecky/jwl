@@ -12,11 +12,16 @@ import javax.faces.context.ResponseWriter;
  */
 public final class HtmlScript extends HtmlElement {
 	
-	protected String type;
-	protected String src = "text/javascript";
+	protected String type = "text/javascript";
+	protected String src;
+	protected String script;
 
 	public void setSrc(String src) {
 		this.src = src;
+	}
+
+	public void setScript(String script) {
+		this.script = script;
 	}
 	
 	@Override
@@ -24,7 +29,12 @@ public final class HtmlScript extends HtmlElement {
 		ResponseWriter writer = this.getWriter(context);
 		writer.startElement(this.getElement(), this);
 		writer.writeAttribute("type", this.type, null);
-		writer.writeAttribute("src", this.src, null);
+		if (this.src != null) {
+			writer.writeAttribute("src", this.src, null);
+		}
+		if (this.script != null) {
+			writer.write(this.script);
+		}
 	}
 
 	@Override

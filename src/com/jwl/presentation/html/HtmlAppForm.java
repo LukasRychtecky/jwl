@@ -1,5 +1,6 @@
 package com.jwl.presentation.html;
 
+import com.jwl.presentation.forms.JSValidation;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ import javax.faces.context.ResponseWriter;
  * @author Lukas Rychtecky
  */
 public class HtmlAppForm extends HtmlOutputText {
+	
 
 	public static final String PREFIX = "jwl-";
 	public static final String FORM_NAME = PREFIX + "form-id";
@@ -40,11 +42,15 @@ public class HtmlAppForm extends HtmlOutputText {
 			throw new IllegalArgumentException("Form name can't be empty or null!");
 		}
 		this.name = name;
+		this.id = PREFIX + name;
 		this.method = METHOD_POST;
 		this.enctype = "application/x-www-form-urlencoded";
 		this.components = new LinkedHashMap<String, HtmlInputExtended>();
 	}
 
+	public String getName() {
+		return name;
+	}
 	
 	public String getAction() {
 		return action;
@@ -74,6 +80,11 @@ public class HtmlAppForm extends HtmlOutputText {
 	public void setMethod(String method) {
 		this.method = method;
 	}
+	
+	@Override
+	public String getId() {
+		return this.id;
+	}
 
 	
 	@Override
@@ -96,6 +107,18 @@ public class HtmlAppForm extends HtmlOutputText {
 	public void encodeEnd(FacesContext context) throws IOException {
 		ResponseWriter writer = this.getWriter(context);
 		writer.endElement(ELEMENT);
+			
+		String validation = this.createJSValidation();
+		if (validation != null) {
+			HtmlScript script = new HtmlScript();
+			script.setScript(validation);
+			script.encodeAll(context);
+		}
+	}
+	
+	protected String createJSValidation() {
+		JSValidation js = new JSValidation(this);
+		return js.generate();
 	}
 
 	
@@ -128,78 +151,78 @@ public class HtmlAppForm extends HtmlOutputText {
 	}
 
 	
-	public UIComponent addText(String name, String label, String value) {
+	public HtmlInputExtended addText(String name, String label, String value) {
 		HtmlInputText input = new HtmlInputText();
 		input.setId(this.createName(name));
 		input.setValue(value);
 		input.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(input, label);
 		this.addComponent(name, labeled);
-		return input;
+		return labeled;
 	}
 
 	
-	public UIComponent addFile(String name, String label) {
+	public HtmlInputExtended addFile(String name, String label) {
 		this.enctype = "multipart/form-data";
 		HtmlInputFile input = new HtmlInputFile();
 		input.setId(this.createName(name));
 		input.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(input, label);
 		this.addComponent(name, labeled);
-		return input;
+		return labeled;
 	}
 
 	
-	public UIComponent addPassword(String name, String label) {
+	public HtmlInputExtended addPassword(String name, String label) {
 		HtmlInputSecret input = new HtmlInputSecret();
 		input.setId(this.createName(name));
 		input.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(input, label);
 		this.addComponent(name, labeled);
-		return input;
+		return labeled;
 	}
 
 	
-	public UIComponent addHidden(String name, String value) {
+	public HtmlInputExtended addHidden(String name, String value) {
 		HtmlInputHidden input = new HtmlInputHidden();
 		input.setId(this.createName(name));
 		input.setValue(value);
 		HtmlInputExtended extended = new HtmlInputExtended(input, null);
 		this.addComponent(name, extended);
-		return input;
+		return extended;
 	}
 
 	
-	public HtmlInputTextarea addTextArea(String name, String label, String value) {
+	public HtmlInputExtended addTextArea(String name, String label, String value) {
 		HtmlInputTextarea textarea = new HtmlInputTextarea();
 		textarea.setId(this.createName(name));
 		textarea.setValue(value);
 		textarea.setLabel(label);
 		HtmlInputExtended labeled = new HtmlInputExtended(textarea, label);
 		this.addComponent(name, labeled);
-		return textarea;
+		return labeled;
 	}
 
 	
-	public UIComponent addSubmit(String name, String caption, String label) {
+	public HtmlInputExtended addSubmit(String name, String caption, String label) {
 		HtmlCommandButton button = new HtmlCommandButton();
 		button.setId(this.createName(name));
 		button.setValue(caption);
 		button.setLabel(label);
 		HtmlInputExtended extended = new HtmlInputExtended(button, null);
 		this.addComponent(name, extended);
-		return button;
+		return extended;
 	}
 
 	
-	public UIComponent addCheckbox(String name, String caption) {
+	public HtmlInputExtended addCheckbox(String name, String caption) {
 		HtmlSelectBooleanCheckbox checkbox = new HtmlSelectBooleanCheckbox();
 		checkbox.setId(this.createName(name));
 		checkbox.setLabel(caption);
 		checkbox.setValue(false);
 		HtmlInputExtended labeled = new HtmlInputExtended(checkbox, caption);
 		this.addComponent(name, labeled);
-		return checkbox;
+		return labeled;
 	}
 
 	
@@ -213,11 +236,11 @@ public class HtmlAppForm extends HtmlOutputText {
 	}
 
 	protected String createName(String name) {
-		return this.getFormId() + name;
+		return getFormIdPostfix() + name;
 	}
-	
-	protected String getFormId() {
-		return PREFIX + this.name + "-";
+
+	protected String getFormIdPostfix() {
+		return this.id + "-";
 	}
 
 	protected UIComponent createLabel(String label, String id) {
@@ -238,11 +261,11 @@ public class HtmlAppForm extends HtmlOutputText {
 	
 	public void process(Map<String, String> requestMap) {
 		for (String key : requestMap.keySet()) {
-			if (!key.startsWith(this.getFormId())) {
+			if (!key.startsWith(this.getFormIdPostfix())) {
 				continue;
 			}
 
-			HtmlInputExtended input = this.get(key.substring(this.getFormId().length()));
+			HtmlInputExtended input = this.get(key.substring(this.getFormIdPostfix().length()));
 			if (input == null) {
 				continue;
 			}
