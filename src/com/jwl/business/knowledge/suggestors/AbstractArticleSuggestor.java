@@ -14,7 +14,8 @@ import java.util.Set;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.KeyWordTO;
 import com.jwl.business.knowledge.keyword.WordProcessor;
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.keyword.WordVector;
+import com.jwl.business.knowledge.util.ISettings;
 import com.jwl.business.knowledge.util.Neuron;
 import com.jwl.business.knowledge.util.WeightRecord;
 import com.jwl.integration.article.IArticleDAO;
@@ -22,7 +23,7 @@ import com.jwl.integration.article.IArticleDAO;
 public class AbstractArticleSuggestor {
 
 	protected Neuron neuron;
-	protected ISettingsSource settingsSource;
+	protected ISettings settings;
 	protected IArticleDAO articleDAO;
 
 	enum InputNames {
@@ -38,15 +39,15 @@ public class AbstractArticleSuggestor {
 	}
 
 	public AbstractArticleSuggestor(IArticleDAO articleDAO,
-			ISettingsSource knowledgeSettings) {
-		this.settingsSource = knowledgeSettings;
+			ISettings knowledgeSettings) {
+		this.settings = knowledgeSettings;
 		this.articleDAO = articleDAO;
 	}
 
 	protected Map<String, WeightRecord> processArticle(
 			Set<String> constructedArticleNameWords,
 			Set<String> constructedArticleTags,
-			Set<String> constructedArticleKeyWords, ArticleTO comparedArticle) {
+			Map<String, Float> constructedArticleKeyWords, ArticleTO comparedArticle) {
 		Map<String, WeightRecord> neuronInput = new HashMap<String, WeightRecord>();
 		float nameSimilarity = getNameSimilarityRatio(
 				constructedArticleNameWords, comparedArticle);
@@ -69,7 +70,7 @@ public class AbstractArticleSuggestor {
 	protected float getNameSimilarityRatio(
 			Set<String> constructedArticleNameWords, ArticleTO comparedArticle) {
 		Set<String> comparedArticleNameWords = WordProcessor
-				.getWords(comparedArticle.getTitle());
+				.getWords(comparedArticle.getTitle(), settings.getUsePorterStamer(), settings.getStopWordSetPath());
 		return WordProcessor.getWordsSimilarityRatio(
 				constructedArticleNameWords, comparedArticleNameWords);
 	}
@@ -82,13 +83,17 @@ public class AbstractArticleSuggestor {
 	}
 
 	protected float getKeyWordSimilarityRatio(
-			Set<String> constructedArticleKeyWords, ArticleTO comparedArticle) {
-		Set<String> comparedArticleKeyWords = new HashSet<String>();
+			Map<String, Float> constructedArticleKeyWords, ArticleTO comparedArticle) {
+		Map<String, Float> comparedArticleKeyWords = new HashMap<String, Float>();
 		for (KeyWordTO kwt : comparedArticle.getKeyWords()) {
-			comparedArticleKeyWords.add(kwt.getWord());
+			comparedArticleKeyWords.put(kwt.getWord(), kwt.getWeight().floatValue());
 		}
-		return WordProcessor.getWordsSimilarityRatio(
-				constructedArticleKeyWords, comparedArticleKeyWords);
+		
+		Set<String> wordDictionary = new HashSet<String>();
+		wordDictionary.addAll(constructedArticleKeyWords.keySet());
+		wordDictionary.addAll(comparedArticleKeyWords.keySet());
+		
+		return WordVector.computeCosineSimilarity(constructedArticleKeyWords, comparedArticleKeyWords, wordDictionary);
 	}
 
 	protected List<ArticleTO> orderWordList(Map<ArticleTO, Float> wordWeights) {
@@ -108,5 +113,6 @@ public class AbstractArticleSuggestor {
 		}
 		return keyWordList;
 	}
+	
 
 }

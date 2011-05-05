@@ -278,16 +278,16 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 			return new ArrayList<ArticleTO>();
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT a FROM Article a WHERE a.text = LIKE %?0");
+		sb.append("SELECT a FROM Article a WHERE a.text LIKE ?0");
 		for(int i = 1; i< searchWords.size();i++){
-			sb.append(" AND a.text = LIKE %?0");
+			sb.append(" AND a.text LIKE ?"+i);
 		}
 		EntityManager em = getEntityManager();
 		List<Article> result = null;
 		Query query = em.createQuery(sb.toString());
 		int i= 0;
 		for(String searchWord: searchWords){			
-			query.setParameter(i, searchWord);
+			query.setParameter(i, "%"+searchWord+"%");
 			i++;
 		}
 		try {					

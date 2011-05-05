@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +17,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.jwl.business.article.ArticleTO;
-import com.jwl.business.knowledge.KnowledgeManagementFacade;
+import com.jwl.business.article.KeyWordTO;
 import com.jwl.business.knowledge.exceptions.KnowledgeException;
 import com.jwl.business.knowledge.keyword.WordProcessor;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.knowledge.util.ArticleIterator;
 import com.jwl.business.knowledge.util.IArticleIterator;
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.ISettings;
 import com.jwl.business.knowledge.util.Neuron;
 import com.jwl.business.knowledge.util.WeightRecord;
 import com.jwl.integration.article.IArticleDAO;
@@ -35,9 +34,9 @@ public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 	private String mergeIgnoreFile;
 
 	public MergeArticleSuggestor(IArticleDAO articleDAO,
-			ISettingsSource settings) {
+			ISettings settings) {
 		super(articleDAO, settings);
-		this.neuron = new Neuron(settingsSource, "MergeSuggestion");
+		this.neuron = new Neuron(settings, "MergeSuggestion");
 		mergeFile = settings.getMergeFile();
 		mergeIgnoreFile = settings.getMergeIgnoreFile();
 	}
@@ -55,11 +54,9 @@ public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 			while(iterator1.hasNext()){
 				ArticleTO article1 = iterator1.getNextArticle();
 				Set<String> a1NameWords = WordProcessor.getWords(article1
-						.getTitle());
-				KnowledgeManagementFacade f = new KnowledgeManagementFacade();
-				Set<String> a1KeyWords = new HashSet<String>(
-						f.extractKeyWordsOnRun(article1.getTitle(),
-								article1.getText()));
+						.getTitle(), settings.getUsePorterStamer(), settings.getStopWordSetPath());
+				Map<String, Float> a1KeyWords = getKeyWordWeifgts(article1);
+				
 				IArticleIterator iterator2 = new ArticleIterator(articleDAO, 50);
 				while(iterator2.hasNext()){
 					ArticleTO article2 = iterator2.getNextArticle();
@@ -184,6 +181,14 @@ public class MergeArticleSuggestor extends AbstractArticleSuggestor {
 			result = (List<ArticleIdPair>) in.readObject();
 		}catch(Exception e){
 			throw new KnowledgeException(e);
+		}
+		return result;
+	}
+	
+	private Map<String, Float> getKeyWordWeifgts(ArticleTO article){
+		Map<String, Float> result = new HashMap<String, Float>();
+		for (KeyWordTO kw : article.getKeyWords()) {
+			result.put(kw.getWord(), kw.getWeight().floatValue());
 		}
 		return result;
 	}

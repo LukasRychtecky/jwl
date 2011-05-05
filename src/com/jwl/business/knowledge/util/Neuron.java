@@ -6,10 +6,10 @@ import java.util.Map.Entry;
 import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
 
 public class Neuron {
-	private ISettingsSource weightSource;
+	private ISettings weightSource;
 	private String neuronName;
 
-	public Neuron(ISettingsSource weightSource,
+	public Neuron(ISettings weightSource,
 			String neuronName) {
 		this.weightSource = weightSource;
 		this.neuronName = neuronName;

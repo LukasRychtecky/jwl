@@ -3,6 +3,7 @@ package com.jwl.business;
 // <editor-fold defaultstate="collapsed">
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
@@ -72,8 +73,6 @@ import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
-import java.util.Collection;
-import java.util.Set;
 
 // </editor-fold>
 /**
@@ -178,7 +177,7 @@ public class Facade implements IFacade {
 	@Override
 	public IPaginator<ArticleTO> getPaginator() {
 		if (this.paginator == null) {
-			this.paginator = new Paginator(3);
+			this.paginator = new Paginator(5);
 		}
 		paginator.setUpPaginator();
 		return paginator;
@@ -195,7 +194,7 @@ public class Facade implements IFacade {
 	@Override
 	public void setSearchParametres(SearchTO searchTO) {
 		if (this.searchPaginator == null) {
-			this.searchPaginator = new KeyWordPaginator(Environment.getKnowledgeFacade());
+			this.searchPaginator = new KeyWordPaginator(Environment.getKnowledgeFacade(), 30);
 		}
 		searchPaginator.setSearch(searchTO);
 	}

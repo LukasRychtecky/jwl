@@ -7,7 +7,7 @@ import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.UserIdentity;
 
 
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.ISettings;
 import com.jwl.business.knowledge.util.SettingsSource;
 import com.jwl.business.security.Principal;
 import com.jwl.business.security.Role;
@@ -33,7 +33,7 @@ public class Environment {
 //	 private static String PERSISTENCE_UNIT = FILESYSTEM_PU;
 	private static IDAOFactory factory = null;
 	private static IIdentity identity = null;
-	private static ISettingsSource knowledgeSettings = null;
+	private static ISettings knowledgeSettings = null;
 	private static IKnowledgeManagementFacade knowledgeFacade = null;
 	private static final String ACL_FILE_NAME = "acl.csv";
 	private static final String FILESYSTEM_STORE = "/Users/ostatnickyjiri/Desktop";
@@ -89,7 +89,7 @@ public class Environment {
 		return Environment.identity;
 	}
 
-	public static ISettingsSource getKnowledgeSettings() {
+	public static ISettings getKnowledgeSettings() {
 		if (knowledgeSettings == null) {
 			knowledgeSettings = new SettingsSource(JWL_HOME);
 		}

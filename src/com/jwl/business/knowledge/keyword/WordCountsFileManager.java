@@ -12,14 +12,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.ISettings;
 
 public class WordCountsFileManager {
 	private String filePath;
 	private static String RECORD_DELIMETR = ",";
 	private static String NUMBER_DELIMETR = ":";
 	
-	public WordCountsFileManager(ISettingsSource settings){
+	public WordCountsFileManager(ISettings settings){
 		filePath = settings.getWordCountsFile();
 	}
 	
