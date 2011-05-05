@@ -32,9 +32,6 @@ public class SettingsSource implements ISettings {
 
 	public SettingsSource(String jwlHomePath) {
 		String settingFilePath = getSettingsFilePath();
-String settingFilePath = getSettingsFilePath();
-
-
 		settingsFile = jwlHomePath + settingFilePath
 				+ "KnowledgeManagementSettings.xml";
 		wordCountsFile = jwlHomePath + settingFilePath + "WordCounts";
