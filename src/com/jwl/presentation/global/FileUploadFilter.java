@@ -1,5 +1,5 @@
 package com.jwl.presentation.global;
-// <editor-fold defaultstate="collapsed">
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -23,6 +23,7 @@ import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.url.URLBuilder;
 import com.jwl.presentation.url.WikiURLParser;
+import org.apache.commons.fileupload.FileUploadException;
 
 public class FileUploadFilter implements Filter {
 
@@ -45,44 +46,47 @@ public class FileUploadFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) arg1;
 		WikiURLParser parser = new WikiURLParser(request);
 
-		UserTransaction ut = this.getUserTransaction();
-		try {
-			this.moveFile(request);
-			FileMover mover = null;
-			IFacade facade = Global.getInstance().getFacadeOutsideJSF();
-			facade.setJWLHome(request.getSession().getServletContext().getRealPath("/jwl/"));
+		FileMover mover = null;
+		IFacade facade = Global.getInstance().getFacadeOutsideJSF();
+		facade.setJWLHome(request.getSession().getServletContext().getRealPath("/jwl/"));
 
-			if (parser.getDoAction().equals(JWLActions.FILE_UPLOAD.id)) {
+		if (parser.getDoAction().equals(JWLActions.FILE_UPLOAD.id)) {
+
+			UserTransaction ut = this.getUserTransaction();
+			try {
 				mover = new FileMover(request);
 				String source = mover.moveToTMP();
 				ut.begin();
 				facade.uploadAttachment(mover.getAttachment(), source);
 				ut.commit();
-			} else if (parser.getDoAction().equals(JWLActions.IMPORT_ACL.id)) {
-				mover = new FileMover(request);
-				String fileName = mover.moveToTMP();
-				facade.importACL(fileName);
+
+			} catch (Throwable e) {
+				Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, e);
+
+				try {
+					ut.rollback();
+				} catch (Throwable t) {
+					Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, t);
+				}
 			}
-
-
-		} catch (Throwable e) {
-			Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, e);
-
+		} else if (parser.getDoAction().equals(JWLActions.IMPORT_ACL.id)) {
 			try {
-				ut.rollback();
-			} catch (Throwable t) {
-				Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, t);
+				mover = new FileMover(request);
+				mover.moveToTMP();
+			} catch (FileUploadException ex) {
+				Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, ex);
+			} catch (Exception ex) {
+				Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
+
+
 
 		String URL = this.getURL(parser);
 		PrintWriter pw = response.getWriter();
 		pw.println(htmlRedirect.replace("_URL_", URL));
 		pw.close();
 		response.setContentType("text/html");
-	}
-
-	protected void moveFile(HttpServletRequest request) {
 	}
 
 	private String getURL(WikiURLParser parser) {
@@ -110,5 +114,4 @@ public class FileUploadFilter implements Filter {
 		}
 		return ut;
 	}
-	
 }

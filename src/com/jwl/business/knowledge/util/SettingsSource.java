@@ -31,9 +31,10 @@ public class SettingsSource implements ISettings {
 	private String jwlHome;
 
 	public SettingsSource(String jwlHomePath) {
-		String pathSeparator = System.getProperty("file.separator");
-		String settingFilePath = pathSeparator + "private" + pathSeparator
-				+ "jwl" + pathSeparator;
+		String settingFilePath = getSettingsFilePath();
+String settingFilePath = getSettingsFilePath();
+
+
 		settingsFile = jwlHomePath + settingFilePath
 				+ "KnowledgeManagementSettings.xml";
 		wordCountsFile = jwlHomePath + settingFilePath + "WordCounts";
@@ -43,6 +44,11 @@ public class SettingsSource implements ISettings {
 		usePorterStamer = null;
 		stopWordSetPath = null;
 		jwlHome=jwlHomePath;
+	}
+	private static String getSettingsFilePath(){
+		String pathSeparator = System.getProperty("file.separator");
+		String settingFilePath = pathSeparator+"private"+pathSeparator+"jwl"+pathSeparator;
+		return settingFilePath;
 	}
 
 	@Override

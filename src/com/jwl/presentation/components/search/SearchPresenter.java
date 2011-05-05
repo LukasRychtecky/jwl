@@ -1,7 +1,5 @@
 package com.jwl.presentation.components.search;
 
-import com.jwl.business.IPaginator;
-import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.presentation.core.AbstractPresenter;

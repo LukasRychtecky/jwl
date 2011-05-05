@@ -40,6 +40,7 @@ import com.jwl.business.usecases.ImportACLUC;
 import com.jwl.business.usecases.IncreaseLivabilityUC;
 import com.jwl.business.usecases.LockArticleUC;
 import com.jwl.business.usecases.OpenForumTopicsUC;
+import com.jwl.business.usecases.ParseACLUC;
 import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
@@ -68,6 +69,7 @@ import com.jwl.business.usecases.interfaces.IImportACLUC;
 import com.jwl.business.usecases.interfaces.IIncreaseLivablityUC;
 import com.jwl.business.usecases.interfaces.ILockArticleUC;
 import com.jwl.business.usecases.interfaces.IOpenForumTopicsUC;
+import com.jwl.business.usecases.interfaces.IParseACLUC;
 import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
@@ -131,9 +133,15 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void importACL(String fileName) throws ModelException {
+	public void importACL() throws ModelException {
 		IImportACLUC uc = new ImportACLUC(Environment.getDAOFactory());
-		uc.importACL(fileName);
+		uc.importACL(Environment.getACLFileName());
+	}
+
+	@Override
+	public Set<Role> parseACL() throws ModelException {
+		IParseACLUC uc = new ParseACLUC(Environment.getDAOFactory());
+		return uc.parse(Environment.getACLFileName());
 	}
 
 	@Override

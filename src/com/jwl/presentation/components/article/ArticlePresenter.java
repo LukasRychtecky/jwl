@@ -1,35 +1,27 @@
 package com.jwl.presentation.components.article;
 
 // <editor-fold defaultstate="collapsed">
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
-import javax.naming.NoPermissionException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jwl.business.Environment;
-import com.jwl.business.IPaginator;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
-import com.jwl.business.security.IIdentity;
-import com.jwl.business.security.Role;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
-import com.jwl.presentation.global.Global;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
 import com.jwl.presentation.renderers.EncodeAttach;
@@ -262,7 +254,7 @@ public class ArticlePresenter extends AbstractPresenter {
 
 			messages.add(new FlashMessage("Article has been saved."));
 			super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
-		} catch (NoPermissionException ex) {
+		} catch (PermissionDeniedException ex) {
 			FlashMessage message = new FlashMessage(
 					"You don't have a permission.",
 					FlashMessage.FlashMessageType.WARNING);
@@ -280,7 +272,7 @@ public class ArticlePresenter extends AbstractPresenter {
 			this.getFacade().updateArticle(article);
 			messages.add(new FlashMessage("Article has been saved."));
 			super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
-		} catch (NoPermissionException ex) {
+		} catch (PermissionDeniedException ex) {
 			FlashMessage message = new FlashMessage(
 					"You don't have a permission.",
 					FlashMessage.FlashMessageType.WARNING);

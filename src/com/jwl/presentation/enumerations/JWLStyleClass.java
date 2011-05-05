@@ -9,35 +9,10 @@ public class JWLStyleClass {
 
 	public static final String ACTION_BUTTON = JWL_PREFIX +						"action-button";
 	public static final String ACTION_BUTTON_SMALLER = JWL_PREFIX +				"action-button-small";
-	public static final String ACTION_LINK = JWL_PREFIX + 						"action-link";
-	
-	// // Main Page ////////////////
-	public static final String CREATE_NEW_ARTICLE = JWL_PREFIX +				"createNewArticle";
 	
 	// // Table of Articles ////////
 	public static final String TABLE_OF_ARTICLES = JWL_PREFIX +					"tableOfArticles";
 	public static final String TABLE_HEADER_OF_ARTICLES = JWL_PREFIX +			"tableHearderOfArticles";
-	public static final String LINK_NEXT_PAGE = JWL_PREFIX +					"nextPage";
-	public static final String LINK_PREVIOUS_PAGE = JWL_PREFIX +				"previousPage";
-	public static final String LINK_FIRST_PAGE = JWL_PREFIX +					"firstPage";
-	public static final String LINK_LAST_PAGE = JWL_PREFIX +					"lastPage";
-
-	// // Create/Edit State ////////
-	public static final String EDIT_INPUT_SUBMIT = JWL_PREFIX + 				"edit-inputSubmit";
-	// Labels
-	public static final String EDIT_LABEL_OF_TITLE = JWL_PREFIX +				"edit-titleLabel";
-	public static final String EDIT_LABEL_FOR_TITLE = JWL_PREFIX +				"edit-title-label";
-	public static final String EDIT_LABEL_FOR_TEXT = JWL_PREFIX + 				"edit-text-label";
-	public static final String EDIT_LABEL_FOR_TAGS = JWL_PREFIX + 				"edit-tags-label";
-	public static final String EDIT_LABEL_FOR_CHANGE_NOTE = JWL_PREFIX + 		"edit-changeNote-label";
-	// Title
-	public static final String EDIT_TITLE = JWL_PREFIX + 						"edit-title";
-	public static final String EDIT_TITLE_INPUT = JWL_PREFIX + 					"edit-title-input";
-	// Inputs
-	public static final String EDIT_TAGS_INPUT = JWL_PREFIX + 					"edit-tags-input";
-	public static final String EDIT_CHANGE_NOTE_INPUT = JWL_PREFIX + 			"edit-changeNote-input";
-	// Messages
-	public static final String EDIT_MESSAGE_WARNING = JWL_PREFIX + 				"edit-warningMessage";
 
 	// // Attach State ////////
 	public static final String ATTACH_INPUT_SUBMIT = JWL_PREFIX + 				"upload-inputSubmit";

@@ -16,7 +16,6 @@ import javax.faces.component.html.HtmlPanelGrid;
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
-import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
@@ -103,6 +102,7 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected HtmlDiv encodedActionButtons(TopicTO topic, ArticleTO article) {
 		HtmlDiv actionButtons = new HtmlDiv();
 		actionButtons.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		actionButtons.addStyleClass(JWLStyleClass.ACTION_BUTTON);
 		
 		actionButtons.addChildren(getArticleLinkComponent(article.getTitle()));
 		actionButtons.addChildren(getTopicListLink(article.getTitle()));
@@ -132,7 +132,6 @@ public class EncodeTopicView extends AbstractEncoder {
 	}
 
 	protected HtmlActionForm getAdministrationForm(Integer postId) {
-		// TODO PJ Doesn't we should set some parameters to form action
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, JWLStates.FORUM_TOPIC_VIEW.id);
 		params.put(JWLURLParams.TOPIC_ID, String.valueOf(topic.getId()));
@@ -244,7 +243,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_VIEW.id);
 		
 		HtmlLink link = this.getHtmlLink("Back to article", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -254,7 +253,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, title);
 
 		HtmlLink link = getHtmlLink("Topic list", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -268,7 +267,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		
 		HtmlLink link = this.getHtmlLink("Reply", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -282,7 +281,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		
 		HtmlLink link = this.getHtmlLink("Quote", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -320,7 +319,7 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	protected UIComponent getReplyButton() {
 		return super.getHtmlSubmitComponent(JWLElements.FORUM_POST_REPLY, 
-				JWLStyleClass.ACTION_BUTTON_SMALLER);
+				JWLStyleClass.ACTION_BUTTON);
 	}
 
 	protected UIComponent getReplyCancelButton() {
@@ -330,7 +329,7 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 
 		HtmlLink link = getHtmlLink(JWLElements.FORUM_TOPIC_CANCEL.value, params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER);
+		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -372,13 +371,14 @@ public class EncodeTopicView extends AbstractEncoder {
 	protected UIComponent getReplyFormActionButtons(TopicTO topic) {
 		HtmlDiv buttonsPanel = new HtmlDiv();
 		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass(JWLStyleClass.ACTION_BUTTON);
 		buttonsPanel.addChildren(getReplyButton());
 		buttonsPanel.addChildren(getReplyCancelButton());
 		return buttonsPanel;
 	}
 
 	protected String getInitText(PostTO quotedPost) {
-		if (quotedPost == null) {
+		if (quotedPost == null || quotedPost.getText() == null) {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder();

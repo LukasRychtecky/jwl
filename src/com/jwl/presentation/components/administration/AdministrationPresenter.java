@@ -7,10 +7,16 @@ import java.util.Map.Entry;
 import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.exceptions.ObjectNotFoundException;
+import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
+import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.html.HtmlAppForm;
+import com.jwl.presentation.renderers.ACLPreview;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
 import com.jwl.presentation.renderers.EncodeDeadArticleList;
 import com.jwl.presentation.renderers.EncodeDeadArticleView;
@@ -19,6 +25,8 @@ import com.jwl.presentation.renderers.EncodeMergeSuggestionView;
 import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.RequestMapDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdministrationPresenter extends AbstractPresenter {
 
@@ -26,11 +34,57 @@ public class AdministrationPresenter extends AbstractPresenter {
 	
 	@Override
 	public void renderDefault() {
+		renderParams.put("uploadACLForm", this.createFormUploadACL());
 		container.addAll(new EncodeAdministrationConsole(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
-	public void renderAdminConsole() {
-		container.addAll(new EncodeAdministrationConsole(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
+	public HtmlAppForm createFormUploadACL() {
+		HtmlAppForm form = new HtmlAppForm("uploadACL");
+		form.addFile("file", "File");
+		form.addSubmit("submit", "Show preview", null);
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParams.REDIRECT_TARGET, super.urlParser.getCurrentPage());
+		params.put(JWLURLParams.STATE, "previewACL");
+		params.put(JWLURLParams.DO, JWLActions.IMPORT_ACL.id);
+		form.setAction(this.linker.buildLink(AbstractComponent.JWL_UPLOAD_FILE_PAGE, params));
+		
+		return form;
+	}
+	
+	public void decodeUploadALC() {
+		
+	}
+	
+	public void decodeImportACL() {
+		try {
+			this.getFacade().importACL();
+			FlashMessage message = new FlashMessage("Access Control List has been imported.");
+			super.messages.add(message);
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex, "default");
+		}
+	}
+	
+	public void renderPreviewACL() {
+		try {
+			renderParams.put("acl", super.getFacade().parseACL());
+			container.addAll(new ACLPreview(linker, getFacade().getIdentity(), renderParams).render());		
+		} catch (PermissionDeniedException ex) {			
+			FlashMessage message = new FlashMessage(
+					"You don't have a permission.",
+					FlashMessage.FlashMessageType.ERROR, false);
+			super.messages.add(message);
+			this.redirect("default");
+		} catch (ObjectNotFoundException e) {
+			FlashMessage message = new FlashMessage(
+					"No Access Control List found.",
+					FlashMessage.FlashMessageType.WARNING, false);
+			super.messages.add(message);
+			this.renderDefault();
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex, "default");
+		}
 	}
 	
 	public void renderMergeSuggestionList() throws ModelException {

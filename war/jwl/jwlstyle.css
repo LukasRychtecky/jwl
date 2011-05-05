@@ -1,15 +1,18 @@
-/*
-* CSS for JSF Wiki Library.
-*/
-
-/*******************************************
-* Action button style
-*/
-#jwl {
-	font-size: 1.1em;
+div.jwl-component {
+	font-family: Arial,Verdana,sans-serif;
+	font-size: 1em;
 }
-a.jwl-action-button, a.jwl-action-button:visited, .jwl-action-button input[type=submit] {
-	padding: .3em 1em;
+.jwl-navigation {
+	margin: 1em 0.5em;
+}
+.jwl-navigation .jwl-action-button {
+	margin: 0 0.2em;
+}
+.jwl-form input[type=text] {
+	width: 100%;
+}
+a.jwl-action-button, a.jwl-action-button:visited, .jwl-action-button input[type=submit], .jwl-form input[type=submit] {
+	padding: 0.3em 0.6em;
 	text-decoration: none;
 	font-size: 1.1em;
 	color: #555;
@@ -34,7 +37,7 @@ a.jwl-action-button, a.jwl-action-button:visited, .jwl-action-button input[type=
 	border: 1px solid #d3d3d3;
 }
 
-a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover {
+a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover, .jwl-form input[type=submit]:hover {
 	border-color: #999;
 	background-color: #DADADA;
 	background-image: -webkit-gradient(
@@ -53,141 +56,58 @@ a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover {
 	cursor: pointer;
 }
 
-a.jwl-action-button:active {
-	background-color: white;
-	background-image: none;
-}
-
-/*
-* Action button style smaller
-*/
-a.jwl-action-button-small, a.jwl-action-button-small:visited {
-	margin: .5em .2em;
-	padding: .15em .55em;
-	text-decoration: none;
-	font-size: 1.1em;
-	color: #555;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	border: 1px solid lightGrey;
-	font-weight: normal;
-	background-color: #E6E6E6;
-	background-image: -webkit-gradient(
-		linear,
-		left top,
-		left bottom,
-		color-stop(0.5, rgb(237,237,237)),
-		color-stop(0.5, rgb(233,233,233))
-		);
-	background-image: -moz-linear-gradient(
-		center top,
-		rgb(237,237,237) 50%,
-		rgb(233,233,233) 50%
-		);
-	border: 1px solid #d3d3d3;
-}
-
-a.jwl-action-button-small:hover {
-	border-color: #999;
-	background-color: #DADADA;
-	background-image: -webkit-gradient(
-		linear,
-		left top,
-		left bottom,
-		color-stop(0.5, rgb(228,228,228)),
-		color-stop(0.5, rgb(227,227,227))
-		);
-	background-image: -moz-linear-gradient(
-		center top,
-		rgb(228,228,228) 50%,
-		rgb(227,227,227) 50%
-		);
-	color: #212121;
-	cursor: pointer;
-}
-
-a.jwl-action-button-small:active {
-	background-color: white;
-	background-image: none;
-}
-
-a.jwl-action-link {
-    margin-right: 5px;
-}
-.jwl-paging {
-	display: block;
-	margin: 1em .3em;
-}
-a.jwl-createNewArticle {
-    margin: .5em .3em;
-}
-
-
-/*****************************************
-* Listing
-*/
-
-/*
-* Table
-*/
-table.jwl-tableOfArticles {
+.jwl-grid {
     width: 100%;
     margin: 1.2em .3em .3em .3em;
     color: black;
+	border-collapse: collapse;
 }
-
-table.jwl-tableOfArticles td {
-    background-color: #F5F5ED;
+.jwl-grid tr {
+	background-color: #F5F5ED;
+}
+.jwl-grid tr:nth-child(2n) {
+	background-color: white;
+}
+.jwl-grid th {
+	padding: .3em;
+    border: 1px solid white;
+}
+.jwl-grid td {
     padding: .4em .6em;
-    border-bottom: 1px solid white;
-    border-right: 1px solid white;
+    border: 1px solid white;
 }
-
-table.jwl-tableOfArticles td a {
+.jwl-grid td a {
     text-decoration: none;
     color: #49A3F2;
 	display: block;
 	float: left;
 }
-
-table.jwl-tableOfArticles td a:hover {
+.jwl-grid td a:hover {
     text-decoration: underline;
     color: #FF008B;
 }
-
-/*
-* Head of table
-*/
-thead.jwl-tableHearderOfArticles th {
-	/*    background-color: #303030; */
-    color: #bababa;
-    border-right: 1px solid white;
-    padding: 5px;
-	background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#111));
-	background: -moz-linear-gradient(top, #333, #111);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333', endColorstr='#111');
-}
-
-thead.jwl-tableHearderOfArticles a {
+.jwl-grid a {
     color: white;
 	display: block;
 	text-decoration: none;
+	margin-right: 0.3em;
 }
 
-thead.jwl-tableHearderOfArticles a:hover {
+.jwl-grid a:hover {
     color: #FF00DB;
 	text-decoration: underline;
 }
 
-/******************************
-* View State
-*/
-.jwl-view-title, .jwl-view-text {
-    border-bottom: 1px dotted #CCCCCC;
+.jwl-grid thead tr {
+	font-size: 1.16em;
+	color: #bababa;
+	background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#111));
+	background: -moz-linear-gradient(top, #333, #111);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333', endColorstr='#111');	
 }
 
-.jwl-view-text {
+.jwl-view-title, .jwl-view-text {
+    border-bottom: 1px dotted #CCCCCC;
 }
 
 .jwl-view-tags {
@@ -223,95 +143,6 @@ thead.jwl-tableHearderOfArticles a:hover {
 .jwl-view-link-back, .jwl-view-link-edit, .jwl-view-link-attach {
     float: left;
     margin-right: 5px;
-}
-
-
-/******************************
-* Create/Edit State
-*/
-
-/*
-* Labels
-*/
-.jwl-edit-titleLabel, .jwl-edit-title-label, .jwl-edit-text-label, .jwl-edit-tags-label, .jwl-edit-changeNote-label {
-    float: left;
-    width: 80px;
-    margin-top: 9px;
-    margin-right: 5px;
-}
-
-.jwl-edit-titleLabel {
-    margin-top: 6px;
-}
-
-.jwl-edit-text-label {
-    position: relative;
-    top: 20px;
-}
-
-/*
-* Title
-*/
-.jwl-edit-title {
-    color: #7890AB;
-    font-size: 1.6em;
-    margin-top: 0px;
-    margin-bottom: 14px;
-    font-weight: bold;
-}
-
-/*
-* Inputs
-*/
-.jwl-edit-title-input input, .jwl-edit-tags-input input, .jwl-edit-changeNote-input input {
-	width: 490px;
-	padding: 5px;
-}
-
-.jwl-edit-title {
-}
-
-.jwl-edit-title-input {
-    margin-bottom: 10px;
-}
-#jwl-edit-text {
-    margin-left: 85px;
-    width: 490px;
-}
-
-/*
-* Messages
-*/
-.jwl-edit-warningMessage {
-    color: #C90000;
-    margin-top: 15px;
-    margin-bottom: 5px;
-}
-
-
-/**
-* Attach State
-*/
-
-/*
-* Labels
-*/
-.jwl-upload-fileName-label, .jwl-upload-file-label, .jwl-upload-fileDescription-label {
-    float: left;
-    width: 80px;
-    margin-top: 9px;
-}
-
-.jwl-upload-file-label, #jwl-upload-fileItem, .jwl-action-button #jwl-upload-save {
-	float: none;
-	display: block;
-}
-.jwl-upload-fileName-input input, .jwl-upload-file-input input, .jwl-upload-fileDescription-input input {
-    width: 490px;
-    padding: 5px;
-}
-.jwl-upload-inputSubmit {
-    margin-top: 20px;
 }
 
 
@@ -373,7 +204,6 @@ thead.jwl-tableHearderOfArticles a:hover {
     background-color: #BED6F8;
     border-color: #BED6F8;
     color: #000000;
-    font-family: Arial, Verdana, sans-serif;
     font-weight: bold;
     background-image: url("/bugtrack/a4j/g/3_3_1.GAorg.richfaces.renderkit.html.GradientA/DATB/eAH7!!3Tj2v7mAAZZAV3");
     font-size: 12px !important;
@@ -385,19 +215,8 @@ thead.jwl-tableHearderOfArticles a:hover {
     text-align: left;
     vertical-align: top;
     color: #000000;
-    font-family: Arial, Verdana, sans-serif;
-    font-size: 12px !important;
     background-color: transparent;
     overflow: auto;
-}
-
-.jwl-panelActionButtons {
-    background: none repeat scroll 0 0 #FAFBFF;
-    border-left: 1px solid #CCCCCC;
-    border-right: 1px solid #CCCCCC;
-    padding-left: 1em;
-    padding-bottom: 0.6em;
-    padding-top: 0.6em;
 }
 
 .jwl-forum-pageTable {
@@ -516,5 +335,13 @@ blockquote{
     background-position: 0 -75px;
 }
 
-
+.jwl-acl-preview {
+	width: auto;
+}
+.jwl-acl-preview tr td {
+	text-align: center;
+}
+.jwl-acl-preview tr td:nth-child(1), .jwl-acl-preview tr td:nth-child(2) {
+	text-align: left;
+}
 

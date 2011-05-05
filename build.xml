@@ -42,6 +42,7 @@
 
 	<target name="JWL.deploy">
 		<ant dir="." target="JWL.undeploy" />
+		<ant dir="." target="JWL.resources" />
 		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="jar" />
 		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="war" />
 		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="ear" />
@@ -50,7 +51,6 @@
 		<ant dir="." target="JWL.asClasses" />
 		<ant dir="." target="JWL.asJar" />
 		<ant dir="." target="JWL.libs" />
-		<ant dir="." target="JWL.resources" />
 		<ant antfile="../SeamWiki/build.xml" dir="../SeamWiki" target="standalnoe-explode" />
 
 		<copy todir="../SeamWiki/${war.dir}/WEB-INF" file="${JWL.buildDir}/META-INF/jwl.taglib.xml" />

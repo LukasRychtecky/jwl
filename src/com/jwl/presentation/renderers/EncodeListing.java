@@ -21,12 +21,14 @@ import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLTableHeaders;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.helpers.HumanDate;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.Linker;
+import java.util.Date;
 // </editor-fold>
 
 public class EncodeListing extends AbstractEncoder {
@@ -43,13 +45,17 @@ public class EncodeListing extends AbstractEncoder {
 	
 	@Override
 	public List<UIComponent> getEncodedComponent() {
-		List<UIComponent> components = new ArrayList<UIComponent>(); 
-		if (this.hasAdministrationPermission()) {
-			components.add(this.encodedLinkToAdministrationConsole());
-		}
-		components.add(this.encodedLinkToSearch());
-		components.add(this.encodedLinkToCreateNewArticle());
+		List<UIComponent> components = new ArrayList<UIComponent>();
+		HtmlDiv div = new HtmlDiv();
+		div.addStyleClass("jwl-navigation");
 		
+		if (this.hasAdministrationPermission()) {
+			div.getChildren().add(this.encodedLinkToAdministrationConsole());
+		}
+		div.getChildren().add(this.encodedLinkToSearch());
+		div.getChildren().add(this.encodedLinkToCreateNewArticle());
+		
+		components.add(div);
 		components.add(this.encodedListing());
 		components.add(this.encodedPaginator());
 		
@@ -58,7 +64,6 @@ public class EncodeListing extends AbstractEncoder {
 
 	private HtmlLink encodedLinkToAdministrationConsole() {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, JWLStates.ADMINISTRATION_CONSOLE.id);
 		params.put(JWLURLParams.PRESENTER, JWLPresenters.ADMINISTRATION.id);
 		
 		HtmlLink link = this.getHtmlLink("Administration Console", params);
@@ -82,7 +87,7 @@ public class EncodeListing extends AbstractEncoder {
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_CREATE.id);
 
 		HtmlLink link = this.getHtmlLink("Create new article", params);
-		link.setStyleClasses(JWLStyleClass.CREATE_NEW_ARTICLE, JWLStyleClass.ACTION_BUTTON);
+		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON);
 		link.setIsAjax(Boolean.TRUE);
 		return link;
 	}
@@ -100,10 +105,10 @@ public class EncodeListing extends AbstractEncoder {
 		return table;
 	}
 	
-	private HtmlPanelGroup encodedPaginator() {
-		HtmlPanelGroup pagingContainer = new HtmlPanelGroup();
-		pagingContainer.setStyleClass("jwl-paging");
-		List<UIComponent> children = pagingContainer.getChildren();
+	private UIComponent encodedPaginator() {
+		HtmlDiv navigation = new HtmlDiv();
+		navigation.addStyleClass("jwl-navigation");
+		List<UIComponent> children = navigation.getChildren();
 
 		children.add(this.createLinkToFirstPage(paginator));
 		if (paginator.hasPrevious()) {
@@ -114,17 +119,14 @@ public class EncodeListing extends AbstractEncoder {
 		}
 		children.add(this.createLinkToLastPage(paginator));
 
-		return pagingContainer;
+		return navigation;
 	}
 
 	private HtmlPanelGrid getTable(List<UIComponent> headers) {
 		HtmlHeaderPanelGrid table = new HtmlHeaderPanelGrid();
 		table.setColumns(headers.size());
-		table.setCellpadding("0");
-		table.setCellspacing("0");
 		table.setHeaders(headers);
-		table.setStyleClass(JWLStyleClass.TABLE_OF_ARTICLES);
-		table.setHeaderClass(JWLStyleClass.TABLE_HEADER_OF_ARTICLES);
+		table.setStyleClass("jwl-grid");
 		return table;
 	}
 
@@ -153,7 +155,7 @@ public class EncodeListing extends AbstractEncoder {
 		rowDataCells.add(this.getTagsComponent(separatedTags));
 		rowDataCells.add(this.getEditorComponent(article.getEditor()));
 		rowDataCells.add(this.getEditingCountComponent(article.getEditCount()));
-		rowDataCells.add(this.getCreatedComponent(article.getCreated().toString()));
+		rowDataCells.add(this.getCreatedComponent(article.getCreated()));
 		rowDataCells.add(this.getRatingComponent(article.getRatingAverage()));
 		rowDataCells.add(this.encodeAdditionalRowData(article));
 		
@@ -204,32 +206,31 @@ public class EncodeListing extends AbstractEncoder {
 		params.put(JWLURLParams.LIST_PAGE_NUMBER, String.valueOf(paginator.getPageIndex()));
 		
 		HtmlLink link = this.getHtmlLink(text, params);
-		link.setStyleClass(JWLStyleClass.ACTION_LINK);
 		return link;
 	}
 	
 	private UIComponent createLinkToFirstPage(IPaginator<ArticleTO> paginator) {
 		return getPaginatorLink(paginator.hasPrevious(), "<<",
-				paginator.getFirstPageIndex(), JWLStyleClass.LINK_FIRST_PAGE);
+				paginator.getFirstPageIndex());
 	}
 	
 	private UIComponent createLinkToPreviousPage(IPaginator<ArticleTO> paginator) {
 		return getPaginatorLink(paginator.hasPrevious(), "<", 
-				paginator.getPreviousPageIndex(), JWLStyleClass.LINK_PREVIOUS_PAGE);
+				paginator.getPreviousPageIndex());
 	}
 
 	private UIComponent createLinkToNextPage(IPaginator<ArticleTO> paginator) {
 		return getPaginatorLink(paginator.hasNext(), ">", 
-				paginator.getNextPageIndex(), JWLStyleClass.LINK_NEXT_PAGE);
+				paginator.getNextPageIndex());
 	}
 
 	private UIComponent createLinkToLastPage(IPaginator<ArticleTO> paginator) {
 		return getPaginatorLink(paginator.hasNext(), ">>", 
-				paginator.getLastPageIndex(), JWLStyleClass.LINK_LAST_PAGE);
+				paginator.getLastPageIndex());
 	}
 
 	private UIComponent getPaginatorLink(boolean viewCondition, String text, 
-			int pageNumber, String styleCass) {
+			int pageNumber) {
 		if (!viewCondition) {
 			HtmlFreeOutput output = new HtmlFreeOutput();
 			output.setFreeOutput("");
@@ -242,7 +243,7 @@ public class EncodeListing extends AbstractEncoder {
 		
 		HtmlLink link = this.getHtmlLink(text, params);
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, styleCass);
+		link.setStyleClass("jwl-action-button");
 		return link;
 	}
 	
@@ -287,8 +288,8 @@ public class EncodeListing extends AbstractEncoder {
 		return this.getHtmlText(editingCountValue);
 	}
 
-	private UIComponent getCreatedComponent(String createdValue) {
-		return this.getHtmlText(createdValue);
+	private UIComponent getCreatedComponent(Date createdValue) {
+		return this.getHtmlText(HumanDate.format(createdValue));
 	}
 
 	private List<JWLTableHeaders> getHeaders() {
