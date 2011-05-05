@@ -207,7 +207,7 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 	
 	protected HtmlLink getLinkAdminConsole() {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, JWLStates.ADMINISTRATION_CONSOLE.id);
+		params.put(JWLURLParams.STATE, "default");
 
 		HtmlLink htmlLink = getHtmlLink("Back to administration", params);
 		htmlLink.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);

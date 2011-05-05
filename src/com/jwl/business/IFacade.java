@@ -3,7 +3,6 @@ package com.jwl.business;
 import java.io.File;
 import java.util.List;
 
-import javax.naming.NoPermissionException;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
@@ -14,10 +13,10 @@ import com.jwl.business.article.PostTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.TopicTO;
 import com.jwl.business.exceptions.ModelException;
+import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.Role;
-import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -33,14 +32,14 @@ public interface IFacade {
 	 * 
 	 * @param articleTO
 	 */
-	public void updateArticle(ArticleTO article) throws ModelException, NoPermissionException;
+	public void updateArticle(ArticleTO article) throws ModelException, PermissionDeniedException;
 
 	/**
 	 * Creates new article
 	 * 
 	 * @param articleTO
 	 */
-	public ArticleId createArticle(ArticleTO article) throws ModelException, NoPermissionException;
+	public ArticleId createArticle(ArticleTO article) throws ModelException, PermissionDeniedException;
 
 	/**
 	 * Deletes given article
@@ -53,8 +52,9 @@ public interface IFacade {
 
 	public String getJWLHome();
 
-	public void importACL(String fileName) throws ModelException;
+	public void importACL() throws ModelException;
 
+	public Set<Role> parseACL() throws ModelException;
 
 	public ArticleTO findArticleByTitle(String title) throws ModelException;
 	

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.faces.component.UIComponent;
 
-import com.jwl.business.article.ArticleTO;
 import com.jwl.business.security.IIdentity;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;

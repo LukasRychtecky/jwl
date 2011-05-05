@@ -14,8 +14,6 @@ public enum JWLStates {
 	
 	SEARCH("search"),
 	
-	ADMINISTRATION_CONSOLE("adminConsole"),
-	
 	HISTORY_VIEW("historyView"),
 	HISTORY_LIST("historyList"),
 	

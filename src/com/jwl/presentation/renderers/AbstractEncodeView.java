@@ -53,7 +53,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		titleDiv.addStyleClass(JWLStyleClass.VIEW_TITLE);
 		
 		HtmlOutputText output = getHtmlText(article.getTitle());
-		output.setStyleClass(JWLStyleClass.VIEW_TITLE);		
+		output.setStyleClass(JWLStyleClass.VIEW_TITLE);
 		titleDiv.addChildren(output);
 		return titleDiv;
 	}
@@ -127,7 +127,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 		HtmlLink link = getHtmlLink("Back to listing", params);
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
+		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 
@@ -138,7 +138,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 		HtmlLink link = getHtmlLink("Edit", params);
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_EDIT);
+		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 
@@ -148,7 +148,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, title);
 
 		HtmlLink link = getHtmlLink("Attach file", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_ATTACH);
+		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 	
@@ -158,7 +158,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, articleTitle);
 
 		HtmlLink link = getHtmlLink("Forum", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_ATTACH);
+		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 
@@ -206,7 +206,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 	
 	protected HtmlDiv encodedPanelActionButtons() {
 		HtmlDiv panelButtons = new HtmlDiv();
-		panelButtons.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		panelButtons.addStyleClass("jwl-navigation");
 		panelButtons.addChildren(this.encodedCommonLinks(article));
 		
 		return panelButtons;
