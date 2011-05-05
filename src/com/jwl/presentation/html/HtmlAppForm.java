@@ -19,8 +19,10 @@ import javax.faces.context.ResponseWriter;
  *
  * @author Lukas Rychtecky
  */
-public class HtmlAppForm extends HtmlOutputText implements AppForm {
+public class HtmlAppForm extends HtmlOutputText {
 
+	public static final String PREFIX = "jwl-";
+	public static final String FORM_NAME = PREFIX + "form-id";
 	public static final String ELEMENT = "form";
 	public static final String METHOD_POST = "post";
 	public static final String METHOD_GET = "get";
@@ -42,37 +44,37 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		this.components = new LinkedHashMap<String, HtmlInputExtended>();
 	}
 
-	@Override
+	
 	public String getAction() {
 		return action;
 	}
 
-	@Override
+	
 	public void setAction(String action) {
 		this.action = action;
 	}
 
-	@Override
+	
 	public String getEnctype() {
 		return enctype;
 	}
 
-	@Override
+	
 	public void setEnctype(String enctype) {
 		this.enctype = enctype;
 	}
 
-	@Override
+	
 	public String getMethod() {
 		return method;
 	}
 
-	@Override
+	
 	public void setMethod(String method) {
 		this.method = method;
 	}
 
-	@Override
+	
 	public void encodeBegin(FacesContext context) throws IOException {
 		ResponseWriter writer = this.getWriter(context);
 		writer.startElement(ELEMENT, this);
@@ -87,13 +89,13 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		formId.encodeAll(context);
 	}
 
-	@Override
+	
 	public void encodeEnd(FacesContext context) throws IOException {
 		ResponseWriter writer = this.getWriter(context);
 		writer.endElement(ELEMENT);
 	}
 
-	@Override
+	
 	public void encodeChildren(FacesContext context) throws IOException {
 		HtmlPanelGrid table = new HtmlPanelGrid();
 		table.setColumns(2);
@@ -121,7 +123,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return context.getResponseWriter();
 	}
 
-	@Override
+	
 	public UIComponent addText(String name, String label, String value) {
 		HtmlInputText input = new HtmlInputText();
 		input.setId(this.createName(name));
@@ -132,7 +134,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return input;
 	}
 
-	@Override
+	
 	public UIComponent addFile(String name, String label) {
 		this.enctype = "multipart/form-data";
 		HtmlInputFile input = new HtmlInputFile();
@@ -143,7 +145,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return input;
 	}
 
-	@Override
+	
 	public UIComponent addPassword(String name, String label) {
 		HtmlInputSecret input = new HtmlInputSecret();
 		input.setId(this.createName(name));
@@ -153,7 +155,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return input;
 	}
 
-	@Override
+	
 	public UIComponent addHidden(String name, String value) {
 		HtmlInputHidden input = new HtmlInputHidden();
 		input.setId(this.createName(name));
@@ -163,7 +165,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return input;
 	}
 
-	@Override
+	
 	public HtmlInputTextarea addTextArea(String name, String label, String value) {
 		HtmlInputTextarea textarea = new HtmlInputTextarea();
 		textarea.setId(this.createName(name));
@@ -174,7 +176,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return textarea;
 	}
 
-	@Override
+	
 	public UIComponent addSubmit(String name, String caption, String label) {
 		HtmlCommandButton button = new HtmlCommandButton();
 		button.setId(this.createName(name));
@@ -185,7 +187,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return button;
 	}
 
-	@Override
+	
 	public UIComponent addCheckbox(String name, String caption) {
 		HtmlSelectBooleanCheckbox checkbox = new HtmlSelectBooleanCheckbox();
 		checkbox.setId(this.createName(name));
@@ -196,12 +198,12 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		return checkbox;
 	}
 
-	@Override
+	
 	public Map<String, HtmlInputExtended> getInputs() {
 		return this.components;
 	}
 
-	@Override
+	
 	public HtmlInputExtended get(String name) {
 		return this.components.get(name);
 	}
@@ -221,7 +223,7 @@ public class HtmlAppForm extends HtmlOutputText implements AppForm {
 		this.components.put(name, component);
 	}
 
-	@Override
+	
 	public void remove(String name) {
 		this.components.remove(name);
 	}

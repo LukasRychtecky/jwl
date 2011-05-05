@@ -36,7 +36,6 @@ import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.global.ExceptionLogger;
-import com.jwl.presentation.html.AppForm;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlInputExtended;
@@ -126,7 +125,7 @@ abstract public class AbstractPresenter {
 	}
 
 	private void prepareFormFromRequest() throws IOException {
-		String formName = getRequestParam(AppForm.FORM_NAME);
+		String formName = getRequestParam(HtmlAppForm.FORM_NAME);
 		if (formName != null && !formName.isEmpty()) {
 			Method method;
 			try {
@@ -134,11 +133,11 @@ abstract public class AbstractPresenter {
 				HtmlAppForm form = (HtmlAppForm) method.invoke(this);
 
 				for (String key : getRequestParamMap().keySet()) {
-					if (!key.startsWith(AppForm.PREFIX)) {
+					if (!key.startsWith(HtmlAppForm.PREFIX)) {
 						continue;
 					}
 
-					HtmlInputExtended input = form.get(key.substring(AppForm.PREFIX.length()));
+					HtmlInputExtended input = form.get(key.substring(HtmlAppForm.PREFIX.length()));
 					if (input == null) {
 						continue;
 					}
