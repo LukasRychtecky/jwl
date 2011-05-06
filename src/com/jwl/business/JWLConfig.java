@@ -17,14 +17,13 @@ import java.util.logging.Logger;
  */
 public class JWLConfig {
 
+	public static final String CONFIG_FILE_NAME = "config.properties";
 	private String configFile;
 	
-	private final String PERSISTANCE_LAYER = "persistance-layer";
-	private final String OPTION_PERSISTANCE_LAYER_DB = "db";
-	private final String OPTION_PERSISTANCE_LAYER_XML = "xml";
-	private final String FILESYSTEM_STORE = "filesystem-store";
-	private final String KNOWLEDGE_SETTINGS_FILE = "knowledge-settings-file";
+	public static final String IMPLICIT_PU = "jsfwiki";
+	public static final String FILESYSTEM_PU = "jsf-filesystem";
 
+	
 	public JWLConfig(String configFile) {
 		this.configFile = configFile;
 		loadConfig();
@@ -62,29 +61,53 @@ public class JWLConfig {
 	}
 
 	private void setupVariable(String variable, String value) {
-		if (variable.equals(PERSISTANCE_LAYER)) {
+		if (variable.equals(JWLConfigConstant.PERSISTANCE_UNIT.constantName)) {
 			persistanceLayer(value);
-		} else if (variable.equals(FILESYSTEM_STORE)) {
-			filesystemStore(value);
-		} else if (variable.equals(KNOWLEDGE_SETTINGS_FILE)) {
-			knowledgeSettingsFile(value);
+		} else if (variable.equals(JWLConfigConstant.FILESYSTEM_STORE.constantName)) {
+			JWLConfigConstant.FILESYSTEM_STORE.value = value;
 		}
 	}
 
 	private void persistanceLayer(String value) {
-		if (value.equals(OPTION_PERSISTANCE_LAYER_DB)) {
-			Environment.setPersistenceUnit(Environment.IMPLICIT_PU);
-		} else if (value.equals(OPTION_PERSISTANCE_LAYER_XML)) {
-			Environment.setPersistenceUnit(Environment.FILESYSTEM_PU);
+		if (value.equals(JWLConfigConstant.PERSISTANCE_UNIT.getPermittedOptions()[0])) {
+			JWLConfigConstant.PERSISTANCE_UNIT.value = JWLConfig.IMPLICIT_PU;
+		} else if (value.equals(JWLConfigConstant.PERSISTANCE_UNIT.getPermittedOptions()[1])) {
+			JWLConfigConstant.PERSISTANCE_UNIT.value = JWLConfig.FILESYSTEM_PU ;
 		}
 	}
 	
-	private void filesystemStore(String value) {
-		Environment.setFilesystemStore(value);
+	public String getPersistanceUnit() {
+		return JWLConfigConstant.PERSISTANCE_UNIT.value;
+	}
+
+	public void setPersistanceUnit(String persistanceUnit) {
+		JWLConfigConstant.PERSISTANCE_UNIT.value = persistanceUnit;
+	}
+
+	public String getAclFileName() {
+		return JWLConfigConstant.ACL_FILE.value;
+	}
+
+}
+
+enum JWLConfigConstant {
+
+	PERSISTANCE_UNIT			("persistance-layer", JWLConfig.IMPLICIT_PU, "db", "xml"),
+	FILESYSTEM_STORE			("filesystem-store", ""),
+	ACL_FILE					("acl-file", "acl.csv");
+
+	public final String constantName;
+	public String value;
+	private String[] permittedOptions;
+
+	JWLConfigConstant(String constantName, String value, String... permittedOptions) {
+		this.constantName = constantName;
+		this.value = value;
+		this.permittedOptions = permittedOptions;
 	}
 	
-	private void knowledgeSettingsFile(String value) {
-		Environment.setKnowledgeSettingsFile(value);
+	public String[] getPermittedOptions() {
+		return permittedOptions;
 	}
 
 }

@@ -23,14 +23,8 @@ import javax.faces.context.FacesContext;
  */
 public class Environment {
 
-	public static final String IMPLICIT_PU = "jsfwiki";
-	public static final String FILESYSTEM_PU = "jsf-filesystem";
-	private static final String CONFIG_FILE_NAME = "config.properties";
-	private static final String ACL_FILE_NAME = "acl.csv";
-	private static String FILESYSTEM_STORE = null;
-	private static String KNOWLEDGE_SETTINGS_FILE = null;
+	private static JWLConfig config = null;
 	private static String JWL_HOME = null;
-	private static String PERSISTENCE_UNIT = IMPLICIT_PU;
 	private static IDAOFactory factory = null;
 	private static IIdentity identity = null;
 	private static ISettings knowledgeSettings = null;
@@ -40,20 +34,20 @@ public class Environment {
 	}
 
 	public static String getPersistenceUnit() {
-		return Environment.PERSISTENCE_UNIT;
+		return config.getPersistanceUnit();
 	}
 
 	public static void setPersistenceUnit(String persistenceUnit) {
 		if (persistenceUnit != null && !persistenceUnit.isEmpty()) {
-			Environment.PERSISTENCE_UNIT = persistenceUnit;
+			config.setPersistanceUnit(persistenceUnit);
 		}
 	}
 
 	public static IDAOFactory getDAOFactory() {
 		if (Environment.factory == null) {
-			if (Environment.PERSISTENCE_UNIT == null ? Environment.FILESYSTEM_PU == null
-					: Environment.PERSISTENCE_UNIT
-							.equals(Environment.FILESYSTEM_PU)) {
+			if (config.getPersistanceUnit() == null ? JWLConfig.FILESYSTEM_PU == null
+					: config.getPersistanceUnit()
+							.equals(JWLConfig.FILESYSTEM_PU)) {
 				Environment.factory = new FSDAOFactory();
 			} else {
 				Environment.factory = new JPADAOFactory();
@@ -69,14 +63,16 @@ public class Environment {
 	public static void setJWLHome(String jwlHome) {
 		if (Environment.JWL_HOME == null) {
 			Environment.JWL_HOME = jwlHome;
-			loadConfig();
+			config = new JWLConfig(Environment.JWL_HOME + File.separator + "private"
+					+ File.separator + "config" + File.separator
+					+ JWLConfig.CONFIG_FILE_NAME);
 		}
 	}
 
 	public static String getACLFileName() {
 		return Environment.JWL_HOME + File.separator + "private"
 				+ File.separator + "tmp" + File.separator
-				+ Environment.ACL_FILE_NAME;
+				+ config.getAclFileName();
 	}
 
 	public static String getAttachmentStorage() {
@@ -112,19 +108,5 @@ public class Environment {
 	private static Map<String, Object> getPermissionStorage() {
 		return FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap();
-	}
-
-	private static void loadConfig() {
-		new JWLConfig(Environment.JWL_HOME + File.separator + "private"
-				+ File.separator + "config" + File.separator
-				+ Environment.CONFIG_FILE_NAME);
-	}
-
-	public static void setFilesystemStore(String value) {
-		Environment.FILESYSTEM_STORE = value;
-	}
-
-	public static void setKnowledgeSettingsFile(String value) {
-		Environment.KNOWLEDGE_SETTINGS_FILE = value;
 	}
 }

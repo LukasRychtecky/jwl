@@ -5,6 +5,3 @@ persistance-layer db
 # Directory of xml storage
 # (It is used only if you set up 'xml' in persistance-layer)
 filesystem-store /Users/ostatnickyjiri/Desktop
-
-# Settings file for knowledge management
-knowledge-settings-file C:\\JWL_BW\\SeamWiki\\resources\\KnowledgeManagementSettings.xml
