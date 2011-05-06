@@ -316,6 +316,9 @@ public class ArticlePresenter extends AbstractPresenter {
 		HistoryId historyId = (HistoryId) super.context.getAttributes().get(
 				JWLContextKey.HISTORY_ID);
 		this.getFacade().restoreArticle(historyId);
+		
+		ArticleTO article = this.getFacade().getArticle(historyId.getArticleId());
+		super.context.getAttributes().put(JWLContextKey.ARTICLE, article);
 		messages.add(new FlashMessage("Article was restored."));
 	}
 
