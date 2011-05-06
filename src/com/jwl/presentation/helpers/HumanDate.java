@@ -23,7 +23,7 @@ public class HumanDate {
 		Calendar calendarDate = Calendar.getInstance();
 		calendarDate.setTime(date);
 		if (isSameYear(calendarDate, Calendar.getInstance())) {
-			dateFormat = dateFormat.replace(".yyyy", "");
+			dateFormat = dateFormat.replace("yyyy", "");
 		}
 		
 		if (isToday(date)) {

@@ -1,6 +1,7 @@
 package com.jwl.business.knowledge;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
@@ -14,7 +15,7 @@ public interface IKnowledgeManagementFacade {
 
 	public void extractKeyWords();
 	
-	public List<String> extractKeyWordsOnRun(String title, String text);
+	public Map<String, Float> extractKeyWordsOnRun(String title, String text);
 	
 	public List<ArticleIdPair> suggestArticleMerge();
 	

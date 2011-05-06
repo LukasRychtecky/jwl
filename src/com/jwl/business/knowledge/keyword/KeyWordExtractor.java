@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.jwl.business.article.ArticleTO;
 import com.jwl.business.article.KeyWordTO;
 import com.jwl.business.knowledge.util.ArticleIterator;
+import com.jwl.business.knowledge.util.ISettings;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.keyword.IKeyWordDAO;
@@ -23,20 +26,34 @@ public class KeyWordExtractor {
 	private IArticleDAO articleDAO;
 	private IKeyWordDAO keyWordDAO;
 	private Map<String, Integer> wordsInArticles;
-	private static int TAG_COUNT = 10;
+	private int keyWordNumber;
+	private ISettings settings;
+	private int articleCount;
 
-	public KeyWordExtractor(IArticleDAO articleDAO, IKeyWordDAO keyWordDAO) {
+	public KeyWordExtractor(IArticleDAO articleDAO, IKeyWordDAO keyWordDAO, ISettings settings) {
 		this.articleDAO = articleDAO;
 		this.keyWordDAO = keyWordDAO;
+		this.settings = settings;
+		keyWordNumber = settings.getKeyWordNumber();
 	}
 
 	public void extractKeyWords(){
 		try{
 			countWordsInArticles();
 		}catch(DAOException e){
+			Logger.getLogger(KeyWordExtractor.class.getName()).log(Level.SEVERE, "Key word extraction failed.");
+			return;
 		}
-		WordCountsFileManager fileManager = new WordCountsFileManager();
+		WordCountsFileManager fileManager = new WordCountsFileManager(settings);
 		fileManager.saveToFile(wordsInArticles);
+		
+		try{
+			articleCount = articleDAO.getCount();
+		}catch(DAOException e1){
+			Logger.getLogger(KeyWordExtractor.class.getName()).log(Level.SEVERE, "Key word extraction failed.");
+			return;
+		}
+		
 		ArticleIterator articleIterator = new ArticleIterator(articleDAO, 100);
 		try{
 			while(articleIterator.hasNext()){
@@ -44,15 +61,16 @@ public class KeyWordExtractor {
 				processArticle(article);
 			}
 		}catch(DAOException e){
+			Logger.getLogger(KeyWordExtractor.class.getName()).log(Level.SEVERE, "Key word extraction failed.");
+			return;
 		}
 	}
 
-	public List<String> extractKeyWordsOnRun(String title, String text){
-		WordCountsFileManager fileManager = new WordCountsFileManager();
+	public Map<String, Float> extractKeyWordsOnRun(String title, String text){
+		WordCountsFileManager fileManager = new WordCountsFileManager(settings);
 		wordsInArticles = fileManager.getFromFile();
 		Map<String, Float> keyWordsWeights = computeKeyWordWeights(title, text);
-		List<String> keyWordList = createKeyWordList(keyWordsWeights);
-		return keyWordList;
+		return keyWordsWeights;
 	}
 
 	private void countWordsInArticles() throws DAOException{
@@ -62,11 +80,11 @@ public class KeyWordExtractor {
 		while(articleIterator.hasNext()){
 			ArticleTO article = articleIterator.getNextArticle();
 			Set<String> titleWords = WordProcessor.getWordsCountInString(
-					article.getTitle()).keySet();
+					article.getTitle(), settings.getUsePorterStamer(), settings.getStopWordSetPath()).keySet();
 			insertWordsInMap(wordsInArticles, titleWords);
 			String articleText = mr.removeMarkdown(article.getText());
 			Set<String> textWords = WordProcessor.getWordsCountInString(
-					articleText).keySet();
+					articleText, settings.getUsePorterStamer(), settings.getStopWordSetPath()).keySet();
 			insertWordsInMap(wordsInArticles, textWords);
 		}
 	}
@@ -81,19 +99,7 @@ public class KeyWordExtractor {
 		}
 	}
 
-	private float computeTFIDF(String word, int articleOccur, int articleLenght){
-		int articleSum = 0;
-		try{
-			articleSum = articleDAO.getCount();
-		}catch(DAOException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		float tf = (float) articleOccur / articleLenght;
-		float idf = (float) Math.log((double) articleSum
-				/ wordsInArticles.get(word));
-		return tf * idf;
-	}
+	
 
 	private void processArticle(ArticleTO article){
 		Map<String, Float> wordWeights = computeKeyWordWeights(
@@ -111,25 +117,15 @@ public class KeyWordExtractor {
 		Map<String, Integer> wordCounts = new HashMap<String, Integer>();
 		MarkdownRemover mr = new MarkdownRemover();
 		title = mr.removeMarkdown(title);
-		int titleWordNum = WordProcessor.getWordNumber(title);
 		Map<String, Integer> titleWords = WordProcessor
-				.getWordsCountInString(title);
+				.getWordsCountInString(title, settings.getUsePorterStamer(), settings.getStopWordSetPath());
 		insertWordsInMap(wordCounts, titleWords);
 		text = mr.removeMarkdown(text);
-		int textWordNum = WordProcessor.getWordNumber(text);
 		Map<String, Integer> textWords = WordProcessor
-				.getWordsCountInString(text);
+				.getWordsCountInString(text, settings.getUsePorterStamer(), settings.getStopWordSetPath());
 		insertWordsInMap(wordCounts, textWords);
-
-		Map<String, Float> wordWeights = new HashMap<String, Float>();
-		for (Entry<String, Integer> wc : wordCounts.entrySet()){
-			if(wordsInArticles.containsKey(wc.getKey())){
-				float weight = computeTFIDF(wc.getKey(), wc.getValue(),
-						titleWordNum + textWordNum);
-				wordWeights.put(wc.getKey(), weight);
-			}
-		}
-		return wordWeights;
+		Tfidf tfidf = new Tfidf(wordsInArticles, articleCount);
+		return tfidf.computeArticleWordWeights(wordCounts);	
 	}
 
 	private void insertWordsInMap(Map<String, Integer> map,
@@ -155,30 +151,12 @@ public class KeyWordExtractor {
 		});
 
 		List<KeyWordTO> keyWords = new ArrayList<KeyWordTO>();
-		for (int i = 0; i < TAG_COUNT && i < list.size(); i++){
+		for (int i = 0; i < keyWordNumber && i < list.size(); i++){
 			Entry<String, Float> e = list.get(i);
 			KeyWordTO kw = createKeyWord(e.getKey(), e.getValue());
 			keyWords.add(kw);
 		}
 		return keyWords;
-	}
-
-	private List<String> createKeyWordList(Map<String, Float> wordWeights){
-		List<Entry<String, Float>> list = new LinkedList<Map.Entry<String, Float>>(
-				wordWeights.entrySet());
-		Collections.sort(list, new Comparator<Entry<String, Float>>() {
-			@Override
-			public int compare(Entry<String, Float> arg0,
-					Entry<String, Float> arg1){
-				return arg1.getValue().compareTo(arg0.getValue());
-			}
-		});
-		List<String> keyWordList = new ArrayList<String>();
-		for (int i = 0; i < TAG_COUNT && i < list.size(); i++){
-			Entry<String, Float> e = list.get(i);
-			keyWordList.add(e.getKey());
-		}
-		return keyWordList;
 	}
 
 	private KeyWordTO createKeyWord(String word, float weight){

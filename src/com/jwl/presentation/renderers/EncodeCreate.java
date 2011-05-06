@@ -37,6 +37,8 @@ public class EncodeCreate extends AbstractEncoder {
 		link.setValue(this.linker.buildLink("default"));
 		navigation.getChildren().add(link);
 		components.add(navigation);
+		components.add(this.getArticleFormJS());
+		
 		return components;
 	}
 

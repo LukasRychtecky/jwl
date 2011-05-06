@@ -3,12 +3,15 @@ package com.jwl.presentation.renderers;
 import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.Role;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractRenderer;
+import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +29,18 @@ public class ACLPreview extends AbstractRenderer {
 		super(linker, identity, params);
 	}
 	
-	public List<UIComponent> render() {
+	public List<UIComponent> renderImport() {
+		this.renderTable();
+		this.renderNavigation(this.createImportLink());
+		return super.components;
+	}
+	
+	public List<UIComponent> renderExport() {
+		this.renderTable();
+		this.renderNavigation(this.createExportLink());
+		return super.components;
+	}
+	public void renderTable() {
 		@SuppressWarnings("unchecked")
 		Set<Role> roles = (Set<Role>) super.params.get("acl");
 		
@@ -60,19 +74,35 @@ public class ACLPreview extends AbstractRenderer {
 			
 		}
 		super.components.add(table);
-		this.renderNavigation();
-		return super.components;
 	}
 	
-	private void renderNavigation() {
-		HtmlDiv div = new HtmlDiv();
-		div.addStyleClass("jwl-navigation");
+	private HtmlLink createImportLink() {
 		HtmlLink linkImport = new HtmlLink();
 		linkImport.setValue(this.linker.buildForm("importACL", "default"));
 		linkImport.setText("Import");
 		linkImport.setIsAjax(true);
 		linkImport.setStyleClass("jwl-action-button");
-		div.getChildren().add(linkImport);
+		return linkImport;
+	}
+	
+	private HtmlLink createExportLink() {
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParams.STATE, "default");
+		params.put(JWLURLParams.DOWNLOAD, "ACL");
+		
+		HtmlLink linkImport = new HtmlLink();
+		linkImport.setValue(this.linker.buildLink(AbstractComponent.JWL_DOWNLOAD_FILE_PAGE, params));
+		linkImport.setText("Export");
+		linkImport.setStyleClass("jwl-action-button");
+		return linkImport;
+	}
+	
+	private void renderNavigation(HtmlLink link) {
+		HtmlDiv div = new HtmlDiv();
+		div.addStyleClass("jwl-navigation");
+		
+		div.getChildren().add(link);
 		
 		HtmlLink linkBack = new HtmlLink();
 		linkBack.setValue(this.linker.buildLink("default"));

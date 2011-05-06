@@ -20,6 +20,7 @@ public class JWLURLParams {
 	public static final String TOPIC_ID = "topicid";
 	public static final String ANSWERING = "jwlanswering";
 	public static final String QUOTE_POST_ID = "jwlquotepostid";
+	public static final String DOWNLOAD = "jwldownload";
 	
 	public static List<String> ALL_URL_PARAMETERS;
 	public static List<String> ALL_URL_PARAMETERS_BUT_TITLE;

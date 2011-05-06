@@ -1,5 +1,6 @@
 package com.jwl.integration.article;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -240,16 +241,17 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 		sb.append(keyWords.size());
 		
 		EntityManager em = getEntityManager();
-		List<Article> result = null;
+		List<ArticleTO> articles = null;
 		try {		
 			Query query = em.createQuery(sb.toString());
-			result = query.getResultList();
+			List<Article> result = query.getResultList();
+			articles = ArticleConvertor.convertList(result);
 		} catch (Exception e) {
 			throw new DAOException(e);
 		}finally{
 			closeEntityManager(em);
 		}
-		return ArticleConvertor.convertList(result);
+		return articles;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -257,15 +259,49 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 	public List<ArticleTO> findDead() throws DAOException {
 		EntityManager em = getEntityManager();
 		List<Article> result = null;
+		List<ArticleTO> deadArticles = null;
 		try {		
-			Query query = em.createNamedQuery("Article.findDead");
-			
+			Query query = em.createNamedQuery("Article.findDead");			
 			result = query.getResultList();
+			deadArticles=ArticleConvertor.convertList(result);
 		} catch (Exception e) {
 			throw new DAOException(e);
 		}finally{
 			closeEntityManager(em);
 		}
-		return ArticleConvertor.convertList(result);
+		return deadArticles;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTO> fullScanSearch(Set<String> searchWords)
+			throws DAOException{
+		if(searchWords.isEmpty()){
+			return new ArrayList<ArticleTO>();
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT a FROM Article a WHERE a.text LIKE ?0");
+		for(int i = 1; i< searchWords.size();i++){
+			sb.append(" AND a.text LIKE ?"+i);
+		}
+		EntityManager em = getEntityManager();		
+		Query query = em.createQuery(sb.toString());
+		int i= 0;
+		for(String searchWord: searchWords){			
+			query.setParameter(i, "%"+searchWord+"%");
+			i++;
+		}
+		
+		List<ArticleTO> articles = null;
+		try {					
+			List<Article> result = query.getResultList();
+			articles = ArticleConvertor.convertList(result);
+		} catch (Exception e) {
+			throw new DAOException(e);
+		}finally{
+			closeEntityManager(em);
+		}
+		return articles;	
+	}
+	
 }

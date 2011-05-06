@@ -59,14 +59,15 @@ public class PostDAO extends BaseDAO implements IPostDAO {
 	@Override
 	public List<PostTO> getPosts(Integer topicId) throws DAOException {
 		EntityManager em = getEntityManager();
-		List<Post> result =null;
+		List<PostTO> posts=null;
 		try{
 			Topic topic  = em.find(Topic.class, topicId);
-			result = topic.getPosts();
+			List<Post> result = topic.getPosts();
+			posts = PostConverter.convertFromEntities(result);
 		}catch(Exception e){
 			throw new DAOException(e);
 		}
-		return PostConverter.convertFromEntities(result);
+		return posts;
 	}
 	
 	@Override

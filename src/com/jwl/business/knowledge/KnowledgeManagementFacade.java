@@ -1,6 +1,7 @@
 package com.jwl.business.knowledge;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
@@ -32,15 +33,15 @@ public class KnowledgeManagementFacade implements IKnowledgeManagementFacade {
 	public void extractKeyWords() {
 		IArticleDAO adao = Environment.getDAOFactory().getArticleDAO();
 		IKeyWordDAO kwdao = Environment.getDAOFactory().getKeyWordDAO();
-		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao);
+		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao, Environment.getKnowledgeSettings());
 		kwe.extractKeyWords();
 	}
 
 	@Override
-	public List<String> extractKeyWordsOnRun(String title, String text) {
+	public Map<String, Float> extractKeyWordsOnRun(String title, String text) {
 		IArticleDAO adao = Environment.getDAOFactory().getArticleDAO();
 		IKeyWordDAO kwdao = Environment.getDAOFactory().getKeyWordDAO();
-		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao);
+		KeyWordExtractor kwe = new KeyWordExtractor(adao, kwdao, Environment.getKnowledgeSettings());
 		return kwe.extractKeyWordsOnRun(title, text);
 	}
 

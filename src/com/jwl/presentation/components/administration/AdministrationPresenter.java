@@ -15,6 +15,7 @@ import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.renderers.ACLPreview;
 import com.jwl.presentation.renderers.EncodeAdministrationConsole;
@@ -25,8 +26,11 @@ import com.jwl.presentation.renderers.EncodeMergeSuggestionView;
 import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.RequestMapDecoder;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdministrationPresenter extends AbstractPresenter {
 
@@ -38,14 +42,26 @@ public class AdministrationPresenter extends AbstractPresenter {
 		container.addAll(new EncodeAdministrationConsole(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
 	}
 	
+	public void renderExportACL() {
+		try {
+			this.renderParams.put("acl", this.getFacade().getAllRoles());
+			container.addAll(new ACLPreview(linker, getFacade().getIdentity(), renderParams).renderExport());		
+		
+		} catch (PermissionDeniedException ex) {			
+			super.defaultPermissionDenied("default");
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex, "default");
+		}
+	}
+	
 	public HtmlAppForm createFormUploadACL() {
 		HtmlAppForm form = new HtmlAppForm("uploadACL");
-		form.addFile("file", "File");
+		form.addFile("file", "File").addRule(Validation.FILLED, "Please choose CSV file.");
 		form.addSubmit("submit", "Show preview", null);
 		
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.REDIRECT_TARGET, super.urlParser.getCurrentPage());
-		params.put(JWLURLParams.STATE, "previewACL");
+		params.put(JWLURLParams.STATE, "importACL");
 		params.put(JWLURLParams.DO, JWLActions.IMPORT_ACL.id);
 		form.setAction(this.linker.buildLink(AbstractComponent.JWL_UPLOAD_FILE_PAGE, params));
 		
@@ -61,15 +77,17 @@ public class AdministrationPresenter extends AbstractPresenter {
 			this.getFacade().importACL();
 			FlashMessage message = new FlashMessage("Access Control List has been imported.");
 			super.messages.add(message);
+		} catch (PermissionDeniedException ex) {			
+			super.defaultPermissionDenied("default");
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex, "default");
 		}
 	}
 	
-	public void renderPreviewACL() {
+	public void renderImportACL() {
 		try {
 			renderParams.put("acl", super.getFacade().parseACL());
-			container.addAll(new ACLPreview(linker, getFacade().getIdentity(), renderParams).render());		
+			container.addAll(new ACLPreview(linker, getFacade().getIdentity(), renderParams).renderImport());		
 		} catch (PermissionDeniedException ex) {			
 			FlashMessage message = new FlashMessage(
 					"You don't have a permission.",

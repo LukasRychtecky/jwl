@@ -47,12 +47,18 @@ public interface IFacade {
 	 * @param ArticleId id
 	 */
 	public void deleteArticle(ArticleId id) throws ModelException;
+	
+	public List<String> getAllTags() throws ModelException;
 
 	public void setJWLHome(String home);
 
 	public String getJWLHome();
 
 	public void importACL() throws ModelException;
+
+	public File exportACL() throws ModelException;
+	
+	public Set<Role> getAllRoles() throws ModelException;
 
 	public Set<Role> parseACL() throws ModelException;
 

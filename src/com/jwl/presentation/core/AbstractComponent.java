@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * 
  * @author Lukas Rychtecky
  */
 abstract public class AbstractComponent extends UIInput implements StateHolder {
@@ -33,6 +33,7 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 	public static final String TAG_PARAM_REQUIRED_ROLE = "role";
 	public static final String TAG_PARAM_ARTICLE_INITIAL_PAGE = "initialPage";
 	private String user;
+	private String role;
 
 	public AbstractComponent() {
 		super();
@@ -89,9 +90,10 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 	}
 
 	protected String getUserRole() {
-		String role = null;
-		Object attribute = this.getAttribute(TAG_PARAM_REQUIRED_ROLE);
-		role = this.getNotNullString(attribute);
+		if (role == null || role.isEmpty()) {
+			Object attribute = this.getAttribute(TAG_PARAM_REQUIRED_ROLE);
+			role = this.getNotNullString(attribute);
+		}
 		return role;
 	}
 
@@ -129,7 +131,8 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 		super.restoreState(context, values[0]);
 	}
 
-	private void loginUser(FacesContext context, AbstractPresenter presenter) throws IOException {
+	private void loginUser(FacesContext context, AbstractPresenter presenter)
+			throws IOException {
 		Set<Role> roles = new HashSet<Role>();
 		String[] splitedRoles = this.getUserRole().split(ROLE_DELIMITER);
 
@@ -146,12 +149,28 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 			this.user = request.getRemoteAddr();
 		}
-		
+
 		try {
 			presenter.loginUser(this.user, roles);
 		} catch (ModelException e) {
 			ExceptionLogger.severe(getClass(), e);
 			presenter.render500();
 		}
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getRole() {
+		return role;
 	}
 }

@@ -19,7 +19,7 @@ import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsExceptio
 import com.jwl.business.knowledge.keyword.WordProcessor;
 import com.jwl.business.knowledge.util.ArticleIterator;
 import com.jwl.business.knowledge.util.IArticleIterator;
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.ISettings;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.keyword.IKeyWordDAO;
@@ -28,18 +28,17 @@ public class KnowledgeSearch {
 
 	IArticleDAO articleDAO;
 	IKeyWordDAO keyWordDAO;
-	ISettingsSource knowledgeSettings;
+	ISettings settings;
 	private boolean searchInEditors;
 	private boolean searchInTags;
 	private boolean searchInKeyWords;
 	private boolean searchInTitle;
 	private Set<String> searchWords;
 	private static final String featureName = "Search";
-	
 
 	private enum InputNames {
 		KEY_WORDS("KeyWords"), TAGS("Tags"), EDITORS("Editors"), TITLE("Title"), RATING(
-				"Rating"), UNMATCHED_TOLERANCE("UnmatchedWordsTolerance");
+				"Rating");
 
 		public String name;
 
@@ -49,82 +48,83 @@ public class KnowledgeSearch {
 	}
 
 	public KnowledgeSearch(IArticleDAO articleDAO, IKeyWordDAO keyWordDAO,
-			ISettingsSource knowledgeSettings) {
+			ISettings knowledgeSettings) {
 		this.articleDAO = articleDAO;
 		this.keyWordDAO = keyWordDAO;
-		this.knowledgeSettings = knowledgeSettings;
+		this.settings = knowledgeSettings;
 	}
 
 	public List<ArticleTO> getSearchResult(SearchTO searchTO)
-			throws KnowledgeException {
+			throws KnowledgeException{
 		setSearchCategories(searchTO);
-		if (!isValidInput()) {
+		if(!isValidInput()){
 			return new ArrayList<ArticleTO>();
 		}
 		List<ArticleTO> result = null;
-		try {
+		try{
 			result = getBestMatching();
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new KnowledgeException(e);
 		}
 		return result;
 	}
 
-	private List<ArticleTO> getBestMatching() throws DAOException, KnowledgeManagementSettingsException {
+	private List<ArticleTO> getBestMatching() throws DAOException,
+			KnowledgeManagementSettingsException{
 		IArticleIterator iterator = new ArticleIterator(articleDAO, 100);
 		Map<ArticleTO, Double> articleWeights = new HashMap<ArticleTO, Double>();
 		double benchmark = computeBenchmarkValue();
-		while (iterator.hasNext()) {
+		while(iterator.hasNext()){
 			ArticleTO article = iterator.getNextArticle();
 			processArticle(article, articleWeights, benchmark);
 		}
-		return orderWordList(articleWeights);		
+		return orderWordList(articleWeights);
 	}
 
-	private void processArticle(ArticleTO article, Map<ArticleTO, Double> articleWeights, double benchmark) throws KnowledgeManagementSettingsException, DAOException {
+	private void processArticle(ArticleTO article,
+			Map<ArticleTO, Double> articleWeights, double benchmark)
+			throws KnowledgeManagementSettingsException, DAOException{
 		Map<String, Boolean> matchMap = createWordMap();
 		double keyWordMatchValue = processKeyWords(matchMap, article);
 		int tagMatchCount = processTags(matchMap, article);
 		int editorMatchCount = processEditors(matchMap, article);
 		int titleMatchCount = processTitle(matchMap, article);
 		Set<String> unmatchedWords = getUnmatchedWords(matchMap);
-		if(!isUnmatchedWithinLimit(unmatchedWords.size(), searchWords.size())){
-			return;
-		}
 		if(!isInFullTextSearch(unmatchedWords, article)){
 			return;
 		}
-		
+
 		double articleValue = computeKeyWordsValue(keyWordMatchValue);
-		articleValue+=computeTagsValue(tagMatchCount, benchmark);
-		articleValue+=computeTitleValue(titleMatchCount, benchmark);
-		articleValue+=computeEditorsValue(editorMatchCount, benchmark);
+		articleValue += computeTagsValue(tagMatchCount, benchmark);
+		articleValue += computeTitleValue(titleMatchCount, benchmark);
+		articleValue += computeEditorsValue(editorMatchCount, benchmark);
 		articleWeights.put(article, articleValue);
 	}
 
-	private double processKeyWords(Map<String, Boolean> matchMap, ArticleTO article) {
+	private double processKeyWords(Map<String, Boolean> matchMap,
+			ArticleTO article){
 		double result = 0.0;
-		if (!searchInKeyWords) {
+		if(!searchInKeyWords){
 			return result;
 		}
-
-		for (KeyWordTO kw : article.getKeyWords()) {
-			if (searchWords.contains(kw.getWord())) {
+		
+		for (KeyWordTO kw : article.getKeyWords()){
+			if(searchWords.contains(kw.getWord())){
 				matchMap.put(kw.getWord(), true);
-				result+=kw.getWeight();
+				result += kw.getWeight();
 			}
 		}
 		return result;
 	}
 
-	private int processTags(Map<String, Boolean> matchMap, ArticleTO article) {
+	private int processTags(Map<String, Boolean> matchMap, ArticleTO article){
 		int result = 0;
-		if (!searchInTags) {
+		if(!searchInTags){
 			return result;
 		}
-
-		for (String tag : article.getTags()) {
-			if (searchWords.contains(tag)) {
+		
+		for (String tag : article.getTags()){
+			if(searchWords.contains(tag)){
 				matchMap.put(tag, true);
 				result++;
 			}
@@ -132,15 +132,15 @@ public class KnowledgeSearch {
 		return result;
 	}
 
-	private int processTitle(Map<String, Boolean> matchMap, ArticleTO article) {
+	private int processTitle(Map<String, Boolean> matchMap, ArticleTO article){
 		int result = 0;
-		if (!searchInTitle) {
+		if(!searchInTitle){
 			return result;
 		}
-
-		Set<String> titleWords = WordProcessor.getWords(article.getTitle());
-		for (String word : titleWords) {
-			if (searchWords.contains(word)) {
+		
+		Set<String> titleWords = WordProcessor.getWords(article.getTitle(), settings.getUsePorterStamer(), settings.getStopWordSetPath());
+		for (String word : titleWords){
+			if(searchWords.contains(word)){
 				matchMap.put(word, true);
 				result++;
 			}
@@ -148,15 +148,15 @@ public class KnowledgeSearch {
 		return result;
 	}
 
-	private int processEditors(Map<String, Boolean> matchMap, ArticleTO article) {
+	private int processEditors(Map<String, Boolean> matchMap, ArticleTO article){
 		int result = 0;
-		if (!searchInEditors) {
+		if(!searchInEditors){
 			return result;
 		}
-
-		Set<String> editorWords = WordProcessor.getWords(article.getEditor());
-		for (String word : editorWords) {
-			if (searchWords.contains(word)) {
+		
+		Set<String> editorWords = WordProcessor.getWords(article.getEditor(), false, settings.getStopWordSetPath());
+		for (String word : editorWords){
+			if(searchWords.contains(word)){
 				matchMap.put(word, true);
 				result++;
 			}
@@ -164,138 +164,128 @@ public class KnowledgeSearch {
 		return result;
 	}
 
-	private Map<String, Boolean> createWordMap() {
+	private Map<String, Boolean> createWordMap(){
 		Map<String, Boolean> result = new HashMap<String, Boolean>(
 				searchWords.size());
-		for (String word : searchWords) {
+		for (String word : searchWords){
 			result.put(word, false);
 		}
 		return result;
 	}
 
-	private List<ArticleTO> orderWordList(Map<ArticleTO, Double> articleWeights) {
+	private List<ArticleTO> orderWordList(Map<ArticleTO, Double> articleWeights){
 		List<Entry<ArticleTO, Double>> list = new LinkedList<Map.Entry<ArticleTO, Double>>(
 				articleWeights.entrySet());
 		Collections.sort(list, new Comparator<Entry<ArticleTO, Double>>() {
 			@Override
 			public int compare(Entry<ArticleTO, Double> arg0,
-					Entry<ArticleTO, Double> arg1) {
+					Entry<ArticleTO, Double> arg1){
 				return arg1.getValue().compareTo(arg0.getValue());
 			}
 		});
 		List<ArticleTO> keyWordList = new ArrayList<ArticleTO>();
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++){
 			Entry<ArticleTO, Double> e = list.get(i);
 			keyWordList.add(e.getKey());
 		}
 		return keyWordList;
 	}
 
-	private Set<String> getUnmatchedWords(Map<String, Boolean> wordMatch) {
+	private Set<String> getUnmatchedWords(Map<String, Boolean> wordMatch){
 		Set<String> result = new HashSet<String>();
-		for (Entry<String, Boolean> e : wordMatch.entrySet()) {
-			if (e.getValue().booleanValue() == false) {
+		for (Entry<String, Boolean> e : wordMatch.entrySet()){
+			if(e.getValue().booleanValue() == false){
 				result.add(e.getKey());
 			}
 		}
 		return result;
 	}
 
-	/*private Set<String> excludeNonKeyWords(Set<String> searchWords)
-			throws KnowledgeException {
-		List<KeyWordTO> keyWords = null;
-		try {
-			keyWords = keyWordDAO.getAll();
-		} catch (DAOException e) {
-			throw new KnowledgeException(e);
-		}
-		Set<String> kws = new HashSet<String>();
-		for (KeyWordTO kw : keyWords) {
-			kws.add(kw.getWord());
-		}
-		Set<String> searchWordsFiltered = new HashSet<String>();
-		for (String searchWord : searchWords) {
-			if (kws.contains(searchWord)) {
-				searchWordsFiltered.add(searchWord);
-			}
-		}
-		return searchWordsFiltered;
-	}*/
+	/*
+	 * private Set<String> excludeNonKeyWords(Set<String> searchWords) throws
+	 * KnowledgeException { List<KeyWordTO> keyWords = null; try { keyWords =
+	 * keyWordDAO.getAll(); } catch (DAOException e) { throw new
+	 * KnowledgeException(e); } Set<String> kws = new HashSet<String>(); for
+	 * (KeyWordTO kw : keyWords) { kws.add(kw.getWord()); } Set<String>
+	 * searchWordsFiltered = new HashSet<String>(); for (String searchWord :
+	 * searchWords) { if (kws.contains(searchWord)) {
+	 * searchWordsFiltered.add(searchWord); } } return searchWordsFiltered; }
+	 */
 
-	private void setSearchCategories(SearchTO searchTO) {
-		if (searchTO.isTags()) {
+	private void setSearchCategories(SearchTO searchTO){
+		if(searchTO.isTags()){
 			this.searchInTags = true;
 		}
-		if (searchTO.isEditors()) {
+		if(searchTO.isEditors()){
 			this.searchInEditors = true;
 		}
-		if (searchTO.isKeyWords()) {
+		if(searchTO.isKeyWords()){
 			this.searchInKeyWords = true;
 		}
-		if (searchTO.isTitle()) {
+		if(searchTO.isTitle()){
 			this.searchInTitle = true;
 		}
-		searchWords = WordProcessor.getWords(searchTO.getSearchPhrase());
+		searchWords = WordProcessor.getWords(searchTO.getSearchPhrase(), settings.getUsePorterStamer(), settings.getStopWordSetPath());
 	}
 
-	private boolean isValidInput() {
-		if ((searchInTags || searchInEditors || searchInKeyWords || searchInTitle)
-				&& !searchWords.isEmpty()) {
+	private boolean isValidInput(){
+		if((searchInTags || searchInEditors || searchInKeyWords || searchInTitle)
+				&& !searchWords.isEmpty()){
 			return true;
 		}
 		return false;
 	}
-	
-	private boolean isUnmatchedWithinLimit(int unmatchedSize, int searchSize) throws KnowledgeManagementSettingsException{
-		double limitKoef = knowledgeSettings.getWeight(featureName, InputNames.UNMATCHED_TOLERANCE.name);
-		if(unmatchedSize<=limitKoef*searchSize){
-			return true;
-		}
-		return false;
-	}
-	
+
 	private boolean isInFullTextSearch(Set<String> words, ArticleTO article){
 		String articleText = article.getText();
-		for(String word : words){
+		for (String word : words){
 			if(!articleText.contains(word)){
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	private double computeKeyWordsValue(double keyWordsValue) throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName, InputNames.KEY_WORDS.name);
+
+	private double computeKeyWordsValue(double keyWordsValue)
+			throws KnowledgeManagementSettingsException{
+		double weight = settings.getWeight(featureName,
+				InputNames.KEY_WORDS.name);
 		return weight * keyWordsValue;
 	}
-	
-	private double computeTagsValue(int tagMatchCount, double benchmark) throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName, InputNames.TAGS.name);
-		return weight*benchmark*tagMatchCount;
+
+	private double computeTagsValue(int tagMatchCount, double benchmark)
+			throws KnowledgeManagementSettingsException{
+		double weight = settings.getWeight(featureName,
+				InputNames.TAGS.name);
+		return weight * benchmark * tagMatchCount;
 	}
-	
-	private double computeTitleValue(int tagMatchCount, double benchmark) throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName, InputNames.TITLE.name);
-		return weight*benchmark*tagMatchCount;
+
+	private double computeTitleValue(int tagMatchCount, double benchmark)
+			throws KnowledgeManagementSettingsException{
+		double weight = settings.getWeight(featureName,
+				InputNames.TITLE.name);
+		return weight * benchmark * tagMatchCount;
 	}
-	
-	private double computeEditorsValue(int tagMatchCount, double benchmark) throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName, InputNames.EDITORS.name);
-		return weight*benchmark*tagMatchCount;
+
+	private double computeEditorsValue(int tagMatchCount, double benchmark)
+			throws KnowledgeManagementSettingsException{
+		double weight = settings.getWeight(featureName,
+				InputNames.EDITORS.name);
+		return weight * benchmark * tagMatchCount;
 	}
-	
+
 	private double computeBenchmarkValue() throws DAOException{
 		IArticleIterator iterator = new ArticleIterator(articleDAO, 100);
 		double result = 0.0;
-		int count =0;
+		int count = 0;
 		while(iterator.hasNext()){
 			ArticleTO article = iterator.getNextArticle();
-			List<KeyWordTO> kws =article.getKeyWords();
+			List<KeyWordTO> kws = article.getKeyWords();
 			if(!kws.isEmpty()){
-				result+=kws.get(0).getWeight();
+				result += kws.get(0).getWeight();
 				count++;
-			}		
+			}
 		}
-		return result/count;
+		return result / count;
 	}
 }

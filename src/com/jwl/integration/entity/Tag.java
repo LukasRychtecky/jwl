@@ -24,7 +24,7 @@ import javax.persistence.NamedQueries;
 @Table(name = "tag")
 @NamedQueries({
 	@NamedQuery(name = "Tag.getByName", query = "SELECT t FROM Tag t WHERE t.name=?0"),
-	@NamedQuery(name = "Tag.getAll", query = "SELECT t FROM Tag t")
+	@NamedQuery(name = "Tag.getAll", query = "SELECT t FROM Tag t ORDER BY t.name")
 })
 public class Tag extends BaseEntity implements java.io.Serializable {
 

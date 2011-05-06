@@ -7,15 +7,24 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class WordProcessor {
-	private static String DELIMITERS = " \f\t\n\r()',.:?!\"";
-
-	public static Map<String, Integer> getWordsCountInString(String str) {
+	private static String DELIMITERS = " \f\t\n\r()',.:?!\"[]{}<>*/+-$";
+	
+	public static Map<String, Integer> getWordsCountInString(String str, boolean useStemmer, String stopWordSPath) {
 		Map<String, Integer> foundWords = new HashMap<String, Integer>();
+		
+		StopWordManager stopMan = new StopWordManager(stopWordSPath);
 		StringTokenizer parser = new StringTokenizer(str, DELIMITERS);
+		
 		String word;
 		while (parser.hasMoreTokens()) {
 			word = parser.nextToken();
 			word = word.toLowerCase();
+			if(stopMan.isStopWord(word)){
+				continue;
+			}
+			if(useStemmer){
+				word = stem(word);
+			}
 			try {
 				Float.parseFloat(word);
 				continue;
@@ -30,26 +39,48 @@ public class WordProcessor {
 		return foundWords;
 	}
 
-	public static int getWordNumber(String str) {
-		StringTokenizer parser = new StringTokenizer(str, DELIMITERS);
-		int count = 0;
-		while (parser.hasMoreTokens()) {
-			parser.nextToken();
-			count++;
+	public static int getWordNumber(String str, boolean useStemmer, String stopWordSPath) {
+		Set<String> result = new HashSet<String>();
+		if (str == null || str == "") {
+			return 0;
 		}
-		return count;
+		
+		StopWordManager stopMan = new StopWordManager(stopWordSPath);
+		StringTokenizer parser = new StringTokenizer(str, DELIMITERS);
+		
+		while (parser.hasMoreTokens()) {
+			String word = parser.nextToken();
+			word = word.toLowerCase();
+			if(stopMan.isStopWord(word)){
+				continue;
+			}
+			result.add(word);			
+		}
+		if(useStemmer){
+			result = stem(result);
+		}
+		return result.size();
 	}
 
-	public static Set<String> getWords(String str) {
+	public static Set<String> getWords(String str, boolean useStemmer, String stopWordSPath) {
 		Set<String> result = new HashSet<String>();
 		if (str == null || str == "") {
 			return result;
 		}
+		
+		StopWordManager stopMan = new StopWordManager(stopWordSPath);
 		StringTokenizer parser = new StringTokenizer(str, DELIMITERS);
+		
 		while (parser.hasMoreTokens()) {
 			String word = parser.nextToken();
 			word = word.toLowerCase();
+			if(stopMan.isStopWord(word)){
+				continue;
+			}
 			result.add(word);
+		}
+		if(useStemmer){
+			result = stem(result);
 		}
 		return result;
 	}
@@ -76,6 +107,21 @@ public class WordProcessor {
 		}
 		float result = numerator;
 		return result / denominator;
+	}
+	
+	private static Set<String> stem(Set<String> words){		
+		Set<String> result = new HashSet<String>();
+		for(String word:words){
+			result.add(stem(word));
+		}
+		return result;
+	}
+	
+	private static String stem(String word){
+		PorterStemmer stemmer = new PorterStemmer();
+		stemmer.add(word.toCharArray(), word.length());
+		stemmer.stem();
+		return stemmer.toString();
 	}
 
 }

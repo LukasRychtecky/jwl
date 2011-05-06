@@ -10,17 +10,17 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import com.jwl.business.Environment;
 import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.ISettings;
 
 public class ScheduledJobManager {
-	ISettingsSource settingsSource;
+	ISettings settingsSource;
 	private static final String jobGroup ="Knowledge Management";
 
 	public ScheduledJobManager() {
 	}
 
 	public void schedule() {
-		ISettingsSource settings = Environment.getKnowledgeSettings();
+		ISettings settings = Environment.getKnowledgeSettings();
 		try {
 			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
 			attachKeyWordGeneration(scheduler, settings);
@@ -28,12 +28,12 @@ public class ScheduledJobManager {
 			attachMergeSuggestionsGeneration(scheduler, settings);
 			attachMergeSuggestionsClenUp(scheduler, settings);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up scheduler", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up scheduler");
 		}
 	}
 	
 	private void attachKeyWordGeneration(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings
@@ -49,12 +49,12 @@ public class ScheduledJobManager {
 					jobGroup, KeyWordGenerationJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up key word generation scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up key word generation scheduling");
 		}
 	}
 	
 	private void attachLivabilityPeriodicDecrease(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings
@@ -70,12 +70,12 @@ public class ScheduledJobManager {
 					jobGroup, LivabilityPeriodicReductionJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up livability decrease scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up livability decrease scheduling");
 		}
 	}
 
 	private void attachMergeSuggestionsGeneration(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings
@@ -91,12 +91,12 @@ public class ScheduledJobManager {
 					jobGroup, MergeSuggestionsGenerationJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions generation scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions generation scheduling");
 		}
 	}
 
 	private void attachMergeSuggestionsClenUp(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings
@@ -112,7 +112,7 @@ public class ScheduledJobManager {
 					jobGroup, MergeSuggestionsCleanUpJob.class);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
-			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions clean up scheduling", e);
+			Logger.getLogger(ScheduledJobManager.class.getName()).log(Level.SEVERE, "could not set up merge suggestions clean up scheduling");
 		}
 	}
 

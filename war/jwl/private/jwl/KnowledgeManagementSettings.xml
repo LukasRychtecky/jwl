@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knowledgeManagement>
+    
+	<globalParameters>
+		<parameter name="keyWordNumber" value="10"/>	
+		<parameter name="porterStemmer" value="true"/>
+		<parameter name="stopWordsSet" value="english"/>
+	</globalParameters>
+	
+	<scheduledJobs>
+		<scheduledJob name="KeyWordGeneration" cronExpression="*/2 * ? * *"/>
+		<scheduledJob name="ArticleMergeSuggestionsGeneration" cronExpression=""/>
+		<scheduledJob name="ArticleMergeSuggestionsCleanUp" cronExpression=""/>
+		<scheduledJob name="LivabilityPeriodicReduction" cronExpression=""/>		
+	</scheduledJobs>
+	
+	<features>
+		<feature name="ArticleSimilarityView" threshold ="1.2">
+			<input name="NameSimilarity" value="1.5"/>
+			<input name="TagSimilarity" value="2"/>
+			<input name="KeyWordSimilarity" value="7"/>
+		</feature>
+		<feature name="ArticleSimilarityEdit" threshold ="1.2">
+			<input name="NameSimilarity" value="1.5"/>
+			<input name="TagSimilarity" value="2"/>
+			<input name="KeyWordSimilarity" value="7"/>
+		</feature>	
+		<feature name="MergeSuggestion" threshold ="1.2">
+			<input name="NameSimilarity" value="1.5"/>
+			<input name="TagSimilarity" value="2"/>
+			<input name="KeyWordSimilarity" value="7"/>
+		</feature>		
+		<feature name="ArticleLivability" threshold ="0">
+			<input name="InitialValue" value="30"/>
+			<input name="PositiveRating" value="1"/>
+			<input name="NegativeRating" value="1.5"/>
+			<input name="PeriodicReduction" value="1"/>
+		</feature>
+		<feature name="Search" threshold ="0">
+			<input name="KeyWords" value="1"/>
+			<input name="Tags" value="1"/>
+			<input name="Editors" value="1"/>
+			<input name="Title" value="1"/>
+			<input name="Rating" value="1"/>
+		</feature>		
+	</features>	
+</knowledgeManagement>

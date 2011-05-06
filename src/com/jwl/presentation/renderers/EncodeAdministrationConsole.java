@@ -35,11 +35,22 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 		HtmlDiv div = new HtmlDiv();
 		div.addStyleClass("jwl-navigation");
 		
+		div.addChildren(this.getShowExistingACLLink());
 		div.addChildren(this.encodedMergeSuggestionsLink());
 		div.addChildren(this.encodedDeadArticlesLink());
 		div.addChildren(this.encodedKeyWordLink());
 		
 		return div;
+	}
+	
+	private HtmlLink getShowExistingACLLink() {
+
+		HtmlLink link = new HtmlLink();
+		link.setIsAjax(Boolean.TRUE);
+		link.setText("Show existing ACL");
+		link.setValue(this.linker.buildLink("exportACL"));
+		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
+		return link;
 	}
 
 	private HtmlLink encodedMergeSuggestionsLink() {

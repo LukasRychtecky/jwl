@@ -34,4 +34,6 @@ public interface IArticleDAO {
 	public List<ArticleTO> findArticleWithKeyWord(Set<String> keyWords)throws DAOException;
 	
 	public List<ArticleTO> findDead() throws DAOException;
+	
+	public List<ArticleTO> fullScanSearch(Set<String> searchWords) throws DAOException;
 }

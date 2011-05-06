@@ -1,5 +1,6 @@
 package com.jwl.presentation.core;
 
+import com.jwl.business.Environment;
 import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
@@ -11,6 +12,9 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.global.FileDownloader;
+import java.io.File;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 
@@ -47,6 +51,7 @@ public class AjaxListener implements PhaseListener {
 			if (method == null || !method.equals("ajax")) {
 				return;
 			}
+			
 			if (!requestParams.containsKey(JWLURLParams.PRESENTER)) {
 				throw new IllegalArgumentException("No "
 						+ JWLURLParams.PRESENTER + " found.");

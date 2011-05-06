@@ -41,6 +41,9 @@ public class AttachCSSAndJSFilter implements Filter {
 		Global.getInstance().saveFacade();
 
 		headEndPosition = wrapper.toString().indexOf("</head>");
+		if (headEndPosition < 0) {
+			return;
+		}
 		bodyBeginPosition = wrapper.toString().indexOf("<body>") + 6;
 
 		StringBuilder builder = new StringBuilder();
@@ -69,6 +72,7 @@ public class AttachCSSAndJSFilter implements Filter {
 		List<String> styles = new ArrayList<String>();
 		styles.add(JWL_DIRECTORY + "markitup/sets/markdown/style.css");
 		styles.add(JWL_DIRECTORY + "markitup/skins/simple/style.css");
+		styles.add(JWL_DIRECTORY + "jquery-ui.css");
 
 		for (String href : styles) {
 			String link = "<link rel=\"stylesheet\" type=\"text/css\" "
@@ -80,6 +84,7 @@ public class AttachCSSAndJSFilter implements Filter {
 
 		List<String> scripts = new ArrayList<String>();
 		scripts.add(JWL_DIRECTORY + "jquery.js");
+		scripts.add(JWL_DIRECTORY + "jquery-ui.min.js");
 		scripts.add(JWL_DIRECTORY + "jquery.livequery.js");
 		scripts.add(JWL_DIRECTORY + "jwlengine.js");
 		scripts.add(JWL_DIRECTORY + "markitup/jquery.markitup.js");

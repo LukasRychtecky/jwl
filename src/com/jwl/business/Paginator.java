@@ -2,6 +2,7 @@ package com.jwl.business;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
@@ -9,6 +10,7 @@ import com.jwl.business.article.ArticleTO;
 import com.jwl.integration.ConnectionFactory;
 import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
+import com.jwl.integration.exceptions.DAOException;
 import com.jwl.presentation.enumerations.JWLTableHeaders;
 
 public class Paginator extends AbstractArticlePaginator {
@@ -28,12 +30,19 @@ public class Paginator extends AbstractArticlePaginator {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<ArticleTO> getCurrentPageContent() {
-		List<Article> articles = null;
-		Query query = this.em.createNamedQuery(this.getQueryName());
+		List<ArticleTO> result = null;
+		try{
+		EntityManager em = super.getEntityManager();
+		Query query = em.createNamedQuery(this.getQueryName());
 		query.setFirstResult((this.pageIndex - 1) * this.pageSize);
 		query.setMaxResults(this.pageSize);
-		articles = query.getResultList();
-		return ArticleConvertor.convertList(articles);
+		List<Article> articles = query.getResultList();
+		result = ArticleConvertor.convertList(articles);
+		super.closeEntityManager(em);
+		}catch(DAOException e){
+			
+		}
+		return result;
 	}
 
 	private String getQueryName() {
@@ -57,9 +66,6 @@ public class Paginator extends AbstractArticlePaginator {
 
 	@Override
 	public void setUpPaginator() {
-		EntityManagerFactory connection = ConnectionFactory.getInstance()
-				.getConnection();
-		em = connection.createEntityManager();
 		super.setUpPaginator();
 	}
 
