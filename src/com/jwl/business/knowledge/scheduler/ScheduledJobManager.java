@@ -10,17 +10,17 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import com.jwl.business.Environment;
 import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.ISettings;
 
 public class ScheduledJobManager {
-	ISettingsSource settingsSource;
+	ISettings settingsSource;
 	private static final String jobGroup ="Knowledge Management";
 
 	public ScheduledJobManager() {
 	}
 
 	public void schedule() {
-		ISettingsSource settings = Environment.getKnowledgeSettings();
+		ISettings settings = Environment.getKnowledgeSettings();
 		try {
 			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
 			attachKeyWordGeneration(scheduler, settings);
@@ -33,7 +33,7 @@ public class ScheduledJobManager {
 	}
 	
 	private void attachKeyWordGeneration(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings
@@ -54,7 +54,7 @@ public class ScheduledJobManager {
 	}
 	
 	private void attachLivabilityPeriodicDecrease(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings
@@ -75,7 +75,7 @@ public class ScheduledJobManager {
 	}
 
 	private void attachMergeSuggestionsGeneration(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings
@@ -96,7 +96,7 @@ public class ScheduledJobManager {
 	}
 
 	private void attachMergeSuggestionsClenUp(Scheduler scheduler,
-			ISettingsSource settings) {
+			ISettings settings) {
 		String cronExpression = null;
 		try {
 			cronExpression = settings

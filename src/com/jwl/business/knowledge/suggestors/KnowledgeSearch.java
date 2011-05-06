@@ -19,7 +19,7 @@ import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsExceptio
 import com.jwl.business.knowledge.keyword.WordProcessor;
 import com.jwl.business.knowledge.util.ArticleIterator;
 import com.jwl.business.knowledge.util.IArticleIterator;
-import com.jwl.business.knowledge.util.ISettingsSource;
+import com.jwl.business.knowledge.util.ISettings;
 import com.jwl.integration.article.IArticleDAO;
 import com.jwl.integration.exceptions.DAOException;
 import com.jwl.integration.keyword.IKeyWordDAO;
@@ -28,7 +28,7 @@ public class KnowledgeSearch {
 
 	IArticleDAO articleDAO;
 	IKeyWordDAO keyWordDAO;
-	ISettingsSource knowledgeSettings;
+	ISettings settings;
 	private boolean searchInEditors;
 	private boolean searchInTags;
 	private boolean searchInKeyWords;
@@ -48,10 +48,10 @@ public class KnowledgeSearch {
 	}
 
 	public KnowledgeSearch(IArticleDAO articleDAO, IKeyWordDAO keyWordDAO,
-			ISettingsSource knowledgeSettings) {
+			ISettings knowledgeSettings) {
 		this.articleDAO = articleDAO;
 		this.keyWordDAO = keyWordDAO;
-		this.knowledgeSettings = knowledgeSettings;
+		this.settings = knowledgeSettings;
 	}
 
 	public List<ArticleTO> getSearchResult(SearchTO searchTO)
@@ -63,10 +63,6 @@ public class KnowledgeSearch {
 		List<ArticleTO> result = null;
 		try{
 			result = getBestMatching();
-			List<ArticleTO> fullScanResult = articleDAO
-					.fullScanSearch(searchWords);
-			fullScanResult.removeAll(result);
-			result.addAll(fullScanResult);
 		}catch(Exception e){
 			throw new KnowledgeException(e);
 		}
@@ -111,7 +107,7 @@ public class KnowledgeSearch {
 		if(!searchInKeyWords){
 			return result;
 		}
-
+		
 		for (KeyWordTO kw : article.getKeyWords()){
 			if(searchWords.contains(kw.getWord())){
 				matchMap.put(kw.getWord(), true);
@@ -126,7 +122,7 @@ public class KnowledgeSearch {
 		if(!searchInTags){
 			return result;
 		}
-
+		
 		for (String tag : article.getTags()){
 			if(searchWords.contains(tag)){
 				matchMap.put(tag, true);
@@ -141,8 +137,8 @@ public class KnowledgeSearch {
 		if(!searchInTitle){
 			return result;
 		}
-
-		Set<String> titleWords = WordProcessor.getWords(article.getTitle());
+		
+		Set<String> titleWords = WordProcessor.getWords(article.getTitle(), settings.getUsePorterStamer(), settings.getStopWordSetPath());
 		for (String word : titleWords){
 			if(searchWords.contains(word)){
 				matchMap.put(word, true);
@@ -157,8 +153,8 @@ public class KnowledgeSearch {
 		if(!searchInEditors){
 			return result;
 		}
-
-		Set<String> editorWords = WordProcessor.getWords(article.getEditor());
+		
+		Set<String> editorWords = WordProcessor.getWords(article.getEditor(), false, settings.getStopWordSetPath());
 		for (String word : editorWords){
 			if(searchWords.contains(word)){
 				matchMap.put(word, true);
@@ -229,7 +225,7 @@ public class KnowledgeSearch {
 		if(searchTO.isTitle()){
 			this.searchInTitle = true;
 		}
-		searchWords = WordProcessor.getWords(searchTO.getSearchPhrase());
+		searchWords = WordProcessor.getWords(searchTO.getSearchPhrase(), settings.getUsePorterStamer(), settings.getStopWordSetPath());
 	}
 
 	private boolean isValidInput(){
@@ -252,28 +248,28 @@ public class KnowledgeSearch {
 
 	private double computeKeyWordsValue(double keyWordsValue)
 			throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName,
+		double weight = settings.getWeight(featureName,
 				InputNames.KEY_WORDS.name);
 		return weight * keyWordsValue;
 	}
 
 	private double computeTagsValue(int tagMatchCount, double benchmark)
 			throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName,
+		double weight = settings.getWeight(featureName,
 				InputNames.TAGS.name);
 		return weight * benchmark * tagMatchCount;
 	}
 
 	private double computeTitleValue(int tagMatchCount, double benchmark)
 			throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName,
+		double weight = settings.getWeight(featureName,
 				InputNames.TITLE.name);
 		return weight * benchmark * tagMatchCount;
 	}
 
 	private double computeEditorsValue(int tagMatchCount, double benchmark)
 			throws KnowledgeManagementSettingsException{
-		double weight = knowledgeSettings.getWeight(featureName,
+		double weight = settings.getWeight(featureName,
 				InputNames.EDITORS.name);
 		return weight * benchmark * tagMatchCount;
 	}

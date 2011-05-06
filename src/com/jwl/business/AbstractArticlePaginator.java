@@ -4,14 +4,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.jwl.business.article.ArticleTO;
+import com.jwl.integration.BaseDAO;
+import com.jwl.integration.exceptions.DAOException;
 import com.jwl.presentation.enumerations.JWLTableHeaders;
 import com.jwl.presentation.url.WikiURLParser;
 
-public abstract class AbstractArticlePaginator implements IPaginator<ArticleTO> {
+public abstract class AbstractArticlePaginator extends BaseDAO implements IPaginator<ArticleTO> {
 
 	private WikiURLParser wup;
 	protected int pageSize;
-	protected EntityManager em;
 	protected String orderByColumn;
 	protected int pageIndex;
 	protected boolean ascendingOrder;
@@ -55,7 +56,11 @@ public abstract class AbstractArticlePaginator implements IPaginator<ArticleTO> 
 		wup = new WikiURLParser();
 		this.setPageNumber();
 		this.setOrderByColumn();
-		this.setArticleCount();
+		try{
+			this.setArticleCount();
+		}catch(DAOException e){
+			articleCount=0;
+		}
 	}
 
 	private void setPageNumber() {
@@ -106,10 +111,12 @@ public abstract class AbstractArticlePaginator implements IPaginator<ArticleTO> 
 		return this.pageIndex + 1;
 	}
 
-	private void setArticleCount() {
+	private void setArticleCount() throws DAOException {
+		EntityManager em=super.getEntityManager();
 		Query q = em.createNamedQuery("Article.count");
 		Long count = (Long) q.getSingleResult();
 		this.articleCount = count.intValue();
+		super.closeEntityManager(em);
 	}
 
 	@Override

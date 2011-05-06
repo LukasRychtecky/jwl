@@ -3,6 +3,7 @@ package com.jwl.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
@@ -11,6 +12,7 @@ import com.jwl.business.article.SearchTO;
 import com.jwl.integration.ConnectionFactory;
 import com.jwl.integration.convertor.ArticleConvertor;
 import com.jwl.integration.entity.Article;
+import com.jwl.integration.exceptions.DAOException;
 import com.jwl.presentation.enumerations.JWLTableHeaders;
 
 public class SearchPaginator extends AbstractArticlePaginator {
@@ -23,9 +25,6 @@ public class SearchPaginator extends AbstractArticlePaginator {
 
 	public SearchPaginator(int pageSize) {
 		this.pageSize = pageSize;
-		EntityManagerFactory connection = ConnectionFactory.getInstance()
-				.getConnection();
-		em = connection.createEntityManager();
 		this.ascendingOrder = true;
 		this.pageIndex = 1;
 	}
@@ -33,16 +32,26 @@ public class SearchPaginator extends AbstractArticlePaginator {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ArticleTO> getCurrentPageContent() {
+		List<ArticleTO> result =null;
 		List<Article> articles = null;
 		if (this.searchText.isEmpty()) {
 			return new ArrayList<ArticleTO>();
 		}
-		Query query = this.em.createQuery(this.buildQuery());
+		EntityManager em;
+		try{
+		em = super.getEntityManager();	
+		Query query = em.createQuery(this.buildQuery());
 		query.setParameter(0, "%" + this.searchText + "%");
 		query.setFirstResult((this.pageIndex - 1) * this.pageSize);
 		query.setMaxResults(this.pageSize);
 		articles = query.getResultList();
-		return ArticleConvertor.convertList(articles);
+		 result = ArticleConvertor.convertList(articles);
+		super.closeEntityManager(em);
+		}catch(DAOException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;		
 	}
 
 	public void setSearchCategories(SearchTO searchTO) {
@@ -132,11 +141,15 @@ public class SearchPaginator extends AbstractArticlePaginator {
 		return sb.toString();
 	}
 
-	private void setArticleCount() {
+	private void setArticleCount() throws DAOException {
+		EntityManager em = super.getEntityManager();
+		
 		Query q = em.createQuery(this.buildResultCountQuery());
 		q.setParameter(0, "%" + this.searchText + "%");
 		Long count = (Long) q.getSingleResult();
 		this.articleCount = count.intValue();
+		
+		super.closeEntityManager(em);
 	}
 
 	private String buildResultCountQuery() {
@@ -149,12 +162,14 @@ public class SearchPaginator extends AbstractArticlePaginator {
 
 	@Override
 	public void setUpPaginator() {
-		EntityManagerFactory connection = ConnectionFactory.getInstance()
-				.getConnection();
-		em = connection.createEntityManager();
 		super.setUpPaginator();
 		if (searchText != null) {
-			this.setArticleCount();
+			try{
+				this.setArticleCount();
+			}catch(DAOException e){
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			this.articleCount = 0;
 		}

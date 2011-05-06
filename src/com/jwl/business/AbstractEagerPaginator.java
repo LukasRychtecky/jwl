@@ -7,7 +7,7 @@ import com.jwl.presentation.url.WikiURLParser;
 
 public class AbstractEagerPaginator<T> implements IPaginator<T> {
 
-	private int pageSize = 3;
+	protected int pageSize = 3;
 	private int pageIndex = 1;
 	protected List<T> searchResults;
 	protected WikiURLParser wup;

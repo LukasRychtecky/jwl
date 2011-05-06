@@ -1,232 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knowledgeManagement>
-    <scheduledJob>
-        <name>
-            KeyWordGeneration
-        </name>
-        <cronExpression>
-            */3 * ? * *
-        </cronExpression>
-    </scheduledJob>
-    <scheduledJob>
-        <name>
-            ArticleMergeSuggestionsGeneration
-        </name>
-        <cronExpression>
-            
-        </cronExpression>
-    </scheduledJob>
-    <scheduledJob>
-        <name>
-            ArticleMergeSuggestionsCleanUp
-        </name>
-        <cronExpression>
-            
-        </cronExpression>
-    </scheduledJob>
-    <scheduledJob>
-        <name>
-            LivabilityPeriodicReduction
-        </name>
-        <cronExpression>
-            
-        </cronExpression>
-    </scheduledJob>
-    <feature>
-        <name>
-            ArticleSimilarityView
-        </name>
-        <input>
-            <name>
-                NameSimilarity
-            </name>
-            <weight>
-                1.5
-            </weight>
-        </input>
-        <input>
-            <name>
-                TagSimilarity
-            </name>
-            <weight>
-                2
-            </weight>
-        </input>
-        <input>
-            <name>
-                KeyWordSimilarity
-            </name>
-            <weight>
-                7
-            </weight>
-        </input>
-        <threshold>
-            1.2
-        </threshold>
-    </feature>
-	<feature>
-        <name>
-            ArticleSimilarityEdit
-        </name>
-        <input>
-            <name>
-                NameSimilarity
-            </name>
-            <weight>
-                1.5
-            </weight>
-        </input>
-        <input>
-            <name>
-                TagSimilarity
-            </name>
-            <weight>
-                2
-            </weight>
-        </input>
-        <input>
-            <name>
-                KeyWordSimilarity
-            </name>
-            <weight>
-                7
-            </weight>
-        </input>
-        <threshold>
-            1.2
-        </threshold>
-    </feature>
-    <feature>
-        <name>
-            MergeSuggestion
-        </name>
-        <input>
-            <name>
-                NameSimilarity
-            </name>
-            <weight>
-                1.5
-            </weight>
-        </input>
-        <input>
-            <name>
-                TagSimilarity
-            </name>
-            <weight>
-                2
-            </weight>
-        </input>
-        <input>
-            <name>
-                KeyWordSimilarity
-            </name>
-            <weight>
-                7
-            </weight>
-        </input>
-        <threshold>
-            1.2
-        </threshold>
-    </feature>
-	<feature>
-        <name>
-            ArticleLivability
-        </name>
-        <input>
-            <name>
-                InitialValue
-            </name>
-            <weight>
-                30
-            </weight>
-        </input>
-		<input>
-            <name>
-                View
-            </name>
-            <weight>
-                1
-            </weight>
-        </input>
-        <input>
-            <name>
-                PositiveRating
-            </name>
-            <weight>
-                1
-            </weight>
-        </input>
-        <input>
-            <name>
-                NegativeRating
-            </name>
-            <weight>
-                1.5
-            </weight>
-        </input>
-		<input>
-            <name>
-                PeriodicReduction
-            </name>
-            <weight>
-                1
-            </weight>
-        </input>
-		<threshold>
-            0
-        </threshold>
-    </feature>
-	<feature>
-        <name>
-            Search
-        </name>
-        <input>
-            <name>
-                KeyWords
-            </name>
-            <weight>
-                1
-            </weight>
-        </input>
-		<input>
-            <name>
-                Tags
-            </name>
-            <weight>
-                1
-            </weight>
-        </input>
-        <input>
-            <name>
-                Editors
-            </name>
-            <weight>
-                1
-            </weight>
-        </input>
-        <input>
-            <name>
-                Title
-            </name>
-            <weight>
-                1.5
-            </weight>
-        </input>
-		<input>
-            <name>
-                Rating
-            </name>
-            <weight>
-                1
-            </weight>
-        </input>
-		<input>
-            <name>
-                UnmatchedWordsTolerance
-            </name>
-            <weight>
-                0.2
-            </weight>
-        </input>
-    </feature>
+    
+	<globalParameters>
+		<parameter name="keyWordNumber" value="10"/>	
+		<parameter name="porterStemmer" value="true"/>
+		<parameter name="stopWordsSet" value="english"/>
+	</globalParameters>
+	
+	<scheduledJobs>
+		<scheduledJob name="KeyWordGeneration" cronExpression="*/2 * ? * *"/>
+		<scheduledJob name="ArticleMergeSuggestionsGeneration" cronExpression=""/>
+		<scheduledJob name="ArticleMergeSuggestionsCleanUp" cronExpression=""/>
+		<scheduledJob name="LivabilityPeriodicReduction" cronExpression=""/>		
+	</scheduledJobs>
+	
+	<features>
+		<feature name="ArticleSimilarityView" threshold ="1.2">
+			<input name="NameSimilarity" value="1.5"/>
+			<input name="TagSimilarity" value="2"/>
+			<input name="KeyWordSimilarity" value="7"/>
+		</feature>
+		<feature name="ArticleSimilarityEdit" threshold ="1.2">
+			<input name="NameSimilarity" value="1.5"/>
+			<input name="TagSimilarity" value="2"/>
+			<input name="KeyWordSimilarity" value="7"/>
+		</feature>	
+		<feature name="MergeSuggestion" threshold ="1.2">
+			<input name="NameSimilarity" value="1.5"/>
+			<input name="TagSimilarity" value="2"/>
+			<input name="KeyWordSimilarity" value="7"/>
+		</feature>		
+		<feature name="ArticleLivability" threshold ="0">
+			<input name="InitialValue" value="30"/>
+			<input name="PositiveRating" value="1"/>
+			<input name="NegativeRating" value="1.5"/>
+			<input name="PeriodicReduction" value="1"/>
+		</feature>
+		<feature name="Search" threshold ="0">
+			<input name="KeyWords" value="1"/>
+			<input name="Tags" value="1"/>
+			<input name="Editors" value="1"/>
+			<input name="Title" value="1"/>
+			<input name="Rating" value="1"/>
+		</feature>		
+	</features>	
 </knowledgeManagement>

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.jwl.business.knowledge.exceptions.KnowledgeManagementSettingsException;
 
-public interface ISettingsSource {
+public interface ISettings {
 	public Map<String, WeightRecord> getWeights(String neuronName)throws KnowledgeManagementSettingsException;
 	
 	public float getThreshold(String neuronName)throws KnowledgeManagementSettingsException;
@@ -18,4 +18,10 @@ public interface ISettingsSource {
 	public String getMergeFile();
 	
 	public String getMergeIgnoreFile();
+	
+	public int getKeyWordNumber();
+	
+	public boolean getUsePorterStamer();
+	
+	public String getStopWordSetPath();
 }

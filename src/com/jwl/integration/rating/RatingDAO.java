@@ -79,17 +79,18 @@ public class RatingDAO extends BaseDAO implements IRatingDAO {
 			throws DAOException {
 		RatingPK key = new RatingPK(articleId.getId(), author);
 		EntityManager em = getEntityManager();
-		Rating entity = null;
+		RatingTO rating = null;
 		try {
-			entity = em.find(Rating.class, key);
+			Rating entity = em.find(Rating.class, key);
+			if (entity == null) {
+				return null;
+			}
+			rating = RatingConvertor.convertFromEntity(entity);
 		} catch (Throwable t) {
 			throw new DAOException(t);
 		} finally {
 			closeEntityManager(em);
 		}
-		if (entity == null) {
-			return null;
-		}
-		return RatingConvertor.convertFromEntity(entity);
+		return rating;
 	}
 }

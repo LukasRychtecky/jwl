@@ -12,10 +12,11 @@ public class KeyWordPaginator extends AbstractEagerPaginator<ArticleTO> {
 
 	private IKnowledgeManagementFacade knowledge;	
 	
-	public KeyWordPaginator(IKnowledgeManagementFacade knowledge) {
+	public KeyWordPaginator(IKnowledgeManagementFacade knowledge, int pageSize) {
 		super();
 		this.wup = new WikiURLParser();
 		this.knowledge = knowledge;
+		this.pageSize = pageSize;
 	}
 
 	public void setSearch(SearchTO searchData){
