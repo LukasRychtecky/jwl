@@ -241,16 +241,17 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 		sb.append(keyWords.size());
 		
 		EntityManager em = getEntityManager();
-		List<Article> result = null;
+		List<ArticleTO> articles = null;
 		try {		
 			Query query = em.createQuery(sb.toString());
-			result = query.getResultList();
+			List<Article> result = query.getResultList();
+			articles = ArticleConvertor.convertList(result);
 		} catch (Exception e) {
 			throw new DAOException(e);
 		}finally{
 			closeEntityManager(em);
 		}
-		return ArticleConvertor.convertList(result);
+		return articles;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -258,16 +259,17 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 	public List<ArticleTO> findDead() throws DAOException {
 		EntityManager em = getEntityManager();
 		List<Article> result = null;
+		List<ArticleTO> deadArticles = null;
 		try {		
-			Query query = em.createNamedQuery("Article.findDead");
-			
+			Query query = em.createNamedQuery("Article.findDead");			
 			result = query.getResultList();
+			deadArticles=ArticleConvertor.convertList(result);
 		} catch (Exception e) {
 			throw new DAOException(e);
 		}finally{
 			closeEntityManager(em);
 		}
-		return ArticleConvertor.convertList(result);
+		return deadArticles;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -282,22 +284,24 @@ public class ArticleDAO extends BaseDAO implements IArticleDAO {
 		for(int i = 1; i< searchWords.size();i++){
 			sb.append(" AND a.text LIKE ?"+i);
 		}
-		EntityManager em = getEntityManager();
-		List<Article> result = null;
+		EntityManager em = getEntityManager();		
 		Query query = em.createQuery(sb.toString());
 		int i= 0;
 		for(String searchWord: searchWords){			
 			query.setParameter(i, "%"+searchWord+"%");
 			i++;
 		}
+		
+		List<ArticleTO> articles = null;
 		try {					
-			result = query.getResultList();
+			List<Article> result = query.getResultList();
+			articles = ArticleConvertor.convertList(result);
 		} catch (Exception e) {
 			throw new DAOException(e);
 		}finally{
 			closeEntityManager(em);
 		}
-		return ArticleConvertor.convertList(result);	
+		return articles;	
 	}
 	
 }

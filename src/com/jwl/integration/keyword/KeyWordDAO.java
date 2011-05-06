@@ -124,16 +124,17 @@ public class KeyWordDAO extends BaseDAO implements IKeyWordDAO {
 	@Override
 	public List<KeyWordTO> getAll() throws DAOException {
 		EntityManager em = getEntityManager();
-		List<KeyWord> result = null;
+		List<KeyWordTO> keyWords = null;
 		try {
 			Query query = em.createNamedQuery("KeyWord.findAll");
-			result = query.getResultList();
+			List<KeyWord> result = query.getResultList();
+			keyWords = KeyWordConvertor.fromEntities(result);
 		} catch (Exception e) {
 			throw new DAOException(e);
 		} finally {
 			closeEntityManager(em);
 		}
-		return KeyWordConvertor.fromEntities(result);
+		return keyWords;
 	}
 
 }
