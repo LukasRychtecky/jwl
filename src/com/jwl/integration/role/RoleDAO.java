@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import com.jwl.integration.BaseDAO;
 import com.jwl.integration.exceptions.DAOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -111,6 +112,27 @@ public class RoleDAO extends BaseDAO implements IRoleDAO {
 		@SuppressWarnings("unchecked")
 		List<PermissionEntity> perms = query.getResultList();
 		return perms;
+	}
+	
+	@Override
+	public Set<Role> getAll() throws DAOException {
+		Set<Role> roles = new HashSet<Role>();
+		EntityManager em = getEntityManager();
+		try {
+			List<RoleEntity> result = this.getAllRoles(em);
+			Role role;
+			for (RoleEntity entity : result) {
+				role = RoleConvertor.toObject(entity);
+				role.setPermissionss(this.toObject(entity.getPermissionList()));
+				roles.add(role);
+			}
+		} catch (Exception e) {
+			throw new DAOException(e);
+		} finally {
+			closeEntityManager(em);
+		}
+		
+		return roles;
 	}
 
 	protected List<RoleEntity> getAllRoles(EntityManager em) {

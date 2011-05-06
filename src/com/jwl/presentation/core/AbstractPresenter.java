@@ -222,6 +222,14 @@ abstract public class AbstractPresenter {
 		this.redirect(redirectState);
 	}
 	
+	public void defaultPermissionDenied(String redirectState) {
+		FlashMessage message = new FlashMessage(
+					"You don't have a permission for this action.",
+					FlashMessage.FlashMessageType.ERROR, false);
+		this.messages.add(message);
+		this.redirect(redirectState);
+	}
+	
 	public void defaultProcessException(Exception ex) {
 		this.defaultProcessException(ex, "default");
 	}

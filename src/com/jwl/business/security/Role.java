@@ -1,10 +1,10 @@
 package com.jwl.business.security;
 
-import com.jwl.business.security.RoleId;
-import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,12 +17,12 @@ public class Role {
 	private RoleId id;
 	private Set<ArticleTO> articles;
 	private Set<ArticleId> articlesId = null;
-	private Set<AccessPermissions> perms;
+	private List<AccessPermissions> perms;
 
 	public Role(String code) {
 		this.code = code;
 		this.articles = new HashSet<ArticleTO>();
-		this.perms = new HashSet<AccessPermissions>();
+		this.perms = new ArrayList<AccessPermissions>();
 	}
 
 	public Role(String code, RoleId id) {
@@ -34,8 +34,12 @@ public class Role {
 		this.perms.add(perm);
 	}
 
-	public Set<AccessPermissions> getPermissions() {
-		return new HashSet<AccessPermissions>(this.perms);
+	public List<AccessPermissions> getPermissions() {
+		return new ArrayList<AccessPermissions>(this.perms);
+	}
+
+	public void setPermissionss(List<AccessPermissions> perms) {
+		this.perms = perms;
 	}
 
 	public String getCode() {

@@ -55,6 +55,8 @@ public interface IFacade {
 	public String getJWLHome();
 
 	public void importACL() throws ModelException;
+	
+	public Set<Role> getAllRoles() throws ModelException;
 
 	public Set<Role> parseACL() throws ModelException;
 
