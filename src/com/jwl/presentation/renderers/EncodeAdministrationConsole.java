@@ -46,6 +46,7 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 	private HtmlLink getShowExistingACLLink() {
 
 		HtmlLink link = new HtmlLink();
+		link.setIsAjax(Boolean.TRUE);
 		link.setText("Show existing ACL");
 		link.setValue(this.linker.buildLink("exportACL"));
 		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);

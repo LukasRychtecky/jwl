@@ -25,6 +25,7 @@ import com.jwl.business.usecases.CreateForumTopicUC;
 import com.jwl.business.usecases.DeleteArticleUC;
 import com.jwl.business.usecases.DeleteForumPostUC;
 import com.jwl.business.usecases.DeleteForumTopicsUC;
+import com.jwl.business.usecases.ExportACLUC;
 import com.jwl.business.usecases.FindArticleByTitleUC;
 import com.jwl.business.usecases.FindArticlesUC;
 import com.jwl.business.usecases.GetAllRolesUC;
@@ -56,6 +57,7 @@ import com.jwl.business.usecases.interfaces.ICreateForumTopicUC;
 import com.jwl.business.usecases.interfaces.IDeleteArticleUC;
 import com.jwl.business.usecases.interfaces.IDeleteForumPostUC;
 import com.jwl.business.usecases.interfaces.IDeleteForumTopicsUC;
+import com.jwl.business.usecases.interfaces.IExportACLUC;
 import com.jwl.business.usecases.interfaces.IFindArticleByTitleUC;
 import com.jwl.business.usecases.interfaces.IFindArticlesUC;
 import com.jwl.business.usecases.interfaces.IGetAllRolesUC;
@@ -146,6 +148,12 @@ public class Facade implements IFacade {
 	public void importACL() throws ModelException {
 		IImportACLUC uc = new ImportACLUC(Environment.getDAOFactory());
 		uc.importACL(Environment.getACLFileName());
+	}
+	
+	@Override
+	public File exportACL() throws ModelException {
+		IExportACLUC uc = new ExportACLUC(Environment.getDAOFactory());
+		return uc.export(new File(Environment.getACLFileName()));
 	}
 	
 	@Override

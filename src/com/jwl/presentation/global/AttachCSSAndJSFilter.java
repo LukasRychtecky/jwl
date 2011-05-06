@@ -41,6 +41,9 @@ public class AttachCSSAndJSFilter implements Filter {
 		Global.getInstance().saveFacade();
 
 		headEndPosition = wrapper.toString().indexOf("</head>");
+		if (headEndPosition < 0) {
+			return;
+		}
 		bodyBeginPosition = wrapper.toString().indexOf("<body>") + 6;
 
 		StringBuilder builder = new StringBuilder();

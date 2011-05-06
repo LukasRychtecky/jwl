@@ -36,6 +36,7 @@ import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.global.ExceptionLogger;
+import com.jwl.presentation.global.FileDownloader;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlInputExtended;
@@ -44,8 +45,10 @@ import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.RequestMapDecoder;
 import com.jwl.presentation.url.WikiURLParser;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -64,8 +67,10 @@ abstract public class AbstractPresenter {
 	public static final String BODY_ELEMENT = "body";
 	public static final String LANG_ATTRIBUTE = "lang";
 
+	public static final String CONTENT_DISPOSITION_ATTACHMENT = "attachment; filename=";
 	public static final String CONTENT_TYPE_JSON = "application/json";
-	public static final String CONTENT_TYPE = "text/html";
+	public static final String CONTENT_TYPE_CSV = "text/csv";
+	public static final String CONTENT_TYPE_HTML = "text/html";
 	public static final String ENCODING = "utf-8";
 
 	private Boolean terminated = Boolean.FALSE;
@@ -264,7 +269,7 @@ abstract public class AbstractPresenter {
 
 		if (externalContext.getRequest() instanceof ServletRequest) {
 			ServletResponse response = (ServletResponse) externalContext.getResponse();
-			String contentType = CONTENT_TYPE;
+			String contentType = CONTENT_TYPE_HTML;
 			response.setContentType(contentType + ";charset=" + encoding);
 		} else {
 			encoding = ENCODING;
@@ -345,7 +350,30 @@ abstract public class AbstractPresenter {
 			ExceptionLogger.severe(this.getClass(), ex);
 		}
 	}
-		
+	
+	protected void sendFile(File file, String contentType) {
+		this.sendFile(file, contentType, CONTENT_DISPOSITION_ATTACHMENT + file.getName());
+	}
+	
+	protected void sendFile(File file, String contentType, String contentDisposition) {
+		ServletOutputStream stream = null;
+		try {
+			System.out.println("BLAH");
+			HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+			stream = response.getOutputStream();
+			System.out.println("GET");
+			response.setContentType(contentType);
+			response.setHeader("Content-Disposition", contentDisposition);
+			FileDownloader.writeFileInStream(file, stream);
+			this.context.responseComplete();
+			this.terminated = Boolean.TRUE;
+			System.out.println("TERMINATED");
+		} catch (IOException ex) {
+			this.messages.add(new FlashMessage("File can not be send, sorry.",
+				FlashMessageType.ERROR, Boolean.FALSE));
+			ExceptionLogger.severe(this.getClass(), ex);
+		}
+	}
 
 	public void sendResponse() throws IOException {
 		if (terminated) {

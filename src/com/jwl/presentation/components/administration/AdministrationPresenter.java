@@ -26,6 +26,7 @@ import com.jwl.presentation.renderers.EncodeMergeSuggestionView;
 import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.RequestMapDecoder;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -83,9 +84,10 @@ public class AdministrationPresenter extends AbstractPresenter {
 		}
 	}
 	
-	public void decodeExportACL() {
+	public void renderDownloadACL() {
 		try {
-			this.getFacade().importACL();
+			File file = this.getFacade().exportACL();
+			super.sendFile(file, CONTENT_TYPE_CSV);
 		} catch (PermissionDeniedException ex) {			
 			super.defaultPermissionDenied("default");
 		} catch (ModelException ex) {

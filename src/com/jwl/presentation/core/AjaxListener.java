@@ -44,7 +44,7 @@ public class AjaxListener implements PhaseListener {
 		try {
 			Map<String, String> requestParams = context.getExternalContext().getRequestParameterMap();
 			String method = requestParams.get(JWLURLParams.METHOD);
-			if (method == null || !method.equals("ajax")) {
+			if (method == null || !(method.equals("ajax") || method.equals("fileDownload"))) {
 				return;
 			}
 			if (!requestParams.containsKey(JWLURLParams.PRESENTER)) {

@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletOutputStream;
@@ -24,22 +25,19 @@ public class FileDownloader {
 		this.response = response;
 	}
 
-
 	public void writeResponse(File file) throws IOException {
 		ServletOutputStream op = this.response.getOutputStream();
 		this.response.setContentType("application/image");
 		this.response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
 		this.response.setContentLength((int) file.length());
 		try {
-			this.writeFileInStream(file, op);
+			writeFileInStream(file, op);
 		} catch (Exception e) {
 			Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, e);
 		}
-		op.flush();
-		op.close();
 	}
 
-	private void writeFileInStream(File file, OutputStream out) throws FileNotFoundException, IOException {
+	public static void writeFileInStream(File file, OutputStream out) throws FileNotFoundException, IOException {
 		InputStream in = null;
 		try {
 			in = new BufferedInputStream(new FileInputStream(file));
@@ -52,6 +50,8 @@ public class FileDownloader {
 			if (in != null) {
 				in.close();
 			}
+			out.flush();
+			out.close();
 		}
 	}
 }
