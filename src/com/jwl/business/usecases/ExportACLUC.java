@@ -28,7 +28,7 @@ public class ExportACLUC extends AbstractUC implements IExportACLUC {
 		super.checkPermission(AccessPermissions.SECURITY_IMPORT);
 		
 		if (file.exists()) {
-			return file;
+			file.delete();
 		}
 		try {
 			Boolean isCreated = file.createNewFile();

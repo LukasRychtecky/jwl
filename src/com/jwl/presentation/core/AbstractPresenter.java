@@ -46,6 +46,7 @@ import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.RequestMapDecoder;
 import com.jwl.presentation.url.WikiURLParser;
 import java.io.File;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.ServletOutputStream;
@@ -67,9 +68,7 @@ abstract public class AbstractPresenter {
 	public static final String BODY_ELEMENT = "body";
 	public static final String LANG_ATTRIBUTE = "lang";
 
-	public static final String CONTENT_DISPOSITION_ATTACHMENT = "attachment; filename=";
 	public static final String CONTENT_TYPE_JSON = "application/json";
-	public static final String CONTENT_TYPE_CSV = "text/csv";
 	public static final String CONTENT_TYPE_HTML = "text/html";
 	public static final String ENCODING = "utf-8";
 
@@ -291,8 +290,7 @@ abstract public class AbstractPresenter {
 		writer.flush();
 		writer.close();
 		servletWriter.close();
-
-		this.context.responseComplete();
+		this.terminate();
 	}
 
 	public void saveViewState(FacesContext context) throws IOException {
@@ -344,35 +342,15 @@ abstract public class AbstractPresenter {
 			String encoding = this.getEncoding();
 			response.setContentType(CONTENT_TYPE_JSON + ";charset=" + encoding);
 			response.getWriter().write(json.toString());
-			this.context.responseComplete();
-			this.terminated = Boolean.TRUE;
+			this.terminate();
 		} catch (IOException ex) {
 			ExceptionLogger.severe(this.getClass(), ex);
 		}
 	}
 	
-	protected void sendFile(File file, String contentType) {
-		this.sendFile(file, contentType, CONTENT_DISPOSITION_ATTACHMENT + file.getName());
-	}
-	
-	protected void sendFile(File file, String contentType, String contentDisposition) {
-		ServletOutputStream stream = null;
-		try {
-			System.out.println("BLAH");
-			HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-			stream = response.getOutputStream();
-			System.out.println("GET");
-			response.setContentType(contentType);
-			response.setHeader("Content-Disposition", contentDisposition);
-			FileDownloader.writeFileInStream(file, stream);
-			this.context.responseComplete();
-			this.terminated = Boolean.TRUE;
-			System.out.println("TERMINATED");
-		} catch (IOException ex) {
-			this.messages.add(new FlashMessage("File can not be send, sorry.",
-				FlashMessageType.ERROR, Boolean.FALSE));
-			ExceptionLogger.severe(this.getClass(), ex);
-		}
+	private void terminate() {		
+		this.context.responseComplete();
+		this.terminated = Boolean.TRUE;
 	}
 
 	public void sendResponse() throws IOException {

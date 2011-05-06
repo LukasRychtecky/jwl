@@ -84,17 +84,6 @@ public class AdministrationPresenter extends AbstractPresenter {
 		}
 	}
 	
-	public void renderDownloadACL() {
-		try {
-			File file = this.getFacade().exportACL();
-			super.sendFile(file, CONTENT_TYPE_CSV);
-		} catch (PermissionDeniedException ex) {			
-			super.defaultPermissionDenied("default");
-		} catch (ModelException ex) {
-			super.defaultProcessException(ex, "default");
-		}
-	}
-	
 	public void renderImportACL() {
 		try {
 			renderParams.put("acl", super.getFacade().parseACL());

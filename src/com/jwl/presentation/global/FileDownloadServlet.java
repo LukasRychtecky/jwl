@@ -1,5 +1,6 @@
 package com.jwl.presentation.global;
 
+import com.jwl.business.IFacade;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,15 +19,19 @@ public class FileDownloadServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			File file =  Global.getInstance().getFacadeOutsideJSF()
-					.getFile(request.getParameter(JWLURLParams.FILE_NAME));
+			IFacade facade = Global.getInstance().getFacadeOutsideJSF();
 			FileDownloader downloader = new FileDownloader(response);
-			downloader.writeResponse(file);
+			File file = null;
+			if (request.getParameter(JWLURLParams.FILE_NAME) != null) {
+				file =  facade.getFile(request.getParameter(JWLURLParams.FILE_NAME));
+				downloader.writeResponse(file, FileDownloader.CONTENT_TYPE_OCTET_STREAM);
+			} else if (request.getParameter(JWLURLParams.DOWNLOAD) != null && request.getParameter(JWLURLParams.DOWNLOAD).equals("ACL")) {
+				file = facade.exportACL();
+				downloader.writeResponse(file, FileDownloader.CONTENT_TYPE_CSV);
+			}
 		} catch (ModelException ex) {
 			ExceptionLogger.severe(getClass(), ex);
 		}
-	}
-
-	
+	}	
 
 }

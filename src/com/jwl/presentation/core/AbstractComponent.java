@@ -39,85 +39,85 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 		super();
 	}
 
-	private void route(FacesContext context){
+	private void route(FacesContext context) {
 		WikiURLParser parser = new WikiURLParser();
 		String presenterParametr = parser.getPresenter();
 
 		AbstractPresenter presenter = null;
-		if(presenterParametr == null){
+		if (presenterParametr == null) {
 			presenter = this.getPresenter();
-		}else{
+		} else {
 			presenter = this.getPresenterInstance(presenterParametr);
 		}
 
-		try{
+		try {
 			this.loginUser(context, presenter);
 
 			Router router = new Router();
 			router.route(presenter);
-		}catch(IOException ex){
+		} catch (IOException ex) {
 			ExceptionLogger.severe(getClass(), ex);
 		}
 	}
 
-	private AbstractPresenter getPresenterInstance(String presenterParametr){
+	private AbstractPresenter getPresenterInstance(String presenterParametr) {
 		JWLPresenters jwlPresenter = JWLPresenters.getFromId(presenterParametr);
 		Class<? extends AbstractPresenter> clazz = jwlPresenter.clazz;
 		AbstractPresenter newInstance = null;
-		try{
+		try {
 			newInstance = clazz.newInstance();
-		}catch(InstantiationException e){
+		} catch (InstantiationException e) {
 			ExceptionLogger.severe(getClass(), e);
-		}catch(IllegalAccessException e){
+		} catch (IllegalAccessException e) {
 			ExceptionLogger.severe(getClass(), e);
 		}
 		return newInstance;
 	}
 
 	@Override
-	public void encodeAll(FacesContext context){
+	public void encodeAll(FacesContext context) {
 		this.route(context);
 	}
 
 	abstract public AbstractPresenter getPresenter();
 
-	protected String getUserName(){
-		if(null == user || user.isEmpty()){
+	protected String getUserName() {
+		if (null == user || user.isEmpty()) {
 			Object attribute = this.getAttribute(TAG_PARAM_REQUIRED_USER);
 			user = this.getNotNullString(attribute);
 		}
 		return user;
 	}
 
-	protected String getUserRole(){
-		if(role == null || role.isEmpty()){
+	protected String getUserRole() {
+		if (role == null || role.isEmpty()) {
 			Object attribute = this.getAttribute(TAG_PARAM_REQUIRED_ROLE);
 			role = this.getNotNullString(attribute);
 		}
 		return role;
 	}
 
-	protected String getNotNullString(Object nullableObject){
+	protected String getNotNullString(Object nullableObject) {
 		return (null != nullableObject ? nullableObject.toString() : "");
 	}
 
 	@Override
-	public String getFamily(){
+	public String getFamily() {
 		return COMPONENT_FAMILY;
 	}
 
-	protected Object getAttribute(String attributeName){
+	protected Object getAttribute(String attributeName) {
 		ValueExpression binding = this.getValueExpression(attributeName);
 		ELContext context = this.getFacesContext().getELContext();
-		if(null != binding && null != context){
+		if (null != binding && null != context) {
 			return binding.getValue(context);
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public Object saveState(FacesContext context){
+	public Object saveState(FacesContext context) {
 		Object values[] = new Object[2];
 		values[0] = super.saveState(context);
 		values[1] = user;
@@ -125,53 +125,52 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 	}
 
 	@Override
-	public void restoreState(FacesContext context, Object state){
+	public void restoreState(FacesContext context, Object state) {
 		Object values[] = (Object[]) state;
 		user = (String) values[1];
 		super.restoreState(context, values[0]);
 	}
 
 	private void loginUser(FacesContext context, AbstractPresenter presenter)
-			throws IOException{
+			throws IOException {
 		Set<Role> roles = new HashSet<Role>();
 		String[] splitedRoles = this.getUserRole().split(ROLE_DELIMITER);
 
 		String role = null;
-		for (int i = 0; i < splitedRoles.length; i++){
+		for (int i = 0; i < splitedRoles.length; i++) {
 			role = splitedRoles[i].trim().toLowerCase();
-			if(role.length() > 0){
+			if (role.length() > 0) {
 				roles.add(new Role(role));
 			}
 		}
 
 		this.user = this.getUserName();
-		if(this.user.isEmpty()){
-			HttpServletRequest request = (HttpServletRequest) context
-					.getExternalContext().getRequest();
+		if (this.user.isEmpty()) {
+			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 			this.user = request.getRemoteAddr();
 		}
 
-		try{
+		try {
 			presenter.loginUser(this.user, roles);
-		}catch(ModelException e){
+		} catch (ModelException e) {
 			ExceptionLogger.severe(getClass(), e);
 			presenter.render500();
 		}
 	}
 
-	public void setUser(String user){
+	public void setUser(String user) {
 		this.user = user;
 	}
 
-	public String getUser(){
+	public String getUser() {
 		return user;
 	}
 
-	public void setRole(String role){
+	public void setRole(String role) {
 		this.role = role;
 	}
 
-	public String getRole(){
+	public String getRole() {
 		return role;
 	}
 }

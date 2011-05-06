@@ -3,6 +3,7 @@ package com.jwl.presentation.renderers;
 import com.jwl.business.security.AccessPermissions;
 import com.jwl.business.security.IIdentity;
 import com.jwl.business.security.Role;
+import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractRenderer;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlDiv;
@@ -85,11 +86,13 @@ public class ACLPreview extends AbstractRenderer {
 	}
 	
 	private HtmlLink createExportLink() {
+		
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, "downloadACL");
-		params.put(JWLURLParams.METHOD, "fileDownload");
+		params.put(JWLURLParams.STATE, "default");
+		params.put(JWLURLParams.DOWNLOAD, "ACL");
+		
 		HtmlLink linkImport = new HtmlLink();
-		linkImport.setValue(this.linker.buildLink(params));
+		linkImport.setValue(this.linker.buildLink(AbstractComponent.JWL_DOWNLOAD_FILE_PAGE, params));
 		linkImport.setText("Export");
 		linkImport.setStyleClass("jwl-action-button");
 		return linkImport;
