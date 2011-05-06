@@ -182,7 +182,14 @@ a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover, .jwl-for
 	background-image: url("img/Critical.png");
 }
 
-
+.ui-state-error.ui-corner-all {
+	padding: 0 0.3em;
+	margin: .3em;
+}
+.ui-icon.ui-icon-alert {
+	float: left;
+	margin-right: .3em;
+}
 
 .jwl-panel {
     background-color: #FFFFFF;

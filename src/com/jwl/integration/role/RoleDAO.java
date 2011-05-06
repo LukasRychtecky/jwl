@@ -25,7 +25,7 @@ import javax.transaction.UserTransaction;
 public class RoleDAO extends BaseDAO implements IRoleDAO {
 
 	private static final long serialVersionUID = -8198800235309610794L;
-	private static final String FIND_ALL_WHERE = "SELECT r FROM RoleEntity r WHERE ";
+	private static final String FIND_ALL_WHERE = "SELECT r FROM RoleEntity r";
 	private static final String DELETE_ROLE_HAS_PERMISSION = "DELETE FROM `role_has_permission`";
 	private static final String FIND_ALL_PERMISSIONS = "PermissionEntity.findAll";
 	private static final String FIND_ALL_ENTITIES = "RoleEntity.findAll";
@@ -76,9 +76,14 @@ public class RoleDAO extends BaseDAO implements IRoleDAO {
 	@Override
 	public Map<Role, List<AccessPermissions>> load(Set<Role> roles) throws DAOException {
 		Map<Role, List<AccessPermissions>> permissions = new HashMap<Role, List<AccessPermissions>>();
+		
+		if (roles.isEmpty()) {
+			return permissions;
+		}
+		
 		EntityManager em = super.getEntityManager();
 		try {
-			Query query = em.createQuery(this.buildQuery(RoleDAO.FIND_ALL_WHERE, roles.size(), "code"));
+			Query query = em.createQuery(this.buildQuery(RoleDAO.FIND_ALL_WHERE + " WHERE ", roles.size(), "code"));
 
 			Integer i = 0;
 			for (Iterator<Role> it = roles.iterator(); it.hasNext();) {

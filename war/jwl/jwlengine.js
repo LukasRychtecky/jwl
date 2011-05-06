@@ -35,11 +35,48 @@ var JWL = {
 	},
 	markIt: function() {
 		$('.markMe').markItUp(mySettings);
+	},
+	forms: {},
+	validateForm: function(form) {
+		var validators = this.forms[form.id];
+		
+		if (validators === null) {
+			return false;
+		}
+		var result = null;
+		var $input = null;
+		
+		for (var i in validators) {
+			$input = $('#' + validators[i].name);
+			result = validators[i].validate($input.val());
+			var $message = $input.parents().children('.ui-state-error.ui-corner-all');
+			if (result != null) {
+				if ($message === null || $message.length === 0) {    
+					$message = $('<div>', {
+						'class': 'ui-state-error ui-corner-all',
+						'html': $('<p>', {
+							'text': result
+						}).prepend($('<span>', {
+								'class': 'ui-icon ui-icon-alert'
+							}))
+					});
+
+					$message.prependTo($input.parent());
+				}				
+				$input.focus();
+				return false;
+			} else {
+				if ($message !== null) {
+					$message.remove();
+				}
+			}
+		}
+		return true;
 	}
 };
 $(document).ready(function() {
 	JWL.init();
-	});
+});
 
 var knowledgeAjax = {
 	suggestSimilarArticle : function(){

@@ -17,6 +17,7 @@ import com.jwl.presentation.core.AbstractRenderer;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlLink;
+import com.jwl.presentation.html.HtmlScript;
 import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.WikiURLParser;
 // </editor-fold>
@@ -81,6 +82,12 @@ public abstract class AbstractEncoder extends AbstractRenderer {
 
 		div.addChildren(submit);
 		return div;
+	}
+	
+	protected HtmlScript getArticleFormJS() {
+		HtmlScript script = new HtmlScript();
+		script.setSrc("jwl/jwlarticle-form.js");
+		return script;
 	}
 
 	protected boolean hasAdministrationPermission() {
