@@ -1,5 +1,6 @@
 package com.jwl.business.usecases;
 
+import com.jwl.business.exceptions.InvalidFileFormatException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
 import com.jwl.business.security.AccessPermissions;
@@ -43,6 +44,7 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 		Map<Integer, Role> roles = this.parsePermissions(acl);
 		return new HashSet<Role>(roles.values());
 	}
+	
 	private String removeQuotes(String token) {
 		if (token.startsWith("\"")) {
 			token = token.substring(1, token.length());
@@ -65,6 +67,10 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 			while ((line = buffer.readLine()) != null) {
 
 				String[] tokens = line.split(";");
+				
+				if (tokens.length < 3) {
+					throw new InvalidFileFormatException("Invalid CSV format.");
+				}
 
 				if (lineNumber == 1) {
 					//TODO: check dim
@@ -101,10 +107,8 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 			}
 
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(ImportACLUC.class.getName()).log(Level.SEVERE, null, ex);
 			throw new ModelException(ex.getMessage(), ex);
 		} catch (IOException ex) {
-			Logger.getLogger(ImportACLUC.class.getName()).log(Level.SEVERE, null, ex);
 			throw new ModelException(ex.getMessage(), ex);
 		} finally {
 			try {

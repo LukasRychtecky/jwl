@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
+import com.jwl.business.exceptions.InvalidFileFormatException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
 import com.jwl.business.exceptions.PermissionDeniedException;
@@ -70,6 +71,12 @@ public class AdministrationPresenter extends AbstractPresenter {
 			HtmlAppForm form = super.getForm("UploadACL");
 			UploadedFile file = (UploadedFile) form.get("file").getValue();
 			super.getFacade().uploadACL(file.getTempPath());
+		} catch (InvalidFileFormatException ex) {
+			FlashMessage message = new FlashMessage(
+					"Given invalid CSV format.",
+					FlashMessage.FlashMessageType.ERROR, false);
+			super.messages.add(message);
+			this.renderDefault();
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex);
 		}
