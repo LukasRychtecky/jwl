@@ -111,17 +111,16 @@ public class FileMover {
 				this.createAttachment(item);
 			} else {
 				this.originalFileName = item.getName();
+				this.attachment.setOriginalName(originalFileName);
 				this.receivedFile = item;
 			}
 		}
 	}
 
 	private void createAttachment(FileItem item) {
-		if (item.getFieldName().endsWith(JWLElements.FILE_TITLE.id)) {
-			this.attachment.setOriginalName(item.getString());
-		} else if (item.getFieldName().endsWith(JWLElements.FILE_ARTICLE_TITLE.id)) {
+		 if (item.getFieldName().endsWith("articleTitle")) {
 			this.attachment.setArticleTitle(item.getString());
-		} else if (item.getFieldName().endsWith(JWLElements.FILE_DESCRIPTION.id)) {
+		} else if (item.getFieldName().endsWith("desc")) {
 			this.attachment.setDescription(item.getString());
 			this.attachment.setTitle(item.getString());
 		}

@@ -49,8 +49,7 @@ public class FileUploadFilter implements Filter {
 		FileMover mover = null;
 		IFacade facade = Global.getInstance().getFacadeOutsideJSF();
 		facade.setJWLHome(request.getSession().getServletContext().getRealPath("/jwl/"));
-
-		if (parser.getDoAction().equals(JWLActions.FILE_UPLOAD.id)) {
+		if (parser.getDoAction().endsWith("fileUpload")) {
 
 			UserTransaction ut = this.getUserTransaction();
 			try {

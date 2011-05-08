@@ -19,8 +19,11 @@ import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
+import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.enumerations.JWLStates;
+import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.html.HtmlAppForm;
@@ -39,6 +42,8 @@ import com.jwl.presentation.renderers.units.ArticleSuggestionsComponent;
 import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.RequestMapDecoder;
+import com.jwl.presentation.url.WikiURLParser;
+import java.util.HashMap;
 
 public class ArticlePresenter extends AbstractPresenter {
 
@@ -100,7 +105,36 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 
 	public void renderAttachFile() {
+		
+		ArticleTO article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		WikiURLParser parser = new WikiURLParser();
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_VIEW.id);
+		params.put(JWLURLParams.ARTICLE_TITLE, article.getTitle());
+		params.put(JWLURLParams.REDIRECT_TARGET, parser.getCurrentPage());
+		params.put(JWLURLParams.DO, JWLActions.FILE_UPLOAD.id);
+		
+		HtmlAppForm form = this.createFormAttachFile();
+		form.get("articleTitle").setValue(article.getTitle());
+		form.setAction(this.linker.buildLink(AbstractComponent.JWL_UPLOAD_FILE_PAGE, params));
+		renderParams.put("attachFile", form);
+		renderParams.put("article", article);
 		container.addAll(new EncodeAttach(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
+	}
+	
+	public HtmlAppForm createFormAttachFile() {
+		HtmlAppForm form = new HtmlAppForm("AttachFile");
+		form.addFile("file", "File").addRule(Validation.FILLED, "Please choose a file.");
+		form.addText("name", "File name", null).addRule(Validation.FILLED, "Please fill a file name");
+		form.addText("desc", "Description", null);
+		form.addHidden("articleTitle", null);
+		form.addSubmit("send", "Send", null);
+		return form;
+	}
+	
+	public void decodeAttachFile() {
+		
 	}
 
 	public void renderAdministrationConsole() {
