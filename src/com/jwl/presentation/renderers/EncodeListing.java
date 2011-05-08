@@ -1,6 +1,5 @@
 package com.jwl.presentation.renderers;
 
-// <editor-fold defaultstate="collapsed">
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,82 +28,78 @@ import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.Linker;
 import java.util.Date;
-// </editor-fold>
 
 public class EncodeListing extends AbstractEncoder {
 
 	private List<JWLTableHeaders> columns;
 	private List<JWLTableHeaders> orderableColumns;
 	protected IPaginator<ArticleTO> paginator;
-	
+
 	@SuppressWarnings("unchecked")
 	public EncodeListing(Linker linker, IIdentity identity, Map<String, Object> params) {
 		super(linker, identity, params);
 		this.paginator = (IPaginator<ArticleTO>) params.get("paginator");
 	}
-	
+
 	@Override
 	public List<UIComponent> getEncodedComponent() {
 		List<UIComponent> components = new ArrayList<UIComponent>();
 		HtmlDiv div = new HtmlDiv();
 		div.addStyleClass("jwl-navigation");
-		
+
 		if (this.hasAdministrationPermission()) {
 			div.getChildren().add(this.encodedLinkToAdministrationConsole());
 		}
 		div.getChildren().add(this.encodedLinkToSearch());
 		div.getChildren().add(this.encodedLinkToCreateNewArticle());
-		
+
 		components.add(div);
 		components.add(this.encodedListing());
 		components.add(this.encodedPaginator());
-		
+
 		return components;
 	}
 
 	private HtmlLink encodedLinkToAdministrationConsole() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.PRESENTER, JWLPresenters.ADMINISTRATION.id);
-		
+
 		HtmlLink link = this.getHtmlLink("Administration Console", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
-	
+
 	private HtmlLink encodedLinkToSearch() {
 		Map<String, String> params = new HashMap<String, String>();
-		
+
 		params.put(JWLURLParams.STATE, JWLStates.SEARCH.id);
 		params.put(JWLURLParams.PRESENTER, JWLPresenters.SEARCH.id);
-		
+
 		HtmlLink link = this.getHtmlLink("Search", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
-	
+
 	private HtmlLink encodedLinkToCreateNewArticle() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_CREATE.id);
 
 		HtmlLink link = this.getHtmlLink("Create new article", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON);
 		link.setIsAjax(Boolean.TRUE);
 		return link;
 	}
 
 	protected HtmlPanelGrid encodedListing() {
-		
+
 		List<UIComponent> headers = this.encodeHeaders();
 		HtmlPanelGrid table = getTable(headers);
-		
-		List<UIComponent> articlesTableData = table.getChildren();	
-		
+
+		List<UIComponent> articlesTableData = table.getChildren();
+
 		for (ArticleTO article : paginator.getCurrentPageContent()) {
 			articlesTableData.addAll(this.encodeRowData(article));
 		}
 		return table;
 	}
-	
+
 	private UIComponent encodedPaginator() {
 		HtmlDiv navigation = new HtmlDiv();
 		navigation.addStyleClass("jwl-navigation");
@@ -135,8 +130,8 @@ public class EncodeListing extends AbstractEncoder {
 			return Collections.emptyList();
 		}
 
-		List<UIComponent> rowDataCells = new ArrayList<UIComponent>(); 
-		
+		List<UIComponent> rowDataCells = new ArrayList<UIComponent>();
+
 		String title = article.getTitle();
 		HtmlLink link = this.encodeActionLink(title, title, JWLStates.ARTICLE_VIEW, null);
 		link.setIsAjax(Boolean.TRUE);
@@ -158,31 +153,31 @@ public class EncodeListing extends AbstractEncoder {
 		rowDataCells.add(this.getCreatedComponent(article.getCreated()));
 		rowDataCells.add(this.getRatingComponent(article.getRatingAverage()));
 		rowDataCells.add(this.encodeAdditionalRowData(article));
-		
+
 		return rowDataCells;
 	}
 
 	private HtmlPanelGroup encodeAdditionalRowData(ArticleTO article) {
 		ArticleId articleId = article.getId();
 		String title = article.getTitle();
-		
+
 		HtmlPanelGroup group = new HtmlPanelGroup();
 		group.setLayout("block");
 		List<UIComponent> actions = group.getChildren();
-		
+
 		// TODO Add current paginator page to url
 		if (article.isLocked() && hasLockPermission(articleId)) {
 			actions.add(this.encodeActionLink(title, "Unlock", JWLStates.ARTICLE_LIST, JWLActions.ARTICLE_UNLOCK));
 		}
-		
+
 		if (!article.isLocked() && hasLockPermission(articleId)) {
 			actions.add(this.encodeActionLink(title, "Lock", JWLStates.ARTICLE_LIST, JWLActions.ARTICLE_LOCK));
 		}
-		
+
 		if (!article.isLocked() && hasRestorePermission(articleId)) {
 			actions.add(this.encodeActionLink(title, "Restore", JWLStates.HISTORY_LIST, null));
 		}
-		
+
 		if (!article.isLocked() && hasDeletePermission(articleId)) {
 			actions.add(this.encodeActionLink(title, "Delete", JWLStates.ARTICLE_LIST, JWLActions.ARTICLE_DELETE));
 		}
@@ -190,7 +185,7 @@ public class EncodeListing extends AbstractEncoder {
 		return group;
 	}
 
-	private HtmlLink encodeActionLink(String title, String text, 
+	private HtmlLink encodeActionLink(String title, String text,
 			JWLStates state, JWLActions action) {
 
 		Map<String, String> params = new HashMap<String, String>();
@@ -198,60 +193,58 @@ public class EncodeListing extends AbstractEncoder {
 			params.put(JWLURLParams.STATE, state.id);
 		}
 		if (action != null) {
-			params.put(JWLURLParams.DO, action.id);	
+			params.put(JWLURLParams.DO, action.id);
 		}
 		if (title != null) {
 			params.put(JWLURLParams.ARTICLE_TITLE, title);
 		}
 		params.put(JWLURLParams.LIST_PAGE_NUMBER, String.valueOf(paginator.getPageIndex()));
-		
+
 		HtmlLink link = this.getHtmlLink(text, params);
 		return link;
 	}
-	
+
 	private UIComponent createLinkToFirstPage(IPaginator<ArticleTO> paginator) {
 		return getPaginatorLink(paginator.hasPrevious(), "<<",
 				paginator.getFirstPageIndex());
 	}
-	
+
 	private UIComponent createLinkToPreviousPage(IPaginator<ArticleTO> paginator) {
-		return getPaginatorLink(paginator.hasPrevious(), "<", 
+		return getPaginatorLink(paginator.hasPrevious(), "<",
 				paginator.getPreviousPageIndex());
 	}
 
 	private UIComponent createLinkToNextPage(IPaginator<ArticleTO> paginator) {
-		return getPaginatorLink(paginator.hasNext(), ">", 
+		return getPaginatorLink(paginator.hasNext(), ">",
 				paginator.getNextPageIndex());
 	}
 
 	private UIComponent createLinkToLastPage(IPaginator<ArticleTO> paginator) {
-		return getPaginatorLink(paginator.hasNext(), ">>", 
+		return getPaginatorLink(paginator.hasNext(), ">>",
 				paginator.getLastPageIndex());
 	}
 
-	private UIComponent getPaginatorLink(boolean viewCondition, String text, 
-			int pageNumber) {
+	private UIComponent getPaginatorLink(boolean viewCondition, String text, int pageNumber) {
 		if (!viewCondition) {
 			HtmlFreeOutput output = new HtmlFreeOutput();
 			output.setFreeOutput("");
 			return output;
 		}
-		
+
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_LIST.id);
 		params.put(JWLURLParams.LIST_PAGE_NUMBER, String.valueOf(pageNumber));
-		
+
 		HtmlLink link = this.getHtmlLink(text, params);
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClass("jwl-action-button");
 		return link;
 	}
-	
+
 	private List<UIComponent> encodeHeaders() {
 		List<JWLTableHeaders> orderableColumns = getOrderableColumns();
 		List<JWLTableHeaders> headerNames = getHeaders();
 		List<UIComponent> result = new ArrayList<UIComponent>();
-		
+
 		for (JWLTableHeaders tableHeader : headerNames) {
 			if (orderableColumns.contains(tableHeader)) {
 				result.add(this.getOrderColumnLink(tableHeader.value));
@@ -305,7 +298,7 @@ public class EncodeListing extends AbstractEncoder {
 		}
 		return columns;
 	}
-	
+
 	private List<JWLTableHeaders> getOrderableColumns() {
 		if (orderableColumns == null) {
 			orderableColumns = new ArrayList<JWLTableHeaders>();
