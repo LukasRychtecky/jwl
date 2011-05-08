@@ -148,6 +148,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, title);
 
 		HtmlLink link = getHtmlLink("Attach file", params);
+		link.setIsAjax(Boolean.TRUE);
 		link.setStyleClasses("jwl-action-button");
 		return link;
 	}

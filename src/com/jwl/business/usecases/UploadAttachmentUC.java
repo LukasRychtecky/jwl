@@ -32,8 +32,8 @@ public class UploadAttachmentUC extends AbstractUC implements IUploadAttachmentU
 		}
 
 		FileExpert expert = new FileExpert();
-		if (!expert.isSupportedFileType(source)) {
-			throw new ModelException("File type is not supported, file: " + source);
+		if (!expert.isSupportedFileType(attachment.getOriginalName())) {
+			throw new ModelException("File type is not supported, file: " + attachment.getOriginalName());
 		}
 		
 		if (!sourceFile.renameTo(destinationFile)) {

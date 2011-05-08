@@ -82,13 +82,7 @@ public class FileMover {
 	}
 
 	private void saveFileOnDisc(File destinationDir, FileItem fileItem)	throws Exception {
-		File file = null;
-		if (this.explicitFileName.isEmpty()) {
-			file = new File(destinationDir, this.createUniqueFileName());
-		} else {
-			file = new File(destinationDir, this.explicitFileName);
-		}
-		
+		File file = new File(destinationDir, this.createUniqueFileName());		
 		fileItem.write(file);
 	}
 

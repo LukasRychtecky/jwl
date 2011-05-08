@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
@@ -24,6 +27,7 @@ import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.forms.UploadedFile;
 import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.html.HtmlAppForm;
@@ -107,17 +111,9 @@ public class ArticlePresenter extends AbstractPresenter {
 	public void renderAttachFile() {
 		
 		ArticleTO article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
-		WikiURLParser parser = new WikiURLParser();
-		
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_VIEW.id);
-		params.put(JWLURLParams.ARTICLE_TITLE, article.getTitle());
-		params.put(JWLURLParams.REDIRECT_TARGET, parser.getCurrentPage());
-		params.put(JWLURLParams.DO, JWLActions.FILE_UPLOAD.id);
-		
 		HtmlAppForm form = this.createFormAttachFile();
 		form.get("articleTitle").setValue(article.getTitle());
-		form.setAction(this.linker.buildLink(AbstractComponent.JWL_UPLOAD_FILE_PAGE, params));
+		form.setAction(this.linker.buildForm("attachFile", "view"));
 		renderParams.put("attachFile", form);
 		renderParams.put("article", article);
 		container.addAll(new EncodeAttach(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
@@ -126,7 +122,6 @@ public class ArticlePresenter extends AbstractPresenter {
 	public HtmlAppForm createFormAttachFile() {
 		HtmlAppForm form = new HtmlAppForm("AttachFile");
 		form.addFile("file", "File").addRule(Validation.FILLED, "Please choose a file.");
-		form.addText("name", "File name", null).addRule(Validation.FILLED, "Please fill a file name");
 		form.addText("desc", "Description", null);
 		form.addHidden("articleTitle", null);
 		form.addSubmit("send", "Send", null);
@@ -134,7 +129,33 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 	
 	public void decodeAttachFile() {
-		
+		try {
+			HtmlAppForm form = super.getForm("AttachFile");
+			
+			UploadedFile file = (UploadedFile) form.get("file").getValue();			
+			
+			AttachmentTO attachment = new AttachmentTO();
+			attachment.setArticleTitle(form.get("articleTitle").getValue().toString());
+			attachment.setDescription(form.get("desc").getValue().toString());
+			attachment.setOriginalName(file.getOriginalName());
+			attachment.setTitle(file.getOriginalName());
+			attachment.setUniqueName(file.getTempPath().getName());
+			
+			super.getFacade().uploadAttachment(attachment, file.getTempPath().getAbsolutePath());
+			messages.add(new FlashMessage("File has been uploaded."));
+			
+			ArticleTO article = super.getFacade().findArticleByTitle(form.get("articleTitle").getValue().toString());
+
+			if (article != null) {
+				context.getAttributes().put(JWLContextKey.ARTICLE, article);
+			}
+
+			if (article != null && article.getId() != null) {
+				context.getAttributes().put(JWLContextKey.ARTICLE_ID, article.getId());
+			}
+		} catch (Exception ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 
 	public void renderAdministrationConsole() {
