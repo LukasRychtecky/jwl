@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.servlet.http.HttpServletResponse;
@@ -22,11 +20,8 @@ import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.knowledge.IKnowledgeManagementFacade;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
-import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
-import com.jwl.presentation.enumerations.JWLStates;
-import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.forms.UploadedFile;
 import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.global.ExceptionLogger;
@@ -46,8 +41,6 @@ import com.jwl.presentation.renderers.units.ArticleSuggestionsComponent;
 import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.RequestMapDecoder;
-import com.jwl.presentation.url.WikiURLParser;
-import java.util.HashMap;
 
 public class ArticlePresenter extends AbstractPresenter {
 
@@ -364,7 +357,7 @@ public class ArticlePresenter extends AbstractPresenter {
 		try {
 			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
 			this.getFacade().lockArticle(articleId);
-			messages.add(new FlashMessage("Article was locked."));
+			messages.add(new FlashMessage("Article has been locked."));
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex);
 		}
@@ -374,7 +367,7 @@ public class ArticlePresenter extends AbstractPresenter {
 		try {
 			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
 			this.getFacade().unlockArticle(articleId);
-			messages.add(new FlashMessage("Article was locked."));
+			messages.add(new FlashMessage("Article has been unlocked."));
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex);
 		}
