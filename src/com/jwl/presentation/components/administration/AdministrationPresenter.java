@@ -10,11 +10,13 @@ import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
 import com.jwl.business.exceptions.PermissionDeniedException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
+import com.jwl.business.usecases.UploadACLUC;
 import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.forms.UploadedFile;
 import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.renderers.ACLPreview;
@@ -55,21 +57,22 @@ public class AdministrationPresenter extends AbstractPresenter {
 	}
 	
 	public HtmlAppForm createFormUploadACL() {
-		HtmlAppForm form = new HtmlAppForm("uploadACL");
+		HtmlAppForm form = new HtmlAppForm("UploadACL");
 		form.addFile("file", "File").addRule(Validation.FILLED, "Please choose CSV file.");
 		form.addSubmit("submit", "Show preview", null);
-		
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.REDIRECT_TARGET, super.urlParser.getCurrentPage());
-		params.put(JWLURLParams.STATE, "importACL");
-		params.put(JWLURLParams.DO, JWLActions.IMPORT_ACL.id);
-		form.setAction(this.linker.buildLink(AbstractComponent.JWL_UPLOAD_FILE_PAGE, params));
+		form.setAction(this.linker.buildForm("uploadALC", "importACL"));
 		
 		return form;
 	}
 	
 	public void decodeUploadALC() {
-		
+		try {
+			HtmlAppForm form = super.getForm("UploadACL");
+			UploadedFile file = (UploadedFile) form.get("file").getValue();
+			super.getFacade().uploadACL(file.getTempPath());
+		} catch (ModelException ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 	
 	public void decodeImportACL() {

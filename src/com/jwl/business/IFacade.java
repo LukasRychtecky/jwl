@@ -55,6 +55,8 @@ public interface IFacade {
 	public String getJWLHome();
 
 	public void importACL() throws ModelException;
+	
+	public void uploadACL(File file) throws ModelException;
 
 	public File exportACL() throws ModelException;
 	
