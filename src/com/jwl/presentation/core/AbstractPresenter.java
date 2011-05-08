@@ -16,7 +16,6 @@ import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlOutputText;
-import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -36,20 +35,15 @@ import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.global.ExceptionLogger;
-import com.jwl.presentation.global.FileDownloader;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlDiv;
-import com.jwl.presentation.html.HtmlInputExtended;
 import com.jwl.presentation.renderers.units.FlashMessage;
 import com.jwl.presentation.renderers.units.FlashMessage.FlashMessageType;
 import com.jwl.presentation.url.Linker;
 import com.jwl.presentation.url.RequestMapDecoder;
 import com.jwl.presentation.url.WikiURLParser;
-import java.io.File;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Set;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -63,15 +57,12 @@ abstract public class AbstractPresenter {
 	public static final String COMPONENT_CLASS = "jwl-component";
 	public static final String COMPONENT_ID = JWLElements.JWL_DIV.id;
 	public static final String CREATE_FORM = "createForm";
-	
 	public static final String HTML_ELEMENT = "html";
 	public static final String BODY_ELEMENT = "body";
 	public static final String LANG_ATTRIBUTE = "lang";
-
 	public static final String CONTENT_TYPE_JSON = "application/json";
 	public static final String CONTENT_TYPE_HTML = "text/html";
 	public static final String ENCODING = "utf-8";
-
 	private Boolean terminated = Boolean.FALSE;
 	protected FacesContext context;
 	protected Linker linker;
@@ -96,16 +87,16 @@ abstract public class AbstractPresenter {
 		} else {
 			this.linker = new Linker(getPresenterName());
 		}
-		
+
 		this.setJWLHome();
-		
+
 		try {
 			this.prepareFormFromRequest();
 		} catch (IOException ex) {
 			ExceptionLogger.severe(getClass(), ex);
 		}
-	}	
-	
+	}
+
 	private String getPresenterName() {
 		String className = this.getClass().getSimpleName();
 		Integer lastIndex = className.lastIndexOf("Presenter");
@@ -115,7 +106,7 @@ abstract public class AbstractPresenter {
 		}
 		return presenterName;
 	}
-	
+
 	private HtmlAppForm buildForm(String formName) {
 		Method method;
 		HtmlAppForm form = null;
@@ -128,25 +119,53 @@ abstract public class AbstractPresenter {
 		return form;
 	}
 
+	private Boolean isJWLParam(String key) {
+		return key.startsWith(HtmlAppForm.PREFIX);
+	}
+
 	private void prepareFormFromRequest() throws IOException {
-		String formName = getRequestParam(HtmlAppForm.FORM_NAME);
+		String formName = this.getRequestParam(HtmlAppForm.FORM_NAME);
+		
+		if (formName == null) {
+			formName = (String) context.getExternalContext().getSessionMap().get(HtmlAppForm.FORM_NAME);
+			context.getExternalContext().getSessionMap().put(HtmlAppForm.FORM_NAME, null);
+		}
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		for (String key : this.getRequestParamMap().keySet()) {
+			if (this.isJWLParam(key)) {
+				params.put(key, this.getRequestParamMap().get(key));
+			}
+		}
+		for (String key : context.getExternalContext().getSessionMap().keySet()) {
+			if (this.isJWLParam(key)) {
+				params.put(key, context.getExternalContext().getSessionMap().get(key));
+				if (key.startsWith(HtmlAppForm.PREFIX + formName)) {
+					context.getExternalContext().getSessionMap().put(key, null);
+				}
+			}
+		}
+
 		if (formName != null && !formName.isEmpty()) {
 			Method method;
 			try {
 				method = this.getClass().getMethod(CREATE_FORM + formName);
 				HtmlAppForm form = (HtmlAppForm) method.invoke(this);
-				form.process(this.getRequestParamMap());				
-				this.forms.put(formName, form);	
+
+
+				form.process(params);
+				this.forms.put(formName, form);
 			} catch (NoSuchMethodException ex) {
 				ExceptionLogger.severe(getClass(), new RuntimeException(
 						"No such method found " + this.getClass().toString()
-								+ "." + CREATE_FORM + formName, ex));
+						+ "." + CREATE_FORM + formName, ex));
 				this.render404();
 			} catch (SecurityException ex) {
 				ExceptionLogger.severe(getClass(), new RuntimeException(
 						"Method " + this.getClass().toString() + "."
-								+ CREATE_FORM + formName
-								+ " must be declarated as public.", ex));
+						+ CREATE_FORM + formName
+						+ " must be declarated as public.", ex));
 				this.render500();
 			} catch (IllegalAccessException ex) {
 				ExceptionLogger.severe(getClass(), ex);
@@ -177,9 +196,9 @@ abstract public class AbstractPresenter {
 	}
 
 	protected RequestMapDecoder getRequestMapDecoder(JWLElements root) {
-		return new RequestMapDecoder(getRequestParamMap(), root);		
+		return new RequestMapDecoder(getRequestParamMap(), root);
 	}
-	
+
 	protected final String getRequestParam(String key) {
 		return this.getRequestParamMap().get(key);
 	}
@@ -187,7 +206,7 @@ abstract public class AbstractPresenter {
 	protected Map<String, String> getRequestParamMap() {
 		return this.context.getExternalContext().getRequestParameterMap();
 	}
-	
+
 	protected void redirect(String state) {
 		this.context.getAttributes().put(JWLContextKey.STATE, state);
 	}
@@ -196,7 +215,7 @@ abstract public class AbstractPresenter {
 		HttpServletRequest request = (HttpServletRequest) this.context.getExternalContext().getRequest();
 		this.getFacade().setJWLHome(request.getSession().getServletContext().getRealPath("/jwl/"));
 	}
-	
+
 	public void loginUser(String username, Set<Role> roles) throws ModelException {
 		this.getFacade().createIdentity(username, roles);
 		if (!this.isInicialized) {
@@ -218,22 +237,22 @@ abstract public class AbstractPresenter {
 		renderer.render500();
 		this.sendResponse();
 	}
-	
+
 	public void defaultProcessException(Exception ex, String redirectState) {
 		ExceptionLogger.severe(this.getClass(), ex);
 		this.messages.add(new FlashMessage("Service is unavailable, sorry.",
 				FlashMessageType.ERROR, Boolean.FALSE));
 		this.redirect(redirectState);
 	}
-	
+
 	public void defaultPermissionDenied(String redirectState) {
 		FlashMessage message = new FlashMessage(
-					"You don't have a permission for this action.",
-					FlashMessage.FlashMessageType.ERROR, false);
+				"You don't have a permission for this action.",
+				FlashMessage.FlashMessageType.ERROR, false);
 		this.messages.add(message);
 		this.redirect(redirectState);
 	}
-	
+
 	public void defaultProcessException(Exception ex) {
 		this.defaultProcessException(ex, "default");
 	}
@@ -247,12 +266,12 @@ abstract public class AbstractPresenter {
 		out.startElement(BODY_ELEMENT, viewRoot);
 	}
 
-	public void encodeAjaxEnd(FacesContext context)	throws IOException {
+	public void encodeAjaxEnd(FacesContext context) throws IOException {
 		ResponseWriter out = context.getResponseWriter();
 		out.endElement(BODY_ELEMENT);
 		out.endElement(HTML_ELEMENT);
 	}
-	
+
 	private String getEncoding() {
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		String encoding = request.getCharacterEncoding();
@@ -280,7 +299,7 @@ abstract public class AbstractPresenter {
 		this.context.setResponseWriter(writer);
 		writer.startDocument();
 		this.encodeAjaxBegin(this.context);
-		
+
 		this.context.getViewRoot().getChildren().add(componentCover);
 		this.context.getViewRoot().encodeAll(this.context);
 
@@ -333,11 +352,11 @@ abstract public class AbstractPresenter {
 
 		return messagesContainer;
 	}
-	
+
 	protected void sendPayload(List<String> payload) {
 		try {
 			JSONEncoder json = new JSONEncoder(payload);
-			
+
 			HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 			String encoding = this.getEncoding();
 			response.setContentType(CONTENT_TYPE_JSON + ";charset=" + encoding);
@@ -347,8 +366,8 @@ abstract public class AbstractPresenter {
 			ExceptionLogger.severe(this.getClass(), ex);
 		}
 	}
-	
-	private void terminate() {		
+
+	private void terminate() {
 		this.context.responseComplete();
 		this.terminated = Boolean.TRUE;
 	}
@@ -362,7 +381,7 @@ abstract public class AbstractPresenter {
 		componentCover.addStyleClass(COMPONENT_CLASS);
 		componentCover.getChildren().add(this.renderMessages());
 		componentCover.getChildren().addAll(this.container);
-		
+
 		if (isAjax()) {
 			this.ajaxResponse(componentCover);
 		} else {
@@ -376,34 +395,34 @@ abstract public class AbstractPresenter {
 		String historyId = this.urlParser.getHistoryId();
 		String userIP = this.urlParser.getUserIP();
 		ArticleTO article = getArticle(articleTitle);
-		
+
 		if (articleTitle != null) {
 			context.getAttributes().put(JWLContextKey.ARTICLE_TITLE, articleTitle);
 		}
-		
+
 		if (article != null) {
 			context.getAttributes().put(JWLContextKey.ARTICLE, article);
 		}
-		
+
 		if (article != null && article.getId() != null) {
 			context.getAttributes().put(JWLContextKey.ARTICLE_ID, article.getId());
 		}
-		
+
 		if (topicId != null) {
 			context.getAttributes().put(JWLContextKey.TOPIC_ID, Integer.parseInt(topicId));
 		}
-		
+
 		if (historyId != null) {
 			HistoryId history = new HistoryId(Integer.parseInt(historyId), article.getId());
 			context.getAttributes().put(JWLContextKey.HISTORY_ID, history);
 		}
-		
+
 		if (userIP != null) {
 			context.getAttributes().put(JWLContextKey.USER_IP, userIP);
 		}
-		
+
 		context.getAttributes().put(JWLContextKey.LINKER, linker);
-		context.getAttributes().put("javax.faces.SEPARATOR_CHAR", 
+		context.getAttributes().put("javax.faces.SEPARATOR_CHAR",
 				AbstractComponent.JWL_HTML_ID_SEPARATOR.charAt(0));
 		this.isInicialized = true;
 	}
@@ -417,17 +436,16 @@ abstract public class AbstractPresenter {
 		}
 		return articleTO;
 	}
-	
+
 	protected HtmlAppForm getForm(String name) {
 		HtmlAppForm form = this.forms.get(name);
 		if (form == null) {
 			form = this.buildForm(name);
-			
+
 			if (form != null) {
 				this.forms.put(name, form);
 			}
 		}
 		return form;
 	}
-
 }

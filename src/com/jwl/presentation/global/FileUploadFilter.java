@@ -78,9 +78,7 @@ public class FileUploadFilter implements Filter {
 				Logger.getLogger(FileUploadFilter.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-
-
-
+		
 		String URL = this.getURL(parser);
 		PrintWriter pw = response.getWriter();
 		pw.println(htmlRedirect.replace("_URL_", URL));
