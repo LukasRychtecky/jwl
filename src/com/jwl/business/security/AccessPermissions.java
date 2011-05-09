@@ -36,6 +36,15 @@ public enum AccessPermissions {
 		this.context = context;
 		this.method = method;
 	}
+	
+	public static AccessPermissions getInstance(String context, String method) {
+		for (AccessPermissions perm : AccessPermissions.values()) {
+			if (perm.context.equals(context) && perm.method.equals(method)) {
+				return perm;
+			}
+		}
+		return null;
+	}
 
 	public String getContext() {
 		return context;
