@@ -347,7 +347,7 @@ public class ArticlePresenter extends AbstractPresenter {
 		try {
 			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
 			this.getFacade().deleteArticle(articleId);
-			messages.add(new FlashMessage("Article was deleted."));
+			messages.add(new FlashMessage("Article has been deleted."));
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex);
 		}
