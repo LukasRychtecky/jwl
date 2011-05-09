@@ -32,7 +32,7 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 	@Override
 	public Set<Role> parse(String fileName) throws ModelException {
 		super.checkPermission(AccessPermissions.SECURITY_IMPORT);
-		
+
 		File acl = new File(fileName);
 		if (!acl.exists()) {
 			throw new ObjectNotFoundException(fileName + " does not exist!");
@@ -44,7 +44,7 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 		Map<Integer, Role> roles = this.parsePermissions(acl);
 		return new HashSet<Role>(roles.values());
 	}
-	
+
 	private String removeQuotes(String token) {
 		if (token.startsWith("\"")) {
 			token = token.substring(1, token.length());
@@ -67,13 +67,12 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 			while ((line = buffer.readLine()) != null) {
 
 				String[] tokens = line.split(";");
-				
-				if (tokens.length < 3) {
-					throw new InvalidFileFormatException("Invalid CSV format.");
-				}
 
 				if (lineNumber == 1) {
-					//TODO: check dim
+					
+					if (tokens.length < 3) {
+						throw new InvalidFileFormatException("Invalid CSV format.");
+					}
 					for (int i = 2; i < tokens.length; i++) {
 						roles.put(i, new Role(this.removeQuotes(tokens[i])));
 					}
@@ -89,7 +88,7 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 
 				for (int i = 2; i < tokens.length; i++) {
 					String checkMark = this.removeQuotes(tokens[i]);
-					
+
 					if (checkMark.equalsIgnoreCase("X")) {
 						try {
 							AccessPermissions perm = AccessPermissions.getInstance(context, method);

@@ -110,6 +110,12 @@ public class AdministrationPresenter extends AbstractPresenter {
 					FlashMessage.FlashMessageType.WARNING, false);
 			super.messages.add(message);
 			this.renderDefault();
+		} catch (InvalidFileFormatException ex) {
+			FlashMessage message = new FlashMessage(
+					"Given invalid CSV format.",
+					FlashMessage.FlashMessageType.ERROR, false);
+			super.messages.add(message);
+			this.renderDefault();
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex, "default");
 		}
