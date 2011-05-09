@@ -6,20 +6,6 @@ public class JWLStyleClass {
 	public static final String JWL_PREFIX = "jwl-";
 	
 	public static final String NO_HIDE = JWL_PREFIX +							"no-hide";
-
-	public static final String ACTION_BUTTON = JWL_PREFIX +						"action-button";
-	public static final String ACTION_BUTTON_SMALLER = JWL_PREFIX +				"action-button-small";
-	
-	// // Table of Articles ////////
-	public static final String TABLE_OF_ARTICLES = JWL_PREFIX +					"tableOfArticles";
-	public static final String TABLE_HEADER_OF_ARTICLES = JWL_PREFIX +			"tableHearderOfArticles";
-
-	// // Attach State ////////
-	public static final String ATTACH_INPUT_SUBMIT = JWL_PREFIX + 				"upload-inputSubmit";
-	// Labels
-	public static final String ATTACH_LABEL_FOR_FILE_NAME = JWL_PREFIX + 		"upload-fileName-label";
-	public static final String ATTACH_LABEL_FOR_FILE = JWL_PREFIX + 			"upload-file-label";
-	public static final String ATTACH_LABEL_FOR_FILE_DESCRIPTION = JWL_PREFIX + "upload-fileDescription-label";
 	// Inputs
 	public static final String ATTACH_FILE_NAME = JWL_PREFIX + 					"upload-fileName-input";
 	public static final String ATTACH_FILE = JWL_PREFIX + 						"upload-file-input";

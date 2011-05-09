@@ -11,6 +11,7 @@ import javax.faces.component.UIComponent;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
 
@@ -32,9 +33,11 @@ public class EncodeMergeSuggestionView extends AbstractEncodeView {
 	protected HtmlLink encodedLinkToListing()  {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, JWLStates.MERGE_SUGGESTION_LIST.id);
+		HtmlDiv navigation = new HtmlDiv();
+		navigation.addStyleClass("jwl-navigation");
 
 		HtmlLink link = getHtmlLink("Back to listing", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
+		navigation.getChildren().add(link);
 		return link;
 	}
 

@@ -17,6 +17,8 @@ import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.helpers.HumanDate;
+import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
 import com.jwl.presentation.html.HtmlLink;
@@ -85,7 +87,8 @@ public class EncodeHistoryListing extends AbstractEncoder {
 		params.put(JWLURLParams.HISTORY_ID, String.valueOf(history.getId().getId()));
 		params.put(JWLURLParams.ARTICLE_TITLE, article.getTitle());
 		
-		HtmlLink link = getHtmlLink(history.getModified().toString(), params);
+		HtmlLink link = getHtmlLink(HumanDate.format(history.getModified()), params);
+		link.setIsAjax(Boolean.TRUE);
 		return link;
 	}
 	
@@ -100,21 +103,24 @@ public class EncodeHistoryListing extends AbstractEncoder {
 		return link;
 	}
 	
-	private HtmlLink encodedLinkToArticleListing() {
+	private HtmlDiv encodedLinkToArticleListing() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_LIST.id);
 		
+		HtmlDiv navigation = new HtmlDiv();
+		navigation.addStyleClass("jwl-navigation");
+		
 		HtmlLink link = getHtmlLink("Back to listing", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
-		return link;
+		link.setIsAjax(Boolean.TRUE);
+		navigation.getChildren().add(link);
+		return navigation;
 	}
 
 	private HtmlPanelGrid getTable(List<UIComponent> headers) {
 		HtmlHeaderPanelGrid table = new HtmlHeaderPanelGrid();
 		table.setColumns(headers.size());
 		table.setHeaders(headers);
-		table.setStyleClass(JWLStyleClass.TABLE_OF_ARTICLES);
-		table.setHeaderClass(JWLStyleClass.TABLE_HEADER_OF_ARTICLES);
+		table.setStyleClass("jwl-grid");
 		return table;
 	}
 

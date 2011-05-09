@@ -21,6 +21,7 @@ import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
+import com.jwl.presentation.html.HtmlHeadline;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.markdown.MarkupToMarkdown;
 import com.jwl.presentation.renderers.units.RatingComponent;
@@ -48,31 +49,25 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		return components;
 	}
 
-	private HtmlDiv encodedTitle() {
-		HtmlDiv titleDiv = new HtmlDiv();
-		titleDiv.addStyleClass(JWLStyleClass.VIEW_TITLE);
-		
-		HtmlOutputText output = getHtmlText(article.getTitle());
-		output.setStyleClass(JWLStyleClass.VIEW_TITLE);
-		titleDiv.addChildren(output);
-		return titleDiv;
+	private HtmlHeadline encodedTitle() {
+		HtmlHeadline headline = new HtmlHeadline(1);
+		headline.setText(this.article.getTitle());
+		return headline;
 	}
 
 	private HtmlDiv encodedText() {
 		HtmlDiv textDiv = new HtmlDiv();
-		textDiv.addStyleClass(JWLStyleClass.VIEW_TEXT);
-		
+		textDiv.addStyleClass("jwl-article-text");		
 		String html = MarkupToMarkdown.convert(article.getText());
 		HtmlFreeOutput out = new HtmlFreeOutput();
-		out.setFreeOutput(html);
-		
+		out.setFreeOutput(html);		
 		textDiv.addChildren(out);
 		return textDiv;
 	}
 
 	private HtmlDiv encodedAttachments() {		
 		HtmlDiv div = new HtmlDiv();
-		div.addStyleClass(JWLStyleClass.VIEW_ATTACHMENTS);
+		div.addStyleClass("jwl-article-attachments");
 		
 		for (AttachmentTO attachment : article.getAttachments()) {
 			Map<String, String> params = new HashMap<String, String>();
@@ -93,7 +88,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 	private HtmlDiv encodedTags() {
 		Set<String> tags = article.getTags();
 		HtmlDiv tagsDiv = new HtmlDiv();
-		tagsDiv.addStyleClass(JWLStyleClass.VIEW_TAGS);
+		tagsDiv.addStyleClass("jwl-article-tags");
 		for (String tag : tags) {
 			// TODO Refactoring to search articles with the same tag
 			/*HtmlLinkProperties properties = new HtmlLinkProperties();
@@ -102,6 +97,7 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 			super.getHtmlLinkComponent(properties).encodeAll(context);*/
 			HtmlFreeOutput output = new HtmlFreeOutput();
 			output.setFreeOutput("<span>" + tag + "</span>");
+			tagsDiv.getChildren().add(output);
 		}
 		return tagsDiv;
 	}
@@ -127,7 +123,6 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 		HtmlLink link = getHtmlLink("Back to listing", params);
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 
@@ -138,7 +133,6 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 		HtmlLink link = getHtmlLink("Edit", params);
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 
@@ -149,7 +143,6 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 		HtmlLink link = getHtmlLink("Attach file", params);
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 	
@@ -159,7 +152,6 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, articleTitle);
 
 		HtmlLink link = getHtmlLink("Forum", params);
-		link.setStyleClasses("jwl-action-button");
 		return link;
 	}
 
@@ -173,36 +165,12 @@ public abstract class AbstractEncodeView extends AbstractEncoder {
 
 	protected HtmlDiv encodedArticlePanel() {
 		HtmlDiv panel = new HtmlDiv();
-		panel.addStyleClass(JWLStyleClass.PANEL);
+		panel.addStyleClass("jwl-article");
 		
-		panel.getChildren().add(this.encodedPanelHeader());
-		panel.getChildren().add(this.encodedPanelBody());
-		
+		panel.getChildren().addAll(this.encondedArticle());
+		panel.getChildren().add(RatingComponent.getRatingComponent(
+					article.getRatingAverage(), article.getId()));
 		return panel;
-	}
-	
-	private UIComponent encodedPanelHeader() {
-		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
-		
-		HtmlOutputText text = new HtmlOutputText();
-		text.setValue("Wiki Article");
-
-		panelHeader.getChildren().add(text);
-		return panelHeader;
-	}
-
-	private UIComponent encodedPanelBody() {
-		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
-		
-		panelBody.getChildren().addAll(this.encondedArticle());
-		
-		UIComponent rating = RatingComponent.getRatingComponent(
-					article.getRatingAverage(), article.getId());
-		
-		panelBody.getChildren().add(rating);
-		return panelBody;
 	}
 	
 	protected HtmlDiv encodedPanelActionButtons() {

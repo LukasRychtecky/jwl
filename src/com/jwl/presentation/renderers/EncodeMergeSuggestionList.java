@@ -18,59 +18,58 @@ import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.enumerations.JWLActions;
 import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
-import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
 import com.jwl.presentation.html.HtmlActionForm;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
+import com.jwl.presentation.html.HtmlHeadline;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.Linker;
 
 public class EncodeMergeSuggestionList extends AbstractEncoder {
 
-	private final String[] headers = new String[] {"Title", "Tags", "Editor",
-			"Editing count", "Created", "Rating"};
-
+	private final String[] headers = new String[]{"Title", "Tags", "Editor",
+		"Editing count", "Created", "Rating"};
 	private List<ArticlePair> articlePairs;
-	
+
 	@SuppressWarnings("unchecked")
 	public EncodeMergeSuggestionList(Linker linker, IIdentity identity, Map<String, Object> params) {
 		super(linker, identity, params);
-		this.articlePairs = (List<ArticlePair>) params.get("articlePairs"); 
-		
+		this.articlePairs = (List<ArticlePair>) params.get("articlePairs");
+
 	}
-	
+
 	@Override
 	public List<UIComponent> getEncodedComponent() {
-		List<UIComponent> components = new ArrayList<UIComponent>(); 
+		List<UIComponent> components = new ArrayList<UIComponent>();
 		components.add(this.encodedForm());
 		return components;
 	}
-	
-	private List<UIComponent> getHeaderNames() {		
+
+	private List<UIComponent> getHeaderNames() {
 		List<String> headerList = new ArrayList<String>();
 		headerList.add("");
-		for(int i = 0; i<2;i++){
-			for(String header: headers){
+		for (int i = 0; i < 2; i++) {
+			for (String header : headers) {
 				headerList.add(header);
 			}
 		}
 		List<UIComponent> result = new ArrayList<UIComponent>();
-		for(String header : headerList){
+		for (String header : headerList) {
 			HtmlFreeOutput output = new HtmlFreeOutput();
 			output.setFreeOutput(header);
 			result.add(output);
 		}
 		return result;
 	}
-	
+
 	private HtmlActionForm encodedForm() {
 		Map<String, String> params = parser.getURLParametersAndArticleTitle();
 		params.put(JWLURLParams.STATE, JWLStates.MERGE_SUGGESTION_LIST.id);
 		params.put(JWLURLParams.DO, JWLActions.MERGE_ARTICLE.id);
-		
+
 		HtmlActionForm form = new HtmlActionForm();
 		form.setId(JWLElements.KNOWLEDGE_MERGE_SUG_FORM.id);
 		form.setEnctype("application/x-www-form-urlencoded");
@@ -79,49 +78,41 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 		List<UIComponent> formData = form.getChildren();
 		formData.addAll(this.encodedPanel(articlePairs));
 		formData.addAll(this.encodedPanelActions());
-		
+
 		return form;
 	}
-	
+
 	protected List<UIComponent> encodedPanel(List<ArticlePair> articlePairs) {
 		List<UIComponent> formData = new ArrayList<UIComponent>();
-		
+
 		HtmlDiv panel = new HtmlDiv();
-		panel.addStyleClass(JWLStyleClass.PANEL);
-		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
-		panelHeader.setValue("Merge Suggestion");
-		HtmlDiv panelBody = new HtmlDiv();
-		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
-		HtmlPanelGrid table = encodeListing(articlePairs);
-		panelBody.getChildren().add(table);
-		//panelBody.getChildren().add(getPageButtonsComponent(paginator));
-		List<UIComponent> panelChildern =  panel.getChildren();
-		panelChildern.add(panelHeader);
-		panelChildern.add(panelBody);
+		panel.addStyleClass("jwl-admin");
+		HtmlHeadline headlline = new HtmlHeadline(1);
+		headlline.setText("Merge suggestion");
+		panel.getChildren().add(headlline);
+		panel.getChildren().add(encodeListing(articlePairs));
 		formData.add(panel);
-		
-		return formData;
-	}
-	
-	protected List<UIComponent> encodedPanelActions() {
-		List<UIComponent> formData = new ArrayList<UIComponent>();
-		
-		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
-		List<UIComponent> panelChildren = buttonsPanel.getChildren();
-		panelChildren.add(getLinkAdminConsole());
-		panelChildren.add(getIgnoreButton());
-		formData.add(buttonsPanel);
-		
+
 		return formData;
 	}
 
-	private HtmlPanelGrid encodeListing(List<ArticlePair> articlePairs) {		
+	protected List<UIComponent> encodedPanelActions() {
+		List<UIComponent> formData = new ArrayList<UIComponent>();
+
+		HtmlDiv buttonsPanel = new HtmlDiv();
+		buttonsPanel.addStyleClass("jwl-navigation");
+		buttonsPanel.getChildren().add(getLinkAdminConsole());
+		buttonsPanel.getChildren().add(getIgnoreButton());
+		formData.add(buttonsPanel);
+
+		return formData;
+	}
+
+	private HtmlPanelGrid encodeListing(List<ArticlePair> articlePairs) {
 		HtmlPanelGrid table = getTable(getHeaderNames());
 		List<UIComponent> articlesTableData = table.getChildren();
 		for (ArticlePair articlePair : articlePairs) {
-			articlesTableData.addAll(this.encodeRowData(articlePair));			
+			articlesTableData.addAll(this.encodeRowData(articlePair));
 		}
 		return table;
 	}
@@ -129,30 +120,27 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 	private HtmlPanelGrid getTable(List<UIComponent> headers) {
 		HtmlHeaderPanelGrid table = new HtmlHeaderPanelGrid();
 		table.setColumns(headers.size());
-		table.setCellpadding("0");
-		table.setCellspacing("0");
 		table.setHeaders(headers);
-		table.setStyleClass(JWLStyleClass.TABLE_OF_ARTICLES);
-		table.setHeaderClass(JWLStyleClass.TABLE_HEADER_OF_ARTICLES);
+		table.setStyleClass("jwl-grid");
 		return table;
 	}
-	
-	private List<UIComponent> encodeRowData(ArticlePair articlePair){
+
+	private List<UIComponent> encodeRowData(ArticlePair articlePair) {
 		List<UIComponent> articlesTableData = new ArrayList<UIComponent>();
-		
-		if(articlePair.getArticle1()==null||articlePair.getArticle2()==null){
+
+		if (articlePair.getArticle1() == null || articlePair.getArticle2() == null) {
 			return Collections.emptyList();
 		}
 		HtmlSelectBooleanCheckbox chbx = new HtmlSelectBooleanCheckbox();
 		chbx.setId(JWLElements.KNOWLEDGE_ID_PAIR_CHECKBOX.id
 				+ AbstractComponent.JWL_HTML_ID_SEPARATOR
-				+articlePair.getArticle1().getId().getId().intValue()
+				+ articlePair.getArticle1().getId().getId().intValue()
 				+ AbstractComponent.JWL_HTML_ID_SEPARATOR
-				+articlePair.getArticle2().getId().getId().intValue());
+				+ articlePair.getArticle2().getId().getId().intValue());
 		articlesTableData.add(chbx);
 		articlesTableData.addAll(this.encodedArticleRowData(articlePair.getArticle1()));
 		articlesTableData.addAll(this.encodedArticleRowData(articlePair.getArticle2()));
-		
+
 		return articlesTableData;
 	}
 
@@ -204,27 +192,20 @@ public class EncodeMergeSuggestionList extends AbstractEncoder {
 	private HtmlDiv getRatingComponent(float rating) {
 		return RatingComponent.getStarComponent(rating);
 	}
-	
+
 	protected HtmlLink getLinkAdminConsole() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, "default");
 
 		HtmlLink htmlLink = getHtmlLink("Back to administration", params);
-		htmlLink.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
-		
 		return htmlLink;
 	}
 
-	protected UIComponent getIgnoreButton(){
-		HtmlDiv div = new HtmlDiv();
-		div.addStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
-		
+	protected UIComponent getIgnoreButton() {
 		HtmlCommandButton button = new HtmlCommandButton();
 		button.setType("submit");
-		button.setId(JWLElements.KNOWLEDGE_IGNORE.id);
-		button.setValue(JWLElements.KNOWLEDGE_IGNORE.value);
-		
-		div.addChildren(button);
-		return div;
+		button.setId("ignore");
+		button.setValue("ignore");
+		return button;
 	}
 }

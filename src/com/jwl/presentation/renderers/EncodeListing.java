@@ -201,6 +201,7 @@ public class EncodeListing extends AbstractEncoder {
 		params.put(JWLURLParams.LIST_PAGE_NUMBER, String.valueOf(paginator.getPageIndex()));
 
 		HtmlLink link = this.getHtmlLink(text, params);
+		link.setIsAjax(Boolean.TRUE);
 		return link;
 	}
 

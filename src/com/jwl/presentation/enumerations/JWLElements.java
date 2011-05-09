@@ -30,7 +30,6 @@ public enum JWLElements {
 	SEARCH_WHERE_TITLE		("search-where-title", ""),
 	SEARCH_BUTTON			("search", "Search"),
 	KNOWLEDGE_MERGE_SUG_FORM("kn-merge-sug-form",""),
-	KNOWLEDGE_IGNORE		("ignore", "ignore"),
 	KNOWLEDGE_ID_PAIR_CHECKBOX("articlePair",""),
 	KNOWLEDGE_DEAD_SUG_FORM  ("kn-dead-sug-form", ""),
 	KNOWLEDGE_ID_CHECKBOX   ("articleId",""),

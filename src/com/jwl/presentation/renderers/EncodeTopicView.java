@@ -101,8 +101,7 @@ public class EncodeTopicView extends AbstractEncoder {
 	
 	protected HtmlDiv encodedActionButtons(TopicTO topic, ArticleTO article) {
 		HtmlDiv actionButtons = new HtmlDiv();
-		actionButtons.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
-		actionButtons.addStyleClass(JWLStyleClass.ACTION_BUTTON);
+		actionButtons.addStyleClass("jwl-navigation");
 		
 		actionButtons.addChildren(getArticleLinkComponent(article.getTitle()));
 		actionButtons.addChildren(getTopicListLink(article.getTitle()));
@@ -243,7 +242,6 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_VIEW.id);
 		
 		HtmlLink link = this.getHtmlLink("Back to article", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -253,7 +251,6 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, title);
 
 		HtmlLink link = getHtmlLink("Topic list", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -267,7 +264,6 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		
 		HtmlLink link = this.getHtmlLink("Reply", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -281,7 +277,6 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 		
 		HtmlLink link = this.getHtmlLink("Quote", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -318,8 +313,7 @@ public class EncodeTopicView extends AbstractEncoder {
 	}
 
 	protected UIComponent getReplyButton() {
-		return super.getHtmlSubmitComponent(JWLElements.FORUM_POST_REPLY, 
-				JWLStyleClass.ACTION_BUTTON);
+		return super.getHtmlSubmitComponent(JWLElements.FORUM_POST_REPLY, null);
 	}
 
 	protected UIComponent getReplyCancelButton() {
@@ -329,7 +323,6 @@ public class EncodeTopicView extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
 
 		HtmlLink link = getHtmlLink(JWLElements.FORUM_TOPIC_CANCEL.value, params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -370,8 +363,7 @@ public class EncodeTopicView extends AbstractEncoder {
 
 	protected UIComponent getReplyFormActionButtons(TopicTO topic) {
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
-		buttonsPanel.addStyleClass(JWLStyleClass.ACTION_BUTTON);
+		buttonsPanel.addStyleClass("jwl-navigation");
 		buttonsPanel.addChildren(getReplyButton());
 		buttonsPanel.addChildren(getReplyCancelButton());
 		return buttonsPanel;
