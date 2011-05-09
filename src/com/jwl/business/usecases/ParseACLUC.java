@@ -91,9 +91,8 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 					String checkMark = this.removeQuotes(tokens[i]);
 					
 					if (checkMark.equalsIgnoreCase("X")) {
-						String name = context + "_" + method;
 						try {
-							AccessPermissions perm = AccessPermissions.valueOf(name.toUpperCase());
+							AccessPermissions perm = AccessPermissions.getInstance(context, method);
 							//TODO: check dims
 							Role role = roles.get(i);
 							role.addPermission(perm);
