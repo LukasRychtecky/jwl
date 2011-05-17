@@ -28,7 +28,7 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 	private static final String ROLE_DELIMITER = ",";
 	public static final String JWL_UPLOAD_FILE_PAGE = "WikiUploadFile";
 	public static final String JWL_DOWNLOAD_FILE_PAGE = "WikiFile";
-	public static final String JWL_HTML_ID_SEPARATOR = "-";
+	public static final String JWL_HTML_ID_SEPARATOR = ":";
 	public static final String TAG_PARAM_REQUIRED_USER = "user";
 	public static final String TAG_PARAM_REQUIRED_ROLE = "role";
 	public static final String TAG_PARAM_ARTICLE_INITIAL_PAGE = "initialPage";
