@@ -4,7 +4,6 @@ import com.jwl.presentation.forms.JSValidation;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlInputHidden;
@@ -34,6 +33,7 @@ public class HtmlAppForm extends HtmlOutputText {
 	protected String method;
 	protected String enctype;
 	protected String id;
+	protected Boolean fileType = Boolean.FALSE;
 	protected String name;
 	protected Map<String, HtmlInputExtended> components;
 
@@ -92,6 +92,11 @@ public class HtmlAppForm extends HtmlOutputText {
 		ResponseWriter writer = this.getWriter(context);
 		writer.startElement(ELEMENT, this);
 		writer.writeAttribute("action", this.action, null);
+		
+		if (this.fileType) {
+			this.enctype = "multipart/form-data";
+		}
+		
 		writer.writeAttribute("enctype", this.enctype, null);
 		writer.writeAttribute("method", this.method, null);
 		writer.writeAttribute("id", this.id, null);
@@ -163,7 +168,7 @@ public class HtmlAppForm extends HtmlOutputText {
 
 	
 	public HtmlInputExtended addFile(String name, String label) {
-		this.enctype = "multipart/form-data";
+		this.fileType = Boolean.TRUE;
 		HtmlInputFile input = new HtmlInputFile();
 		input.setId(this.createName(name));
 		input.setLabel(label);
@@ -259,7 +264,7 @@ public class HtmlAppForm extends HtmlOutputText {
 		this.components.remove(name);
 	}
 	
-	public void process(Map<String, String> requestMap) {
+	public void process(Map<String, Object> requestMap) {
 		for (String key : requestMap.keySet()) {
 			if (!key.startsWith(this.getFormIdPostfix())) {
 				continue;

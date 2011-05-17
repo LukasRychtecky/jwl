@@ -79,7 +79,7 @@ public class EncodeTopicCreate extends AbstractEncoder {
 	
 	private HtmlDiv encodedPanelActions() {
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass("jwl-navigation");
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
 		panelChildren.add(encodedCreateButton());
 		panelChildren.add(encodedCancelButton());
@@ -125,7 +125,6 @@ public class EncodeTopicCreate extends AbstractEncoder {
 	
 	private UIComponent encodedCreateButton(){
 		HtmlCommandButton button = new HtmlCommandButton();
-		button.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		button.setType("submit");
 		button.setId(JWLElements.FORUM_TOPIC_CREATE.id);
 		button.setValue(JWLElements.FORUM_TOPIC_CREATE.value);
@@ -138,7 +137,6 @@ public class EncodeTopicCreate extends AbstractEncoder {
 		params.put(JWLURLParams.ARTICLE_TITLE, article.getTitle());
 
 		HtmlLink link = getHtmlLink(JWLElements.FORUM_TOPIC_CANCEL.value, params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		return link;		
 	}
 

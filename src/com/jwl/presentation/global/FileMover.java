@@ -1,12 +1,14 @@
 package com.jwl.presentation.global;
 
 import com.jwl.business.article.AttachmentTO;
-import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.forms.UploadedFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -43,6 +45,14 @@ public class FileMover {
 		return this.dir.getPath() + File.separator + this.uniqueFileName;
 	}
 
+	public void moveToTMPFiles() throws IOException, FileUploadException, Exception {
+		this.dir = new File(this.jwlHome + File.separator + "private" + File.separator + "tmp");
+
+		this.checkDir();
+		this.parseFileUploadRequestFiles();
+		this.saveFileOnDisc(this.dir, this.receivedFile);
+	}
+
 	public AttachmentTO getAttachment() {
 		this.attachment.setUniqueName(this.uniqueFileName);
 		return this.attachment;
@@ -72,13 +82,7 @@ public class FileMover {
 	}
 
 	private void saveFileOnDisc(File destinationDir, FileItem fileItem)	throws Exception {
-		File file = null;
-		if (this.explicitFileName.isEmpty()) {
-			file = new File(destinationDir, this.createUniqueFileName());
-		} else {
-			file = new File(destinationDir, this.explicitFileName);
-		}
-		
+		File file = new File(destinationDir, this.createUniqueFileName());		
 		fileItem.write(file);
 	}
 
@@ -111,17 +115,35 @@ public class FileMover {
 				this.createAttachment(item);
 			} else {
 				this.originalFileName = item.getName();
+				this.attachment.setOriginalName(originalFileName);
 				this.receivedFile = item;
 			}
 		}
 	}
 
+	private void parseFileUploadRequestFiles() throws FileUploadException, Exception {
+		List<?> items = this.getParsedRequest();
+		Iterator<?> itr = items.iterator();
+		while (itr.hasNext()) {
+			FileItem item = (FileItem) itr.next();
+
+			if (item.isFormField()) {
+				this.request.getSession().setAttribute(item.getFieldName(), item.getString());
+			} else {				
+				this.receivedFile = item;
+				File file = new File(this.dir, this.createUniqueFileName());		
+				item.write(file);
+				
+				UploadedFile uploadedFile = new UploadedFile(item.getName(), file, item.getSize());
+				this.request.getSession().setAttribute(item.getFieldName(), uploadedFile);
+			}
+		}
+	}
+
 	private void createAttachment(FileItem item) {
-		if (item.getFieldName().endsWith(JWLElements.FILE_TITLE.id)) {
-			this.attachment.setOriginalName(item.getString());
-		} else if (item.getFieldName().endsWith(JWLElements.FILE_ARTICLE_TITLE.id)) {
+		 if (item.getFieldName().endsWith("articleTitle")) {
 			this.attachment.setArticleTitle(item.getString());
-		} else if (item.getFieldName().endsWith(JWLElements.FILE_DESCRIPTION.id)) {
+		} else if (item.getFieldName().endsWith("desc")) {
 			this.attachment.setDescription(item.getString());
 			this.attachment.setTitle(item.getString());
 		}

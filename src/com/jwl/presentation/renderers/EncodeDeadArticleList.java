@@ -20,13 +20,16 @@ import com.jwl.presentation.enumerations.JWLElements;
 import com.jwl.presentation.enumerations.JWLStates;
 import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.helpers.HumanDate;
 import com.jwl.presentation.html.HtmlActionForm;
 import com.jwl.presentation.html.HtmlDiv;
 import com.jwl.presentation.html.HtmlFreeOutput;
 import com.jwl.presentation.html.HtmlHeaderPanelGrid;
+import com.jwl.presentation.html.HtmlHeadline;
 import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.renderers.units.RatingComponent;
 import com.jwl.presentation.url.Linker;
+import java.util.Date;
 
 public class EncodeDeadArticleList extends AbstractEncoder {
 	private final String[] headers = new String[] { "", "Title", "Tags", "Editor",
@@ -75,20 +78,16 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	
 	protected HtmlDiv encodedPanel(List<ArticleTO> articles) {
 		HtmlDiv panel = new HtmlDiv();
-		panel.addStyleClass(JWLStyleClass.PANEL);
-		
-		HtmlDiv panelHeader = new HtmlDiv();
-		panelHeader.addStyleClass(JWLStyleClass.PANEL_HEADER);
-		HtmlOutputText title = getHtmlText("Possibly dead articles");
-		panelHeader.addChildren(title);
+		panel.addStyleClass("jwl-admin");
+		HtmlHeadline title = new HtmlHeadline(1);
+		title.addStyleClass("Possibly dead articles");
 		
 		HtmlDiv panelBody = new HtmlDiv();
 		panelBody.addStyleClass(JWLStyleClass.PANEL_BODY);
 		HtmlPanelGrid table = encodedListing(articles);
 		panelBody.getChildren().add(table);
-		//panelBody.getChildren().add(getPageButtonsComponent(paginator));
 		List<UIComponent> panelChildern =  panel.getChildren();
-		panelChildern.add(panelHeader);
+		panelChildern.add(title);
 		panelChildern.add(panelBody);
 		
 		return panel;
@@ -97,11 +96,8 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	private HtmlPanelGrid encodedListing(List<ArticleTO> articles) {
 		HtmlHeaderPanelGrid table = new HtmlHeaderPanelGrid();
 		table.setColumns(getHeaders().size());
-		table.setCellpadding("0");
-		table.setCellspacing("0");
 		table.setHeaders(getHeaders());
-		table.setStyleClass(JWLStyleClass.TABLE_OF_ARTICLES);
-		table.setHeaderClass(JWLStyleClass.TABLE_HEADER_OF_ARTICLES);
+		table.setStyleClass("jwl-grid");
 		
 		List<UIComponent> articlesTableData = table.getChildren();
 		for (ArticleTO article : articles) {
@@ -132,7 +128,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 		components.add(this.encodedTagsComponent(separatedTags));
 		components.add(this.encodedEditorComponent(article.getEditor()));
 		components.add(this.encodedEditingCountComponent(article.getEditCount()));
-		components.add(this.encodedCreatedComponent(article.getCreated().toString()));
+		components.add(this.encodedCreatedComponent(article.getCreated()));
 		components.add(this.encodedRatingComponent(article.getRatingAverage()));
 		
 		return components;
@@ -157,8 +153,8 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 		return this.getHtmlText(editingCountValue);
 	}
 
-	private HtmlOutputText encodedCreatedComponent(String createdValue) {
-		return this.getHtmlText(createdValue);
+	private HtmlOutputText encodedCreatedComponent(Date created) {
+		return this.getHtmlText(HumanDate.format(created));
 	}
 
 	private HtmlDiv encodedRatingComponent(float rating) {
@@ -167,7 +163,7 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 
 	protected HtmlDiv encodedPanelActions(){
 		HtmlDiv buttonsPanel = new HtmlDiv();
-		buttonsPanel.addStyleClass(JWLStyleClass.PANEL_ACTION_BUTTONS);
+		buttonsPanel.addStyleClass("jwl-navigation");
 		
 		List<UIComponent> panelChildren = buttonsPanel.getChildren();
 		panelChildren.add(encodedLivabilityInput());
@@ -182,9 +178,8 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 		livabilityInput.setSize(4);
 		livabilityInput.setId(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
 		HtmlOutputLabel labelForFileName = new HtmlOutputLabel();
-		//labelForFileName.setDivStyleClass(styleClass);
 		labelForFileName.setFor(JWLElements.KNOWLEDGE_LIVABILITY_INPUT.id);
-		labelForFileName.setValue("livability increase");
+		labelForFileName.setValue("Livability increase");
 		HtmlPanelGrid table= new HtmlPanelGrid();
 		table.setColumns(2);
 		table.setCellpadding("0");
@@ -198,16 +193,12 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	protected HtmlLink encodedLinkToAdministrationConsole() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.STATE, "default");
-
 		HtmlLink htmlLink = getHtmlLink("Back to administration", params);
-		htmlLink.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
-		
 		return htmlLink;
 	}
 	
 	protected HtmlCommandButton encodedDeleteButton(){
 		HtmlCommandButton submit = new HtmlCommandButton();
-		submit.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		submit.setType("submit");
 		submit.setId(JWLElements.KNOWLEDGE_DEAD_DELETE.id);
 		submit.setValue(JWLElements.KNOWLEDGE_DEAD_DELETE.value);
@@ -216,7 +207,6 @@ public class EncodeDeadArticleList extends AbstractEncoder {
 	
 	protected HtmlCommandButton encodedLivabilityIncreaseButton(){
 		HtmlCommandButton submit = new HtmlCommandButton();
-		submit.setStyleClass(JWLStyleClass.ACTION_BUTTON_SMALLER);
 		submit.setType("submit");
 		submit.setId(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.id);
 		submit.setValue(JWLElements.KNOWLEDGE_INCREASE_LIVABILITY.value);

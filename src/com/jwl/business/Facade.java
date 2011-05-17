@@ -1,6 +1,7 @@
 package com.jwl.business;
 
 // <editor-fold defaultstate="collapsed">
+import com.jwl.business.exceptions.BusinessProcessException;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ import com.jwl.business.article.HistoryTO;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.SearchTO;
 import com.jwl.business.article.TopicTO;
+import com.jwl.business.article.usecases.interfaces.IUploadFileUC;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.knowledge.util.ArticleIdPair;
 import com.jwl.business.security.IIdentity;
@@ -48,6 +50,7 @@ import com.jwl.business.usecases.RateArticleUC;
 import com.jwl.business.usecases.RestoreArticleUC;
 import com.jwl.business.usecases.UnlockArticleUC;
 import com.jwl.business.usecases.UpdateArticleUC;
+import com.jwl.business.usecases.UploadACLUC;
 import com.jwl.business.usecases.UploadAttachmentUC;
 import com.jwl.business.usecases.interfaces.IAddForumPostUC;
 import com.jwl.business.usecases.interfaces.IAddToMergeSuggestionsIgnoreUC;
@@ -80,6 +83,7 @@ import com.jwl.business.usecases.interfaces.IRateArticleUC;
 import com.jwl.business.usecases.interfaces.IRestoreArticleUC;
 import com.jwl.business.usecases.interfaces.IUnlockArticleUC;
 import com.jwl.business.usecases.interfaces.IUpdateArticleUC;
+import com.jwl.business.usecases.interfaces.IUploadACLUC;
 import com.jwl.business.usecases.interfaces.IUploadAttachmentUC;
 
 // </editor-fold>
@@ -154,6 +158,12 @@ public class Facade implements IFacade {
 	public File exportACL() throws ModelException {
 		IExportACLUC uc = new ExportACLUC(Environment.getDAOFactory());
 		return uc.export(new File(Environment.getACLFileName()));
+	}
+	
+	@Override
+	public void uploadACL(File file) throws ModelException {
+		IUploadACLUC uc = new UploadACLUC(Environment.getDAOFactory());
+		uc.upload(file, Environment.getACLFileName());
 	}
 	
 	@Override

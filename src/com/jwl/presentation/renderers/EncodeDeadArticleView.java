@@ -34,7 +34,6 @@ public class EncodeDeadArticleView extends AbstractEncodeView {
 		params.put(JWLURLParams.STATE, JWLStates.DEAD_ARTICLE_LIST.id);
 
 		HtmlLink link = getHtmlLink("Back to listing", params);
-		link.setStyleClasses(JWLStyleClass.ACTION_BUTTON_SMALLER, JWLStyleClass.VIEW_LINK_BACK);
 		return link;
 	}
 

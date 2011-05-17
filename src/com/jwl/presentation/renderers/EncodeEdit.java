@@ -29,17 +29,18 @@ public class EncodeEdit extends AbstractEncoder {
 
 	@Override
 	public List<UIComponent> getEncodedComponent() {
-		List<UIComponent> components = new ArrayList<UIComponent>();
 		
 		HtmlHeadline headline = new HtmlHeadline(1);
 		headline.setText(this.article.getTitle());
 		components.add(headline);
 		components.add(this.form);
+		HtmlDiv cover = new HtmlDiv();
+		cover.getChildren().add(this.getArticleFormJS());
+		components.add(cover);
 		
 		HtmlLink link = new HtmlLink();
 		link.setText("Back to detail");
 		link.setIsAjax(Boolean.TRUE);
-		link.setStyleClass("jwl-action-button");
 		
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(JWLURLParams.ARTICLE_TITLE, this.article.getTitle());
@@ -50,7 +51,6 @@ public class EncodeEdit extends AbstractEncoder {
 		navigation.addStyleClass("jwl-navigation");
 		navigation.getChildren().add(link);
 		components.add(navigation);
-		components.add(this.getArticleFormJS());
 		return components;
 	}	
 }

@@ -1,23 +1,34 @@
 package com.jwl.presentation.components.widget;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 
 import com.jwl.presentation.core.AbstractPresenter;
-import com.jwl.presentation.forms.Validation;
+import com.jwl.presentation.enumerations.JWLURLParams;
+import com.jwl.presentation.forms.UploadedFile;
 import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlLink;
-import java.util.ArrayList;
+import com.jwl.presentation.url.WikiURLParser;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  *
  * @author Lukas Rychtecky
  */
 public class WidgetPresenter extends AbstractPresenter {
-
 	private WidgetRenderer renderer;
 
 	public WidgetPresenter() {
@@ -27,6 +38,7 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	@Override
 	public void renderDefault() throws IOException {
+		
 		HtmlAppForm form = this.createFormMujForm();
 		super.container.add(form);
 		this.renderer.renderDefault();
@@ -45,38 +57,18 @@ public class WidgetPresenter extends AbstractPresenter {
 		table.setColumns(2);
 
 		HtmlOutputText text = new HtmlOutputText();
-		text.setValue("Skryte pole");
+		text.setValue("Text");
 		table.getChildren().add(text);
 		text = new HtmlOutputText();
-		text.setValue(form.get("hidden").getValue().toString());
+		UploadedFile file = (UploadedFile) form.get("file").getValue();
+		text.setValue(file.getTempPath());
+		
 		table.getChildren().add(text);
-
-		text = new HtmlOutputText();
-		text.setValue("Heslo");
-		table.getChildren().add(text);
-		text = new HtmlOutputText();
-		text.setValue(form.get("pass").getValue());
-		table.getChildren().add(text);
-
 		text = new HtmlOutputText();
 		text.setValue("Text");
 		table.getChildren().add(text);
 		text = new HtmlOutputText();
-		text.setValue(form.get("text").getValue());
-		table.getChildren().add(text);
-
-		text = new HtmlOutputText();
-		text.setValue("Checkbox");
-		table.getChildren().add(text);
-		text = new HtmlOutputText();
-		text.setValue(form.get("checkbox").getValue());
-		table.getChildren().add(text);
-
-		text = new HtmlOutputText();
-		text.setValue("Textarea");
-		table.getChildren().add(text);
-		text = new HtmlOutputText();
-		text.setValue(form.get("textarea").getValue());
+		text.setValue(form.get("blah").getValue());
 		table.getChildren().add(text);
 
 		super.container.add(table);
@@ -91,17 +83,18 @@ public class WidgetPresenter extends AbstractPresenter {
 
 	public HtmlAppForm createFormMujForm() {
 		HtmlAppForm form = new HtmlAppForm("MujForm");
-		List args = new ArrayList();
-		args.add("AHOJ");
-		form.addText("text1", "Text", null).addRule(Validation.EQUAL, "Must be equal to AHOJ", args);
-		form.addText("text2", "Text", null).addRule(Validation.FILLED, "Must be filled");
-		args = new ArrayList();
-		args.add(3);
-		form.addText("text3", "Text", null).addRule(Validation.LENGTH, "Must has 3 size", args);args = new ArrayList();
-		args.add("AHOJ");
-		form.addText("text4", "Text", null).addRule(Validation.NOT_EQUAL, "Must be not equal to AHOJ", args);
-		form.addText("text5", "Text", null).addRule(Validation.NUMERIC, "Must be a numeric");
-		form.addSubmit("submit", "Odesli", "click");
+		form.addFile("file", "File");
+		form.addText("blah", "Blah", "BLAH");
+		form.addSubmit("submit", "Odesli", null);
+		
+		WikiURLParser parser = new WikiURLParser(context);
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(JWLURLParams.STATE, "default");
+//		params.put(JWLURLParams.REDIRECT_TARGET, parser.getCurrentPage());
+//		params.put(JWLURLParams.DO, JWLActions.FILE_UPLOAD.id);
+		params.put("jwl-fu", "fu");
+		
 		form.setAction(this.linker.buildForm("mujForm", null));
 		return form;
 	}

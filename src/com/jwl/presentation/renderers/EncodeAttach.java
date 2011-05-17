@@ -1,126 +1,42 @@
 package com.jwl.presentation.renderers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.jwl.business.article.ArticleTO;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlInputHidden;
 
-import com.jwl.business.article.ArticleTO;
 import com.jwl.business.security.IIdentity;
-import com.jwl.presentation.core.AbstractComponent;
-import com.jwl.presentation.enumerations.JWLActions;
-import com.jwl.presentation.enumerations.JWLContextKey;
-import com.jwl.presentation.enumerations.JWLElements;
-import com.jwl.presentation.enumerations.JWLStates;
-import com.jwl.presentation.enumerations.JWLStyleClass;
 import com.jwl.presentation.enumerations.JWLURLParams;
-import com.jwl.presentation.html.HtmlActionForm;
+import com.jwl.presentation.html.HtmlAppForm;
 import com.jwl.presentation.html.HtmlDiv;
-import com.jwl.presentation.html.HtmlInputFile;
+import com.jwl.presentation.html.HtmlLink;
 import com.jwl.presentation.url.Linker;
-import com.jwl.presentation.url.WikiURLParser;
+import java.util.HashMap;
 
 public class EncodeAttach extends AbstractEncoder {
-
-	private ArticleTO article;
-	
 	public EncodeAttach(Linker linker, IIdentity identity, Map<String, Object> params) {
 		super(linker, identity, params);
-		this.article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
 	}
 
 	@Override
 	public List<UIComponent> getEncodedComponent() {
-		List<UIComponent> components = new ArrayList<UIComponent>(); 
-		components.add(this.encodedForm());
-		return components;
-	}
-
-	private HtmlActionForm encodedForm() {
+		this.components.add((HtmlAppForm) this.params.get("attachFile"));
+		HtmlLink link = new HtmlLink();
+		link.setIsAjax(Boolean.TRUE);
+		link.setText("Back to detail");
+		
+		ArticleTO article = (ArticleTO) params.get("article");
+		
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(JWLURLParams.STATE, JWLStates.ARTICLE_VIEW.id);
 		params.put(JWLURLParams.ARTICLE_TITLE, article.getTitle());
-		params.put(JWLURLParams.REDIRECT_TARGET, parser.getCurrentPage());
-		params.put(JWLURLParams.DO, JWLActions.FILE_UPLOAD.id);
+		params.put(JWLURLParams.STATE, "view");
+		link.setValue(this.linker.buildLink(params));
 		
-		HtmlActionForm form = new HtmlActionForm();
-		form.setId(JWLElements.FILE_FORM.id);
-		form.setEnctype("multipart/form-data");
-		
-		form.setAction(this.linker.buildLink(
-				AbstractComponent.JWL_UPLOAD_FILE_PAGE, params));
-
-		List<UIComponent> formData = form.getChildren();
-
-		formData.add(this.encodedLabelForFileName());
-		formData.add(this.encodedFileName());
-
-		formData.add(this.encodedLabelForFileInput());
-		formData.add(this.encodedFileInput());
-
-		formData.add(this.encodedLabelForFileDescription());
-		formData.add(this.encodedFileDescription());
-
-		formData.add(this.encodedSubmit());
-		formData.add(this.encodedHiddenArticleTitle());
-		
-		return form;
+		HtmlDiv navigation = new HtmlDiv();
+		navigation.addStyleClass("jwl-navigation");
+		navigation.getChildren().add(link);
+		this.components.add(navigation);
+		return this.components;
 	}
-
-	private UIComponent encodedLabelForFileName() {
-		return getHtmlLabelComponent(JWLElements.FILE_TITLE,
-				JWLStyleClass.ATTACH_LABEL_FOR_FILE_NAME);
-	}
-
-	private HtmlDiv encodedFileName() {
-		return getHtmlInputComponent(JWLElements.FILE_TITLE, "", 
-				JWLStyleClass.ATTACH_FILE_NAME);
-	}
-
-	private UIComponent encodedLabelForFileInput() {
-		return getHtmlLabelComponent(JWLElements.FILE_ITEM,
-				JWLStyleClass.ATTACH_LABEL_FOR_FILE);
-	}
-
-	private HtmlDiv encodedFileInput() {
-		HtmlDiv div = new HtmlDiv();
-		div.addStyleClass(JWLStyleClass.ATTACH_FILE);
-		
-		HtmlInputFile fileInput = new HtmlInputFile();
-		fileInput.setId(JWLElements.FILE_ITEM.id);
-		
-		div.addChildren(fileInput);
-		return div;
-	}
-
-	private UIComponent encodedLabelForFileDescription() {
-		return getHtmlLabelComponent(JWLElements.FILE_DESCRIPTION,
-				JWLStyleClass.ATTACH_LABEL_FOR_FILE_DESCRIPTION);
-	}
-
-	private HtmlDiv encodedFileDescription() {
-		return getHtmlInputComponent(JWLElements.FILE_DESCRIPTION, "", 
-				JWLStyleClass.ATTACH_FILE_DESCRIPTION);
-	}
-
-	private HtmlDiv encodedSubmit() {
-		return getHtmlSubmitComponent(JWLElements.FILE_SAVE,
-				JWLStyleClass.ACTION_BUTTON);
-	}
-
-	private HtmlInputHidden encodedHiddenArticleTitle() {
-		HtmlInputHidden articleTitle = new HtmlInputHidden();
-		articleTitle.setId(JWLElements.FILE_ARTICLE_TITLE.id);
-		articleTitle.setValue(this.getArticleTitle());
-		return articleTitle;
-	}
-
-	private String getArticleTitle() {
-		WikiURLParser parser = new WikiURLParser();
-		return parser.getArticleTitle();
-	}
-
 }

@@ -16,17 +16,16 @@ import javax.servlet.http.HttpServletResponse;
  * @author Lukas Rychtecky
  */
 public class FileDownloader {
-	
+
 	public static final String CONTENT_DISPOSITION_ATTACHMENT = "attachment; filename=";
 	public static final String CONTENT_TYPE_CSV = "text/csv";
 	public static final String CONTENT_TYPE_OCTET_STREAM = "application/octet-stream";
-
 	private HttpServletResponse response;
 
 	public FileDownloader(HttpServletResponse response) {
 		this.response = response;
 	}
-	
+
 	public void writeResponse(File file, String contentType) throws IOException {
 		this.writeResponse(file, contentType, CONTENT_DISPOSITION_ATTACHMENT + file.getName());
 	}
@@ -57,19 +56,6 @@ public class FileDownloader {
 			fileIn.close();
 			out.flush();
 			out.close();
-
-//			in = new BufferedInputStream(new FileInputStream(file));
-//			byte data[] = new byte[1024];
-//			int count = 0;
-//			while((count = in.read(data, 0, 1024)) != -1) {
-//				out.write(data, 0, count);
-//			}
-
-//			byte[] buffer = new byte[4 * 1024]; // 4K buffer
-//			int bytesRead = 0;
-//			while ((bytesRead = in.read(buffer)) != -1) {
-//				out.write(buffer, 0, bytesRead);
-//			}
 		} finally {
 			out.flush();
 			out.close();

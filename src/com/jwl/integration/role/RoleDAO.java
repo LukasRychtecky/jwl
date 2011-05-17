@@ -143,14 +143,7 @@ public class RoleDAO extends BaseDAO implements IRoleDAO {
 	}
 
 	private AccessPermissions toObject(PermissionEntity entity) {
-		AccessPermissions perm = null;
-		String name = entity.getContext() + "_" + entity.getMethod();
-		try {
-			perm = AccessPermissions.valueOf(name.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			//TODO: skip unknow permission
-		}
-
+		AccessPermissions perm = AccessPermissions.getInstance(entity.getContext(), entity.getMethod());
 		return perm;
 	}
 

@@ -1,5 +1,6 @@
 package com.jwl.business.usecases;
 
+import com.jwl.business.exceptions.InvalidFileFormatException;
 import com.jwl.business.exceptions.ModelException;
 import com.jwl.business.exceptions.ObjectNotFoundException;
 import com.jwl.business.security.AccessPermissions;
@@ -31,7 +32,7 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 	@Override
 	public Set<Role> parse(String fileName) throws ModelException {
 		super.checkPermission(AccessPermissions.SECURITY_IMPORT);
-		
+
 		File acl = new File(fileName);
 		if (!acl.exists()) {
 			throw new ObjectNotFoundException(fileName + " does not exist!");
@@ -43,6 +44,7 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 		Map<Integer, Role> roles = this.parsePermissions(acl);
 		return new HashSet<Role>(roles.values());
 	}
+
 	private String removeQuotes(String token) {
 		if (token.startsWith("\"")) {
 			token = token.substring(1, token.length());
@@ -67,7 +69,10 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 				String[] tokens = line.split(";");
 
 				if (lineNumber == 1) {
-					//TODO: check dim
+					
+					if (tokens.length < 3) {
+						throw new InvalidFileFormatException("Invalid CSV format.");
+					}
 					for (int i = 2; i < tokens.length; i++) {
 						roles.put(i, new Role(this.removeQuotes(tokens[i])));
 					}
@@ -83,11 +88,10 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 
 				for (int i = 2; i < tokens.length; i++) {
 					String checkMark = this.removeQuotes(tokens[i]);
-					
+
 					if (checkMark.equalsIgnoreCase("X")) {
-						String name = context + "_" + method;
 						try {
-							AccessPermissions perm = AccessPermissions.valueOf(name.toUpperCase());
+							AccessPermissions perm = AccessPermissions.getInstance(context, method);
 							//TODO: check dims
 							Role role = roles.get(i);
 							role.addPermission(perm);
@@ -101,10 +105,8 @@ public class ParseACLUC extends AbstractUC implements IParseACLUC {
 			}
 
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(ImportACLUC.class.getName()).log(Level.SEVERE, null, ex);
 			throw new ModelException(ex.getMessage(), ex);
 		} catch (IOException ex) {
-			Logger.getLogger(ImportACLUC.class.getName()).log(Level.SEVERE, null, ex);
 			throw new ModelException(ex.getMessage(), ex);
 		} finally {
 			try {

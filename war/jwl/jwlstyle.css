@@ -5,13 +5,14 @@ div.jwl-component {
 .jwl-navigation {
 	margin: 1em 0.5em;
 }
-.jwl-navigation .jwl-action-button {
+.jwl-navigation a {
 	margin: 0 0.2em;
 }
 .jwl-form input[type=text] {
 	width: 100%;
 }
-a.jwl-action-button, a.jwl-action-button:visited, .jwl-action-button input[type=submit], .jwl-form input[type=submit] {
+.jwl-action-button, .jwl-action-button:visited, .jwl-form input[type=submit],
+.jwl-navigation a,  .jwl-navigation a:visited, .jwl-navigation input[type=submit] {
 	padding: 0.3em 0.6em;
 	text-decoration: none;
 	font-size: 1.1em;
@@ -37,7 +38,8 @@ a.jwl-action-button, a.jwl-action-button:visited, .jwl-action-button input[type=
 	border: 1px solid #d3d3d3;
 }
 
-a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover, .jwl-form input[type=submit]:hover {
+.jwl-action-button:hover, .jwl-form input[type=submit]:hover, .jwl-navigation a:hover,
+.jwl-navigation input[type=submit]:hover {
 	border-color: #999;
 	background-color: #DADADA;
 	background-image: -webkit-gradient(
@@ -106,43 +108,28 @@ a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover, .jwl-for
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333', endColorstr='#111');	
 }
 
-.jwl-view-title, .jwl-view-text {
-    border-bottom: 1px dotted #CCCCCC;
+.jwl-admin h1 {
+	font-size: 1.4em;
+	margin-left: 0.3em; 
 }
 
-.jwl-view-tags {
-    margin-top: 3px;
-    padding-bottom: 4px;
-    border-bottom: 1px dotted #F5F5F5;
+.jwl-article div {
+	margin: .6em 0;
 }
-/* Change 'span' to 'a' after refactoring where tag will link
- to search articles with the same tag */
-.jwl-view-tags span { 
+
+.jwl-article-text {
+    border-bottom: 1px dotted #CCCCCC;
+    border-top: 1px dotted #CCCCCC;
+}
+.jwl-article-attachments a {
+    padding: 0px 0px 0px 15px;
+	background: url('img/General-Document-icon.png') no-repeat left center;
+}
+
+.jwl-article-tags span { 
 	margin: 0px 5px 0px 0px;
     padding: 0px 0px 0px 15px;
     background: url('img/tag-small-icon.png') no-repeat left 1px;
-}
-
-.jwl-view-attachments {
-    margin-top: 3px;
-    padding-bottom: 4px;
-    border-bottom: 1px dotted #F5F5F5;
-}
-.jwl-view-attachments a {
-    margin: 0px 5px 0px 0px;
-    padding: 0px 0px 0px 15px;
-    background: url('img/General-Document-icon.png') no-repeat left center;
-}
-
-.jwl-view-stars {
-    margin-top: 3px;
-    margin-bottom: 5px;
-
-}
-
-.jwl-view-link-back, .jwl-view-link-edit, .jwl-view-link-attach {
-    float: left;
-    margin-right: 5px;
 }
 
 
@@ -162,12 +149,18 @@ a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover, .jwl-for
 * Flash messages
 */
 .jwl-flash-message {
+	text-shadow: #BBCEE9 0 1px 1px;
 	background-position: 0.5em 50%;
 	color: black;
 	padding: 1em;
 	background-repeat: no-repeat;
 	padding: 1.5em 1em 1.5em 60px;
 	margin: 0em 0em 2em 0em;
+	border: 1px solid #8FAAD9;
+	background-color: #D4DDE5;
+	font-size: 1.2em;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
 .jwl-flash-info {
@@ -199,31 +192,6 @@ a.jwl-action-button:hover, .jwl-action-button input[type=submit]:hover, .jwl-for
     border-style: solid;
     border-width: 1px;
     padding: 1px
-}
-
-.jwl-panelHeader {
-    background-position: left top;
-    background-repeat: repeat-x;
-    border-style: solid;
-    border-width: 1px;
-    cursor: pointer;
-    padding: 2px;
-    background-color: #BED6F8;
-    border-color: #BED6F8;
-    color: #000000;
-    font-weight: bold;
-    background-image: url("/bugtrack/a4j/g/3_3_1.GAorg.richfaces.renderkit.html.GradientA/DATB/eAH7!!3Tj2v7mAAZZAV3");
-    font-size: 12px !important;
-    background: url("/SeamWiki/jwl/img/3DlayoutBlue3Big.png") repeat-x scroll 0 0 #D0DBFF
-}
-
-.jwl-panelBody {
-    padding: 10px;
-    text-align: left;
-    vertical-align: top;
-    color: #000000;
-    background-color: transparent;
-    overflow: auto;
 }
 
 .jwl-forum-pageTable {

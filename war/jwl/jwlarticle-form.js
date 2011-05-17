@@ -11,7 +11,7 @@ Array.prototype.removeObject = function(o) {
 JWLArticleForm = {
 	_initAutocomplete: function() {
 		var oThis = this;
-			$('input[name=jwl-tags]')
+			$('input[name=jwl-ArticleCreate-tags], input[name=jwl-ArticleEdit-tags]')
 				.bind("keydown", function(event) {
 					if (event.keyCode === $.ui.keyCode.TAB && $(this).data("autocomplete").menu.active) {
 						event.preventDefault();

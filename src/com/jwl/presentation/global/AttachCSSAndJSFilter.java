@@ -1,9 +1,14 @@
 package com.jwl.presentation.global;
 
+import com.jwl.presentation.url.WikiURLParser;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,8 +16,11 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Attaches javascript and css to pages containing wiki
@@ -30,6 +38,8 @@ public class AttachCSSAndJSFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
+
+		this.processUploadedFiles((HttpServletRequest) request);
 
 		GenericResponseWrapper wrapper = new GenericResponseWrapper(
 				(HttpServletResponse) response);
@@ -56,19 +66,29 @@ public class AttachCSSAndJSFilter implements Filter {
 
 	}
 
+	private void processUploadedFiles(HttpServletRequest request) {
+		String contentType = request.getHeader("content-type");
+		WikiURLParser parser = new WikiURLParser(request);
+				
+		if (	parser.getDoAction() != null && contentType != null &&
+				((contentType.indexOf("multipart/form-data") != -1) || 
+				(contentType.indexOf("multipart/mixed") != -1))) {
+			//if sent form is from JWL and contains a file input
+			
+			FileMover mover = new FileMover(request);
+			try {
+				mover.moveToTMPFiles();
+			} catch (Exception ex) {
+				Logger.getLogger(AttachCSSAndJSFilter.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+	}
+
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 	}
 
-	/**
-	 * Attaches javascript to pages containing wiki
-	 * 
-	 * @author Petr Janouch
-	 * @param headEndPosition
-	 * @param bodyBeginPosition
-	 * @param builder
-	 */
-	public void addEditToolbarJavascript(StringBuilder builder) {
+	private void addEditToolbarJavascript(StringBuilder builder) {
 		List<String> styles = new ArrayList<String>();
 		styles.add(JWL_DIRECTORY + "markitup/sets/markdown/style.css");
 		styles.add(JWL_DIRECTORY + "markitup/skins/simple/style.css");
@@ -97,10 +117,10 @@ public class AttachCSSAndJSFilter implements Filter {
 			headEndPosition += script.length();
 			bodyBeginPosition += script.length();
 		}
-		
+
 	}
 
-	public void addWikiCSS(StringBuilder builder) {
+	private void addWikiCSS(StringBuilder builder) {
 		String link = "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 				+ JWL_DIRECTORY + "jwlstyle.css\"/>";
 		builder.insert(headEndPosition, link);

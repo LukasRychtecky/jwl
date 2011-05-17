@@ -14,7 +14,7 @@ var JWL = {
 			{
 				url: "ajax.seam?jwlmethod=ajax&jwluri=" + uri + href,
 				success: function(data) {
-					$(thisTrigger).parents('.jwl-component').html(data);
+					$(thisTrigger).parents('.jwl-component').replaceWith($(data));
 					JWL.markIt();
 					starRating.create('.jwl-view-stars');
 					knowledgeAjax.init();

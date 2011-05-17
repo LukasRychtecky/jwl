@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.jwl.business.Environment;
 import com.jwl.business.article.ArticleId;
 import com.jwl.business.article.ArticleTO;
+import com.jwl.business.article.AttachmentTO;
 import com.jwl.business.article.HistoryId;
 import com.jwl.business.article.PostTO;
 import com.jwl.business.article.TopicTO;
@@ -21,6 +22,7 @@ import com.jwl.presentation.core.AbstractComponent;
 import com.jwl.presentation.core.AbstractPresenter;
 import com.jwl.presentation.enumerations.JWLContextKey;
 import com.jwl.presentation.enumerations.JWLElements;
+import com.jwl.presentation.forms.UploadedFile;
 import com.jwl.presentation.forms.Validation;
 import com.jwl.presentation.global.ExceptionLogger;
 import com.jwl.presentation.html.HtmlAppForm;
@@ -116,7 +118,53 @@ public class ArticlePresenter extends AbstractPresenter {
 	}
 
 	public void renderAttachFile() {
+		
+		ArticleTO article = (ArticleTO) context.getAttributes().get(JWLContextKey.ARTICLE);
+		HtmlAppForm form = this.createFormAttachFile();
+		form.get("articleTitle").setValue(article.getTitle());
+		form.setAction(this.linker.buildForm("attachFile", "view"));
+		renderParams.put("attachFile", form);
+		renderParams.put("article", article);
 		container.addAll(new EncodeAttach(linker, getFacade().getIdentity(), renderParams).getEncodedComponent());
+	}
+	
+	public HtmlAppForm createFormAttachFile() {
+		HtmlAppForm form = new HtmlAppForm("AttachFile");
+		form.addFile("file", "File").addRule(Validation.FILLED, "Please choose a file.");
+		form.addText("desc", "Description", null);
+		form.addHidden("articleTitle", null);
+		form.addSubmit("send", "Send", null);
+		return form;
+	}
+	
+	public void decodeAttachFile() {
+		try {
+			HtmlAppForm form = super.getForm("AttachFile");
+			
+			UploadedFile file = (UploadedFile) form.get("file").getValue();			
+			
+			AttachmentTO attachment = new AttachmentTO();
+			attachment.setArticleTitle(form.get("articleTitle").getValue().toString());
+			attachment.setDescription(form.get("desc").getValue().toString());
+			attachment.setOriginalName(file.getOriginalName());
+			attachment.setTitle(file.getOriginalName());
+			attachment.setUniqueName(file.getTempPath().getName());
+			
+			super.getFacade().uploadAttachment(attachment, file.getTempPath().getAbsolutePath());
+			messages.add(new FlashMessage("File has been uploaded."));
+			
+			ArticleTO article = super.getFacade().findArticleByTitle(form.get("articleTitle").getValue().toString());
+
+			if (article != null) {
+				context.getAttributes().put(JWLContextKey.ARTICLE, article);
+			}
+
+			if (article != null && article.getId() != null) {
+				context.getAttributes().put(JWLContextKey.ARTICLE_ID, article.getId());
+			}
+		} catch (Exception ex) {
+			super.defaultProcessException(ex);
+		}
 	}
 
 	public void renderAdministrationConsole() {
@@ -315,7 +363,7 @@ public class ArticlePresenter extends AbstractPresenter {
 		try {
 			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
 			this.getFacade().deleteArticle(articleId);
-			messages.add(new FlashMessage("Article was deleted."));
+			messages.add(new FlashMessage("Article has been deleted."));
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex);
 		}
@@ -325,7 +373,7 @@ public class ArticlePresenter extends AbstractPresenter {
 		try {
 			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
 			this.getFacade().lockArticle(articleId);
-			messages.add(new FlashMessage("Article was locked."));
+			messages.add(new FlashMessage("Article has been locked."));
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex);
 		}
@@ -335,7 +383,7 @@ public class ArticlePresenter extends AbstractPresenter {
 		try {
 			ArticleId articleId = (ArticleId) super.context.getAttributes().get(JWLContextKey.ARTICLE_ID);
 			this.getFacade().unlockArticle(articleId);
-			messages.add(new FlashMessage("Article was locked."));
+			messages.add(new FlashMessage("Article has been unlocked."));
 		} catch (ModelException ex) {
 			super.defaultProcessException(ex);
 		}

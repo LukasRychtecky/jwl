@@ -49,7 +49,6 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 		link.setIsAjax(Boolean.TRUE);
 		link.setText("Show existing ACL");
 		link.setValue(this.linker.buildLink("exportACL"));
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -58,7 +57,6 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 		params.put(JWLURLParams.STATE, JWLStates.MERGE_SUGGESTION_LIST.id);
 
 		HtmlLink link = this.getHtmlLink("Merge suggestions", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 	
@@ -67,7 +65,6 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 		params.put(JWLURLParams.STATE, JWLStates.DEAD_ARTICLE_LIST.id);
 
 		HtmlLink link = this.getHtmlLink("Dead articles suggestions", params);
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		return link;
 	}
 
@@ -75,7 +72,6 @@ public class EncodeAdministrationConsole extends AbstractEncoder {
 		HtmlLink link = new HtmlLink();
 		link.setIsAjax(false);
 		link.setText("create key words - do nothing");
-		link.setStyleClass(JWLStyleClass.ACTION_BUTTON);
 		link.setId(JWLElements.ADMINISTRATION_KW_LINK.id);
 		
 		return link;
