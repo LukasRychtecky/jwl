@@ -15,8 +15,6 @@ import com.jwl.presentation.global.FileURLBuilder;
  */
 public class MarkdownImageExtension extends MarkdownExtension {
 	private static final String IMAGE_PATTERN = "!\\[.*\\]\\(.*\\)";
-	private int ci = Pattern.CASE_INSENSITIVE;
-	private static final String LINK_PATTERN = "link=";
 	private Pattern imagePattern;
 	private String alt = "";
 	private String width = "";
@@ -29,10 +27,9 @@ public class MarkdownImageExtension extends MarkdownExtension {
 	private final String position_left = "left";
 	private final String position_right = "right";
 
-	public MarkdownImageExtension(String currentUrl,
-			Map<String, String> requestParams, String outputParameter) {
-		super(currentUrl, requestParams, outputParameter);
-		imagePattern = Pattern.compile(IMAGE_PATTERN, ci);
+	public MarkdownImageExtension(String currentUrl, Map<String, String> requestParams) {
+		super(currentUrl, requestParams);
+		imagePattern = Pattern.compile(IMAGE_PATTERN, Pattern.CASE_INSENSITIVE);
 	}
 
 	@Override
@@ -161,11 +158,11 @@ public class MarkdownImageExtension extends MarkdownExtension {
 	}
 
 	private void setLink(List<String> options) {
+		String linkPrefix = "link=";
 		for (String option : options) {
-			int patternIndex = option.indexOf(LINK_PATTERN);
-			if (patternIndex != -1) {
-				String link = option.substring(patternIndex
-						+ LINK_PATTERN.length());
+			if (option.contains(linkPrefix)) {
+				String link = option.substring(option.indexOf(linkPrefix)
+						+ linkPrefix.length());
 				link = link.trim();
 				if (link.charAt(0) == '"') {
 					link = link.substring(1, link.length() - 1);

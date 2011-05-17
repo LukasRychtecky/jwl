@@ -9,12 +9,9 @@ public class MarkdownProcessor {
 	private MarkdownExtension imageExtension;
 	private MarkdownExtension linkExtension;
 	
-	public MarkdownProcessor(String currentUrl,
-			Map<String, String> requestParams, String outputParameter) {
-		imageExtension = new MarkdownImageExtension(currentUrl, requestParams,
-				outputParameter);
-		linkExtension = new MarkdownLinkExtension(currentUrl, requestParams,
-				outputParameter);
+	public MarkdownProcessor(String currentUrl, Map<String, String> requestParams) {
+		imageExtension = new MarkdownImageExtension(currentUrl, requestParams);
+		linkExtension = new MarkdownLinkExtension(currentUrl, requestParams);
 	}
 	
 	public String markdownToHtml(String markdownSource){

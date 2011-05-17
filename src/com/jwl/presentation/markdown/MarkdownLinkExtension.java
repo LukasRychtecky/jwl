@@ -12,16 +12,13 @@ public class MarkdownLinkExtension extends MarkdownExtension {
 	private Pattern internalLinkPattern;
 	private Pattern articleTitlePattern;
 	
-	private int ci = Pattern.CASE_INSENSITIVE;
-
 	private String linkPatternStart;
 	private String linkPatternEnd; 
 	
-	public MarkdownLinkExtension(String currentUrl,
-			Map<String, String> requestParams, String outputParameter) {
-		super(currentUrl, requestParams, outputParameter);
-		internalLinkPattern = Pattern.compile(INTERNAL_LINK_PATTERN, ci);
-		articleTitlePattern = Pattern.compile(ARTICLE_TITLE_PATTERN, ci);
+	public MarkdownLinkExtension(String currentUrl, Map<String, String> requestParams) {
+		super(currentUrl, requestParams);
+		internalLinkPattern = Pattern.compile(INTERNAL_LINK_PATTERN, Pattern.CASE_INSENSITIVE);
+		articleTitlePattern = Pattern.compile(ARTICLE_TITLE_PATTERN, Pattern.CASE_INSENSITIVE);
 	}
 
 	@Override

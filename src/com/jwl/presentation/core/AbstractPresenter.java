@@ -360,7 +360,9 @@ abstract public class AbstractPresenter {
 		HtmlDiv componentCover = new HtmlDiv();
 		componentCover.setId(COMPONENT_ID);
 		componentCover.addStyleClass(COMPONENT_CLASS);
-		componentCover.getChildren().add(this.renderMessages());
+		if (!messages.isEmpty()) {
+			componentCover.getChildren().add(this.renderMessages());
+		}
 		componentCover.getChildren().addAll(this.container);
 		
 		if (isAjax()) {

@@ -7,7 +7,7 @@ public class MarkdownRemover {
 	MarkdownProcessor processor;
 
 	public MarkdownRemover() {
-		processor = new MarkdownProcessor("", new HashMap<String, String>(), "");
+		processor = new MarkdownProcessor("", new HashMap<String, String>());
 	}
 
 	public String removeMarkdown(String text) {

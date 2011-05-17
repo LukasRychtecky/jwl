@@ -134,13 +134,12 @@ abstract public class AbstractComponent extends UIInput implements StateHolder {
 	private void loginUser(FacesContext context, AbstractPresenter presenter)
 			throws IOException {
 		Set<Role> roles = new HashSet<Role>();
+		
 		String[] splitedRoles = this.getUserRole().split(ROLE_DELIMITER);
-
-		String role = null;
-		for (int i = 0; i < splitedRoles.length; i++) {
-			role = splitedRoles[i].trim().toLowerCase();
-			if (role.length() > 0) {
-				roles.add(new Role(role));
+		for (String splitedRole : splitedRoles) {
+			splitedRole = splitedRole.trim().toLowerCase();
+			if (!splitedRole.isEmpty()) {
+				roles.add(new Role(splitedRole));
 			}
 		}
 

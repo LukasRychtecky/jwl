@@ -42,10 +42,26 @@ import com.jwl.presentation.url.RequestMapDecoder;
 
 public class ArticlePresenter extends AbstractPresenter {
 
+	private String initialPage;
+
+	public ArticlePresenter(String initialPage) {
+		super();
+		this.initialPage = initialPage;
+	}
+
+	public ArticlePresenter() {
+		super();
+	}
+
 	@Override
 	public void renderDefault() {
-		super.renderParams.put("paginator", this.getFacade().getPaginator());
-		container.addAll(new EncodeListing(linker, this.getFacade().getIdentity(), renderParams).getEncodedComponent());
+		if (initialPage != null) {
+			
+			container.addAll(new EncodeView(linker, this.getFacade().getIdentity(), renderParams).getEncodedComponent());
+		} else {		
+			super.renderParams.put("paginator", this.getFacade().getPaginator());
+			container.addAll(new EncodeListing(linker, this.getFacade().getIdentity(), renderParams).getEncodedComponent());
+		}
 	}
 
 	public void renderCreate() {

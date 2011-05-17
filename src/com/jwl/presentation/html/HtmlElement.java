@@ -28,6 +28,9 @@ abstract public class HtmlElement extends UIOutput {
 	public void encodeBegin(FacesContext context) throws IOException{
 		ResponseWriter writer = this.getWriter(context);
 		writer.startElement(this.getElement(), this);
+		if(this.getId() != null) {
+			writer.writeAttribute("id", this.getId(), null);
+		}
 		if(!this.styleClasses.isEmpty()){
 			StringBuilder styleClass = new StringBuilder();
 			for (String className : this.styleClasses){
